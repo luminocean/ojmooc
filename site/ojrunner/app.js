@@ -18,13 +18,15 @@ var buildRepo = 'build_repo';
  * 编译执行的入口方法
  * @param srcCode 需要编译源代码
  * @param inputData 执行程序的输入数据
+ * @param srcType 源码类型（是哪种源程序文件）
  * @param callback 执行后（不管成功与否）的回调函数
+ * @param callback
  */
-or.run = function(srcCode, inputData, callback){
+or.run = function(srcCode, inputData, srcType, callback){
     //程序名
     var programName = util.generateFileName();
     //构造源程序全路径
-    var srcName = programName+'.c';
+    var srcName = programName+'.'+srcType;
     var srcFullPath = path.join(__dirname, srcRepo, srcName);
     //生成源文件
     fs.writeFile(srcFullPath, srcCode, function(err){
@@ -43,13 +45,13 @@ or.run = function(srcCode, inputData, callback){
             }
 
             //编译成功后执行
-            exec.exec(buildFullPath, inputData, function(err, result){
+            exec.exec(programName, inputData, function(err, result){
                 if(err){
                     console.log(err.message);
                     return;
                 }
 
-                console.log('执行结果：'+result);
+                callback(null, result);
             });
         });
     });
