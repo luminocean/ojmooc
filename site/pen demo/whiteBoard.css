@@ -1,0 +1,10 @@
+#whiteBoard
+{
+    background-color: lightblue;
+}
+
+
+.draw
+{
+    cursor: url("pen.cur"),auto;
+}
