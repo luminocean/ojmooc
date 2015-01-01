@@ -20,10 +20,18 @@ exports.exec = function(programName, inputData, callback){
     child.stdout.on('data',function(data){
         result += data;
     });
+
+    var errResult = "";
+    child.stdout.on('data',function(data){
+        errResult += data;
+    });
     child.on('error', function(err){
        callback(err, null);
     });
     child.on('exit',function(){
-        callback(null, result);
+        if(result)
+            callback(null, result);
+        else
+            callback(null, errResult);
     });
 };

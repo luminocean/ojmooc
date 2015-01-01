@@ -3,4 +3,4 @@
 exe_name="$1"
 
 #从标准输入流里面加载程序的输入数据
-cat "-" | docker run -i --rm=true -v /home/lumino/ojmooc/site/ojrunner/build_repo:/home/build_repo exec-img /home/build_repo/$exe_name
+cat "-" | docker run -i --rm=true -v /home/luminocean/ojmooc/site/ojrunner/build_repo:/home/build_repo ojrunner-img /home/build_repo/$exe_name

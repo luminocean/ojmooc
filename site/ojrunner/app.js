@@ -52,6 +52,8 @@ or.run = function(srcCode, inputData, srcType, callback){
                 }
 
                 callback(null, result);
+
+                util.cleanup(programName,[srcRepo,buildRepo]);
             });
         });
     });
