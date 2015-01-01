@@ -1,5 +1,6 @@
 var fs = require('fs');
 var path = require('path');
+var Q = require('q');
 var compile = require('./compile.js');
 var exec = require('./exec.js');
 var util = require('./util/util.js');
@@ -28,36 +29,26 @@ or.run = function(srcCode, inputData, srcType, callback){
     //构造源程序全路径
     var srcName = programName+'.'+srcType;
     var srcFullPath = path.join(__dirname, srcRepo, srcName);
+
     //生成源文件
-    fs.writeFile(srcFullPath, srcCode, function(err){
-        if(err){
-            console.log(err.message);
-            callback(err);
-            return;
-        }
-
+    Q.denodeify(fs.writeFile)(srcFullPath, srcCode)
         //生成源文件成功后编译文件
-        //构造可执行程序的全路径
-        var buildFullPath = path.join(__dirname, buildRepo, programName);
-        compile.compile(srcFullPath, buildFullPath, function(err){
-            if(err){
-                console.log(err.message);
-                callback(err);
-                return;
-            }
-
-            //编译成功后执行
-            exec.exec(programName, inputData, function(err, result){
-                if(err){
-                    console.log(err.message);
-                    callback(err);
-                    return;
-                }
-
-                callback(null, result);
-
-                util.cleanup(programName,[srcRepo,buildRepo]);
-            });
+        .then(function(){
+            //构造可执行程序的全路径
+            var buildFullPath = path.join(__dirname, buildRepo, programName);
+            return Q.denodeify(compile.compile)(srcFullPath, buildFullPath);
+        })
+        //编译成功后执行
+        .then(function(){
+            return Q.denodeify(exec.exec)(programName, inputData);
+        })
+        //将结果传回调用方
+        .then(function(result){
+            callback(null, result);
+        },function(err){
+            callback(err, null);
+        })
+        .then(function(){
+            util.cleanup(programName,[srcRepo,buildRepo]);
         });
-    });
 };

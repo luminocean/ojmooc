@@ -10,9 +10,7 @@ var srcType = 'cpp';
 
 or.run(srcCode, inputData, srcType, function(err, result){
     if(err){
-        console.log(err);
-        return;
+        return console.log("测试异常:"+err);
     }
-
     console.log("测试结果:"+result);
 });
