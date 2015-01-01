@@ -9,12 +9,13 @@ var compileShell = __dirname +"/shell/compile.sh";
  * @param callback 完成后的回调函数
  */
 exports.compile = function(srcFullPath, buildFullPath, callback){
-    cp.execFile('./shell/compile.sh',[srcFullPath,buildFullPath],function(err, stdout, stderr){
+    cp.execFile(compileShell,[srcFullPath,buildFullPath],function(err){
        if(err){
            console.log('ERROR::'+err);
+           callback(err);
            return;
        }
 
-       callback();
+       callback(null);
     });
-}
+};

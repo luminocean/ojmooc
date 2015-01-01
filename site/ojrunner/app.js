@@ -19,7 +19,7 @@ var buildRepo = 'build_repo';
  * @param srcCode 需要编译源代码
  * @param inputData 执行程序的输入数据
  * @param srcType 源码类型（是哪种源程序文件）
- * @param callback 执行后（不管成功与否）的回调函数
+ * @param callback 执行后的回调函数
  * @param callback
  */
 or.run = function(srcCode, inputData, srcType, callback){
@@ -32,6 +32,7 @@ or.run = function(srcCode, inputData, srcType, callback){
     fs.writeFile(srcFullPath, srcCode, function(err){
         if(err){
             console.log(err.message);
+            callback(err);
             return;
         }
 
@@ -41,6 +42,7 @@ or.run = function(srcCode, inputData, srcType, callback){
         compile.compile(srcFullPath, buildFullPath, function(err){
             if(err){
                 console.log(err.message);
+                callback(err);
                 return;
             }
 
@@ -48,6 +50,7 @@ or.run = function(srcCode, inputData, srcType, callback){
             exec.exec(programName, inputData, function(err, result){
                 if(err){
                     console.log(err.message);
+                    callback(err);
                     return;
                 }
 
