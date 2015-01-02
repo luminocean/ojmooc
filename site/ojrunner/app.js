@@ -50,8 +50,8 @@ or.run = function(srcCode, inputData, srcType, callback){
             //失败时回传错误
             callback(err, null);
         })
+        //清理临时文件
         .then(function(){
-            //清理临时文件
             util.cleanup(programName,[srcRepo,buildRepo]);
         });
 };
