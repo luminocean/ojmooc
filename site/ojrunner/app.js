@@ -14,6 +14,8 @@ module.exports = or;
 var srcRepo = 'src_repo';
 //编译完的可执行文件的存放处
 var buildRepo = 'build_repo';
+//报告文件存放处
+var reportRepo = 'report_repo';
 
 /**
  * 编译执行的入口方法
@@ -52,6 +54,6 @@ or.run = function(srcCode, inputData, srcType, callback){
         })
         //清理临时文件
         .then(function(){
-            util.cleanup(programName,[srcRepo,buildRepo]);
+            util.cleanup(programName,[srcRepo,buildRepo/*,reportRepo*/]);
         });
 };
