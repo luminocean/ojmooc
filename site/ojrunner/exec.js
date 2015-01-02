@@ -21,17 +21,20 @@ exports.exec = function(programName, inputData, callback){
         result += data;
     });
 
-    var errResult = "";
-    child.stdout.on('data',function(data){
-        errResult += data;
+    var errMsg = "";
+    child.stderr.on('data',function(data){
+        errMsg += data;
     });
+
     child.on('error', function(err){
        callback(err, null);
     });
+
+    //当子进程退出时，回传执行结果
     child.on('exit',function(){
         if(result)
             callback(null, result);
         else
-            callback(null, errResult);
+            callback(errMsg, null);
     });
 };

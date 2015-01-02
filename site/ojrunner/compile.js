@@ -11,11 +11,9 @@ var compileShell = __dirname +"/shell/compile.sh";
 exports.compile = function(srcFullPath, buildFullPath, callback){
     cp.execFile(compileShell,[srcFullPath,buildFullPath],function(err){
        if(err){
-           console.log('ERROR::'+err);
-           callback(err);
-           return;
+           return callback(err, null);
        }
 
-       callback(null);
+       callback();
     });
 };

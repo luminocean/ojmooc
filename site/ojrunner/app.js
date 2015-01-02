@@ -44,11 +44,14 @@ or.run = function(srcCode, inputData, srcType, callback){
         })
         //将结果传回调用方
         .then(function(result){
+            //执行成功时回传结果
             callback(null, result);
         },function(err){
+            //失败时回传错误
             callback(err, null);
         })
         .then(function(){
+            //清理临时文件
             util.cleanup(programName,[srcRepo,buildRepo]);
         });
 };
