@@ -8,9 +8,10 @@ var inputData = fs.readFileSync('./input_data/data','utf-8');
 //测试的编译类型
 var srcType = 'cpp';
 
-or.run(srcCode, inputData, srcType, function(err, result){
+or.run(srcCode, inputData, srcType, function(err, result, params){
     if(err){
-        return console.log("测试异常:"+err);
+        return console.log("运行异常:"+err);
     }
-    console.log("测试结果:"+result);
+    console.log("运行结果:"+result);
+    console.log("运行参数:"+JSON.stringify(params));
 });

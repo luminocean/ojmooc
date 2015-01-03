@@ -1,4 +1,5 @@
 var cp = require('child_process');
+var util = require('./util/util.js');
 
 //执行编译任务的shell文件的位置
 var execShell = __dirname +"/shell/exec.sh";
@@ -32,9 +33,14 @@ exports.exec = function(programName, inputData, callback){
 
     //当子进程退出时，回传执行结果
     child.on('exit',function(){
-        if(result)
-            callback(null, result);
-        else
-            callback(errMsg, null);
+        if(errMsg)
+            return callback(null, errMsg, null);
+
+        //读取运行数据
+        util.readReportParams(programName, function(err, params){
+            if(err) return callback(err, null, null);
+
+            callback(null, result, params);
+        })
     });
 };

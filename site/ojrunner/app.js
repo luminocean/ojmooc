@@ -45,15 +45,15 @@ or.run = function(srcCode, inputData, srcType, callback){
             return Q.denodeify(exec.exec)(programName, inputData);
         })
         //将结果传回调用方
-        .then(function(result){
+        .then(function(results){
             //执行成功时回传结果
-            callback(null, result);
+            callback(null, results[0], results[1]);
         },function(err){
             //失败时回传错误
             callback(err, null);
         })
         //清理临时文件
         .then(function(){
-            util.cleanup(programName,[srcRepo,buildRepo/*,reportRepo*/]);
+            util.cleanup(programName,[srcRepo,buildRepo,reportRepo]);
         });
 };
