@@ -1,13 +1,14 @@
 var fs = require('fs');
 var or = require('./app.js');
 
-//读取测试用源文件
-var srcCode = fs.readFileSync('./input_data/src_code','utf-8');
-//读取测试用数据
-var inputData = fs.readFileSync('./input_data/data','utf-8');
 //测试的编译类型
-var srcType = 'cpp';
+var srcType = 'pas';
+//读取测试用源文件
+var srcCode = fs.readFileSync('./input_data/'+srcType+'_code','utf-8');
+//读取测试用数据
+var inputData = fs.readFileSync('./input_data/'+srcType+'_data','utf-8');
 
+//测试执行
 or.run(srcCode, inputData, srcType, function(err, result, params){
     if(err){
         return console.log("运行异常:"+err);

@@ -1,8 +1,9 @@
 var moment = require('moment');
 var fs = require('fs');
+var config = require('../config/config.json');
 
 //可用的扩展名
-var extNames = ['','cpp',"txt"];
+var extNames = config.repo.cleanExt;
 var reportRepo = "./report_repo";
 
 /**

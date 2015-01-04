@@ -8,7 +8,13 @@
     "cleanExt": [
       "",
       "cpp",
+      "pas",
       "txt"
     ]
+  },
+  "compile":{
+    "c":"clang",
+    "cpp":"clang++",
+    "pas":"fpc"
   }
 }

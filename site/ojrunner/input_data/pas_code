@@ -1,0 +1,14 @@
+program HelloWorld;
+const
+msg='Hello,';
+type
+name=string;
+var
+firstname:name;
+lastname:name;
+begin
+	writeln('Pascal Program Starts...');
+	readln(firstname);
+	readln(lastname);
+	writeln(msg,firstname,' ',lastname);
+end.

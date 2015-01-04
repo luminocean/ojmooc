@@ -42,7 +42,7 @@ or.run = function(srcCode, inputData, srcType, callback){
         .then(function(){
             //构造可执行程序的路径
             var buildPath = path.join('./', buildRepo, programName);
-            return Q.denodeify(compile.compile)(srcPath, buildPath);
+            return Q.denodeify(compile.compile)(srcType, srcPath, buildPath);
         })
         //编译成功后执行
         .then(function(){
