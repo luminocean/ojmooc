@@ -1,11 +1,13 @@
 var moment = require('moment');
 var fs = require('fs');
-var path = require('path');
 
 //可用的扩展名
 var extNames = ['','cpp',"txt"];
-var reportRepo = path.join(__dirname, "../report_repo");
+var reportRepo = "./report_repo";
 
+/**
+ * 根据当前时间生成唯一文件名
+ */
 exports.generateFileName = function(){
     return moment().format('YYYYMMDDx');
 };
@@ -29,6 +31,11 @@ exports.cleanup = function(fileName, dirs){
     }
 };
 
+/**
+ * 解析shell内置time命令返回的文件内容，解析出各个时间，以秒的形式返回
+ * @param programName 被生成执行报告的程序名
+ * @param callback 返回解析结果的回调函数
+ */
 exports.readReportParams = function(programName, callback){
     fs.readFile(reportRepo+"/"+programName+".txt", function(err, data){
         if(err) return callback(err, null);
@@ -42,9 +49,8 @@ exports.readReportParams = function(programName, callback){
             if(line){
                 var parts = line.split(" ");
                 if( parts.length == 2 ){
-                    var key = parts[0];
-                    var value = convertToSeconds(parts[1]);
-                    params[key] = value;
+                    //设置key/value对
+                    params[parts[0]] = convertToSeconds(parts[1]);
                 }
             }
         }

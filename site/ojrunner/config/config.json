@@ -1,0 +1,14 @@
+{
+  "repo": {
+    "dir": {
+      "src": "src_repo",
+      "build": "build_repo",
+      "report": "report_repo"
+    },
+    "cleanExt": [
+      "",
+      "cpp",
+      "txt"
+    ]
+  }
+}
