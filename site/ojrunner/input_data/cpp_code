@@ -1,5 +1,4 @@
 #include <iostream>
-#include <unistd.h>
 
 using namespace std;
 
@@ -9,7 +8,10 @@ int main ()
 
 	cin>>a>>b>>c;
 
-	sleep(1);
+	int acc = 0;
+	for(int i=0; i<500; i++){
+		acc = i*2;
+	}
 
 	cout<<"read:"<<a<<","<<b<<","<<c<<endl;
 

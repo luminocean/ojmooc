@@ -1,9 +1,14 @@
 var moment = require('moment');
 var fs = require('fs');
+var config = require('../config/config.json');
 
 //可用的扩展名
-var extNames = ['','cpp'];
+var extNames = config.repo.cleanExt;
+var reportRepo = "./report_repo";
 
+/**
+ * 根据当前时间生成唯一文件名
+ */
 exports.generateFileName = function(){
     return moment().format('YYYYMMDDx');
 };
@@ -26,6 +31,45 @@ exports.cleanup = function(fileName, dirs){
 
     }
 };
+
+/**
+ * 解析shell内置time命令返回的文件内容，解析出各个时间，以秒的形式返回
+ * @param programName 被生成执行报告的程序名
+ * @param callback 返回解析结果的回调函数
+ */
+exports.readReportParams = function(programName, callback){
+    fs.readFile(reportRepo+"/"+programName+".txt", function(err, data){
+        if(err) return callback(err, null);
+
+        var params = {};
+        var report = data.toString();
+        var lines = report.split("\n");
+
+        for(var i=0; i<lines.length; i++){
+            var line = lines[i];
+            if(line){
+                var parts = line.split(" ");
+                if( parts.length == 2 ){
+                    //设置key/value对
+                    params[parts[0]] = convertToSeconds(parts[1]);
+                }
+            }
+        }
+
+        callback(null, params);
+    });
+};
+
+function convertToSeconds(timeStr){
+    if(!timeStr) return;
+
+    var pieces = timeStr.match(/([0-9]*)m([0-9.]*)s/);
+    if(pieces.length != 3) return;
+
+    var min = parseFloat(pieces[1]);
+    var sec = parseFloat(pieces[2]);
+    return min*60+sec;
+}
 
 /**
  * 删除文件
