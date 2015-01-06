@@ -51,7 +51,12 @@ exports.readReportParams = function(programName, callback){
                 var parts = line.split(" ");
                 if( parts.length == 2 ){
                     //设置key/value对
-                    params[parts[0]] = convertToSeconds(parts[1]);
+                    //前三行是时间，做转换
+                    if( i<3 )
+                        params[parts[0]] = convertToSeconds(parts[1]);
+                    else
+                        //后面的就直接赋值
+                        params[parts[0]] = parts[1];
                 }
             }
         }
