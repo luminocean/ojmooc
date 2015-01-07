@@ -26,6 +26,11 @@ echo "$input_data" | (valgrind --tool=massif \
     --time-unit=B --stacks=yes \
     /home/build_repo/"$exe_name") &> /dev/null
 
+if [ ! -f "/home/report_repo/${exe_name}_rawmemusg.txt" ];then
+    #无法生成valgrind报告，为valgrind对free pascal生成程序的bug
+    exit 0
+fi
+
 ms_print /home/report_repo/${exe_name}_rawmemusg.txt > /home/report_repo/${exe_name}_graph.txt
 
 max_mem_usage=$(cat /home/report_repo/${exe_name}_graph.txt \

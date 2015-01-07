@@ -6,6 +6,6 @@ FROM ubuntu:14.04
 RUN apt-get update
 
 # install nodejs and npm
-RUN apt-get install -y llvm clang vim time
+RUN apt-get install -y llvm clang vim time valgrind
 
 RUN apt-get install -y --reinstall binutils

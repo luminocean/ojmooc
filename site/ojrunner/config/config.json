@@ -9,12 +9,14 @@
       "",
       "cpp",
       "pas",
-      "txt"
+      "txt",
+      "bas"
     ]
   },
   "compile":{
     "c":"clang",
     "cpp":"clang++",
-    "pas":"fpc"
+    "pas":"fpc",
+    "bas":"fbc"
   }
 }
