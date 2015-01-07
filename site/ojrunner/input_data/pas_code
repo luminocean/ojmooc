@@ -1,4 +1,5 @@
 program HelloWorld;
+uses crt;
 const
 msg='Hello,';
 type
@@ -7,6 +8,7 @@ var
 firstname:name;
 lastname:name;
 begin
+	Delay(1);
 	writeln('Pascal Program Starts...');
 	readln(firstname);
 	readln(lastname);
