@@ -13,7 +13,7 @@ echo "$input_data" \
     -v ~/ojmooc/site/ojrunner/build_repo:/home/build_repo \
     -v ~/ojmooc/site/ojrunner/report_repo:/home/report_repo \
     -v ~/ojmooc/site/ojrunner/shell:/home/shell \
-    ojrunner-img2 sudo bash /home/shell/docker.sh "$exe_name"
+    ojrunner-img sudo bash /home/shell/docker.sh "$exe_name"
 
 
 

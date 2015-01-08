@@ -1,11 +1,12 @@
 # DOCKER-VERSION 0.10.0
 
+#基于ubuntu14.04
 FROM ubuntu:14.04
 
-# make sure apt is up to date
 RUN apt-get update
 
-# install nodejs and npm
-RUN apt-get install -y llvm clang vim time valgrind
+#安装依赖的工具，尤其是valgrind
+RUN apt-get install -y vim time valgrind
 
+#安装一些不知道为什么缺少的工具
 RUN apt-get install -y --reinstall binutils
