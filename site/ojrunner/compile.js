@@ -1,8 +1,9 @@
 var cp = require('child_process');
-var config = require('./config/config.json');
+var config = require('./config/config.js');
 
 //执行编译任务的shell文件的位置
-var compileShell = "./shell/compile.sh";
+var compileShell = "."+config.compile.shell;
+
 /**
  * 执行编译的方法
  * @param srcType 源码类型
@@ -11,7 +12,7 @@ var compileShell = "./shell/compile.sh";
  * @param callback 完成后的回调函数
  */
 exports.compile = function(srcType, srcPath, buildPath, callback){
-    var compiler = config.compile[srcType];
+    var compiler = config.compile.compiler[srcType];
     if(!compiler)
         return callback(new Error('源码类型'+srcType+'没有配置对应的编译器'));
 

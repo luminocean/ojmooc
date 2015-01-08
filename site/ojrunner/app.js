@@ -7,7 +7,7 @@ var compile = require('./compile.js');
 var exec = require('./exec.js');
 var util = require('./util/util.js');
 //获取配置信息
-var config = require('./config/config.json');
+var config = require('./config/config.js');
 
 //ojrunner对象
 var or = {};
@@ -15,11 +15,11 @@ var or = {};
 module.exports = or;
 
 //要编译的源文件存放处
-var srcRepo = config.repo.dir.src;
+var srcRepo = "."+config.repo.dir.src;
 //编译完的可执行文件的存放处
-var buildRepo = config.repo.dir.build;
+var buildRepo = "."+config.repo.dir.build;
 //报告文件存放处
-var reportRepo = config.repo.dir.report;
+var reportRepo = "."+config.repo.dir.report;
 
 /**
  * 编译执行的入口方法
@@ -32,10 +32,11 @@ var reportRepo = config.repo.dir.report;
 or.run = function(srcCode, inputData, srcType, callback){
     //程序名
     var programName = util.generateFileName();
-    //构造源程序全路径
+    //构造源程序文件名和路径
     var srcName = programName+'.'+srcType;
     var srcPath = path.join('./', srcRepo, srcName);
 
+    //使用Q控制流框架优化代码结构
     //生成源文件
     Q.denodeify(fs.writeFile)(srcPath, srcCode)
         //生成源文件成功后编译文件

@@ -1,36 +1,39 @@
 #!/bin/bash
 
 #$1 编译器名称
+compiler=$1
 #$2 需要编译的源文件路径
+srcPath=$2
 #$3 编译后的文件路径
+buildPath=$3
 
 #检查源文件存在与否
-if [ -z "$1" ];then
+if [ -z "$compiler" ];then
 	echo "编译器未指定"
 	exit 1
-elif [ ! -f "$2" ]; then
+elif [ ! -f "$srcPath" ]; then
 	echo "源文件不存在"
 	exit 1
 #检查是否给出了目标路径
-elif [ -z "$3" ]; then
+elif [ -z "$buildPath" ]; then
 	echo "目标编译路径为空"
 	exit 1
 fi
 
 #根据使用的编译器执行编译
-case "$1" in
+case "$compiler" in
 	#pascal
 	"fpc")
-		"$1" "$2" -o"$3";;
+		"$compiler" "$srcPath" -o"$buildPath";;
 	#qbasic
 	"fbc")
-		"$1" -lang qb "$2" -x "$3";;
+		"$compiler" -lang qb "$srcPath" -x "$buildPath";;
 	#其他，如clang,clang++
 	*)
-		"$1" "$2" -o "$3";;
+		"$compiler" "$srcPath" -o "$buildPath";;
 esac
 
 #清理中间文件（.o文件）
-if [ -f "${3}.o" ];then
-	rm "${3}.o"
+if [ -f "${buildPath}.o" ];then
+	rm "${buildPath}.o"
 fi

@@ -1,8 +1,9 @@
 var cp = require('child_process');
 var util = require('./util/util.js');
+var config = require('./config/config.js');
 
 //执行编译任务的shell文件的位置
-var execShell = "./shell/exec.sh";
+var execShell = "."+config.exec.shell;
 
 /**
  * 执行程序，取得输出结果
