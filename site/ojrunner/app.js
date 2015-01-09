@@ -64,6 +64,7 @@ or.run = function(srcCode, inputData, srcType, callback){
         //清理临时文件
         .then(function(){
             util.cleanup(programName,[srcPath,buildPath,reportPath]);
+            queue.finish();
         });
 };
 
