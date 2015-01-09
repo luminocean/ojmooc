@@ -65,6 +65,23 @@ exports.readReportParams = function(programName, callback){
     });
 };
 
+/**
+ * 准备临时文件存放需要的目录，避免找不到目录而出错
+ */
+exports.prepareDir = function(){
+    //获取各临时目录
+    var dirs = config.repo.dir;
+    for(var key in dirs){
+        //跳过继承属性
+        if( !dirs.hasOwnProperty(key) ) continue;
+
+        var dir = '.'+dirs[key];
+        if( !fs.existsSync(dir) ){
+            fs.mkdirSync(dir);
+        }
+    }
+};
+
 function convertToSeconds(timeStr){
     if(!timeStr) return;
 

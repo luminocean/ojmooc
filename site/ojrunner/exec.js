@@ -3,7 +3,13 @@ var util = require('./util/util.js');
 var config = require('./config/config.js');
 
 //执行编译任务的shell文件的位置
-var execShell = "."+config.exec.shell;
+var execShell = "."+config.shell.exec;
+//编译完的可执行文件的文件系统路径(因为要传给shell由shell来使用)
+var buildPath = __dirname+config.repo.dir.build;
+//报告文件的文件系统路径
+var reportPath = __dirname+config.repo.dir.report;
+//shell文件的路径，因为docker需要用到一个shell
+var shellPath = __dirname+config.shell.base;
 
 /**
  * 执行程序，取得输出结果
@@ -13,7 +19,7 @@ var execShell = "."+config.exec.shell;
  */
 exports.exec = function(programName, inputData, callback){
     //开启shell执行子进程，将输入数据通过stdin输入
-    var child = cp.spawn(execShell, [programName]);
+    var child = cp.spawn(execShell, [programName,buildPath,reportPath,shellPath]);
     child.stdin.end(inputData);
 
     //收集子进程返回的数据

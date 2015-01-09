@@ -1,6 +1,5 @@
 //获取外部依赖模块
 var fs = require('fs');
-var path = require('path');
 var Q = require('q');
 //获取内部模块
 var compile = require('./compile.js');
@@ -14,12 +13,15 @@ var or = {};
 //将ojrunner对象导出
 module.exports = or;
 
-//要编译的源文件存放处
-var srcRepo = "."+config.repo.dir.src;
-//编译完的可执行文件的存放处
-var buildRepo = "."+config.repo.dir.build;
-//报告文件存放处
-var reportRepo = "."+config.repo.dir.report;
+//要编译的源文件的存放路径
+var srcPath = __dirname+config.repo.dir.src;
+//编译完的可执行文件的存放路径
+var buildPath = __dirname+config.repo.dir.build;
+//报告文件存放路径
+var reportPath = __dirname+config.repo.dir.report;
+
+//准备好临时目录,只执行一次
+util.prepareDir();
 
 /**
  * 编译执行的入口方法
@@ -34,16 +36,16 @@ or.run = function(srcCode, inputData, srcType, callback){
     var programName = util.generateFileName();
     //构造源程序文件名和路径
     var srcName = programName+'.'+srcType;
-    var srcPath = path.join('./', srcRepo, srcName);
+    var srcFilePath = srcPath+'/'+srcName;
 
     //使用Q控制流框架优化代码结构
     //生成源文件
-    Q.denodeify(fs.writeFile)(srcPath, srcCode)
+    Q.denodeify(fs.writeFile)(srcFilePath, srcCode)
         //生成源文件成功后编译文件
         .then(function(){
             //构造可执行程序的路径
-            var buildPath = path.join('./', buildRepo, programName);
-            return Q.denodeify(compile.compile)(srcType, srcPath, buildPath);
+            var buildFilePath = buildPath+'/'+programName;
+            return Q.denodeify(compile.compile)(srcType, srcFilePath, buildFilePath);
         })
         //编译成功后执行
         .then(function(){
@@ -61,7 +63,7 @@ or.run = function(srcCode, inputData, srcType, callback){
         })
         //清理临时文件
         .then(function(){
-            util.cleanup(programName,[srcRepo,buildRepo,reportRepo]);
+            util.cleanup(programName,[srcPath,buildPath,reportPath]);
         });
 };
 

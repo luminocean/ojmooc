@@ -2,21 +2,21 @@ var cp = require('child_process');
 var config = require('./config/config.js');
 
 //执行编译任务的shell文件的位置
-var compileShell = "."+config.compile.shell;
+var compileShellPath = __dirname+config.shell.compile;
 
 /**
  * 执行编译的方法
- * @param srcType 源码类型
- * @param srcPath 需要编译的已存在的源文件的路径
- * @param buildPath 将要生成的可执行文件的路径
+ * @param srcFileType 源码类型
+ * @param srcFilePath 需要编译的已存在的源文件的路径
+ * @param buildFilePath 将要生成的可执行文件的路径
  * @param callback 完成后的回调函数
  */
-exports.compile = function(srcType, srcPath, buildPath, callback){
-    var compiler = config.compile.compiler[srcType];
+exports.compile = function(srcFileType, srcFilePath, buildFilePath, callback){
+    var compiler = config.compile.compiler[srcFileType];
     if(!compiler)
-        return callback(new Error('源码类型'+srcType+'没有配置对应的编译器'));
+        return callback(new Error('源码类型'+srcFileType+'没有配置对应的编译器'));
 
-    cp.execFile(compileShell,[compiler,srcPath,buildPath],function(err){
+    cp.execFile(compileShellPath,[compiler,srcFilePath,buildFilePath],function(err){
        if(err){
            return callback(err, null);
        }
