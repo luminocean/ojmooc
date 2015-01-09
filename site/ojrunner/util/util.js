@@ -67,6 +67,8 @@ exports.readReportParams = function(programName, callback){
 
 /**
  * 准备临时文件存放需要的目录，避免找不到目录而出错
+ * 注意本方法调用了同步方法，请不要反复执行，会产生性能问题
+ * 另外，如果将内存挂载到tmp上可以提高读写性能。可以使执行config/mount.sh完成挂载
  */
 exports.prepareDir = function(){
     //获取各临时目录
