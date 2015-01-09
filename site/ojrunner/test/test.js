@@ -1,5 +1,5 @@
 var fs = require('fs');
-var or = require('./app.js');
+var or = require('../app.js');
 
 //测试的编译类型
 var srcType = 'bas';
@@ -16,3 +16,5 @@ or.run(srcCode, inputData, srcType, function(err, result, params){
     console.log("运行结果:"+result);
     console.log("运行参数:"+JSON.stringify(params));
 });
+
+

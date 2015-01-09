@@ -2,8 +2,8 @@
 var fs = require('fs');
 var Q = require('q');
 //获取内部模块
-var compile = require('./compile.js');
-var exec = require('./exec.js');
+var compile = require('./core/compile.js');
+var exec = require('./core/exec.js');
 var util = require('./util/util.js');
 //获取配置信息
 var config = require('./config/config.js');
@@ -29,7 +29,6 @@ util.prepareDir();
  * @param inputData 执行程序的输入数据
  * @param srcType 源码类型（是哪种源程序文件）
  * @param callback 执行后的回调函数
- * @param callback
  */
 or.run = function(srcCode, inputData, srcType, callback){
     //程序名
@@ -64,10 +63,12 @@ or.run = function(srcCode, inputData, srcType, callback){
         //清理临时文件
         .then(function(){
             util.cleanup(programName,[srcPath,buildPath,reportPath]);
-            queue.finish();
         });
 };
 
+/**
+ * 捕获致命错误，防止进程意外崩溃
+ */
 process.on('uncaughtException',function(err){
     console.log("致命错误："+err);
 });
