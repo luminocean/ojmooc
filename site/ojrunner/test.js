@@ -1,5 +1,5 @@
 var fs = require('fs');
-var or = require('../app.js');
+var or = require('./app.js');
 
 //测试的编译类型
 var srcType = 'bas';

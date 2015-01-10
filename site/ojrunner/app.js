@@ -1,5 +1,6 @@
 //获取外部依赖模块
 var fs = require('fs');
+var path = require('path');
 var Q = require('q');
 //获取内部模块
 var compile = require('./core/compile.js');
@@ -14,11 +15,11 @@ var or = {};
 module.exports = or;
 
 //要编译的源文件的存放路径
-var srcPath = __dirname+config.repo.dir.src;
+var srcPath = path.join(__dirname,config.repo.dir.src);
 //编译完的可执行文件的存放路径
-var buildPath = __dirname+config.repo.dir.build;
+var buildPath = path.join(__dirname,config.repo.dir.build);
 //报告文件存放路径
-var reportPath = __dirname+config.repo.dir.report;
+var reportPath = path.join(__dirname,config.repo.dir.report);
 
 //准备好临时目录,只执行一次
 util.prepareDir();
