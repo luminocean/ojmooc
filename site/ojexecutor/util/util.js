@@ -1,5 +1,11 @@
 var fs = require('fs');
-var reportRepo = './report';
+var path = require('path');
+var config = require('../config/config.js');
+
+//可用的扩展名
+var extNames = config.repo.cleanExt;
+//报告文件所在位置
+var reportPath = path.join(__dirname,'../',config.repo.dir.report);
 
 /**
  * 解析shell内置time命令返回的文件内容，解析出各个时间，以秒的形式返回
@@ -7,7 +13,7 @@ var reportRepo = './report';
  * @param callback 返回解析结果的回调函数
  */
 exports.readReportParams = function(programName, callback){
-    fs.readFile(reportRepo+"/"+programName+".txt", function(err, data){
+    fs.readFile(path.join(reportPath,programName+".txt"), function(err, data){
         if(err) return callback(err, null);
 
         var params = {};
@@ -35,23 +41,39 @@ exports.readReportParams = function(programName, callback){
 };
 
 /**
- * 准备临时文件存放需要的目录，避免找不到目录而出错
- * 注意本方法调用了同步方法，请不要反复执行，会产生性能问题
- * 另外，如果将内存挂载到tmp上可以提高读写性能。可以使执行config/mount.sh完成挂载
+ * 清理中间文件
+ * @param fileName 中间文件的文件名（扩展名前面的部分）
+ * @param dirs 查找的目录
  */
-exports.prepareDir = function(){
-    //获取各临时目录
-    var dirs = config.repo.dir;
-    for(var key in dirs){
-        //跳过继承属性
-        if( !dirs.hasOwnProperty(key) ) continue;
-
-        var dir = '.'+dirs[key];
-        if( !fs.existsSync(dir) ){
-            fs.mkdirSync(dir);
+exports.cleanup = function(fileName, dirs){
+    for(var i=0; i<dirs.length; i++){
+        var path = dirs[i]+"/"+fileName;
+        for(var j=0; j<extNames.length; j++){
+            var extName = extNames[j];
+            if(extName)
+                deleteFile(path+"."+extName);
+            else
+                deleteFile(path);
         }
+
     }
 };
+
+/**
+ * 删除文件
+ * @param path 要删除的文件的路径，如src_repo/aa.cpp
+ */
+function deleteFile(path){
+    fs.exists(path, function(exists){
+        if(exists){
+            fs.unlink(path, function(err){
+                if(err) {
+                    console.log(err);
+                }
+            });
+        }
+    });
+}
 
 function convertToSeconds(timeStr){
     if(!timeStr) return;

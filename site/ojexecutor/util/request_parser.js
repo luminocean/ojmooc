@@ -1,6 +1,7 @@
 /**
  * 解析执行请求
  * @param req http传来的请求对象
+ * @param callback
  */
 exports.parseRequest = function(req, callback){
     //只处理json类型的POST请求
@@ -21,4 +22,4 @@ exports.parseRequest = function(req, callback){
             callback(err);
         }
     });
-}
+};

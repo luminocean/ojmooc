@@ -9,9 +9,8 @@ var config={
    * 项目路径相关配置
    */
   "repo": {
-    //源码文件、可执行文件、报告文件所在的目录
+    //可执行文件、报告文件所在的目录
     "dir": {
-      "src": "/repo/src",
       "build": "/repo/build",
       "report": "/repo/report"
     },
@@ -19,10 +18,7 @@ var config={
     //比如要清理程序abc的各中间文件，则会依次搜索abc,abc.cpp,abc.pas等等
     "cleanExt": [
       "",
-      "cpp",
-      "pas",
-      "txt",
-      "bas"
+      "txt"
     ]
   },
   /**
@@ -30,20 +26,7 @@ var config={
    */
   "shell":{
     "base":"/shell",
-    "compile":"/shell/compile.sh",
     "exec":"/shell/exec.sh"
-  },
-  /**
-   * 编译相关配置
-   */
-  "compile":{
-    //某种源码后缀使用的编译器的配置
-    "compiler":{
-      "c":"clang",
-      "cpp":"clang++",
-      "pas":"fpc",
-      "bas":"fbc"
-    }
   }
 };
 
