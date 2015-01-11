@@ -10,6 +10,7 @@
   "license": "BSD-2-Clause",
   "dependencies": {
     "moment": "~2.8.4",
-    "q": "~1.1.2"
+    "q": "~1.1.2",
+    "request": "~2.51.0"
   }
 }

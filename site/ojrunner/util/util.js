@@ -1,10 +1,11 @@
 var moment = require('moment');
 var fs = require('fs');
+var path = require('path');
 var config = require('../config/config.js');
 
 //可用的扩展名
 var extNames = config.repo.cleanExt;
-var reportRepo = "."+config.repo.dir.report;
+var reportRepo = path.join(__dirname,'..',config.repo.dir.report);
 
 /**
  * 根据当前时间生成唯一文件名

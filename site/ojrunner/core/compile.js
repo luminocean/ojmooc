@@ -19,7 +19,7 @@ exports.compile = function(srcFileType, srcFilePath, buildFilePath, callback){
 
     cp.execFile(compileShellPath,[compiler,srcFilePath,buildFilePath],function(err){
        if(err){
-           return callback(err, null);
+           return callback(new Error('编译失败'));
        }
        callback();
     });

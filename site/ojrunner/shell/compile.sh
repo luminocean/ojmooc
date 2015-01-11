@@ -33,6 +33,10 @@ case "$compiler" in
 		"$compiler" "$srcPath" -o "$buildPath";;
 esac
 
+if [ "$?" -ne 0 ];then
+	exit 1
+fi
+
 #清理中间文件（.o文件）
 if [ -f "${buildPath}.o" ];then
 	rm "${buildPath}.o"

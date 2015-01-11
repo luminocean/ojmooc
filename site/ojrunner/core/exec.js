@@ -4,7 +4,7 @@ var util = require('../util/util.js');
 var config = require('../config/config.js');
 
 //执行编译任务的shell文件的位置
-var execShell = "."+config.shell.exec;
+var execShell = path.join(__dirname,'../',config.shell.exec);
 //编译完的可执行文件的文件系统路径(因为要传给shell由shell来使用)
 var buildPath = path.join(__dirname,'../',config.repo.dir.build);
 //报告文件的文件系统路径
@@ -44,6 +44,6 @@ exports.exec = function(programName, inputData, callback){
             if(err) return callback(err);
 
             callback(null, result, params);
-        })
+        });
     });
 };
