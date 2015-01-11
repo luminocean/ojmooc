@@ -13,7 +13,7 @@ request({
     //请求数据
     "body":{
         //要执行的程序名
-        "program":"read",
+        "program":"readme",
         //输入参数
         "data":"1\n2\n3"
     }

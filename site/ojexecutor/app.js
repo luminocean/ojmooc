@@ -43,9 +43,11 @@ function serverPerform(req,res){
             resultJson.result = result;
             resultJson.params = params;
 
+            //将执行结果转成json字符串返回
             res.writeHead(200, {'Content-Type': 'application/json'});
             res.end(JSON.stringify(resultJson)+'\n');
 
+            //清理临时文件
             util.cleanup(programName,[reportPath]);
         });
     });
