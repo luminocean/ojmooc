@@ -3,5 +3,6 @@
 container=$(docker ps -a | grep ojrunner)
 #如果存在容器则删除
 if [ -n "$container" ];then
-    docker rm -f ojrunner
+    docker stop ojrunner
+    docker rm ojrunner
 fi

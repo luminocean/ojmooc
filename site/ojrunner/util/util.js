@@ -78,7 +78,7 @@ exports.prepareDir = function(){
         //跳过继承属性
         if( !dirs.hasOwnProperty(key) ) continue;
 
-        var dir = '.'+dirs[key];
+        var dir = path.join(__dirname,'../',dirs[key]);
         if( !fs.existsSync(dir) ){
             fs.mkdirSync(dir);
         }

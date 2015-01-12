@@ -3,7 +3,11 @@
  */
 var http = require('http');
 var requestParser = require('./util/request_parser');
+var util = require('./util/util');
 var run = require('./core/run');
+
+//准备好各种临时文件需要的目录
+util.prepareDir();
 
 /**
  * 服务器处理的入口方法
