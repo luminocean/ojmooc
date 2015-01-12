@@ -5,7 +5,7 @@ var fs = require('fs');
 var request = require('request');
 
 //测试的编译类型
-var srcType = 'cpp';
+var srcType = 'bas';
 //读取测试用源文件
 var srcCode = fs.readFileSync('./input_data/'+srcType+'_code','utf-8');
 //读取测试用数据
@@ -22,10 +22,13 @@ requestObj.body.srcType = srcType;
 requestObj.body.srcCode = srcCode;
 requestObj.body.inputData = inputData;
 
-//发送执行请求，获取执行结果
-request(requestObj,function(error, response, body){
-    console.log(body);
-});
+for(var i=0; i<3; i++){
+    //发送执行请求，获取执行结果
+    request(requestObj,function(error, response, body){
+        console.log(body);
+    });
+}
+
 
 
 

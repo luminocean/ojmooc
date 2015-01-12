@@ -28,7 +28,7 @@ exports.run = function(srcCode, inputData, srcType, callback){
     var programName = util.generateFileName();
     //构造源程序文件名和路径
     var srcName = programName+'.'+srcType;
-    var srcFilePath = srcPath+'/'+srcName;
+    var srcFilePath = path.join(srcPath, srcName);
 
     //使用Q控制流框架优化代码结构
     //生成源文件
