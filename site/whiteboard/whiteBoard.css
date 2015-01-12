@@ -1,0 +1,35 @@
+#whiteBoard
+{
+    z-index: 1;
+    background: none;
+    border: solid;
+    position: absolute;
+    top: 50px;
+    left: 50px;
+}
+
+#main{
+    z-index: 2;
+    background: none;
+    position: absolute;
+    top: 50px;
+    left: 50px;
+    width:500px;
+    height:500px;
+}
+
+
+.pen {
+    cursor: url("pen.cur"),auto;
+}
+
+.eraser {
+    cursor: url("eraser.cur"),auto;
+}
+
+.colorChooser{
+    background-color: #000000;
+    width: 20px;
+    height: 20px;
+}
+
