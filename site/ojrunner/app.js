@@ -2,6 +2,8 @@
  * 服务器入口，负责启动服务器，并将编译执行请求解析后传给具体业务逻辑模块
  */
 var http = require('http');
+var domain = require('domain');
+var Q = require('q');
 var requestParser = require('./util/request_parser');
 var util = require('./util/util');
 var run = require('./core/run');
@@ -34,34 +36,42 @@ function handleRequest(req,res){
  * @param res
  */
 function perform(req,res){
-    //解析请求，获取解析后的POST报文体
-    requestParser.parseRequest(req,function(err, body){
-        if(err)
-            return console.error(err);
+    //使用domain来拦截意外错误
+    var d = domain.create();
 
-        //从报文体中取出请求参数
-        var srcType = body.srcType;
-        var srcCode = body.srcCode;
-        var inputData = body.inputData;
+    //若拦截到错误则返回错误信息
+    d.on('error', function(err){
+        reply(res, err, 500);
+        queue.next();
+    });
 
-        //交由业务逻辑执行，取得结果
-        run.run(srcCode,inputData,srcType,function(err, result, params){
-            if(err){
-                var errMsg = {};
-                errMsg.errMessage = err.message;
+    d.run(function() {
+        //解析请求
+        Q.denodeify(requestParser.parseRequest)(req)
+            //使用解析得到的参数编译执行
+            .then(function (body) {
+                //从报文体中取出请求参数
+                var srcType = body.srcType;
+                var srcCode = body.srcCode;
+                var inputData = body.inputData;
 
-                reply(res, errMsg, 500);
-                return queue.next();
-            }
+                return Q.denodeify(run.run)(srcCode, inputData, srcType);
+            })
+            //取得结果返回客户端
+            .then(function (results) {
+                var resultJson = {};
+                resultJson.result = results[0];
+                resultJson.params = results[1];
 
-            var resultJson = {};
-            resultJson.result = result;
-            resultJson.params = params;
-
-            //将执行结果转成json字符串返回
-            reply(res, resultJson);
-            queue.next();
-        });
+                //将执行结果转成json字符串返回
+                reply(res, resultJson);
+                queue.next();
+            },
+            //如果出错则返回错误
+            function (err) {
+                reply(res, err, 500);
+                queue.next();
+            });
     });
 }
 
@@ -78,7 +88,3 @@ function reply(res, object, code){
     res.writeHead(responseCode, {'Content-Type': 'application/json'});
     res.end(JSON.stringify(object)+'\n');
 }
-
-/*process.on('uncaughtException',function(err){
-    console.error(err);
-});*/

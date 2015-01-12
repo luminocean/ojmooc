@@ -45,6 +45,5 @@ RequestQueue.prototype.next = function(){
     this.callback(obj.req, obj.res);
 };
 
-
 exports.RequestQueue = RequestQueue;
 
