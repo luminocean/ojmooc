@@ -1,6 +1,6 @@
 var request = require('request');
 var util = require('./util');
-var logic = require('./logic');
+var controller = require('./proxy_controller');
 
 //上次获取的容器列表
 var lastContainers = [];
@@ -16,19 +16,25 @@ request(requestObj,function(err, response, body){
         return console.error(err);
     }
 
+    //获取docker信息的json对象做处理
     var containers = JSON.parse(body);
     doProcess(containers);
 });
 
 /**
- * 处理获取到的docker container信息
+ * 处理获取到的docker容器信息
  * @param containers
  */
 function doProcess(containers){
-    if(util.isSame(containers, lastContainers)) return;
+    //如果取到的信息和上一次一样则直接跳过
+    if(util.isSame(containers, lastContainers)){
+        console.log('container列表没有变化');
+        return;
+    }
 
+    //否则根据新取到的容器信息刷新HAProxy
     lastContainers = containers;
-    logic.refresh(containers);
+    controller.refresh(containers);
 }
 
 

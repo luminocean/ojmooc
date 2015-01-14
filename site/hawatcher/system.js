@@ -1,7 +1,11 @@
+/**
+ * HAWatcher在系统层的模块，用于和文件系统以及shell交互
+ */
 var path = require('path');
 var cp =require('child_process');
 
-var configPath = path.join(__dirname, '/config/haproxy.cfg');
+var configPah = path.join(__dirname, '/config');
+var configFilePath = path.join(__dirname, '/config/haproxy.cfg');
 var refreshShellPath = path.join(__dirname, '/shell/refresh.sh');
 var reloadShellPath = path.join(__dirname, '/shell/reload.sh');
 
@@ -9,7 +13,8 @@ exports.write = function(entries){
     var configText = format(entries);
 
     //开启shell执行子进程，将输入数据通过stdin输入
-    var child = cp.spawn(refreshShellPath, [configPath]);
+    //这里需要向shell传送文本，所以使用spawn从而可以使用stdin
+    var child = cp.spawn(refreshShellPath, [configFilePath]);
     child.stdin.end(configText);
 
     //收集子进程返回的数据
@@ -30,8 +35,11 @@ exports.write = function(entries){
     });
 };
 
+/**
+ * 重新加载HAProxy配置文件完成HAProxy的重启
+ */
 exports.reload = function(){
-    cp.execFile(reloadShellPath, function(err, stdout, stderr){
+    cp.execFile(reloadShellPath,[configPah],function(err, stdout, stderr){
         if(err) return console.error(err);
         if(stderr) console.warn(stderr);
         console.log(stdout);
