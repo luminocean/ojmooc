@@ -30,8 +30,8 @@ exports.write = function(entries){
     //当子进程退出时，回传执行结果
     child.on('exit',function(){
         if(errMsg)
-            console.error(errMsg);
-        console.log(result);
+            console.error(errMsg+'1');
+        console.log(result+'2');
     });
 };
 
@@ -40,9 +40,10 @@ exports.write = function(entries){
  */
 exports.reload = function(){
     cp.execFile(reloadShellPath,[configPah],function(err, stdout, stderr){
-        if(err) return console.error(err);
-        if(stderr) console.warn(stderr);
-        console.log(stdout);
+        if(err) return console.error(err+'3');
+        if(stderr) return console.warn(stderr+'4');
+
+        console.log('HAProxy重加载完毕');
     });
 };
 
