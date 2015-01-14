@@ -18,7 +18,7 @@
         </h2>
 
         <div class="inner" style="height: 5em;">
-            <audio id="audio" autoplay controls></audio>
+            <audio id="audio" controls></audio>
             <button id="record-audio">Record</button>
             <button id="stop-recording-audio" disabled>Stop</button>
             <h2 id="audio-url-preview"></h2>
@@ -81,7 +81,7 @@
                     recorder.stopRecording(function(url) {
                         audio.src = url;
                         audio.muted = false;
-                        audio.play();
+                        //audio.play();  //消除停止录音后自动播放
 
                         document.getElementById('audio-url-preview').innerHTML = '<a href="' + url + '" target="_blank">Recorded Audio URL</a>';
                     });
