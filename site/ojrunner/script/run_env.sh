@@ -23,12 +23,10 @@ function get_root_path(){
 ids=$(running docker)
 if [ "$ids" -eq -1 ]; then
     sudo service docker.io start
+fi
 
 #启动HAWatcher，由HAWatcher开启HAProxy提供负载均衡服务
 #这里默认HAWatcher和ojrunner在同一目录下
 root_path=$(get_root_path)
 watcher_path=${root_path%/*}/hawatcher
 "$watcher_path"/script/launch.sh
-
-
-
