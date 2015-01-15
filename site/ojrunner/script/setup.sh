@@ -3,7 +3,6 @@
 # 本脚本用于配置宿主环境的各种依赖项目
 # 包括安装各种依赖程序，开启HAProxy和Docker的某些配置以支持负载均衡
 # ##
-
 sudo apt-get update
 
 ### 安装依赖程序
@@ -32,6 +31,15 @@ else
     sudo sed -i '$a DOCKER_OPTS="-H tcp:\/\/0.0.0.0:4243 -H unix:\/\/\/var\/run\/docker.sock"' "$docker_config_path"
 fi
 
+#开始下载并安装docker镜像
+#生成的docker镜像名
+img_name="ojrunner-img"
+rl=$(readlink -f $0)
+dir=$(dirname $rl)
+root_path=${dir%/*}
+#生成镜像
+sudo docker build -t "$img_name" "${root_path}/config"
+
 if [ $? -eq 0 ]; then
-    echo "环境配置完成"
+    echo "环境安装完成"
 fi

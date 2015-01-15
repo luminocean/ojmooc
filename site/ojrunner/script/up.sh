@@ -10,20 +10,12 @@ docker_ojrunner_path="/home/ojrunner"
 
 #docker内服务器监听的端口
 docker_port=23333
-#映射到主机上的端口
-#host_port=23333
 #docker内ojrunner的入口文件
 docker_main="app.js"
-
-#如果已经存在ojrunner容器，则先删除
-#container=$(docker ps -a | grep ojrunner)
-#如果存在容器则删除
-#if [ -n "$container" ];then
-#    docker stop ojrunner
-#    docker rm ojrunner
-#fi
+#使用的docker镜像名
+img_name="ojrunner-img"
 
 #将服务器运行为守护进程，加入docker容器列表
-docker run -d -P -p "$docker_port" \
+sudo docker run -d -P -p "$docker_port" \
     -v "$host_ojrunner_path":"$docker_ojrunner_path" \
-    ojrunner-img nodejs "${docker_ojrunner_path}/${docker_main}"
+    "$img_name" nodejs "${docker_ojrunner_path}/${docker_main}"
