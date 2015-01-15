@@ -3,7 +3,7 @@ var util = require('./util');
 var controller = require('./proxy_controller');
 
 //上次获取的容器列表
-var lastContainers = [{"Id":"10086"}];
+var lastContainers = [];
 
 //开始周期性地检查docker容器变化
 inspectDocker();

@@ -4,7 +4,6 @@
 var path = require('path');
 var cp =require('child_process');
 
-var configPah = path.join(__dirname, '/config');
 var configFilePath = path.join(__dirname, '/config/haproxy.cfg');
 var refreshShellPath = path.join(__dirname, '/shell/refresh.sh');
 var reloadShellPath = path.join(__dirname, '/shell/reload.sh');
@@ -30,8 +29,7 @@ exports.write = function(entries){
     //当子进程退出时，回传执行结果
     child.on('exit',function(){
         if(errMsg)
-            console.error(errMsg+'1');
-        console.log(result+'2');
+            console.error(errMsg);
     });
 };
 
@@ -39,9 +37,9 @@ exports.write = function(entries){
  * 重新加载HAProxy配置文件完成HAProxy的重启
  */
 exports.reload = function(){
-    cp.execFile(reloadShellPath,[configPah],function(err, stdout, stderr){
-        if(err) return console.error(err+'3');
-        if(stderr) return console.warn(stderr+'4');
+    cp.execFile(reloadShellPath,[configFilePath],function(err, stdout, stderr){
+        if(err) return console.error(err);
+        if(stderr) return console.warn(stderr);
 
         console.log('HAProxy重加载完毕');
     });
