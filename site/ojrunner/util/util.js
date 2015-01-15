@@ -72,6 +72,11 @@ exports.readReportParams = function(programName, callback){
  * 另外，如果将内存挂载到tmp上可以提高读写性能。可以使执行config/mount.sh完成挂载
  */
 exports.prepareDir = function(){
+    //如果repo目录本身就不存在就先创建
+    if(!fs.existsSync(path.join(__dirname,'../',config.repo.dir.base))){
+        fs.mkdirSync(path.join(__dirname,'../',config.repo.dir.base));
+    }
+
     //获取各临时目录
     var dirs = config.repo.dir;
     for(var key in dirs){

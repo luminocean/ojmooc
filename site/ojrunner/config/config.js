@@ -11,6 +11,7 @@ var config={
   "repo": {
     //源码文件、可执行文件、报告文件所在的目录
     "dir": {
+      "base":"/repo",
       "src": "/repo/src",
       "build": "/repo/build",
       "report": "/repo/report"
