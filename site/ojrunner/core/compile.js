@@ -17,10 +17,14 @@ exports.compile = function(srcFileType, srcFilePath, buildFilePath, callback){
     if(!compiler)
         return callback(new Error('源码类型'+srcFileType+'没有配置对应的编译器'));
 
-    cp.execFile(compileShellPath,[compiler,srcFilePath,buildFilePath],function(err){
-       if(err){
-           return callback(new Error('编译失败'));
-       }
-       callback();
+    //设置编译时间上限
+    var options = {"timeout":config.compile.limit.timeout};
+
+    cp.execFile(compileShellPath,[compiler,srcFilePath,buildFilePath],options,
+        function(err,stdout,stderr){
+            if(err) return callback(err);
+            if(stderr.toString()) return callback(new Error(stderr.toString()));
+
+            callback();
     });
 };

@@ -44,6 +44,16 @@ var config={
       "cpp":"clang++",
       "pas":"fpc",
       "bas":"fbc"
+    },
+    "limit":{
+      //编译时的时间限制
+      "timeout": 5000
+    }
+  },
+  "exec":{
+    "limit":{
+      //运行的时间限制
+      "timeout": 10000
     }
   }
 };

@@ -16,7 +16,7 @@ var queue = new RequestQueue(perform);
 util.prepareDir();
 
 //启动服务器，指定绑定端口
-http.createServer(handleRequest).listen(23333,function(){
+http.createServer(handleRequest).listen(/*23333*/8080,function(){
     console.log('服务器已启动');
 });
 
@@ -28,7 +28,7 @@ http.createServer(handleRequest).listen(23333,function(){
 function handleRequest(req,res){
     //将req,res加入队列，等调度到该次请求的时候再把req,res通过回调传给perform去执行
     queue.push(req, res);
-};
+}
 
 /**
  * 执行服务器处理
@@ -69,6 +69,9 @@ function perform(req,res){
             },
             //如果出错则返回错误
             function (err) {
+                //输出错误记录
+                console.error(err.stack);
+                //发出响应
                 reply(res, err, 500);
                 queue.next();
             });
@@ -83,8 +86,14 @@ function perform(req,res){
  */
 function reply(res, object, code){
     var responseCode = code || 200;
+    var reply = "";
+
+    if(responseCode === 200)
+        reply = JSON.stringify(object);
+    else
+        reply = object.toString();
 
     //将执行结果转成json字符串返回
     res.writeHead(responseCode, {'Content-Type': 'application/json'});
-    res.end(JSON.stringify(object)+'\n');
+    res.end(reply+'\n');
 }

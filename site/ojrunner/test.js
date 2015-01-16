@@ -23,7 +23,7 @@ requestObj.body.srcType = srcType;
 requestObj.body.srcCode = srcCode;
 requestObj.body.inputData = inputData;
 
-for(var i=0; i<5; i++){
+for(var i=0; i<1; i++){
     //发送执行请求，获取执行结果
     request(requestObj,function(error, response, body){
         console.log(body);
