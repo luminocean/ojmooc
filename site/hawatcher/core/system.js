@@ -4,33 +4,20 @@
 var path = require('path');
 var cp =require('child_process');
 
-var configFilePath = path.join(__dirname, '/config/haproxy.cfg');
-var refreshShellPath = path.join(__dirname, '/shell/refresh.sh');
-var reloadShellPath = path.join(__dirname, '/shell/reload.sh');
+var configFilePath = path.join(__dirname,'../','/config/haproxy.cfg');
+var refreshShellPath = path.join(__dirname,'../','/shell/refresh.sh');
+var reloadShellPath = path.join(__dirname,'../','/shell/reload.sh');
 
 exports.write = function(entries){
     var configText = format(entries);
 
     //开启shell执行子进程，将输入数据通过stdin输入
     //这里需要向shell传送文本，所以使用spawn从而可以使用stdin
-    var child = cp.spawn(refreshShellPath, [configFilePath]);
+    var child = cp.execFile(refreshShellPath,[configFilePath],function(err,stdout,stderr){
+        if(err) return console.error(err);
+        if(stderr) return console.warn(stderr);
+    });
     child.stdin.end(configText);
-
-    //收集子进程返回的数据
-    var result = "";
-    var errMsg = "";
-    child.stdout.on('data',function(data){
-        result += data;
-    });
-    child.stderr.on('data',function(data){
-        errMsg += data;
-    });
-
-    //当子进程退出时，回传执行结果
-    child.on('exit',function(){
-        if(errMsg)
-            console.error(errMsg);
-    });
 };
 
 /**

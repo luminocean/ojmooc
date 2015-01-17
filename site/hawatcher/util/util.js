@@ -4,9 +4,7 @@
  * @param arr2
  */
 exports.isSame = function(arr1, arr2){
-    if( isSubset(arr1, arr2) && isSubset(arr2, arr1) )
-        return true;
-    return false;
+    return isSubset(arr1, arr2) && isSubset(arr2, arr1);
 };
 
 /**

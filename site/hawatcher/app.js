@@ -1,6 +1,7 @@
 var request = require('request');
-var util = require('./util');
-var controller = require('./proxy_controller');
+var util = require('./util/util');
+var controller = require('./core/proxy_controller');
+//var config = require('./config/config');
 
 //上次获取的容器列表
 var lastContainers = [];

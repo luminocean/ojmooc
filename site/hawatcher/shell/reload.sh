@@ -7,7 +7,7 @@ config_file_path="$1"
 #    -sf $(cat "${config_path}/haproxy.pid")
 
 #直接杀掉进程重新加载配置文件
-pids=$(ps -e | grep 'haproxy' | awk '{print $1}')
+pids=$(ps -e | grep ' haproxy$' | awk '{print $1}')
 if [ -n "$pids" ]; then
     kill "$pids"
 fi

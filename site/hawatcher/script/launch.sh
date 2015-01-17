@@ -7,13 +7,13 @@ dir=$(dirname $rl)
 root_path=${dir%/*}
 
 #如果HAProxy没有启动就先启动
-if [ -z "$(ps -e | grep 'haproxy')" ]; then
+if [ -z "$(ps -e | grep ' haproxy$')" ]; then
     haproxy -f "${root_path}/config/haproxy.cfg"
 fi
 
 pid=$(cat "$root_path"/log/hawatch.pid)
 current=$(ps -e | grep "$pid")
-if [ -n "$current" ]; then
+if [ -n "$pid" -a -n "$current" ]; then
     echo "HAWatcher已经启动，不再重复启动"
     exit 0
 fi
