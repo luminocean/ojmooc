@@ -10,7 +10,9 @@ var run = require('./core/run');
 
 //请求队列
 var RequestQueue = require('./util/request_queue').RequestQueue;
-var queue = new RequestQueue(perform);
+
+//初始化队列，设置回调函数
+var queue = new RequestQueue([heartBeat,perform]);
 
 //准备好各种临时文件需要的目录
 util.prepareDir();
@@ -31,18 +33,37 @@ function handleRequest(req,res){
 }
 
 /**
- * 执行服务器处理
- * @param req
- * @param res
+ * 心跳响应中间件，负责响应心跳检测请求
+ * @param req 请求对象
+ * @param res 响应对象
+ * @param next 处理下一个中间件，如果没有的话就处理下一个请求
  */
-function perform(req,res){
+function heartBeat(req,res,next){
+    requestParser.parseRequest(req,function(err, body){
+        //如果请求是心跳检测，那么返回响应
+        if(body.heartBeat){
+            reply(res,{isAlive:"I'm alive"});
+            next(false);
+        }else{
+            //否则继续处理
+            next();
+        }
+    });
+}
+/**
+ * 执行服务器处理
+ * @param req 请求对象
+ * @param res 响应对象
+ * @param next 处理下一个中间件，如果没有的话就处理下一个请求
+ */
+function perform(req,res,next){
     //使用domain来拦截意外错误
     var d = domain.create();
 
     //若拦截到错误则返回错误信息
     d.on('error', function(err){
         reply(res, err, 500);
-        queue.next();
+        next();
     });
 
     d.run(function() {
@@ -65,7 +86,7 @@ function perform(req,res){
 
                 //将执行结果转成json字符串返回
                 reply(res, resultJson);
-                queue.next();
+                next();
             },
             //如果出错则返回错误
             function (err) {
@@ -73,7 +94,7 @@ function perform(req,res){
                 console.error(err.stack);
                 //发出响应
                 reply(res, err, 500);
-                queue.next();
+                next();
             });
     });
 }
