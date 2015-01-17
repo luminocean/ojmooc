@@ -28,7 +28,7 @@ http.createServer(handleRequest).listen(/*23333*/8080,function(){
  * @param res 执行结果
  */
 function handleRequest(req,res){
-    //将req,res加入队列，等调度到该次请求的时候再把req,res通过回调传给perform去执行
+    //将req,res加入队列，等调度到该次请求的时候再把req,res传给配置好的回调函数
     queue.push(req, res);
 }
 
@@ -69,33 +69,33 @@ function perform(req,res,next){
     d.run(function() {
         //解析请求
         Q.denodeify(requestParser.parseRequest)(req)
-            //使用解析得到的参数编译执行
-            .then(function (body) {
-                //从报文体中取出请求参数
-                var srcType = body.srcType;
-                var srcCode = body.srcCode;
-                var inputData = body.inputData;
+        //使用解析得到的参数编译执行
+        .then(function (body) {
+            //从报文体中取出请求参数
+            var srcType = body.srcType;
+            var srcCode = body.srcCode;
+            var inputData = body.inputData;
 
-                return Q.denodeify(run.run)(srcCode, inputData, srcType);
-            })
-            //取得结果返回客户端
-            .then(function (results) {
-                var resultJson = {};
-                resultJson.result = results[0];
-                resultJson.params = results[1];
+            return Q.denodeify(run.run)(srcCode, inputData, srcType);
+        })
+        //取得结果返回客户端
+        .then(function (results) {
+            var resultJson = {};
+            resultJson.result = results[0];
+            resultJson.params = results[1];
 
-                //将执行结果转成json字符串返回
-                reply(res, resultJson);
-                next();
-            },
-            //如果出错则返回错误
-            function (err) {
-                //输出错误记录
-                console.error(err.stack);
-                //发出响应
-                reply(res, err, 500);
-                next();
-            });
+            //将执行结果转成json字符串返回
+            reply(res, resultJson);
+            next();
+        },
+        //如果出错则返回错误
+        function (err) {
+            //输出错误记录
+            console.error(err.stack);
+            //发出响应
+            reply(res, err, 500);
+            next();
+        });
     });
 }
 
