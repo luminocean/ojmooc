@@ -1,0 +1,148 @@
+<html>
+	<head>
+		<style type="text/css">
+		 .editor {
+            position: absolute;
+            float: right;
+            width: 800px;
+            height: 400px;
+            margin-right:20px;
+             font-size: 12px;
+    	}
+        #optionPanel{
+            background-color: rgb(192,192,192);
+            float: left;
+            width:400px;
+            height:400px;
+            margin-left: 10px;
+            font-family: sans-serif;
+            font-size: 40px;
+        }
+		</style>
+	</head>
+	<body>
+        <div id="optionPanel">
+            <table>
+                <tr>
+                    <td>
+                        <label>fontsize</label>
+                    </td>
+                    <td>
+                    <select id="fontsize" size="1" onchange="changeSize(this)">
+                        <option value="11px">11px</option>
+                        <option value="12px" selected="selected">12px</option>
+                        <option value="13px">13px</option>
+                        <option value="14px">14px</option>
+                    </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>language</label>
+                    </td>
+                    <td>
+                        <select id="language" size="1" onchange="changeLanguage(this)">
+                            <option value="C/C++">C/C++</option>
+                            <option value="pascal">pascal</option>
+                            <option value="Qbasic">Qbasic</option>
+                        </select>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="editor"  name="editor" id="Qbasiceditor" style="display:none">
+                Sub MakeHelloWorldFile (FileName)
+                'Create a new file in C: drive or overwrite existing file
+                   Set FSO = CreateObject("Scripting.FileSystemObject")
+                   If FSO.FileExists(FileName) Then 
+                      Answer = MsgBox ("File " & FileName & " exists ... OK to overwrite?", vbOKCancel)
+                      'If button selected is not OK, then quit now
+                      'vbOK is a language constant
+                      If Answer <> vbOK Then Exit Sub
+                   Else
+                      'Confirm OK to create
+                      Answer = MsgBox ("File " & FileName & " ... OK to create?", vbOKCancel)
+                      If Answer <> vbOK Then Exit Sub
+                   End If
+                   'Create new file (or replace an existing file)
+                   Set FileObject = FSO.CreateTextFile (FileName)
+                   FileObject.WriteLine "Time ... " & Now()
+                   FileObject.WriteLine "Hello World"
+                   FileObject.Close()
+                   MsgBox "File " & FileName & " ... updated."
+                End Sub
+        </div>
+        <div class="editor"  name="editor" id="Pascaleditor" style="display:none">
+            (* Sort using bubble sort. *)
+            FOR i := size - 1 DOWNTO 1 DO
+            FOR j := 1 TO i DO 
+                IF arr[j] > arr[j + 1] THEN BEGIN
+                    tmp := arr[j];
+                    arr[j] := arr[j + 1];
+                    arr[j + 1] := tmp;
+                END;
+                
+        </div>
+		<div class="editor" name="editor" id="Ceditor">
+                int main ()
+                {
+                int a, b=3; /* foobar */
+                a = b;
+                a+=2; // equivalent to a=a+2
+                cout << a;
+                #if VERBOSE >= 2
+                prints("trace message");
+                #endif
+                return 0;
+                }
+		</div>
+        <script src="src/ace.js"></script>
+        <script src="src/theme-twilight.js"></script>
+        <script src="src/mode-c_cpp.js"></script>
+        <script src="src/mode-pascal.js"></script>
+
+        <script>
+            function changeSize(item){
+                var editor = document.getElementsByName("editor");
+                for (var i = editor.length - 1; i >= 0; i--) {
+                    editor[i].style.fontSize = item.value;
+                };
+            }
+
+            function changeLanguage(item){
+                var Ceditor = document.getElementById("Ceditor");
+                var Pascaleditor = document.getElementById("Pascaleditor");
+                var Qbasiceditor = document.getElementById("Qbasiceditor");
+                if(item.value == "C/C++"){
+                    Ceditor.style.display = "block";
+                    Pascaleditor.style.display = "none";
+                    Qbasiceditor.style.display = "none";
+                }else if(item.value == "pascal"){
+                    Ceditor.style.display = "none";
+                    Pascaleditor.style.display = "block";
+                    Qbasiceditor.style.display = "none";
+                }else {
+                    Ceditor.style.display = "none";
+                    Pascaleditor.style.display = "none";
+                    Qbasiceditor.style.display = "block";
+                }
+            }
+        </script>
+
+    	<script>
+            var Ceditor = ace.edit("Ceditor");
+            Ceditor.setTheme("ace/theme/monokai");
+            Ceditor.getSession().setMode("ace/mode/c_cpp");
+
+            var Pascaleditor = ace.edit("Pascaleditor");
+            Pascaleditor.setTheme("ace/theme/monokai");
+            Pascaleditor.getSession().setMode("ace/mode/pascal");
+
+            var Qbasiceditor = ace.edit("Qbasiceditor");
+            Qbasiceditor.setTheme("ace/theme/monokai");
+            Qbasiceditor.getSession().setMode("ace/mode/vbscript");
+    	</script>
+
+        <script type="text/javascript" charset="utf-8"></script>
+	</body>
+    </html>
