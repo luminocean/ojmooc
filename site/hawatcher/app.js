@@ -6,6 +6,7 @@ var config = require('./config/config');
 
 //上次获取的容器列表
 var lastContainers = [];
+//开启Q的debug模式
 Q.longStackSupport = true;
 
 //开始周期性地检查docker容器变化
@@ -14,9 +15,9 @@ setInterval(inspectContainers, 5000);
 
 /*
  * 检查docker内配置的容器是否有变化，如果有变化则刷新HAProxy的负载配置
- * 将异步的检查动作promise化，所有的docker宿主机的容器列表都取得后统一处理
  */
 function inspectContainers(){
+    //将异步的检查动作promise化，所有的docker宿主机的容器列表都取得后统一处理
     var promises = [];
     for(var i=0; i<config.inspectIps.length; i++){
         var ip = config.inspectIps[i];
@@ -24,9 +25,10 @@ function inspectContainers(){
         var port = config.restful.port;
 
         var url = 'http://'+ip+':'+port+path;
-        promises.push(Q.denodeify(getContainersOnHost)(url,ip));
+        promises.push(Q.denodeify(getContainersOnHost)(url,ip)) ;
     }
 
+    //所有的promise都完成，即已经访问了所有配置的docker宿主机了
     Q.allSettled(promises).then(function(results){
         //每台docker宿主机上配置的docker列表的集合
         var containerGroups = [];
@@ -53,7 +55,7 @@ function inspectContainers(){
         }
 
         validateContainers(containers,function(err,survivors){
-            console.log('共检测到容器数：'+containers.length+' 存活容器数:'+survivors.length);
+            //console.log('共检测到容器数：'+containers.length+' 存活容器数:'+survivors.length);
             processContainerChanges(survivors);
         });
     });
@@ -158,6 +160,3 @@ function processContainerChanges(containers){
     lastContainers = containers;
     controller.refresh(containers);
 }
-
-
-

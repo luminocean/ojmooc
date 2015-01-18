@@ -1,25 +1,14 @@
 docker列表发生变化，准备刷新HAProxy配置
 HAProxy重加载完毕
-docker列表发生变化，准备刷新HAProxy配置
-HAProxy重加载完毕
-docker列表发生变化，准备刷新HAProxy配置
-HAProxy重加载完毕
-docker列表发生变化，准备刷新HAProxy配置
-HAProxy重加载完毕
-docker列表发生变化，准备刷新HAProxy配置
-HAProxy重加载完毕
-docker列表发生变化，准备刷新HAProxy配置
-HAProxy重加载完毕
-docker列表发生变化，准备刷新HAProxy配置
-HAProxy重加载完毕
-docker列表发生变化，准备刷新HAProxy配置
-HAProxy重加载完毕
-docker列表发生变化，准备刷新HAProxy配置
-HAProxy重加载完毕
-docker列表发生变化，准备刷新HAProxy配置
-HAProxy重加载完毕
-docker列表发生变化，准备刷新HAProxy配置
-HAProxy重加载完毕
+Error: ETIMEDOUT
+    at null._onTimeout (/home/luminocean/ojmooc/site/hawatcher/node_modules/request/request.js:919:15)
+    at Timer.listOnTimeout [as ontimeout] (timers.js:110:15)
+Error: ETIMEDOUT
+    at null._onTimeout (/home/luminocean/ojmooc/site/hawatcher/node_modules/request/request.js:919:15)
+    at Timer.listOnTimeout [as ontimeout] (timers.js:110:15)
+Error: ETIMEDOUT
+    at null._onTimeout (/home/luminocean/ojmooc/site/hawatcher/node_modules/request/request.js:919:15)
+    at Timer.listOnTimeout [as ontimeout] (timers.js:110:15)
 docker列表发生变化，准备刷新HAProxy配置
 HAProxy重加载完毕
 docker列表发生变化，准备刷新HAProxy配置
