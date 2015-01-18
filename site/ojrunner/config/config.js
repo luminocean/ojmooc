@@ -47,13 +47,13 @@ var config={
     },
     "limit":{
       //编译时的时间限制
-      "timeout": 5000
+      "timeout": 10000
     }
   },
   "exec":{
     "limit":{
       //运行的时间限制
-      "timeout": 10000
+      "timeout": 15000
     }
   }
 };

@@ -25,7 +25,8 @@ function convertToEntries(containers){
     for(var i=0; i<containers.length; i++){
         var container = containers[i];
         var entry = convert(container);
-        entries.push(entry);
+        if(entry)
+            entries.push(entry);
     }
     return entries;
 }
@@ -39,9 +40,7 @@ function convert(container){
     var entry = {};
     //server名会带有前缀的/，HAProxy不允许这样因此将其去除
     entry.server = container.Names.toString().replace('/','');
-    //暂时默认所有的后台服务器都在本地
-    //TODO 后台服务器ip地址要可配置
-    entry.ip = "127.0.0.1";
+    entry.ip = container.ip;
     entry.port = container.Ports[0].PublicPort;
     return entry;
 }

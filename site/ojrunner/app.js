@@ -2,6 +2,7 @@
  * 服务器入口，负责启动服务器，并将编译执行请求解析后传给具体业务逻辑模块
  */
 var http = require('http');
+var os = require('os');
 var domain = require('domain');
 var Q = require('q');
 var requestParser = require('./util/request_parser');
@@ -18,7 +19,7 @@ var queue = new RequestQueue([heartBeat,perform]);
 util.prepareDir();
 
 //启动服务器，指定绑定端口
-http.createServer(handleRequest).listen(/*23333*/8080,function(){
+http.createServer(handleRequest).listen(23333,function(){
     console.log('服务器已启动');
 });
 
@@ -42,7 +43,9 @@ function heartBeat(req,res,next){
     requestParser.parseRequest(req,function(err, body){
         //如果请求是心跳检测，那么返回响应
         if(body.heartBeat){
-            reply(res,{isAlive:"I'm alive"});
+            reply(res,{
+                "isAlive":"I'm alive"
+            });
             next(false);
         }else{
             //否则继续处理
@@ -108,6 +111,8 @@ function perform(req,res,next){
 function reply(res, object, code){
     var responseCode = code || 200;
     var reply = "";
+
+    object.host = os.hostname();
 
     if(responseCode === 200)
         reply = JSON.stringify(object);

@@ -1,41 +1,78 @@
 var request = require('request');
+var Q = require('q');
 var util = require('./util/util');
 var controller = require('./core/proxy_controller');
-//var config = require('./config/config');
+var config = require('./config/config');
 
 //上次获取的容器列表
 var lastContainers = [];
+Q.longStackSupport = true;
 
 //开始周期性地检查docker容器变化
-inspectDocker();
-setInterval(inspectDocker, 5000);
+inspectContainers();
+setInterval(inspectContainers, 5000);
 
 /*
  * 检查docker内配置的容器是否有变化，如果有变化则刷新HAProxy的负载配置
  */
-function inspectDocker(){
+function inspectContainers(){
+    var promises = [];
+    for(var i=0; i<config.inspectIps.length; i++){
+        var ip = config.inspectIps[i];
+        var path = config.restful.path;
+        var port = config.restful.port;
+
+        var url = 'http://'+ip+':'+port+path;
+        promises.push(Q.denodeify(doInspect)(url,ip));
+    }
+
+    Q.all(promises).then(function(containerGroups){
+        var containers = [];
+        for(var i=0; i<containerGroups.length; i++){
+            var containerGroup = containerGroups[i];
+            for(var j=0; j<containerGroup.length; j++){
+                var container = containerGroup[j];
+                containers.push(container);
+            }
+        }
+
+        processContainerChanges(containers);
+    },function(err){
+        console.error(err.stack);
+    });
+}
+
+function doInspect(url,ip,callback){
     //准备请求的数据
     var requestObj = {
-        "url":"http://localhost:4243/containers/json",
+        "url":url,
         "method":"GET"
     };
     //发送执行请求，获取执行结果
     request(requestObj,function(err, response, body){
-        if(err){
-            return console.error(err);
+        if(err) return callback(err);
+
+        //从所有containers里面找出ojrunner的containers进行处理
+        var allContainers = JSON.parse(body);
+        var containers = [];
+        for(var i=0; i<allContainers.length; i++){
+            var container = allContainers[i];
+            if(container.Ports[0]
+                && (container.Ports[0].PrivatePort === config.privatePort)){
+                container.ip = ip;
+                containers.push(container);
+            }
         }
 
-        //获取docker信息的json对象做处理
-        var containers = JSON.parse(body);
-        doProcess(containers);
+        callback(null, containers);
     });
 }
 
 /**
- * 处理获取到的docker容器信息
+ * 处理Docker容器变化，如果有变化则刷新HAProxy配置信息
  * @param containers
  */
-function doProcess(containers){
+function processContainerChanges(containers){
     //如果取到的信息和上一次一样则直接跳过
     if(util.isSame(containers, lastContainers)) return;
 
