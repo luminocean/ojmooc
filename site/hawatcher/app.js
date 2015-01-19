@@ -34,7 +34,7 @@ function inspectContainers(){
         var containerGroups = [];
 
         //获取每一个promise的结果，如果是fulfilled表示获取成功
-        //将获取的容器组（某一个host上的容器）加入数组中
+        //将获取的容器组（某一个host上的容器列表）加入数组中
         results.forEach(function (result) {
             if (result.state === "fulfilled") {
                 containerGroups.push(result.value);
@@ -54,6 +54,7 @@ function inspectContainers(){
             }
         }
 
+        //进行容器的心跳检查，如果存活则进行容器的变更处理
         validateContainers(containers,function(err,survivors){
             //console.log('共检测到容器数：'+containers.length+' 存活容器数:'+survivors.length);
             processContainerChanges(survivors);
@@ -96,16 +97,19 @@ function validateContainers(containers,callback){
             }
         };
 
+        //这里使用额外使用闭包防止回调函数中使用的外部变量被覆盖
         (function(requestObj,container){
             //发送执行请求，获取执行结果
             request(requestObj,function(err, response, body){
+                //发完请求后就把计数器+1，不管成功还是失败
+                counter++;
                 if(err)
                     return console.error(err.stack);
-                counter++;
 
                 if(body.isAlive)
                     survivors.push(container);
 
+                //所有容器都检查完毕后调用回调函数回传幸存容器
                 if(counter===containers.length){
                     callback(null,survivors);
                 }
