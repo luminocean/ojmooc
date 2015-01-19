@@ -1,0 +1,47 @@
+1、OJ interface
+//执行获取运行结果
+oj.run(/*源代码*/srcCode,/*源码类型*/srcType,/*输入数据*/inputData,function(err,results){
+	//运行结果
+	var result = results.result;
+	//运行参数
+	var params = result.params;
+
+	//各种运行时间
+	var times = params.times;
+	//运行内存占用
+	var mem = params.mem;
+});
+
+2、DEBUG interface
+//开启debug会话
+oj.debug(srcCode,srcType,inputData,/*断点行数*/lineNums,function(err,result,status){
+	//当前debug会话的id
+	var debugId = status.debugId;
+	//栈变量
+	var varibles = status.variables;
+});
+
+//stepInto
+oj.stepInto(debugId,function(err,result,status){
+	//....
+});
+
+//stepOver
+oj.stepOver(debugId,function(err,result,status){
+	//....
+});
+
+//查看栈状态
+oj.status(debugId,/*变量名*/varibleName,function(err,/*变量值*/value){
+	
+});
+
+//继续
+oj.resume(debugId,function(err,result,status){
+	
+});
+
+//终止debug会话
+oj.stop(debugId,function(err){
+	
+});
