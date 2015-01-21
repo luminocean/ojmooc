@@ -17,8 +17,6 @@ http.createServer(function (req, res) {
     });
 }).listen(23333);
 
-
-
 /**
  * 将响应json写回http响应对象中
  * @param res http的response对象

@@ -1,10 +1,10 @@
 /**
- * gdb封装模块，用于直接返回需要的gdb输出结果，具体结果的解析由逻辑层完成
- * @type {exports}
+ * gdb封装模块
  */
 
 var path = require('path');
 var cp = require('child_process');
+var parser = require('./parser');
 
 //debugger对象
 var dbr = {};
@@ -12,6 +12,7 @@ module.exports = dbr;
 
 //临时计数器
 var counter = 0;
+//存放所有gdb进程的对象
 var gdbMap = {};
 
 /**
@@ -37,15 +38,15 @@ dbr.debug = function(programName,breakLine,callback){
     //读完一批数据出发batch事件，进行输出的处理操作
     gdb.stdout.on('batch',function(batch){
         console.log('read complete-----------------\n'+batch);
-        console.log('-------------------------------\n')
+        console.log('-------------------------------\n');
+
+        counter++;
+        gdbMap[counter] = gdb;
+        callback(null, {"debugId":counter});
     });
 
     gdb.stdin.write('break '+breakLine+'\n');
     gdb.stdin.write('r\n');
-
-    counter++;
-    gdbMap[counter] = gdb;
-    callback(null, counter);
 };
 
 /**
@@ -63,6 +64,8 @@ dbr.printVal = function(debugId,valName,callback){
     gdb.stdout.removeAllListeners('batch').on('batch',function(batch){
         console.log('read complete-----------------\n'+batch);
         console.log('-------------------------------\n');
-        callback(null,batch);
+
+        var result = parser.printVal(batch);
+        callback(null, result.value);
     });
 };
