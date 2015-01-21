@@ -1,6 +1,10 @@
+/**
+ * gdb封装模块，用于直接返回需要的gdb输出结果，具体结果的解析由逻辑层完成
+ * @type {exports}
+ */
+
 var path = require('path');
 var cp = require('child_process');
-var gdbParser = require('./util/gdb_parser');
 
 //debugger对象
 var dbr = {};
@@ -12,12 +16,12 @@ var gdbMap = {};
 
 /**
  * 开启debug
- * @param programPath
+ * @param programName
  * @param breakLine
  * @param callback
  */
 dbr.debug = function(programName,breakLine,callback){
-    var programPath = path.join(__dirname,'./program',programName);
+    var programPath = path.join(__dirname,'../program',programName);
 
     var gdb = cp.spawn('gdb',['--interpreter=mi',programPath]);
     var data = '';
@@ -44,14 +48,21 @@ dbr.debug = function(programName,breakLine,callback){
     callback(null, counter);
 };
 
+/**
+ * 查值操作
+ * @param debugId
+ * @param valName
+ * @param callback
+ */
 dbr.printVal = function(debugId,valName,callback){
     var gdb = gdbMap[debugId];
-    if(gdb){
-        gdb.stdin.write('p '+valName+'\n');
-    }
+    if(!gdb)
+        return callback(new Error('找不到debugId '+debugId+' 对应的进程'));
+
+    gdb.stdin.write('p '+valName+'\n');
     gdb.stdout.removeAllListeners('batch').on('batch',function(batch){
-        console.log(batch);
-        var outputObj = gdbParser.parseGdbOutputText(batch);
-        callback(null,outputObj.printVal);
+        console.log('read complete-----------------\n'+batch);
+        console.log('-------------------------------\n');
+        callback(null,batch);
     });
-}
+};
