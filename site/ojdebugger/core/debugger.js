@@ -40,9 +40,19 @@ dbr.debug = function(programName,breakLine,callback){
         console.log('read complete-----------------\n'+batch);
         console.log('-------------------------------\n');
 
+        //直到解析到断点信息出现才回传信息，因为之前的都是无用信息
+        var breakPointResult = parser.breakPoint(batch);
+        if(!breakPointResult) return;
+
         counter++;
         gdbMap[counter] = gdb;
-        callback(null, {"debugId":counter});
+
+        var result = {
+            "debugId":counter,
+            "breakPoint":breakPointResult
+        };
+
+        callback(null, result);
     });
 
     gdb.stdin.write('break '+breakLine+'\n');

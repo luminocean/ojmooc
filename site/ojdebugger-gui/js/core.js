@@ -28,7 +28,7 @@ function printVal(){
             "valName":varName
         }
     },function(err,result){
-        $("#output").text(JSON.stringify(result));
+        $("#output").text(result['value']);
     });
 }
 
@@ -50,6 +50,9 @@ function debug(){
             "breakLine":breakLine
         }
     },function(err,result){
+        if(err)
+            return console.log(err);
+
         var debugId = result.debugId;
         $("#debugId").val(debugId);
         $("#output").text(JSON.stringify(result));
