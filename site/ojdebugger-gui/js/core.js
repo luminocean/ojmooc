@@ -45,9 +45,9 @@ function debug(){
     }
 
     sendRequest({
-        "debug":{
+        "suit":{
             "programName":programName,
-            "breakLine":breakLine
+            "breakLines":[breakLine]
         }
     },function(err,result){
         if(err)

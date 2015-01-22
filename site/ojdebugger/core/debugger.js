@@ -18,14 +18,14 @@ var gdbMap = {};
 /**
  * 开启debug
  * @param programName
- * @param breakLine
  * @param callback
  */
-dbr.debug = function(programName,breakLine,callback){
+dbr.debug = function(programName,callback){
     var programPath = path.join(__dirname,'../program',programName);
 
     var gdb = cp.spawn('gdb',['--interpreter=mi',programPath]);
     var data = '';
+
     gdb.stdout.on('data',function(chunk){
         data += chunk;
         //检查已获取数据的结尾，如果是(gdb)就表示一次输出已经完成，触发batch事件
@@ -40,23 +40,74 @@ dbr.debug = function(programName,breakLine,callback){
         console.log('read complete-----------------\n'+batch);
         console.log('-------------------------------\n');
 
-        //直到解析到断点信息出现才回传信息，因为之前的都是无用信息
-        var breakPointResult = parser.breakPoint(batch);
-        if(!breakPointResult) return;
-
         counter++;
         gdbMap[counter] = gdb;
-
-        var result = {
-            "debugId":counter,
-            "breakPoint":breakPointResult
-        };
+        var result = {"debugId":counter};
 
         callback(null, result);
     });
+};
 
-    gdb.stdin.write('break '+breakLine+'\n');
-    gdb.stdin.write('r\n');
+/**
+ * 添加断点操作
+ * @param debugId
+ * @param breakLines
+ * @param callback
+ */
+dbr.breakPoint = function(debugId,breakLines,callback){
+    var gdb = gdbMap[debugId];
+    if(!gdb)
+        return callback(new Error('找不到debugId '+debugId+' 对应的进程'));
+
+    var received = 0;
+
+    gdb.stdout.removeAllListeners('batch').on('batch',function(batch){
+        console.log('read complete-----------------\n'+batch);
+        console.log('-------------------------------\n');
+
+        received++;
+        if(received === breakLines.length){
+            callback(null,{"breakPoint":breakLines.length});
+        }
+    });
+
+    //加入断点
+    if(!breakLines || breakLines.length==0) {
+        callback(null, {"breakPoint": 0});
+    }else{
+        breakLines.forEach(function(lineNum){
+            gdb.stdin.write('break '+lineNum+'\n');
+        });
+    }
+};
+
+/**
+ * gdb执行操作
+ * @param debugId
+ * @param callback
+ * @returns {*}
+ */
+dbr.run = function(debugId,callback){
+    var gdb = gdbMap[debugId];
+    if(!gdb)
+        return callback(new Error('找不到debugId '+debugId+' 对应的进程'));
+
+    gdb.stdout.removeAllListeners('batch').on('batch',function(batch){
+        console.log('read complete-----------------\n'+batch);
+        console.log('-------------------------------\n');
+
+        //直到解析到断点信息出现才回传信息，因为之前的基本都是无用信息
+        var breakPointResult = parser.parseStopPoint(batch);
+        if(breakPointResult)
+            return callback(null, breakPointResult);
+
+        var exitResult = parser.parseExit(batch);
+        if(exitResult)
+            return callback(null, exitResult);
+    });
+
+    //开始执行gdb
+    gdb.stdin.write('r \n');
 };
 
 /**
@@ -70,12 +121,50 @@ dbr.printVal = function(debugId,valName,callback){
     if(!gdb)
         return callback(new Error('找不到debugId '+debugId+' 对应的进程'));
 
-    gdb.stdin.write('p '+valName+'\n');
     gdb.stdout.removeAllListeners('batch').on('batch',function(batch){
         console.log('read complete-----------------\n'+batch);
         console.log('-------------------------------\n');
 
-        var result = parser.printVal(batch);
+        var result = parser.parsePrintVal(batch);
         callback(null, result.value);
     });
+
+    gdb.stdin.write('p '+valName+'\n');
 };
+
+/*function print(token,json){
+    console.log(token+"* * * * *"+JSON.stringify(json));
+}*/
+
+/**
+ * 测试用执行套装，给定程序名一直执行到断点处
+ */
+dbr.suit = function(programName,breakLines,callback){
+    //开启debug
+    dbr.debug(programName,function(err,result){
+        if(err) return callback(err);
+        //print('debug',result);
+
+        var debugId = result.debugId;
+        //插入断点
+        dbr.breakPoint(debugId,breakLines,function(err){
+            if(err) return callback(err);
+            //print('breakPoint',result);
+
+            //执行程序
+            dbr.run(debugId,function(err,result){
+                if(err) return callback(err);
+                //print('run',result);
+
+                callback(null,{
+                    "debugId":debugId,
+                    "output":result
+                });
+            });
+        });
+    });
+};
+
+/*dbr.suit('hello',[],function(err,result){
+   print('suit',result);
+});*/

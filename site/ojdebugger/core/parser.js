@@ -3,7 +3,7 @@ module.exports = parser;
 
 var parseConfig = {
     //对外提供的parser方法
-    "breakPoint":{
+    "parseStopPoint":{
         //返回的结果的一个属性,表示某一行输出的分析
         "function":{
             //分析用的正则
@@ -16,10 +16,16 @@ var parseConfig = {
             "meta":["codeLineNum","code"]
         }
     },
-    "printVal":{
+    "parsePrintVal":{
         "value":{
             "reg":/~"\$\d+\s=\s(.+)"/,
             "meta":["value"]
+        }
+    },
+    "parseExit":{
+        "normalExit":{
+            "reg":/\(process\s(\d+)\)\sexited normally/,
+            "meta":["processId"]
         }
     }
 };

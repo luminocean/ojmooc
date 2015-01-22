@@ -5,7 +5,15 @@ module.exports = controller;
 
 //各种操作请求中包含的参数名称配置
 var paramConfigs = {
-    "debug":["programName","breakLine"],
+    //执行套装的参数
+    "suit":["programName","breakLines"],
+    //debug参数
+    "debug":["programName"],
+    //添加断点参数
+    "breakPoint":["debugId","breakLines"],
+    //执行参数
+    "run":["debugId"],
+    //查值参数
     "printVal":["debugId","valName"]
 };
 
