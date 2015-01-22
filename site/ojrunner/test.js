@@ -5,7 +5,7 @@ var fs = require('fs');
 var request = require('request');
 
 //测试的编译类型
-var srcType = 'cpp';
+var srcType = 'pas';
 //读取测试用源文件
 var srcCode = fs.readFileSync('./input_data/'+srcType+'_code','utf-8');
 //读取测试用数据
@@ -14,7 +14,7 @@ var inputData = fs.readFileSync('./input_data/'+srcType+'_data','utf-8');
 //准备请求的数据
 var requestObj = {
     //这里直接访问HAProxy做负载均衡
-    "url":"http://localhost:8080",
+    "url":"http://localhost:23333",
     "method":"POST",
     "json":true,
     "body":{}

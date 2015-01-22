@@ -21,10 +21,8 @@ exports.compile = function(srcFileType, srcFilePath, buildFilePath, callback){
     var options = {"timeout":config.compile.limit.timeout};
 
     cp.execFile(compileShellPath,[compiler,srcFilePath,buildFilePath],options,
-        function(err,stdout,stderr){
+        function(err){
             if(err) return callback(err);
-            if(stderr.toString()) return callback(new Error(stderr.toString()));
-
             callback();
     });
 };
