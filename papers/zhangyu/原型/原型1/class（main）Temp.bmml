@@ -100,9 +100,9 @@
         <text>%u5F00%u8BBE%u8001%u5E08%u540D</text>
       </controlProperties>
     </control>
-    <control controlID="49" controlTypeID="com.balsamiq.mockups::StickyNote" x="217" y="181" w="-1" h="-1" measuredW="109" measuredH="123" zOrder="24" locked="false" isInGroup="-1">
+    <control controlID="49" controlTypeID="com.balsamiq.mockups::StickyNote" x="217" y="181" w="109" h="294" measuredW="109" measuredH="123" zOrder="24" locked="false" isInGroup="-1">
       <controlProperties>
-        <text>%u4E3B%u754C%u9762%u4EE5%u8BFE%u7A0B%u4E3A%u4E3B</text>
+        <text>%u4E3B%u754C%u9762%u4EE5%u8BFE%u7A0B%u4E3A%u4E3B%0A%u7528%u6237%u5206%u4F18%u5148%u7EA7%uFF0C%u521D%u7EA7%u548C%u9AD8%u7EA7%uFF0C%u51C6%u5165%u51C6%u51FA%uFF0C%u7528%u6237%u7B49%u7EA7%u5224%u65AD</text>
       </controlProperties>
     </control>
   </controls>

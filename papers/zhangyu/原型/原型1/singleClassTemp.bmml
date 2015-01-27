@@ -74,9 +74,14 @@
         <text>%u5F00%u8BBE%u8001%u5E08</text>
       </controlProperties>
     </control>
-    <control controlID="33" controlTypeID="com.balsamiq.mockups::Label" x="384" y="588" w="-1" h="-1" measuredW="39" measuredH="21" zOrder="20" locked="false" isInGroup="-1">
+    <control controlID="33" controlTypeID="com.balsamiq.mockups::Label" x="357" y="199" w="-1" h="-1" measuredW="39" measuredH="21" zOrder="20" locked="false" isInGroup="-1">
       <controlProperties>
         <text>%u5B8C%u6210%u5EA6</text>
+      </controlProperties>
+    </control>
+    <control controlID="34" controlTypeID="com.balsamiq.mockups::Button" x="357" y="580" w="-1" h="-1" measuredW="100" measuredH="27" zOrder="21" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>%u5F55%u5236%u6DFB%u52A0%u8BFE%u7A0B</text>
       </controlProperties>
     </control>
   </controls>
