@@ -28,11 +28,16 @@ dbr.debug = function(programName,callback){
 
     gdb.stdout.on('data',function(chunk){
         data += chunk;
-        //检查已获取数据的结尾，如果是(gdb)就表示一次输出已经完成，触发batch事件
-        var tail = data.substr(data.length-7,7).toString();
-        if(tail.match(/\(gdb\)\s*$/)){
-            gdb.stdout.emit('batch',data);
-            data = '';
+
+        //在读到的gdb输出中检索(gdb)分隔标记，每个标记前面的数据都是一个batch
+        var batchData = data.match(/([\s\S]*?)\(gdb\)/);
+        while(batchData){
+            //发送batch事件与数据
+            gdb.stdout.emit('batch',batchData[1]);
+
+            //把发掉的数据去除，再检索还有没有batch
+            data = data.replace(/[.\n]*?\(gdb\)/,'');
+            batchData = data.match(/([\s\S]*?)\(gdb\)/);
         }
     });
     //读完一批数据出发batch事件，进行输出的处理操作
@@ -96,11 +101,12 @@ dbr.run = function(debugId,callback){
         console.log('read complete-----------------\n'+batch);
         console.log('-------------------------------\n');
 
-        //直到解析到断点信息出现才回传信息，因为之前的基本都是无用信息
+        //如果到达了断点则返回断点信息
         var breakPointResult = parser.parseStopPoint(batch);
         if(breakPointResult)
             return callback(null, breakPointResult);
 
+        //如果运行结束则返回结束信息
         var exitResult = parser.parseExit(batch);
         if(exitResult)
             return callback(null, exitResult);
@@ -132,29 +138,24 @@ dbr.printVal = function(debugId,valName,callback){
     gdb.stdin.write('p '+valName+'\n');
 };
 
-/*function print(token,json){
-    console.log(token+"* * * * *"+JSON.stringify(json));
-}*/
 
 /**
- * 测试用执行套装，给定程序名一直执行到断点处
+ * [测试用]执行套装，给定程序名一直执行到断点处
  */
 dbr.suit = function(programName,breakLines,callback){
     //开启debug
     dbr.debug(programName,function(err,result){
         if(err) return callback(err);
-        //print('debug',result);
 
         var debugId = result.debugId;
         //插入断点
         dbr.breakPoint(debugId,breakLines,function(err){
             if(err) return callback(err);
-            //print('breakPoint',result);
 
+            console.log("to run");
             //执行程序
             dbr.run(debugId,function(err,result){
                 if(err) return callback(err);
-                //print('run',result);
 
                 callback(null,{
                     "debugId":debugId,
@@ -164,7 +165,3 @@ dbr.suit = function(programName,breakLines,callback){
         });
     });
 };
-
-/*dbr.suit('hello',[],function(err,result){
-   print('suit',result);
-});*/
