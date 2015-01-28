@@ -1,6 +1,6 @@
 var dbr = require('./core/debugger');
 
-dbr.suit('hello',[17,19],function(err,result){
+dbr.suit('hello',[17],function(err,result){
     if(err){
        console.error(err.stack);
        console.error(err.message);
@@ -13,11 +13,15 @@ dbr.suit('hello',[17,19],function(err,result){
     dbr.printVal(debugId,'sum',function(err,result){
         console.log(result);
 
-        dbr.continue(debugId,function(err,result){
+        dbr.stepOver(debugId,function(err,result){
             console.log(result);
 
             dbr.printVal(debugId,'sum',function(err,result) {
                 console.log(result);
+
+                dbr.continue(debugId,function(err,result){
+                    console.log(result);
+                });
             });
         });
     });
