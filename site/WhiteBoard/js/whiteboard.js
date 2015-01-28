@@ -2,14 +2,14 @@
  * Created by YBH on 2015/1/13.
  */
 //白板的两种模式，画笔，图片和文本
-var states = {
-    free:"free",
-    draw:"draw",
-    graph:"graph"
-}
+//var states = {
+//    free:"free",
+//    draw:"draw",
+//    graph:"graph"
+//}
 
 
-var currentState = states.draw;
+//var currentState = states.draw;
 var mainBoard = $("#mainBoard");
 var canvas = $("#drawBoard");
 var graphBoard = $("#graphBoard");
@@ -18,23 +18,17 @@ var graphBoard = $("#graphBoard");
 
 
 $("#textButton").bind("mousedown",function(e){
-    changeToTextMode();
+    //changeToTextMode();
 });
 
 $("#imageButton").bind("mousedown",function(e){
-    changeToGraphMode();
+    //changeToGraphMode();
 });
 
 //画笔键按下，开启画笔模式
 $("#penButton").bind("mousedown",function(e){
-    changeToPenMode();
+    //changeToPenMode();
     console.log("penMode");
-});
-
-//橡皮键按下，开启橡皮模式
-$("#eraserButton").bind("mousedown",function(e){
-    changeToEraserMode();
-    console.log("eraserMode");
 });
 
 //撤销键按下，撤销

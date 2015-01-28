@@ -4,13 +4,13 @@
     <meta charset="UTF-8">
     <title>WhiteBoard</title>
     <link rel="stylesheet" type="text/css" href="./css/whiteboard.css">
+    <link rel="stylesheet" type="text/css" href="bootstrap/dist/css/bootstrap.min.css">
 </head>
 <body>
 
 <div id="whiteboard">
     <div id="menu">
         <button id="penButton" class="menuButton"></button>
-        <button id="eraserButton" class="menuButton"></button>
         <button id="textButton" class="menuButton"></button>
         <button id="imageButton" class="menuButton"></button>
 
@@ -18,8 +18,7 @@
         <button id="redoButton" class="menuButton"></button>
         <button id="undoButton" class="menuButton"></button>
     </div>
-    <div id="mainBoard" class="pen">
-        <canvas id="drawBoard" width="500" height="500"></canvas>
+    <div id="mainBoard">
         <div id="graphBoard"></div>
     </div>
 
@@ -33,6 +32,8 @@
 </div>
 
 <script src="js/jquery-2.1.3.js"></script>
+<script src="bootstrap/dist/js/bootstrap.min.js"></script>
+
 <script src="js/file.js"></script>
 <script src="layer/layer/layer.min.js"></script>
 <script src="zrender/doc/asset/js/esl/esl.js"></script>
@@ -42,7 +43,7 @@
 
 
 <script src="js/whiteboard.js"></script>
-<script src="js/draw.js"></script>
+
 <script src="js/graphboard.js"></script>
 <script src="js/text.js"></script>
 <script src="js/graph.js"></script>

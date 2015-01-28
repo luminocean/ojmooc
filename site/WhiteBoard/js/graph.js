@@ -1,14 +1,14 @@
 /**
  * Created by YBH on 2015/1/15.
  */
-function changeToGraphMode(){
-    currentState = states.graph;
-    graphBoardState = graphBoardStates.graph;
-    drawBoardState = drawBoardStates.free;
-    $("#mainBoard").removeClass().addClass("graph");
-
-    changeToGraphBoard();
-}
+//function changeToGraphMode(){
+//    currentState = states.graph;
+//    graphBoardState = graphBoardStates.graph;
+//    drawBoardState = drawBoardStates.free;
+//    $("#mainBoard").removeClass().addClass("graph");
+//
+//    changeToGraphBoard();
+//}
 
 //数组图形设计
 function MyArray(options) {

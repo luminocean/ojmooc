@@ -1,13 +1,13 @@
 /**
  * Created by YBH on 2015/1/15.
  */
-var graphBoardStates = {
-    free:"free",
-    text:"text",
-    graph:"graph"
-}
+//var graphBoardStates = {
+//    free:"free",
+//    text:"text",
+//    graph:"graph"
+//}
 
-graphBoardState = graphBoardStates.free;
+//graphBoardState = graphBoardStates.free;
 
 var zr;
 var graphBoard = $("#graphBoard")[0];

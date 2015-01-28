@@ -1,14 +1,14 @@
 /**
  * Created by YBH on 2015/1/15.
  */
-function changeToTextMode(){
-    currentState = states.graph;
-    graphBoardState = graphBoardStates.text;
-    drawBoardState = drawBoardStates.free;
-    $("#mainBoard").removeClass().addClass("txt");
-
-    changeToGraphBoard();
-}
+//function changeToTextMode(){
+//    currentState = states.graph;
+//    graphBoardState = graphBoardStates.text;
+//    drawBoardState = drawBoardStates.free;
+//    $("#mainBoard").removeClass().addClass("txt");
+//
+//    changeToGraphBoard();
+//}
 //双击初始时间
 var time;
 
