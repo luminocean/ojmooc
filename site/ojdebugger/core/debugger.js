@@ -10,7 +10,7 @@ var parser = require('./parser');
 var dbr = {};
 module.exports = dbr;
 
-//临时计数器
+//gdb进程计数器
 var counter = 0;
 //存放所有gdb进程的对象
 var gdbMap = {};
@@ -30,20 +30,23 @@ dbr.debug = function(programName,callback){
         data += chunk;
 
         //在读到的gdb输出中检索(gdb)分隔标记，每个标记前面的数据都是一个batch
-        var batchData = data.match(/([\s\S]*?)\(gdb\)/);
+        var batchData = data.match(/([\s\S]*?)\(gdb\)\s*/);
         while(batchData){
             //发送batch事件与数据
-            gdb.stdout.emit('batch',batchData[1]);
+            gdb.stdout.emit('batch',batchData[0]);
 
             //把发掉的数据去除，再检索还有没有batch
-            data = data.replace(/[.\n]*?\(gdb\)/,'');
+            data = data.replace(/[\s\S]*?\(gdb\)\s*/,'');
             batchData = data.match(/([\s\S]*?)\(gdb\)/);
         }
     });
+
     //读完一批数据出发batch事件，进行输出的处理操作
     gdb.stdout.on('batch',function(batch){
-        console.log('read complete-----------------\n'+batch);
-        console.log('-------------------------------\n');
+        //console.log('read complete-----------------\n'+batch);
+        //console.log('-------------------------------\n');
+
+        console.log(" DEBUG resolve");
 
         counter++;
         gdbMap[counter] = gdb;
@@ -67,8 +70,10 @@ dbr.breakPoint = function(debugId,breakLines,callback){
     var received = 0;
 
     gdb.stdout.removeAllListeners('batch').on('batch',function(batch){
-        console.log('read complete-----------------\n'+batch);
-        console.log('-------------------------------\n');
+        //console.log('read complete-----------------\n'+batch);
+        //console.log('-------------------------------\n');
+
+        console.log(debugId+" BP resolve");
 
         received++;
         if(received === breakLines.length){
@@ -98,22 +103,33 @@ dbr.run = function(debugId,callback){
         return callback(new Error('找不到debugId '+debugId+' 对应的进程'));
 
     gdb.stdout.removeAllListeners('batch').on('batch',function(batch){
+        console.log(debugId+" RUN resolve");
+
         console.log('read complete-----------------\n'+batch);
         console.log('-------------------------------\n');
 
-        //如果到达了断点则返回断点信息
-        var breakPointResult = parser.parseStopPoint(batch);
-        if(breakPointResult)
-            return callback(null, breakPointResult);
-
-        //如果运行结束则返回结束信息
-        var exitResult = parser.parseExit(batch);
-        if(exitResult)
-            return callback(null, exitResult);
+        runHandler(batch,callback);
     });
 
     //开始执行gdb
     gdb.stdin.write('r \n');
+};
+
+dbr.continue = function(debugId,callback){
+    var gdb = gdbMap[debugId];
+    if(!gdb)
+        return callback(new Error('找不到debugId '+debugId+' 对应的进程'));
+
+    gdb.stdout.removeAllListeners('batch').on('batch',function(batch){
+        console.log(debugId+" CONTINUE resolve");
+        console.log('read complete-----------------\n'+batch);
+        console.log('-------------------------------\n');
+
+        runHandler(batch,callback);
+    });
+
+    //继续gdb
+    gdb.stdin.write('c \n');
 };
 
 /**
@@ -128,6 +144,7 @@ dbr.printVal = function(debugId,valName,callback){
         return callback(new Error('找不到debugId '+debugId+' 对应的进程'));
 
     gdb.stdout.removeAllListeners('batch').on('batch',function(batch){
+        console.log(debugId+' PRINT resolve');
         console.log('read complete-----------------\n'+batch);
         console.log('-------------------------------\n');
 
@@ -152,7 +169,6 @@ dbr.suit = function(programName,breakLines,callback){
         dbr.breakPoint(debugId,breakLines,function(err){
             if(err) return callback(err);
 
-            console.log("to run");
             //执行程序
             dbr.run(debugId,function(err,result){
                 if(err) return callback(err);
@@ -165,3 +181,24 @@ dbr.suit = function(programName,breakLines,callback){
         });
     });
 };
+
+/**
+ * 处理运行数据
+ * @param batch
+ * @param callback
+ * @returns {*}
+ */
+function runHandler(batch,callback){
+    //console.log('read complete-----------------\n'+batch);
+    //console.log('-------------------------------\n');
+
+    //如果到达了断点则返回断点信息
+    var breakPointResult = parser.parseStopPoint(batch);
+    if(breakPointResult)
+        return callback(null, breakPointResult);
+
+    //如果运行结束则返回结束信息
+    var exitResult = parser.parseExit(batch);
+    if(exitResult)
+        return callback(null, exitResult);
+}
