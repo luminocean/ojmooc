@@ -7,13 +7,10 @@ module.exports = controller;
 var paramConfigs = {
     //执行套装的参数
     "suit":["programName","breakLines"],
-    //debug参数
     "debug":["programName"],
-    //添加断点参数
     "breakPoint":["debugId","breakLines"],
-    //执行参数
     "run":["debugId"],
-    //查值参数
+    "continue":["debugId"],
     "printVal":["debugId","valName"]
 };
 

@@ -5,15 +5,15 @@ var parseConfig = {
     //对外提供的parser方法
     "parseStopPoint":{
         //返回的结果的一个属性,表示某一行输出的分析
-        "function":{
+        /*"function":{
             //分析用的正则
             "reg": /~"(\d+),\s(.*)\s\((.*)\)\sat\s(.*):(\d+)/,
             //每一项表示对应的分组名称，顺序也对应，一行分析出来的各种子属性
             "meta":["funcLineNum","funcName","params","srcName","srcLineNum"]
-        },
+        },*/
         "code":{
             "reg": /~"(\d+)(?:\\t)+(.*)\\n/,
-            "meta":["codeLineNum","code"]
+            "meta":["lineNum","text"]
         }
     },
     "parsePrintVal":{

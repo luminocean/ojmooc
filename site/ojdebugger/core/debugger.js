@@ -1,7 +1,6 @@
 /**
  * gdb封装模块
  */
-
 var path = require('path');
 var cp = require('child_process');
 var parser = require('./parser');
@@ -10,11 +9,80 @@ var parser = require('./parser');
 var dbr = {};
 module.exports = dbr;
 
-//临时计数器
+//gdb进程计数器
 var counter = 0;
 //存放所有gdb进程的对象
 var gdbMap = {};
 
+//用于快速构建模式化的debug方法所用的配置
+var debuggerMethods = {
+    //gdb执行操作
+    "run":{
+        //log用的标识名称
+        "name":"RUN",
+        //实际传给gdb执行的命令
+        "command":"r",
+        //获取gdb输出后用来处理该输出的handler
+        "handler":proceedHandler
+    },
+    //继续操作
+    "continue":{
+        "name":"CONTINUE",
+        "command":"c",
+        "handler":proceedHandler
+    },
+    //单步进入操作
+    "stepInto":{
+        "name":"STEPINTO",
+        "command":"step",
+        "handler":proceedHandler
+    },
+    //单步越过操作
+    "stepOver":{
+        "name":"STEPOVER",
+        "command":"next",
+        "handler":proceedHandler
+    }
+};
+
+//使用配置对象自动构建常规的debugger方法
+for(var methodName in debuggerMethods){
+    if(!debuggerMethods.hasOwnProperty(methodName)) continue;
+
+    var methodConfig = debuggerMethods[methodName];
+
+    (function(methodName,methodConfig){
+        dbr[methodName] = function(debugId,callback){
+            //取出gdb实例
+            var gdb = gdbMap[debugId];
+            if(!gdb)
+                return callback(new Error('找不到debugId '+debugId+' 对应的进程'));
+
+            //截获batch事件及其带来的数据
+            gdb.stdout.removeAllListeners('batch').on('batch',function(batch){
+                console.log(debugId+' '+methodConfig.name+' resolve');
+                //console.log('read complete-----------------\n'+batch);
+                //console.log('-------------------------------\n');
+
+                //交给配置好的方法去解析
+                methodConfig.handler(batch,function(err,result,exit){
+                    if(err) callback(err);
+                    if(result) callback(null,result);
+
+                    //调试结束，结束当前的debug会话
+                    if(exit){
+                        gdb.kill('SIGTERM');
+                    }
+                });
+            });
+
+            //向gdb进程传入指令
+            gdb.stdin.write(methodConfig.command+' \n');
+        };
+    })(methodName,methodConfig);
+}
+
+//以下的均为非常规的debugger方法，需要时请自行添加
 /**
  * 开启debug
  * @param programName
@@ -30,24 +98,26 @@ dbr.debug = function(programName,callback){
         data += chunk;
 
         //在读到的gdb输出中检索(gdb)分隔标记，每个标记前面的数据都是一个batch
-        var batchData = data.match(/([\s\S]*?)\(gdb\)/);
+        var batchData = data.match(/([\s\S]*?)\(gdb\)\s*/);
         while(batchData){
             //发送batch事件与数据
-            gdb.stdout.emit('batch',batchData[1]);
+            gdb.stdout.emit('batch',batchData[0]);
 
             //把发掉的数据去除，再检索还有没有batch
-            data = data.replace(/[.\n]*?\(gdb\)/,'');
+            data = data.replace(/[\s\S]*?\(gdb\)\s*/,'');
             batchData = data.match(/([\s\S]*?)\(gdb\)/);
         }
     });
+
     //读完一批数据出发batch事件，进行输出的处理操作
-    gdb.stdout.on('batch',function(batch){
-        console.log('read complete-----------------\n'+batch);
-        console.log('-------------------------------\n');
+    gdb.stdout.on('batch',function(){
+        console.log(" DEBUG resolve");
 
         counter++;
         gdbMap[counter] = gdb;
-        var result = {"debugId":counter};
+        var result = {
+            "debugId":counter
+        };
 
         callback(null, result);
     });
@@ -66,13 +136,14 @@ dbr.breakPoint = function(debugId,breakLines,callback){
 
     var received = 0;
 
-    gdb.stdout.removeAllListeners('batch').on('batch',function(batch){
-        console.log('read complete-----------------\n'+batch);
-        console.log('-------------------------------\n');
+    gdb.stdout.removeAllListeners('batch').on('batch',function(){
+        console.log(debugId+" BP resolve");
 
         received++;
         if(received === breakLines.length){
-            callback(null,{"breakPoint":breakLines.length});
+            callback(null,{
+                "breakPointNum":breakLines.length
+            });
         }
     });
 
@@ -87,36 +158,6 @@ dbr.breakPoint = function(debugId,breakLines,callback){
 };
 
 /**
- * gdb执行操作
- * @param debugId
- * @param callback
- * @returns {*}
- */
-dbr.run = function(debugId,callback){
-    var gdb = gdbMap[debugId];
-    if(!gdb)
-        return callback(new Error('找不到debugId '+debugId+' 对应的进程'));
-
-    gdb.stdout.removeAllListeners('batch').on('batch',function(batch){
-        console.log('read complete-----------------\n'+batch);
-        console.log('-------------------------------\n');
-
-        //如果到达了断点则返回断点信息
-        var breakPointResult = parser.parseStopPoint(batch);
-        if(breakPointResult)
-            return callback(null, breakPointResult);
-
-        //如果运行结束则返回结束信息
-        var exitResult = parser.parseExit(batch);
-        if(exitResult)
-            return callback(null, exitResult);
-    });
-
-    //开始执行gdb
-    gdb.stdin.write('r \n');
-};
-
-/**
  * 查值操作
  * @param debugId
  * @param valName
@@ -128,16 +169,18 @@ dbr.printVal = function(debugId,valName,callback){
         return callback(new Error('找不到debugId '+debugId+' 对应的进程'));
 
     gdb.stdout.removeAllListeners('batch').on('batch',function(batch){
-        console.log('read complete-----------------\n'+batch);
-        console.log('-------------------------------\n');
+        console.log(debugId+' PRINT resolve');
+        //console.log('read complete-----------------\n'+batch);
+        //console.log('-------------------------------\n');
 
         var result = parser.parsePrintVal(batch);
-        callback(null, result.value);
+        if(result){
+            callback(null, result.value);
+        }
     });
 
     gdb.stdin.write('p '+valName+'\n');
 };
-
 
 /**
  * [测试用]执行套装，给定程序名一直执行到断点处
@@ -152,16 +195,33 @@ dbr.suit = function(programName,breakLines,callback){
         dbr.breakPoint(debugId,breakLines,function(err){
             if(err) return callback(err);
 
-            console.log("to run");
             //执行程序
             dbr.run(debugId,function(err,result){
                 if(err) return callback(err);
 
                 callback(null,{
                     "debugId":debugId,
-                    "output":result
+                    "result":result
                 });
             });
         });
     });
 };
+
+/**
+ * 处理运行数据
+ * @param batch
+ * @param finish
+ * @returns {*}
+ */
+function proceedHandler(batch,finish){
+    //如果到达了断点则返回断点信息
+    var breakPointResult = parser.parseStopPoint(batch);
+    if(breakPointResult)
+        return finish(null,breakPointResult,false);
+
+    //如果运行结束则返回结束信息
+    var exitResult = parser.parseExit(batch);
+    if(exitResult)
+        return finish(null,exitResult,true);
+}
