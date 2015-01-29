@@ -31,6 +31,43 @@ config.forEach(function(item){
     });
 });
 
+function debug(){
+    var programName = $('#programName').val();
+    var breakLine = $('#breakLine').val();
+
+    if(!programName||!breakLine){
+        console.error('程序名或断点位置未设定:'+programName+" & "+breakLine);
+        return;
+    }
+
+    //开启debug
+    sendRequest({"debug":{"programName":programName}},function(err,result){
+        if(err) return console.log(err);
+        var debugId = result.debugId;
+
+        //加入断点
+        sendRequest({
+            "breakPoint":{
+                "debugId":debugId,
+                "breakLines":[breakLine]
+            }
+        },function(err,result){
+            if(err) return console.log(err);
+            //运行程序
+            sendRequest({
+                "run":{
+                    "debugId":debugId
+                }
+            },function(err,result){
+                if(err) return console.log(err);
+
+                $("#debugId").val(debugId);
+                display(JSON.stringify(result));
+            });
+        });
+    });
+}
+
 function printVal(){
     var debugId = $('#debugId').val();
     var varName = $('#varName').val();
@@ -46,30 +83,6 @@ function printVal(){
         }
     },function(err,result){
         $('#varVal').val(result['value']);
-    });
-}
-
-function debug(){
-    var programName = $('#programName').val();
-    var breakLine = $('#breakLine').val();
-
-    if(!programName||!breakLine){
-        console.error('程序名或断点位置未设定:'+programName+" & "+breakLine);
-        return;
-    }
-
-    sendRequest({
-        "suit":{
-            "programName":programName,
-            "breakLines":[breakLine]
-        }
-    },function(err,result){
-        if(err)
-            return console.log(err);
-
-        var debugId = result.debugId;
-        $("#debugId").val(debugId);
-        display(JSON.stringify(result));
     });
 }
 

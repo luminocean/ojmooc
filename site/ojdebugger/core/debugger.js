@@ -183,32 +183,6 @@ dbr.printVal = function(debugId,valName,callback){
 };
 
 /**
- * [测试用]执行套装，给定程序名一直执行到断点处
- */
-dbr.suit = function(programName,breakLines,callback){
-    //开启debug
-    dbr.debug(programName,function(err,result){
-        if(err) return callback(err);
-
-        var debugId = result.debugId;
-        //插入断点
-        dbr.breakPoint(debugId,breakLines,function(err){
-            if(err) return callback(err);
-
-            //执行程序
-            dbr.run(debugId,function(err,result){
-                if(err) return callback(err);
-
-                callback(null,{
-                    "debugId":debugId,
-                    "result":result
-                });
-            });
-        });
-    });
-};
-
-/**
  * 处理运行数据
  * @param batch
  * @param finish
