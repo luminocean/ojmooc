@@ -1,24 +1,41 @@
 var request = require('request');
 
-//设置调试按钮的监听
-$('#debugBtn').on('click',function(e){
-    e.preventDefault();
+var config = [
+    {
+        "id":"debugBtn",
+        "handler":debug
+    },
+    {
+        "id":"printValBtn",
+        "handler":printVal
+    },
+    {
+        "id":"stepIntoBtn",
+        "handler":stepInto
+    },
+    {
+        "id":"stepOverBtn",
+        "handler":stepOver
+    },
+    {
+        "id":"continueBtn",
+        "handler":ctn
+    }
+];
 
-    debug();
-});
-
-//设置变量查看按钮的监听
-$('#printValBtn').on('click',function(e){
-    e.preventDefault();
-
-    printVal();
+//设置按钮的监听
+config.forEach(function(item){
+    $('#'+item['id']).on('click',function(e){
+        e.preventDefault();
+        item['handler']();
+    });
 });
 
 function printVal(){
     var debugId = $('#debugId').val();
     var varName = $('#varName').val();
     if(!varName){
-        console.log('没有给定要查看的变量名');
+        console.error('没有给定要查看的变量名');
         return;
     }
 
@@ -28,13 +45,10 @@ function printVal(){
             "valName":varName
         }
     },function(err,result){
-        $("#output").text(result['value']);
+        $('#varVal').val(result['value']);
     });
 }
 
-/**
- * 开启debug模式
- */
 function debug(){
     var programName = $('#programName').val();
     var breakLine = $('#breakLine').val();
@@ -55,7 +69,53 @@ function debug(){
 
         var debugId = result.debugId;
         $("#debugId").val(debugId);
-        $("#output").text(JSON.stringify(result));
+        display(JSON.stringify(result));
+    });
+}
+
+function stepInto(){
+    var debugId = $('#debugId').val();
+    if(!debugId) return console.error('找不到从服务器获取的debugId，是否正处于调试？');
+
+    sendRequest({
+        "stepInto":{
+            "debugId":debugId
+        }
+    },function(err,result){
+        if(err) return console.error(err);
+
+        display(JSON.stringify(result));
+    });
+}
+
+function stepOver(){
+    var debugId = $('#debugId').val();
+    if(!debugId) return console.error('找不到从服务器获取的debugId，是否正处于调试？');
+
+    sendRequest({
+        "stepOver":{
+            "debugId":debugId
+        }
+    },function(err,result){
+        if(err) return console.error(err);
+
+        display(JSON.stringify(result));
+    });
+}
+
+//continue
+function ctn(){
+    var debugId = $('#debugId').val();
+    if(!debugId) return console.error('找不到从服务器获取的debugId，是否正处于调试？');
+
+    sendRequest({
+        "continue":{
+            "debugId":debugId
+        }
+    },function(err,result){
+        if(err) return console.error(err);
+
+        display(JSON.stringify(result));
     });
 }
 
@@ -72,4 +132,8 @@ function sendRequest(object,callback){
 
         callback(null,body);
     });
+}
+
+function display(text){
+    $("#output").text(text);
 }

@@ -11,6 +11,8 @@ var paramConfigs = {
     "breakPoint":["debugId","breakLines"],
     "run":["debugId"],
     "continue":["debugId"],
+    "stepInto":["debugId"],
+    "stepOver":["debugId"],
     "printVal":["debugId","valName"]
 };
 

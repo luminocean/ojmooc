@@ -8,6 +8,8 @@
     "request": "^2.51.0"
   },
   "window":{
-
+    "position": "center",
+    "width": 960,
+    "height": 600
   }
 }
