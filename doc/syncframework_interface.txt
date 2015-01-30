@@ -6,3 +6,11 @@ syncfw.setPFrame(operList/*操作序列，是一个数组，
 syncfw.setFFrame(compomentState/*组件的中间状态*/,corseName/*对应课程的名称*/,currentTime/*当前状态所在的时间*/){
 	
 }
+
+syncfw.getPFrame(corseName/*对应课程的名称*/,startTime,endTime/*这段操作的起止时间*/){
+	
+}
+	
+syncfw.getFFrame(corseName/*对应课程的名称*/,currentTime/*当前状态所在的时间*/){
+	
+}
