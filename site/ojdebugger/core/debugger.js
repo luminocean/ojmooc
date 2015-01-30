@@ -4,21 +4,22 @@
 var path = require('path');
 var cp = require('child_process');
 var parser = require('./parser');
+var util = require('../util/util');
 
 //debugger对象
 var dbr = {};
 module.exports = dbr;
 
-//gdb进程计数器
-var counter = 0;
-//存放所有gdb进程的对象
+//存放所有gdb进程的map对象
 var gdbMap = {};
 
 //用于快速构建模式化的debug方法所用的配置
+//这里配置的都是简单方法，即入参都是debugId和callback函数，其中callback接受err和result两个参数
+//不符合这样签名的复杂方法需要在后面定制
 var debuggerMethods = {
     //gdb执行操作
     "run":{
-        //log用的标识名称
+        //log用的标识名称，主要给log使用
         "name":"RUN",
         //实际传给gdb执行的命令
         "command":"r",
@@ -103,7 +104,7 @@ dbr.debug = function(programName,callback){
             //发送batch事件与数据
             gdb.stdout.emit('batch',batchData[0]);
 
-            //把发掉的数据去除，再检索还有没有batch
+            //把发出去的数据去除，再检索还有没有batch
             data = data.replace(/[\s\S]*?\(gdb\)\s*/,'');
             batchData = data.match(/([\s\S]*?)\(gdb\)/);
         }
@@ -113,10 +114,10 @@ dbr.debug = function(programName,callback){
     gdb.stdout.on('batch',function(){
         console.log(" DEBUG resolve");
 
-        counter++;
-        gdbMap[counter] = gdb;
+        var debugId = 'debug-'+util.genDebugId();
+        gdbMap[debugId] = gdb;
         var result = {
-            "debugId":counter
+            "debugId":debugId
         };
 
         callback(null, result);
@@ -183,7 +184,7 @@ dbr.printVal = function(debugId,valName,callback){
 };
 
 /**
- * 处理运行数据
+ * 处理运行数据，程序运行结束或者到达断点后才返回结果
  * @param batch
  * @param finish
  * @returns {*}

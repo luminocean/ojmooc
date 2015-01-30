@@ -1,13 +1,17 @@
+/**
+ * ojdebugger入口
+ */
 var http = require('http');
 var requestParser = require('./util/request_parser');
 var controller = require('./core/controller');
 
 http.createServer(function (req, res) {
+    //解析用户传来的http报文为json对象
     requestParser.parseRequest(req,function(err,body){
         if(err){
             return reply(res,err,500);
         }
-
+        //解析完传给controller处理
         controller.process(body,function(err,result){
             if(err){
                 return reply(res,err,500);

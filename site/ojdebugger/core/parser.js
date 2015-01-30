@@ -4,6 +4,7 @@ module.exports = parser;
 var parseConfig = {
     //对外提供的parser方法
     "parseStopPoint":{
+        //示例
         //返回的结果的一个属性,表示某一行输出的分析
         /*"function":{
             //分析用的正则

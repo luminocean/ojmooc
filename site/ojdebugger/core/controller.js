@@ -1,9 +1,15 @@
+/**
+ * 用于将用户请求的json对象分配给具体的debugger对象处理
+ */
 var dbr = require('./debugger');
 
 var controller = {};
 module.exports = controller;
 
 //各种操作请求中包含的参数名称配置
+//controller会将用户的json请求中对应的这些变量取出传入debugger
+//比如请求对象中有一个continue属性，
+//那么就会从该对象中取出debugId属性作为参数传给debugger对象的continue方法
 var dbrMethodConfig = {
     "debug":["programName"],
     "breakPoint":["debugId","breakLines"],
