@@ -12,13 +12,13 @@ var parseConfig = {
             //每一项表示对应的分组名称，顺序也对应，一行分析出来的各种子属性
             "meta":["funcLineNum","funcName","params","srcName","srcLineNum"]
         },*/
-        "code":{
+        "breakPoint":{
             "reg": /~"(\d+)(?:\\t)+(.*)\\n/,
             "meta":["lineNum","text"]
         }
     },
     "parsePrintVal":{
-        "value":{
+        "var":{
             "reg":/~"\$\d+\s=\s(.+)"/,
             "meta":["value"]
         }

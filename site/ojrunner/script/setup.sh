@@ -15,9 +15,9 @@ sudo sed -i 's/ENABLED=0/ENABLED=1/g' /etc/default/haproxy
 
 ### 开启docker.io的tcp通讯接口
 #docker配置文件的位置
-docker_config_path="/etc/default/docker"
+docker_config_path="/etc/default/docker.io"
 if [ ! -f "$docker_config_path" ]; then
-    echo "/etc/default/docker处找不到docker配置文件"
+    echo "/etc/default/docker处找不到docker.io配置文件"
     exit 1
 fi
 

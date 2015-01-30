@@ -17,7 +17,7 @@ var dbrMethodConfig = {
     "continue":["debugId"],
     "stepInto":["debugId"],
     "stepOver":["debugId"],
-    "printVal":["debugId","valName"]
+    "printVal":["debugId","varName"]
 };
 
 /**

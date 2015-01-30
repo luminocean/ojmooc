@@ -161,10 +161,10 @@ dbr.breakPoint = function(debugId,breakLines,callback){
 /**
  * 查值操作
  * @param debugId
- * @param valName
+ * @param varName
  * @param callback
  */
-dbr.printVal = function(debugId,valName,callback){
+dbr.printVal = function(debugId,varName,callback){
     var gdb = gdbMap[debugId];
     if(!gdb)
         return callback(new Error('找不到debugId '+debugId+' 对应的进程'));
@@ -176,11 +176,11 @@ dbr.printVal = function(debugId,valName,callback){
 
         var result = parser.parsePrintVal(batch);
         if(result){
-            callback(null, result.value);
+            callback(null, result);
         }
     });
 
-    gdb.stdin.write('p '+valName+'\n');
+    gdb.stdin.write('p '+varName+'\n');
 };
 
 /**
