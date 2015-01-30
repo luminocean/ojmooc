@@ -1,24 +1,38 @@
 /**
  * Created by YBH on 2015/1/13.
  */
-//白板的两种模式，画笔，图片和文本
-//var states = {
-//    free:"free",
-//    draw:"draw",
-//    graph:"graph"
-//}
-
-
-//var currentState = states.draw;
 var mainBoard = $("#mainBoard");
-var canvas = $("#drawBoard");
 var graphBoard = $("#graphBoard");
+var textButton = $("#textButton");
+//var textStyle;
 
-
-
-
-$("#textButton").bind("mousedown",function(e){
+//文本按钮点击监听，添加文本
+textButton.bind("mousedown",function(e){
     //changeToTextMode();
+});
+
+//文本按钮点击监听，显示修改文本样式
+textButton.bind("mousedown",function(e){
+
+    var xLoc = textButton.offset().left;
+    var yLoc = textButton.offset().top + textButton.outerHeight(true);
+
+    textStyle = $.layer({
+        type: 2,
+        shade:[1],
+        title: false,
+        closeBtn:false,
+        shadeClose:true,
+        border:[0],
+        offset:[yLoc.toString()+"px",xLoc.toString()+"px"],
+        area: ["350px","140px"],
+        iframe: {src : "textStyle.html"}
+    });
+});
+
+//鼠标移出文本按钮监听，隐藏修改文本样式
+textButton.bind("mouseleave",function(e){
+    //layer.close(textStyle);
 });
 
 $("#imageButton").bind("mousedown",function(e){

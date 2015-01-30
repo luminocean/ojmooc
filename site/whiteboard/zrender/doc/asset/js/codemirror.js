@@ -1616,7 +1616,7 @@ window.CodeMirror = (function() {
     // Used to ensure timeout re-tries don't fire when another extend
     // happened in the meantime (clearTimeout isn't reliable -- at
     // least on Chrome, the timeouts still happen even when cleared,
-    // if the clear happens after their scheduled firing time).
+    // if the clear happens after their scheduled firing dbClickStartTime).
     var counter = 0;
 
     function extend(e) {

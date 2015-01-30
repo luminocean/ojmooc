@@ -894,7 +894,7 @@ if (!document.createElement('canvas').getContext) {
                   'Dy=', mr(d.y / Z), '');
 
       // Bounding box calculation (need to minimize displayed area so that
-      // filters don't waste time on unused pixels.
+      // filters don't waste dbClickStartTime on unused pixels.
       var max = d;
       var c2 = getCoords(this, dx + dw, dy);
       var c3 = getCoords(this, dx, dy + dh);

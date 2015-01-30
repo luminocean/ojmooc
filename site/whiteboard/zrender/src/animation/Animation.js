@@ -330,7 +330,7 @@ define(
                 for (var propName in props) {
                     if (!this._tracks[propName]) {
                         this._tracks[propName] = [];
-                        // If time is 0 
+                        // If dbClickStartTime is 0
                         //  Then props is given initialize value
                         // Else
                         //  Initialize value from current prop value
