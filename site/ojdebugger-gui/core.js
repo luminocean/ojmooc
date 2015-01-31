@@ -40,11 +40,7 @@ function launchDebug(){
         if(err) return callback(err);
 
         $("#debugId").val(debugId);
-        if(exit){
-            return display('debug over');
-        }
-
-        display(JSON.stringify(breakPoint));
+        display((exit?'exit:':'')+JSON.stringify(breakPoint));
     });
 }
 
@@ -70,11 +66,7 @@ function stepInto(){
     client.stepInto(debugId,function(err,exit,breakPoint){
         if(err) return callback(err);
 
-        if(exit){
-            return display('debug over');
-        }
-
-        display(JSON.stringify(breakPoint));
+        display((exit?'exit:':'')+JSON.stringify(breakPoint));
     });
 }
 
@@ -85,11 +77,7 @@ function stepOver(){
     client.stepOver(debugId,function(err,exit,breakPoint){
         if(err) return callback(err);
 
-        if(exit){
-            return display('debug over');
-        }
-
-        display(JSON.stringify(breakPoint));
+        display((exit?'exit:':'')+JSON.stringify(breakPoint));
     });
 }
 
@@ -101,11 +89,7 @@ function ctn(){
     client.continue(debugId,function(err,exit,breakPoint){
         if(err) return callback(err);
 
-        if(exit){
-            return display('debug over');
-        }
-
-        display(JSON.stringify(breakPoint));
+        display((exit?'exit:':'')+JSON.stringify(breakPoint));
     });
 }
 

@@ -2,23 +2,11 @@
  * 用于将用户请求的json对象分配给具体的debugger对象处理
  */
 var dbr = require('./debugger');
+//debugger方法配置
+var methods = require('../config/config').methods;
 
 var controller = {};
 module.exports = controller;
-
-//各种操作请求中包含的参数名称配置
-//controller会将用户的json请求中对应的这些变量取出传入debugger
-//比如请求对象中有一个continue属性，
-//那么就会从该对象中取出debugId属性作为参数传给debugger对象的continue方法
-var dbrMethodConfig = {
-    "debug":["programName"],
-    "breakPoint":["debugId","breakLines"],
-    "run":["debugId"],
-    "continue":["debugId"],
-    "stepInto":["debugId"],
-    "stepOver":["debugId"],
-    "printVal":["debugId","varName"]
-};
 
 /**
  * 根据传入的请求对象找到对应的逻辑处理函数进行执行
@@ -31,12 +19,12 @@ controller.process = function(requestJSON, callback){
         if(!requestJSON.hasOwnProperty(methodName))
             continue;
 
-        //如果该方法是debugger直接提供的
-        if(dbrMethodConfig[methodName]){
+        //如果在方法配置中有该方法
+        if(methods[methodName]){
             //取出客户端传来的参数
             var requestParams = requestJSON[methodName];
-            //取出这种请求应该带有的参数名称
-            var configParams = dbrMethodConfig[methodName];
+            //取出该方法需要的入参名称
+            var configParams = methods[methodName].paramNames;
             //将所有的参数值从请求中取出后存起来，将会作为入参传给debugger
             var paramValues = [];
             configParams.forEach(function(param){
@@ -51,6 +39,8 @@ controller.process = function(requestJSON, callback){
             });
             //使用apply传入所有参数，调用debugger处理
             dbr[methodName].apply(null,paramValues);
+        }else{
+            callback(new Error('未知的请求方法:'+methodName));
         }
     }
 };
