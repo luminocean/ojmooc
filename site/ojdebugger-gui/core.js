@@ -4,20 +4,19 @@ var config = [
     {
         "id":"debugBtn",
         "handler":launchDebug
-    },
-    {
+    },{
+        "id":"exitBtn",
+        "handler":exit
+    },{
         "id":"printValBtn",
         "handler":printVal
-    },
-    {
+    },{
         "id":"stepIntoBtn",
         "handler":stepInto
-    },
-    {
+    },{
         "id":"stepOverBtn",
         "handler":stepOver
-    },
-    {
+    },{
         "id":"continueBtn",
         "handler":ctn
     }
@@ -90,6 +89,17 @@ function ctn(){
         if(err) return callback(err);
 
         display((exit?'exit:':'')+JSON.stringify(breakPoint));
+    });
+}
+
+function exit(){
+    var debugId = $('#debugId').val();
+    if(!debugId) return console.error('找不到从服务器获取的debugId，是否正处于调试？');
+
+    client.exit(debugId,function(err,debugId){
+        if(err) return callback(err);
+
+        display('DEBUG OVER:'+debugId);
     });
 }
 

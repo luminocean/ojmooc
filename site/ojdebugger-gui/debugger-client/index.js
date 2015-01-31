@@ -40,7 +40,7 @@ client.debug = function(programName,callback){
         {"debug":
             {"programName":programName}
         },function(err,result){
-            if(err) return console.error(err);
+            if(err) return callback(err);
             if(!result.debugId)
                 return console.error(new Error('异常返回值'+JSON.stringify(result)));
 
@@ -61,7 +61,7 @@ client.breakPoint = function(debugId,breakLines,callback){
                 "breakLines":breakLines
             }
         },function(err,result){
-            if(err) return console.log(err);
+            if(err) return callback(err);
             if(!result.breakPointNum)
                 return console.error(new Error('异常返回值'+JSON.stringify(result)));
 
@@ -83,7 +83,7 @@ client.printVal = function(debugId,varName,callback){
                 "varName":varName
              }
         },function(err,result){
-            if(err) return console.log(err);
+            if(err) return callback(err);
             if(!result.var || !result.var.value)
                 return console.error(new Error('异常返回值'+JSON.stringify(result)));
 
@@ -103,7 +103,7 @@ client.run = function(debugId,callback){
                 "debugId":debugId
             }
         },function(err,result){
-            if(err) return console.log(err);
+            if(err) return callback(err);
             if(result.breakPoint)
                 return callback(null,false,result.breakPoint);
 
@@ -126,7 +126,7 @@ client.stepInto = function(debugId,callback){
             "debugId": debugId
         }
     },function(err,result){
-        if(err) return console.log(err);
+        if(err) return callback(err);
         if(result.breakPoint)
             return callback(null,false,result.breakPoint);
 
@@ -149,7 +149,7 @@ client.stepOver = function(debugId,callback){
             "debugId": debugId
         }
     },function(err,result){
-        if(err) return console.log(err);
+        if(err) return callback(err);
         if(result.breakPoint)
             return callback(null,false,result.breakPoint);
 
@@ -172,7 +172,7 @@ client.continue = function(debugId,callback){
             "debugId": debugId
         }
     },function(err,result){
-        if(err) return console.log(err);
+        if(err) return callback(err);
         if(result.breakPoint)
             return callback(null,false,result.breakPoint);
 
@@ -182,6 +182,25 @@ client.continue = function(debugId,callback){
         console.error(new Error('异常返回值'+JSON.stringify(result)));
     });
 };
+
+/**
+ * 结束debug
+ * @param debugId
+ * @param callback
+ */
+client.exit = function(debugId,callback){
+    sendRequest({
+        "exit": {
+            "debugId": debugId
+        }
+    },function(err,result){
+        if(err) return callback(err);
+
+        callback(null,result.debugId);
+    });
+};
+
+
 
 /**
  * 向debugger服务器发出请求，并接收返回值

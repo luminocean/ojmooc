@@ -151,6 +151,26 @@ dbr.printVal = function(debugId,varName,callback){
 };
 
 /**
+ * 结束debug会话
+ * @param debugId
+ * @param callback
+ */
+dbr.exit = function(debugId,callback){
+    var gdb = gdbMap[debugId];
+    if(!gdb)
+        return callback(new Error('找不到debugId '+debugId+' 对应的进程'));
+
+    gdb.on('exit',function(){
+        delete gdb[debugId];
+        var result = methods['exit'].result;
+        result.debugId = debugId;
+
+        callback(null,result);
+    });
+
+    gdb.stdin.write('q \n');
+};
+/**
  * 根据传入的parse函数的名称数组逐个解析，返回第一个解析成功的结果
  * @param batch
  * @param parseNames

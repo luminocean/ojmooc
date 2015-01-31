@@ -1,5 +1,5 @@
 /**
- * 用于将用户请求的json对象分配给具体的debugger对象处理
+ * 用于将用户请求的json对象分配给具体的debugger对象方法处理
  */
 var dbr = require('./debugger');
 //debugger方法配置
@@ -38,9 +38,9 @@ controller.process = function(requestJSON, callback){
                 return callback(err,result);
             });
             //使用apply传入所有参数，调用debugger处理
-            dbr[methodName].apply(null,paramValues);
+            return dbr[methodName].apply(null,paramValues);
         }else{
-            callback(new Error('未知的请求方法:'+methodName));
+            return callback(new Error('未知的请求方法:'+methodName));
         }
     }
 };

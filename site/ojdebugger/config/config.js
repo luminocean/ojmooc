@@ -37,6 +37,12 @@ var methods = {
           "debugId":undefined
       }
     },
+    "exit":{
+        "paramNames":["debugId"],
+        "result": {
+            "debugId":undefined
+        }
+    },
     "breakPoint":{
         "paramNames":["debugId","breakLines"],
         "result":{
