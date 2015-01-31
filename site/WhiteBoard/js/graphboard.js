@@ -57,7 +57,7 @@ require(
 
 
 
-        addText("text");
+        addText("text",100,100);
         //addArray();
         //addCircle();
         //addStack();

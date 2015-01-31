@@ -55,10 +55,28 @@ $("#close").bind("click",function(){
     parent.layer.close(index);
 });
 
+$("#color").ColorPicker({
+    color:"#000000",
+    onShow: function (colpkr) {
+        $(colpkr).fadeIn(500);
+        $(colpkr).css("left","44px");
+        $(colpkr).css("top","24px");
+        return false;
+    },
+    onHide: function (colpkr) {
+        $(colpkr).fadeOut(500);
+        parent.setTextColor($("#color").css("background-color"));
+        return false;
+    },
+    onChange: function (hsb, hex, rgb) {
+        $('#color').css('backgroundColor', '#' + hex);
+    }
+});
+
 
 window.onload = function(){
     index = parent.layer.getFrameIndex(window.name);
-
+    $("#color").css("background-color",parent.getTextColor());
     $("#font").html(parent.getTextFont());
     $("#size").html(parent.getTextSize());
 }

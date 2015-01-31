@@ -1,5 +1,5 @@
 #wrapper{
-    width: 350px;
+    width: 400px;
     height: 40px;
     border-radius: 10px;
     background-color: #b9def0;
@@ -12,10 +12,12 @@
     height: 30px;
 }
 
-#colorButton{
-    width: 25px;
-    height: 20px;
+#color{
+    width: 15px;
+    height: 15px;
     background-color: #000000;
+    border: 1px solid;
+    display: inline-block;
 }
 
 label{

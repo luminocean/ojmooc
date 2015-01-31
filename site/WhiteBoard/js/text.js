@@ -1,19 +1,11 @@
 /**
  * Created by YBH on 2015/1/15.
  */
-//function changeToTextMode(){
-//    currentState = states.graph;
-//    graphBoardState = graphBoardStates.text;
-//    drawBoardState = drawBoardStates.free;
-//    $("#mainBoard").removeClass().addClass("txt");
-//
-//    changeToGraphBoard();
-//}
 //双击初始时间
 var dbClickStartTime;
 var textFont = "Arial";
 var textSize = "20px";
-var textColor = "blue";
+var textColor = "black";
 
 function getTextFont(){
     return textFont;
@@ -37,14 +29,37 @@ function setTextColor(color){
     textColor = color;
 }
 
+function createText(xLoc,yLoc,x,y){
+    var editText = $.layer({
+        type: 1,
+        title: false,
+        offset:[yLoc.toString()+"px",xLoc.toString()+"px"],
+        area: ["170px","20px"],
+        border: [0], //去掉默认边框
+        shade: [0], //去掉遮罩
+        closeBtn: [0, true],
+        page: {
+            html: '<div style="width:180px; height:20px;"><input id="textField" type="text"></div>'
+        }
+    });
+    var textField = $("#textField");
+    textField.bind("keydown",function(e){
+        if(e.keyCode == 13){
+            layer.close(editText);
+            addText(textField.val(),x,y);
+            zr.render();
+        }
+    });
+}
+
 
 //添加文本
-function addText(txt){
+function addText(txt,x,y){
     var shape = new Text({
         style: {
             text: txt,
-            x: 100,
-            y: 100,
+            x: x,
+            y: y,
             textFont: textSize+" "+textFont,
             color: textColor
         },
@@ -73,7 +88,7 @@ function dbClicked(params){
     var textShape = params.target;                                                                  //获取文本对象
 
     var currentTime = new Date().getTime();                                                         //判断是否双击
-    if((currentTime - dbClickStartTime) < 250){
+    if((currentTime - dbClickStartTime) < 300){
         var event = require("zrender/tool/event");
         var yLoc = (event.getY(params.event)+graphBoard.offsetTop);
         var xLoc = (event.getX(params.event)+graphBoard.offsetLeft);
@@ -92,7 +107,6 @@ function dbClicked(params){
         });
 
         var textField = $("#textField");
-        //textField.value = textShape.style.text;
         textField.val(textShape.style.text);
         textField.bind("keydown",function(e){
             if(e.keyCode == 13){

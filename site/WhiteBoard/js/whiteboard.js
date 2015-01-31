@@ -1,23 +1,47 @@
 /**
  * Created by YBH on 2015/1/13.
  */
-var mainBoard = $("#mainBoard");
-var graphBoard = $("#graphBoard");
-var textButton = $("#textButton");
-//var textStyle;
+var states = {
+    free:"free",
+    text:"text"
+}
+
+var currentState = states.text;
+var timer = null;
+
+//双击回到初始状态
+$("#graphBoard").bind("dblclick",function(){
+    clearTimeout(timer);
+    currentState = states.free;
+});
+
+$("#graphBoard").bind("click",function(e){
+    clearTimeout(timer);
+
+    timer = setTimeout(function(){
+        var xLoc = e.pageX - $("#graphBoard").offset().left;
+        var yLoc = e.pageY - $("#graphBoard").offset().top;
+
+        switch(currentState){
+            case states.text:         //文本模式，点击界面添加文本
+                createText(e.pageX, e.pageY,xLoc,yLoc);
+                break;
+        }
+    },300);
+});
 
 //文本按钮点击监听，添加文本
-textButton.bind("mousedown",function(e){
-    //changeToTextMode();
+$("#textButton").bind("click",function(e){
+    changeToTextMode();
 });
 
 //文本按钮点击监听，显示修改文本样式
-textButton.bind("mousedown",function(e){
+$("#textButton").bind("click",function(e){
 
-    var xLoc = textButton.offset().left;
-    var yLoc = textButton.offset().top + textButton.outerHeight(true);
+    var xLoc = $("#textButton").offset().left;
+    var yLoc = $("#textButton").offset().top + $("#textButton").outerHeight(true);
 
-    textStyle = $.layer({
+    var textStyle = $.layer({
         type: 2,
         shade:[1],
         title: false,
@@ -25,13 +49,13 @@ textButton.bind("mousedown",function(e){
         shadeClose:true,
         border:[0],
         offset:[yLoc.toString()+"px",xLoc.toString()+"px"],
-        area: ["350px","140px"],
+        area: ["400px","200px"],
         iframe: {src : "textStyle.html"}
     });
 });
 
 //鼠标移出文本按钮监听，隐藏修改文本样式
-textButton.bind("mouseleave",function(e){
+$("#textButton").bind("mouseleave",function(e){
     //layer.close(textStyle);
 });
 
@@ -62,5 +86,9 @@ $("#clearButton").bind("mousedown",function(e){
     clear();
     console.log("clear");
 });
+
+function changeToTextMode(){
+    currentState = states.text;
+}
 
 
