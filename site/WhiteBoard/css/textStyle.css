@@ -1,0 +1,87 @@
+#wrapper{
+    width: 400px;
+    height: 40px;
+    border-radius: 10px;
+    background-color: #b9def0;
+}
+
+#close{
+    float: right;
+    border-radius: 20px;
+    width: 30px;
+    height: 30px;
+}
+
+#color{
+    width: 15px;
+    height: 15px;
+    background-color: #000000;
+    border: 1px solid;
+    display: inline-block;
+}
+
+label{
+    margin-top: 10px;
+    margin-left: 5px;
+}
+
+#fontList{
+    margin: 0px;
+    padding: 0px;
+    width: 80px;
+    height: 100px;
+    overflow-y: auto;
+    display: none;
+    border: 1px solid;
+}
+
+#sizeList{
+    margin: 0px;
+    padding: 0px;
+    width: 50px;
+    height: 100px;
+    overflow-y: auto;
+    display: none;
+    border: 1px solid;
+}
+
+li{
+    padding: 0px;
+    white-space: nowrap;
+    display: inline;
+    float: left;
+}
+
+.font-value{
+    width: 60px;
+}
+
+.size-value{
+    width: 30px;
+}
+
+#fontSelect{
+    display: inline-block;
+    border: 1px blanchedalmond solid;
+    border-radius: 5px;
+    width: auto;
+    height: 22px;
+}
+
+#sizeSelect{
+    display: inline-block;
+    border: 1px blanchedalmond solid;
+    border-radius: 5px;
+    width: auto;
+    height: 22px;
+}
+
+
+.down-arrow{
+    float: right;
+    margin-top: 2px;
+    width: 15px;
+    height: 13px;
+    display: inline-block;
+    background: url("../img/down.jpg");
+}

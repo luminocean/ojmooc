@@ -1,3 +1,5 @@
+var moment = require('moment');
+
 /**
  * 将一个对象的属性扩展给另一个对象
  * @param obj1 被扩展的对象
@@ -10,4 +12,12 @@ exports.extend = function(obj1,obj2){
 
         obj1[key] = obj2[key];
     }
+};
+
+/**
+ * 根据当前时间自动生成debugId
+ * @returns {*}
+ */
+exports.genDebugId = function(){
+    return moment().format('YYYYMMDDx');
 };

@@ -1,34 +1,8 @@
+var parseConfig = require('../config/config').parseConfig;
+
+//要导出的parser对象
 var parser = {};
 module.exports = parser;
-
-var parseConfig = {
-    //对外提供的parser方法
-    "parseStopPoint":{
-        //返回的结果的一个属性,表示某一行输出的分析
-        /*"function":{
-            //分析用的正则
-            "reg": /~"(\d+),\s(.*)\s\((.*)\)\sat\s(.*):(\d+)/,
-            //每一项表示对应的分组名称，顺序也对应，一行分析出来的各种子属性
-            "meta":["funcLineNum","funcName","params","srcName","srcLineNum"]
-        },*/
-        "code":{
-            "reg": /~"(\d+)(?:\\t)+(.*)\\n/,
-            "meta":["lineNum","text"]
-        }
-    },
-    "parsePrintVal":{
-        "value":{
-            "reg":/~"\$\d+\s=\s(.+)"/,
-            "meta":["value"]
-        }
-    },
-    "parseExit":{
-        "normalExit":{
-            "reg":/\(process\s(\d+)\)\sexited normally/,
-            "meta":["processId"]
-        }
-    }
-};
 
 //根据配置自动构建parser对外接口
 for(var func in parseConfig){
@@ -62,6 +36,6 @@ for(var func in parseConfig){
                 });
             }
             return object;
-        }
+        };
     })(func);
 }

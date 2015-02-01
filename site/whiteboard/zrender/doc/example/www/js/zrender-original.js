@@ -856,7 +856,7 @@ if (!document.createElement('canvas').getContext) {
                   'Dy=', mr(d.y / Z), '');
 
       // Bounding box calculation (need to minimize displayed area so that
-      // filters don't waste time on unused pixels.
+      // filters don't waste dbClickStartTime on unused pixels.
       var max = d;
       var c2 = getCoords(this, dx + dw, dy);
       var c3 = getCoords(this, dx, dy + dh);
@@ -10218,7 +10218,7 @@ define(
                 for (var propName in props) {
                     if (!this._tracks[propName]) {
                         this._tracks[propName] = [];
-                        // If time is 0 
+                        // If dbClickStartTime is 0
                         //  Then props is given initialize value
                         // Else
                         //  Initialize value from current prop value

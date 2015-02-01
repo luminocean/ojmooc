@@ -1,93 +1,132 @@
 /**
  * Created by YBH on 2015/1/15.
  */
-//function changeToTextMode(){
-//    currentState = states.graph;
-//    graphBoardState = graphBoardStates.text;
-//    drawBoardState = drawBoardStates.free;
-//    $("#mainBoard").removeClass().addClass("txt");
-//
-//    changeToGraphBoard();
-//}
 //双击初始时间
-var time;
+var dbClickStartTime;
+var textFont = "Arial";
+var textSize = "20px";
+var textColor = "black";
+
+function getTextFont(){
+    return textFont;
+}
+function getTextSize(){
+    return textSize;
+}
+function getTextColor(){
+    return textColor;
+}
+//设置字体类型
+function setTextFont(font){
+    textFont = font;
+}
+//设置字体大小
+function setTextSize(size){
+    textSize = size;
+}
+//设置字体颜色
+function setTextColor(color){
+    textColor = color;
+}
+
+function createText(xLoc,yLoc,x,y){
+    var editText = $.layer({
+        type: 1,
+        title: false,
+        offset:[yLoc.toString()+"px",xLoc.toString()+"px"],
+        area: ["170px","20px"],
+        border: [0], //去掉默认边框
+        shade: [0], //去掉遮罩
+        closeBtn: [0, true],
+        page: {
+            html: '<div style="width:180px; height:20px;"><input id="textField" type="text"></div>'
+        }
+    });
+    var textField = $("#textField");
+    textField.bind("keydown",function(e){
+        if(e.keyCode == 13){
+            layer.close(editText);
+            addText(textField.val(),x,y);
+            zr.render();
+        }
+    });
+}
+
 
 //添加文本
-function addText(){
+function addText(txt,x,y){
     var shape = new Text({
         style: {
-            text: "text",
-            x: 100,
-            y: 100,
-            textFont: '14px Arial'
+            text: txt,
+            x: x,
+            y: y,
+            textFont: textSize+" "+textFont,
+            color: textColor
         },
         draggable:true
     });
     shape.bind("dragend",textDragged);
 
-    time = new Date().getTime();
-    shape.bind("mousedown",function(params){
-        var currentTime = new Date().getTime();
-        if((currentTime - time) < 250){
-            console.log("db click");
-
-            var event = require("zrender/tool/event");
-            var yLoc = (event.getY(params.event)+graphBoard.offsetTop);
-            var xLoc = (event.getX(params.event)+graphBoard.offsetLeft);
-
-
-
-            var editText = $.layer({
-                type: 1,
-                title: false,
-                offset:[yLoc.toString()+"px",xLoc.toString()+"px"],
-                area: ["170px","20px"],
-                border: [0], //去掉默认边框
-                shade: [0], //去掉遮罩
-                closeBtn: [0, true], //去掉默认关闭按钮
-                page: {
-                    html: '<div style="width:180px; height:20px;"><input id="textField" type="text"></div>'
-                }
-            });
-            editText.success = function(layero){
-                alert("a");
-            };
-
-            var textfield = document.getElementById("textField");
-            textfield.value = shape.style.text;
-
-            textfield.onkeydown = function(e){
-                if(e.keyCode == 13){
-                    shape.style.text = textfield.value;
-                    layer.close(editText);
-                    zr.render();
-                }
-            }
-            //编辑文本
-        }
-        time = currentTime;
-    });
+    dbClickStartTime = new Date().getTime();
+    shape.bind("mousedown",dbClicked);
 
     zr.addShape(shape);
     zr.render();
-
+    console.log("add text");
 }
 
-
+//文本拖动监听，记录位置
 function textDragged(params){
     var event = require("zrender/tool/event");
-    console.log(event.getX(params.event).toString()+"px");
-    console.log(event.getY(params.event).toString()+"px");
-    console.log(params.id);
+    var xLoc = event.getX(params.event);
+    var yLoc = event.getY(params.event);
+    console.log("text dragged" + xLoc + yLoc);
+}
+
+//文本双击监听，修改文本
+function dbClicked(params){
+    var textShape = params.target;                                                                  //获取文本对象
+
+    var currentTime = new Date().getTime();                                                         //判断是否双击
+    if((currentTime - dbClickStartTime) < 300){
+        var event = require("zrender/tool/event");
+        var yLoc = (event.getY(params.event)+graphBoard.offsetTop);
+        var xLoc = (event.getX(params.event)+graphBoard.offsetLeft);
+
+        var editText = $.layer({
+            type: 1,
+            title: false,
+            offset:[yLoc.toString()+"px",xLoc.toString()+"px"],
+            area: ["170px","20px"],
+            border: [0], //去掉默认边框
+            shade: [0], //去掉遮罩
+            closeBtn: [0, true],
+            page: {
+                html: '<div style="width:180px; height:20px;"><input id="textField" type="text"></div>'
+            }
+        });
+
+        var textField = $("#textField");
+        textField.val(textShape.style.text);
+        textField.bind("keydown",function(e){
+            if(e.keyCode == 13){
+                textShape.style.text = textField.val();
+                layer.close(editText);
+                zr.render();
+            }
+        });
+        console.log("edit text");
+    }
+    dbClickStartTime = currentTime;
 }
 
 function editText(){
     var currentTime = new Date().getTime();
-    if((currentTime - time) < 250) {
+    if((currentTime - dbClickStartTime) < 250) {
 
         var event = require("zrender/tool/event");
         var yLoc = (event.getY(params.event)+graphBoard.offsetTop);
         var xLoc = (event.getX(params.event)+graphBoard.offsetLeft);
     }
-    time = currentTime;
+    dbClickStartTime = currentTime;
 }

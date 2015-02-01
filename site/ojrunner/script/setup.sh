@@ -6,7 +6,7 @@
 sudo apt-get update
 
 ### 安装依赖程序
-sudo apt-get install -y nodejs npm haproxy docker.io
+sudo apt-get install -y nodejs npm gdb haproxy docker.io
 ###
 
 ### 开启haproxy的脚本控制
@@ -17,7 +17,7 @@ sudo sed -i 's/ENABLED=0/ENABLED=1/g' /etc/default/haproxy
 #docker配置文件的位置
 docker_config_path="/etc/default/docker.io"
 if [ ! -f "$docker_config_path" ]; then
-    echo "/etc/default/docker.io处找不到docker配置文件"
+    echo "/etc/default/docker处找不到docker.io配置文件"
     exit 1
 fi
 

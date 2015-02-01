@@ -45,24 +45,24 @@ require(
         Base = require("zrender/shape/Base");
 
 
-        var BrokenLineShape = require('zrender/shape/BrokenLine');
-        zr.addShape(new BrokenLineShape({
-            style : {
-                pointList : [[10, 10], [60, 100], [148, 130], [250, 40], [446, 100]],
-                lineWidth : 3,
-                text : 'brokenLine'
-            },
-            draggable:true
-        }));
+        //var BrokenLineShape = require('zrender/shape/BrokenLine');
+        //zr.addShape(new BrokenLineShape({
+        //    style : {
+        //        pointList : [[10, 10], [60, 100], [148, 130], [250, 40], [446, 100]],
+        //        lineWidth : 3,
+        //        text : 'brokenLine'
+        //    },
+        //    draggable:true
+        //}));
 
 
 
-        addText();
-        addArray();
-        addCircle();
-        addStack();
-        addQueue();
-        addImage();
+        addText("text",100,100);
+        //addArray();
+        //addCircle();
+        //addStack();
+        //addQueue();
+        //addImage();
 
         zr.render();
     }
@@ -72,7 +72,7 @@ require(
 
 
 
-function changeToGraphBoard(){
-    $("#drawBoard")[0].style.zIndex = 1;
-    $("#graphBoard")[0].style.zIndex = 2;
-}
+//function changeToGraphBoard(){
+//    $("#drawBoard")[0].style.zIndex = 1;
+//    $("#graphBoard")[0].style.zIndex = 2;
+//}
