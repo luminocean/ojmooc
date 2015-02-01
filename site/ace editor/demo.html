@@ -25,6 +25,14 @@
             <table>
                 <tr>
                     <td>
+                        <input type="submit" value="run">
+                    </td>
+                    <td>
+                        <input type="submit" value="debug" onchange="intoDebug(this)">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
                         <label>fontsize</label>
                     </td>
                     <td>
@@ -82,7 +90,6 @@
                 }
 		</div>
         <script src="src/ace.js"></script>
-        <script src="src/theme-twilight.js"></script>
 
         <script>
             function changeSize(item){
@@ -109,6 +116,14 @@
                     Pascaleditor.style.display = "none";
                     Qbasiceditor.style.display = "block";
                 }
+            }
+
+            function intoDebug(item){
+
+            }
+
+            function outDebug(item){
+
             }
         </script>
 
