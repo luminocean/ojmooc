@@ -21,10 +21,3 @@ exports.extend = function(obj1,obj2){
 exports.genDebugId = function(){
     return moment().format('YYYYMMDDx');
 };
-
-/**
- * 根据当前时间生成唯一文件名
- */
-exports.generateFileName = function(){
-    return moment().format('YYYYMMDDx');
-};

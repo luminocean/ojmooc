@@ -19,6 +19,7 @@ var gdbMap = {};
 
 var srcPath = path.join(__dirname, '../repo/src');
 var buildPath = path.join(__dirname, '../repo/build');
+var inputPath = path.join(__dirname, '../repo/input');
 
 //使用配置对象自动构建常规的debugger方法
 for(var methodName in methods){
@@ -64,8 +65,9 @@ for(var methodName in methods){
  * @param callback
  */
 dbr.debug = function(srcCode,srcType,inputData,callback){
-    //程序名
-    var programName = util.generateFileName();
+    var debugId = util.genDebugId();
+    var programName = debugId;
+
     //构造源程序文件名和路径
     var srcName = programName+'.'+srcType;
     var srcFilePath = path.join(srcPath, srcName);
@@ -73,6 +75,13 @@ dbr.debug = function(srcCode,srcType,inputData,callback){
 
     //生成源文件
     Q.denodeify(fs.writeFile)(srcFilePath, srcCode)
+        //写入输入数据
+        .then(function(){
+            //构造源程序文件名和路径
+            var inputName = programName+'.txt';
+            var inputFilePath = path.join(inputPath, inputName);
+            return Q.denodeify(fs.writeFile)(inputFilePath, inputData);
+        })
         //编译文件
         .then(function(){
             //构造可执行程序的路径
@@ -82,8 +91,9 @@ dbr.debug = function(srcCode,srcType,inputData,callback){
         //编译成功后执行
         .then(function(){
             var gdb = cp.spawn('gdb',['--interpreter=mi',buildFilePath]);
-            var data = '';
+            gdbMap[debugId] = gdb;
 
+            var data = '';
             gdb.stdout.on('data',function(chunk){
                 data += chunk;
 
@@ -103,9 +113,6 @@ dbr.debug = function(srcCode,srcType,inputData,callback){
             gdb.stdout.on('batch',function(){
                 console.log(" DEBUG resolve");
 
-                var debugId = 'debug-'+util.genDebugId();
-                gdbMap[debugId] = gdb;
-
                 var result = methods['debug'].result||{};
                 result.debugId = debugId;
                 callback(null, result);
@@ -113,6 +120,8 @@ dbr.debug = function(srcCode,srcType,inputData,callback){
         })
         .catch(function(err){
             console.error(err);
+            console.error(err.stack);
+            callback(err);
         });
 };
 
@@ -175,6 +184,39 @@ dbr.printVal = function(debugId,varName,callback){
     });
 
     gdb.stdin.write('p '+varName+'\n');
+};
+
+/**
+ * 启动运行操作
+ * @param debugId
+ * @param callback
+ * @returns {*}
+ */
+dbr.run = function(debugId,callback){
+    var gdb = gdbMap[debugId];
+    if(!gdb)
+        return callback(new Error('找不到debugId '+debugId+' 对应的进程'));
+
+    gdb.stdout.removeAllListeners('batch').on('batch',function(batch){
+        console.log(debugId+' RUN resolve');
+        //console.log('read complete-----------------\n'+batch);
+        //console.log('-------------------------------\n');
+
+        //parse函数的名称
+        var parseNames = methods['run'].parseNames;
+        doParses(batch,parseNames,function(err,result){
+            callback(null, result);
+        });
+    });
+
+    var runCommand = 'r '
+        //输入数据
+        +' <'+path.join(__dirname,'../repo/input/'+debugId+'.txt')
+        //输出数据
+        +' >'+path.join(__dirname,'../repo/output/'+debugId+'.txt')
+        +'\n';
+
+    gdb.stdin.write(runCommand);
 };
 
 /**

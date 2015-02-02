@@ -30,7 +30,7 @@ case "$compiler" in
 		"$compiler" -lang qb "$srcPath" -x "$buildPath";;
 	#其他，如clang,clang++
 	*)
-		"$compiler" "$srcPath" -o "$buildPath";;
+		"$compiler" -g "$srcPath" -o "$buildPath";;
 esac
 
 if [ "$?" -ne 0 ];then

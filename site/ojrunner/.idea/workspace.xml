@@ -2,18 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="6e762905-2113-4904-b61f-d060467ebbd4" name="Default" comment="添加oj后台构建指南">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../ojdebugger/shell/compile.sh" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../ojdebugger/core/compiler.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../ojclient/runner_test.js" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/../ojclient/test.js" afterPath="$PROJECT_DIR$/../ojclient/debugger_test.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../ojdebugger/.gitignore" afterPath="$PROJECT_DIR$/../ojdebugger/.gitignore" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../ojclient/app.js" afterPath="$PROJECT_DIR$/../ojclient/app.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../ojdebugger/shell/compile.sh" afterPath="$PROJECT_DIR$/../ojdebugger/shell/compile.sh" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../ojdebugger/config/config.js" afterPath="$PROJECT_DIR$/../ojdebugger/config/config.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../ojdebugger/core/debugger.js" afterPath="$PROJECT_DIR$/../ojdebugger/core/debugger.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../ojclient/debugger_test.js" afterPath="$PROJECT_DIR$/../ojclient/debugger_test.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../hawatcher/config/haproxy.cfg" afterPath="$PROJECT_DIR$/../hawatcher/config/haproxy.cfg" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../hawatcher/log/hawatch.pid" afterPath="$PROJECT_DIR$/../hawatcher/log/hawatch.pid" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../hawatcher/log/log" afterPath="$PROJECT_DIR$/../hawatcher/log/log" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../ojdebugger/package.json" afterPath="$PROJECT_DIR$/../ojdebugger/package.json" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../ojdebugger/util/util.js" afterPath="$PROJECT_DIR$/../ojdebugger/util/util.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../ojclient/.idea/workspace.xml" afterPath="$PROJECT_DIR$/../ojclient/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />

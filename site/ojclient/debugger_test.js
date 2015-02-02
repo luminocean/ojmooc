@@ -14,10 +14,18 @@ var srcCode = fs.readFileSync('./input_data/'+srcType+'_code','utf-8');
 //读取测试用数据
 var inputData = fs.readFileSync('./input_data/'+srcType+'_data','utf-8');
 
-dbr.debug(srcCode,srcType,inputData,function(err,results) {
+dbr.debug(srcCode,srcType,inputData,function(err,debugId) {
     if (err) return console.error(err);
 
-    console.log(JSON.stringify(results));
+    dbr.breakPoint(debugId,[18],function(){
+        dbr.run(debugId,function(err,exit,breakPoint){
+            console.log(exit);
+            console.log(JSON.stringify(breakPoint));
+            dbr.continue(debugId,function(err,exit){
+               console.log(exit);
+            });
+        });
+    });
 });
 
 

@@ -56,13 +56,12 @@ var methods = {
     },
     "run":{
         "paramNames":["debugId"],
-        "parseNames":['parseStopPoint','parseExit'],
-        //提供了command表示该方法的debugger实现将自动生成
-        "command":"r"
+        "parseNames":['parseStopPoint','parseExit']
     },
     "continue":{
         "paramNames":["debugId"],
         "parseNames":['parseStopPoint','parseExit'],
+        //提供了command表示该方法的debugger实现将自动生成
         "command":"c"
     },
     "stepInto":{
