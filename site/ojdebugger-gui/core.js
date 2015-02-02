@@ -1,4 +1,5 @@
-var client = require('./debugger-client/index');
+//引用同目录下的ojclient
+var dbr = require('../ojclient/app').debugger;
 
 var config = [
     {
@@ -35,7 +36,7 @@ function launchDebug(){
     if(!programName) return console.error('没有指定程序名');
     var breakLine = $('#breakLine').val();
 
-    client.launchDebug(programName,[breakLine],function(err,debugId,exit,breakPoint){
+    dbr.launchDebug(programName,[breakLine],function(err,debugId,exit,breakPoint){
         if(err) return callback(err);
 
         $("#debugId").val(debugId);
@@ -51,7 +52,7 @@ function printVal(){
         return;
     }
 
-    client.printVal(debugId,varName,function(err,value){
+    dbr.printVal(debugId,varName,function(err,value){
         if(err) return display(err.message);
 
         $('#varVal').val(value);
@@ -62,7 +63,7 @@ function stepInto(){
     var debugId = $('#debugId').val();
     if(!debugId) return console.error('找不到从服务器获取的debugId，是否正处于调试？');
 
-    client.stepInto(debugId,function(err,exit,breakPoint){
+    dbr.stepInto(debugId,function(err,exit,breakPoint){
         if(err) return callback(err);
 
         display((exit?'exit:':'')+JSON.stringify(breakPoint));
@@ -73,7 +74,7 @@ function stepOver(){
     var debugId = $('#debugId').val();
     if(!debugId) return console.error('找不到从服务器获取的debugId，是否正处于调试？');
 
-    client.stepOver(debugId,function(err,exit,breakPoint){
+    dbr.stepOver(debugId,function(err,exit,breakPoint){
         if(err) return callback(err);
 
         display((exit?'exit:':'')+JSON.stringify(breakPoint));
@@ -85,7 +86,7 @@ function ctn(){
     var debugId = $('#debugId').val();
     if(!debugId) return console.error('找不到从服务器获取的debugId，是否正处于调试？');
 
-    client.continue(debugId,function(err,exit,breakPoint){
+    dbr.continue(debugId,function(err,exit,breakPoint){
         if(err) return callback(err);
 
         display((exit?'exit:':'')+JSON.stringify(breakPoint));
@@ -96,7 +97,7 @@ function exit(){
     var debugId = $('#debugId').val();
     if(!debugId) return console.error('找不到从服务器获取的debugId，是否正处于调试？');
 
-    client.exit(debugId,function(err,debugId){
+    dbr.exit(debugId,function(err,debugId){
         if(err) return callback(err);
 
         display('DEBUG OVER:'+debugId);
