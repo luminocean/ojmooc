@@ -2,7 +2,10 @@
  * gdb封装模块
  */
 var path = require('path');
+var fs = require('fs');
 var cp = require('child_process');
+var Q = require('q');
+var compiler = require('./compiler');
 var parser = require('./parser');
 var util = require('../util/util');
 var methods = require('../config/config').methods;
@@ -13,6 +16,9 @@ module.exports = dbr;
 
 //存放所有gdb进程的map对象
 var gdbMap = {};
+
+var srcPath = path.join(__dirname, '../repo/src');
+var buildPath = path.join(__dirname, '../repo/build');
 
 //使用配置对象自动构建常规的debugger方法
 for(var methodName in methods){
@@ -51,42 +57,63 @@ for(var methodName in methods){
 
 //以下的均为非常规的debugger方法，即配置时未指定command属性，实现需要自行定义
 /**
- * 开启debug
- * @param programName
+ * 开启一个debug会话
+ * @param srcCode
+ * @param srcType
+ * @param inputData
  * @param callback
  */
-dbr.debug = function(programName,callback){
-    var programPath = path.join(__dirname,'../program',programName);
+dbr.debug = function(srcCode,srcType,inputData,callback){
+    //程序名
+    var programName = util.generateFileName();
+    //构造源程序文件名和路径
+    var srcName = programName+'.'+srcType;
+    var srcFilePath = path.join(srcPath, srcName);
+    var buildFilePath = null;
 
-    var gdb = cp.spawn('gdb',['--interpreter=mi',programPath]);
-    var data = '';
+    //生成源文件
+    Q.denodeify(fs.writeFile)(srcFilePath, srcCode)
+        //编译文件
+        .then(function(){
+            //构造可执行程序的路径
+            buildFilePath = path.join(buildPath,programName);
+            return Q.denodeify(compiler.compile)(srcType, srcFilePath, buildFilePath);
+        })
+        //编译成功后执行
+        .then(function(){
+            var gdb = cp.spawn('gdb',['--interpreter=mi',buildFilePath]);
+            var data = '';
 
-    gdb.stdout.on('data',function(chunk){
-        data += chunk;
+            gdb.stdout.on('data',function(chunk){
+                data += chunk;
 
-        //在读到的gdb输出中检索(gdb)分隔标记，每个标记前面的数据都是一个batch
-        var batchData = data.match(/([\s\S]*?)\(gdb\)\s*/);
-        while(batchData){
-            //发送batch事件与数据
-            gdb.stdout.emit('batch',batchData[0]);
+                //在读到的gdb输出中检索(gdb)分隔标记，每个标记前面的数据都是一个batch
+                var batchData = data.match(/([\s\S]*?)\(gdb\)\s*/);
+                while(batchData){
+                    //发送batch事件与数据
+                    gdb.stdout.emit('batch',batchData[0]);
 
-            //把发出去的数据去除，再检索还有没有batch
-            data = data.replace(/[\s\S]*?\(gdb\)\s*/,'');
-            batchData = data.match(/([\s\S]*?)\(gdb\)/);
-        }
-    });
+                    //把发出去的数据去除，再检索还有没有batch
+                    data = data.replace(/[\s\S]*?\(gdb\)\s*/,'');
+                    batchData = data.match(/([\s\S]*?)\(gdb\)/);
+                }
+            });
 
-    //读完一批数据出发batch事件，进行输出的处理操作
-    gdb.stdout.on('batch',function(){
-        console.log(" DEBUG resolve");
+            //读完一批数据出发batch事件，进行输出的处理操作
+            gdb.stdout.on('batch',function(){
+                console.log(" DEBUG resolve");
 
-        var debugId = 'debug-'+util.genDebugId();
-        gdbMap[debugId] = gdb;
+                var debugId = 'debug-'+util.genDebugId();
+                gdbMap[debugId] = gdb;
 
-        var result = methods['debug'].result||{};
-        result.debugId = debugId;
-        callback(null, result);
-    });
+                var result = methods['debug'].result||{};
+                result.debugId = debugId;
+                callback(null, result);
+            });
+        })
+        .catch(function(err){
+            console.error(err);
+        });
 };
 
 /**

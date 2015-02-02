@@ -75,14 +75,18 @@ dbr.launchDebug = function(programName,breakLines,callback){
 
 /**
  * 开启一个debug会话
- * @param programName
- * @param callback callback(err,debugId)
+ * @param srcCode
+ * @param srcType
+ * @param inputData
+ * @param callback
  */
-dbr.debug = function(programName,callback){
+dbr.debug = function(srcCode,srcType,inputData,callback){
     //开启debug
     sendRequest.call(this,{
         "debug":{
-                "programName":programName
+                "srcCode":srcCode,
+                "srcType":srcType,
+                "inputData":inputData
             }
         },function(err,result){
             if(err) return callback(err);
