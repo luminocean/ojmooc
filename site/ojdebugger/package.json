@@ -9,6 +9,7 @@
   "author": "luMinO",
   "license": "BSD-2-Clause",
   "dependencies": {
-    "moment": "^2.9.0"
+    "moment": "^2.9.0",
+    "q": "^1.1.2"
   }
 }

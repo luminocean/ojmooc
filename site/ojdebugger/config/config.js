@@ -31,7 +31,7 @@ var parseConfig = {
  */
 var methods = {
     "debug":{
-      "paramNames":["programName"],
+      "paramNames":["srcCode","srcType","inputData"],
       "result":{
           //之后的会话中一直要使用的id
           "debugId":undefined
@@ -56,13 +56,12 @@ var methods = {
     },
     "run":{
         "paramNames":["debugId"],
-        "parseNames":['parseStopPoint','parseExit'],
-        //提供了command表示该方法的debugger实现将自动生成
-        "command":"r"
+        "parseNames":['parseStopPoint','parseExit']
     },
     "continue":{
         "paramNames":["debugId"],
         "parseNames":['parseStopPoint','parseExit'],
+        //提供了command表示该方法的debugger实现将自动生成
         "command":"c"
     },
     "stepInto":{
@@ -77,5 +76,25 @@ var methods = {
     }
 };
 
+var settings = {
+    /**
+     * 编译相关配置
+     */
+    "compile":{
+        //某种源码后缀使用的编译器的配置
+        "compiler":{
+            "c":"clang",
+            "cpp":"clang++",
+            "pas":"fpc",
+            "bas":"fbc"
+        },
+        "limit":{
+            //编译时的时间限制
+            "timeout": 10000
+        }
+    }
+};
+
 exports.methods = methods;
 exports.parseConfig = parseConfig;
+exports.settings = settings;
