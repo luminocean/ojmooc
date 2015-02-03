@@ -143,7 +143,7 @@ dbr.printVal = function(debugId,varName,callback){
 /**
  * 执行一个debug会话，取得执行结果（遇到断点或者运行结束）
  * @param debugId
- * @param callback callback(err,exit,breakPoint)
+ * @param callback callback(err,exit,breakPoint,stdout)
  * exit:是否结束的flag   breakPoint:遇到的断点信息
  */
 dbr.run = function(debugId,callback){
@@ -153,11 +153,14 @@ dbr.run = function(debugId,callback){
         }
     },function(err,result){
         if(err) return callback(err);
+
+        var stdout = result.stdout;
+
         if(result.breakPoint)
-            return callback(null,false,result.breakPoint);
+            return callback(null,false,result.breakPoint,stdout);
 
         if(result.normalExit)
-            return callback(null,true,result.normalExit);
+            return callback(null,true,result.normalExit,stdout);
 
         console.error(new Error('异常返回值'+JSON.stringify(result)));
     });
@@ -166,7 +169,7 @@ dbr.run = function(debugId,callback){
 /**
  * 单步进入
  * @param debugId
- * @param callback callback(err,exit,breakPoint)
+ * @param callback callback(err,exit,breakPoint,stdout)
  * exit:是否结束的flag   breakPoint:遇到的断点信息
  */
 dbr.stepInto = function(debugId,callback){
@@ -176,11 +179,12 @@ dbr.stepInto = function(debugId,callback){
         }
     },function(err,result){
         if(err) return callback(err);
-        if(result.breakPoint)
-            return callback(null,false,result.breakPoint);
+        var stdout = result.stdout;
 
+        if(result.breakPoint)
+            return callback(null,false,result.breakPoint,stdout);
         if(result.normalExit)
-            return callback(null,true,result.normalExit);
+            return callback(null,true,result.normalExit,stdout);
 
         console.error(new Error('异常返回值'+JSON.stringify(result)));
     });
@@ -189,7 +193,7 @@ dbr.stepInto = function(debugId,callback){
 /**
  * 单步跨越
  * @param debugId
- * @param callback callback(err,exit,breakPoint)
+ * @param callback callback(err,exit,breakPoint,stdout)
  * exit:是否结束的flag   breakPoint:遇到的断点信息
  */
 dbr.stepOver = function(debugId,callback){
@@ -199,11 +203,12 @@ dbr.stepOver = function(debugId,callback){
         }
     },function(err,result){
         if(err) return callback(err);
-        if(result.breakPoint)
-            return callback(null,false,result.breakPoint);
+        var stdout = result.stdout;
 
+        if(result.breakPoint)
+            return callback(null,false,result.breakPoint,stdout);
         if(result.normalExit)
-            return callback(null,true,result.normalExit);
+            return callback(null,true,result.normalExit,stdout);
 
         console.error(new Error('异常返回值'+JSON.stringify(result)));
     });
@@ -212,7 +217,7 @@ dbr.stepOver = function(debugId,callback){
 /**
  * 继续
  * @param debugId
- * @param callback callback(err,exit,breakPoint)
+ * @param callback callback(err,exit,breakPoint,stdout)
  * exit:是否结束的flag   breakPoint:遇到的断点信息
  */
 dbr.continue = function(debugId,callback){
@@ -222,11 +227,13 @@ dbr.continue = function(debugId,callback){
         }
     },function(err,result){
         if(err) return callback(err);
+        var stdout = result.stdout;
+
         if(result.breakPoint)
-            return callback(null,false,result.breakPoint);
+            return callback(null,false,result.breakPoint,stdout);
 
         if(result.normalExit)
-            return callback(null,true,result.normalExit);
+            return callback(null,true,result.normalExit,stdout);
 
         console.error(new Error('异常返回值'+JSON.stringify(result)));
     });

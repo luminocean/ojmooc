@@ -24,7 +24,7 @@ fi
 case "$compiler" in
 	#pascal
 	"fpc")
-		"$compiler" "$srcPath" -o"$buildPath";;
+		"$compiler" -g "$srcPath" -o"$buildPath";;
 	#qbasic
 	"fbc")
 		"$compiler" -lang qb "$srcPath" -x "$buildPath";;

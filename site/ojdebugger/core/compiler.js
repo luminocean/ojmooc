@@ -6,7 +6,7 @@ var cp = require('child_process');
 var config = require('../config/config.js').settings;
 
 //执行编译任务的shell文件的位置
-var compileShellPath = path.join(__dirname,'../shell/compile.sh');
+var compileShellPath = path.join(__dirname,'../', config.shell.compile);
 
 /**
  * 执行编译的方法

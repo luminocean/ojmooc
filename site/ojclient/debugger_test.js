@@ -8,7 +8,7 @@ var dbr = require('./app.js').debugger;
 dbr.setPort(23333);
 
 //测试的编译类型
-var srcType = 'cpp';
+var srcType = 'pas';
 //读取测试用源文件
 var srcCode = fs.readFileSync('./input_data/'+srcType+'_code','utf-8');
 //读取测试用数据
@@ -17,15 +17,15 @@ var inputData = fs.readFileSync('./input_data/'+srcType+'_data','utf-8');
 dbr.debug(srcCode,srcType,inputData,function(err,debugId) {
     if (err) return console.error(err);
 
-    dbr.breakPoint(debugId,[18],function(){
-        dbr.run(debugId,function(err,exit,breakPoint){
+    //dbr.breakPoint(debugId,[12],function(){
+        dbr.run(debugId,function(err,exit,breakPoint,stdout){
             console.log(exit);
-            console.log(JSON.stringify(breakPoint));
-            dbr.continue(debugId,function(err,exit){
+            console.log(JSON.stringify(breakPoint)+'->'+stdout);
+            /*dbr.continue(debugId,function(err,exit){
                console.log(exit);
-            });
+            });*/
         });
-    });
+    //});
 });
 
 

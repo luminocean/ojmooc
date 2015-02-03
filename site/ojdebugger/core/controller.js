@@ -14,7 +14,7 @@ module.exports = controller;
  * @param callback
  */
 controller.process = function(requestJSON, callback){
-    //找出请求json对象中的方法
+    //找出请求json对象中的方法，只找出第一个就处理返回
     for(var methodName in requestJSON){
         if(!requestJSON.hasOwnProperty(methodName))
             continue;
@@ -30,7 +30,7 @@ controller.process = function(requestJSON, callback){
             configParams.forEach(function(param){
                 var requestParam = requestParams[param];
                 if(!requestParam)
-                    return callback(new Error(JSON.stringify(requestJSON)+'请求json对象中的属性与服务器中配置的不符'));
+                    return callback(new Error('配置中需要的属性在请求中找不到：'+param));
                 paramValues.push(requestParam);
             });
             //回调函数放在最后
