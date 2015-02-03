@@ -236,6 +236,8 @@ dbr.exit = function(debugId,callback){
         result.debugId = debugId;
 
         callback(null,result);
+
+        util.cleanup(debugId,[srcPath,buildPath,inputPath,outputPath]);
     });
 
     gdb.stdin.write('q \n');

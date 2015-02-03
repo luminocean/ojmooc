@@ -242,7 +242,7 @@ dbr.continue = function(debugId,callback){
 /**
  * 结束debug
  * @param debugId
- * @param callback
+ * @param callback callback(err,debugId)
  */
 dbr.exit = function(debugId,callback){
     sendRequest.call(this,{
