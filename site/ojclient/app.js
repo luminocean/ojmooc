@@ -133,6 +133,10 @@ dbr.printVal = function(debugId,varName,callback){
             }
         },function(err,result){
             if(err) return callback(err);
+            if(result.noSymbol){
+                return callback(new Error('变量'+varName+'不存在'));
+            }
+
             if(!result.var || !result.var.value)
                 return console.error(new Error('异常返回值'+JSON.stringify(result)));
 

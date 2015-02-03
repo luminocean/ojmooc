@@ -27,7 +27,7 @@ case "$compiler" in
 		"$compiler" -g "$srcPath" -o"$buildPath";;
 	#qbasic
 	"fbc")
-		"$compiler" -lang qb "$srcPath" -x "$buildPath";;
+		"$compiler" -lang qb "$srcPath" -x "$buildPath" -g;;
 	#其他，如clang,clang++
 	*)
 		"$compiler" -g "$srcPath" -o "$buildPath";;

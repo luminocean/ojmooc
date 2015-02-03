@@ -4,6 +4,10 @@
 var http = require('http');
 var requestParser = require('./util/request_parser');
 var controller = require('./core/controller');
+var util = require('./util/util');
+
+//准备好各种临时文件需要的目录
+util.prepareDir();
 
 http.createServer(function (req, res) {
     //解析用户传来的http报文为json对象

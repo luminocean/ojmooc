@@ -11,7 +11,7 @@ var parseConfig = {
         //解析某一行获取有用的信息
         "breakPoint":{
             //解析用正则
-            "reg": /~"(\d+)(?:\\t)+(.*)\\n/,
+            "reg": /~"(\d+)(?:\\t)+(.*)(?:\\n)*/,
             //解析完成后返回的对象所包含的属性
             "meta":["lineNum","text"]
         }
@@ -20,6 +20,10 @@ var parseConfig = {
         "var":{
             "reg":/~"\$\d+\s=\s(.+)"/,
             "meta":["value"]
+        },
+        "noSymbol":{
+            "reg": /&"No symbol \\"(.*)\\" in current context/,
+            "meta":["varName"]
         }
     },
     "parseExit":{

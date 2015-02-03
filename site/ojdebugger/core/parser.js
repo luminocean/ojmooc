@@ -23,6 +23,8 @@ for(var func in parseConfig){
                 var reg = attr.reg;
                 var meta = attr.meta;
 
+                console.log(reg);
+
                 //遍历要解析的数据的每一行
                 lines.forEach(function(line){
                     var regResults = line.match(reg);

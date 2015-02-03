@@ -1,4 +1,5 @@
 var fs = require('fs');
+var path = require('path');
 var moment = require('moment');
 var config = require('../config/config').settings;
 
@@ -40,6 +41,29 @@ exports.cleanup = function(fileName, dirs){
                 deleteFile(path+"."+extName);
             else
                 deleteFile(path);
+        }
+    }
+};
+
+/**
+ * 准备临时文件存放需要的目录，避免找不到目录而出错
+ * 注意本方法调用了同步方法，请不要反复执行，会产生性能问题
+ */
+exports.prepareDir = function(){
+    //如果repo目录本身就不存在就先创建
+    if(!fs.existsSync(path.join(__dirname,'../',config.repo.dir.base))){
+        fs.mkdirSync(path.join(__dirname,'../',config.repo.dir.base));
+    }
+
+    //获取各临时目录
+    var dirs = config.repo.dir;
+    for(var key in dirs){
+        //跳过继承属性
+        if( !dirs.hasOwnProperty(key) ) continue;
+
+        var dir = path.join(__dirname,'../',dirs[key]);
+        if( !fs.existsSync(dir) ){
+            fs.mkdirSync(dir);
         }
     }
 };

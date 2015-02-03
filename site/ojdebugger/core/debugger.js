@@ -173,8 +173,8 @@ dbr.printVal = function(debugId,varName,callback){
 
     gdb.stdout.removeAllListeners('batch').on('batch',function(batch){
         console.log(debugId+' PRINT resolve');
-        //console.log('read complete-----------------\n'+batch);
-        //console.log('-------------------------------\n');
+        console.log('read complete-----------------\n'+batch);
+        console.log('-------------------------------\n');
 
         //parse函数的名称
         var parseNames = methods['printVal'].parseNames;

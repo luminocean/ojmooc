@@ -9,7 +9,7 @@ var dbr = require('./app.js').debugger;
 dbr.setPort(23333);
 
 //测试的编译类型
-var srcType = 'pas';
+var srcType = 'bas';
 //读取测试用源文件
 var srcCode = fs.readFileSync('./input_data/'+srcType+'_code','utf-8');
 //读取测试用数据
@@ -21,19 +21,23 @@ Q.denodeify(dbr.debug)(srcCode,srcType,inputData)
     //加入断点
     .then(function(id){
         debugId = id;
-        return Q.denodeify(dbr.breakPoint)(debugId,[14]);
+        return Q.denodeify(dbr.breakPoint)(debugId,[3]);
     })
     //运行程序
     .then(function(){
         return Q.denodeify(dbr.run)(debugId);
     })
+    //查看断点信息
+    .then(function(results){
+        console.log(JSON.stringify(results[1]));
+    })
     //查看变量值
-    .then(function(){
-        return Q.denodeify(dbr.printVal)(debugId,'lastname');
+    /*.then(function(){
+        return Q.denodeify(dbr.printVal)(debugId,'indata');
     })
     .then(function(value){
         console.log('value of lastname:'+value);
-    })
+    })*/
     //继续程序
     .then(function(){
         return Q.denodeify(dbr.continue)(debugId);
@@ -49,7 +53,6 @@ Q.denodeify(dbr.debug)(srcCode,srcType,inputData)
         console.log(debugId+' exited');
     })
     .catch(function(err){
-        console.error(err);
         console.error(err.stack);
     });
 
