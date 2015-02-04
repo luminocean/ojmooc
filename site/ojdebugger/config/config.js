@@ -29,7 +29,19 @@ var parseConfig = {
     "parseExit":{
         "normalExit":{
             "reg":/\(process\s(\d+)\)\sexited normally/,
-            "meta":["processId"]
+            "meta":["processId"],
+            //解析到这个表示当前debug的程序退出了
+            "exit":true
+        }
+    },
+    "parseLocals":{
+        "locals":{
+            "reg":/~"(.*) = (.*)"/,
+            "meta":["varName","varVal"]
+        },
+        "noFrame":{
+            "reg": /&"(No frame selected)/,
+            "meta":["msg"]
         }
     }
 };
@@ -63,29 +75,37 @@ var methods = {
         "paramNames":["debugId","varName"],
         "parseNames":['parsePrintVal']
     },
+    "locals":{
+        "paramNames":["debugId"],
+        "parseNames":['parseLocals']
+    },
     "run":{
         "paramNames":["debugId"],
         "parseNames":['parseStopPoint','parseExit'],
-        "stdout":true
+        "stdout":true,
+        "locals":true
     },
     "continue":{
         "paramNames":["debugId"],
         "parseNames":['parseStopPoint','parseExit'],
         //提供了command表示该方法的debugger实现将自动生成
         "command":"c",
-        "stdout":true
+        "stdout":true,
+        "locals":true
     },
     "stepInto":{
         "paramNames":["debugId"],
         "parseNames":['parseStopPoint','parseExit'],
         "command":"step",
-        "stdout":true
+        "stdout":true,
+        "locals":true
     },
     "stepOver":{
         "paramNames":["debugId"],
         "parseNames":['parseStopPoint','parseExit'],
         "command":"next",
-        "stdout":true
+        "stdout":true,
+        "locals":true
     }
 };
 

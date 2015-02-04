@@ -41,12 +41,13 @@ for(var methodName in methods){
             //截获batch事件及其带来的数据
             gdb.stdout.removeAllListeners('batch').on('batch',function(batch){
                 console.log(debugId+' '+methodName+' resolve');
-                //console.log('read complete-----------------\n'+batch);
-                //console.log('-------------------------------\n');
+                console.log('read complete-----------------\n'+batch);
+                console.log('-------------------------------\n');
 
                 //配置好的parse函数的名称
                 var parseNames = methodConfig.parseNames;
-                processBatch(batch,debugId,parseNames,methodConfig.stdout,callback);
+                processBatch(batch,debugId,parseNames,
+                    methodConfig.stdout,methodConfig.locals,callback);
             });
 
             //向gdb进程传入指令
@@ -187,6 +188,33 @@ dbr.printVal = function(debugId,varName,callback){
 };
 
 /**
+ * 获取局部变量
+ * @param debugId
+ * @param callback
+ * @returns {*}
+ */
+dbr.locals = function(debugId,callback){
+    var gdb = gdbMap[debugId];
+    if(!gdb)
+        return callback(new Error('找不到debugId '+debugId+' 对应的进程'));
+
+    var methodConfig = methods['locals'];
+
+    gdb.stdout.removeAllListeners('batch').on('batch',function(batch){
+        console.log(debugId+'   LOCALS resolve');
+        //console.log('read complete-----------------\n'+batch);
+        //console.log('-------------------------------\n');
+
+        //parse函数的名称
+        var parseNames = methodConfig.parseNames;
+        //locals参数必须是false
+        processBatch(batch,debugId,parseNames,methodConfig.stdout,false,callback);
+    });
+
+    gdb.stdin.write('info locals \n');
+};
+
+/**
  * 启动运行操作
  * @param debugId
  * @param callback
@@ -207,7 +235,8 @@ dbr.run = function(debugId,callback){
         //parse函数的名称
         var parseNames = methodConfig.parseNames;
 
-        processBatch(batch,debugId,parseNames,methodConfig.stdout,callback);
+        processBatch(batch,debugId,parseNames
+            ,methodConfig.stdout,methodConfig.locals,callback);
     });
 
     var runCommand = 'r '
@@ -249,15 +278,22 @@ dbr.exit = function(debugId,callback){
  * @param debugId 当前debug会话的id
  * @param parseNames 用于解析的函数名称
  * @param withStdout 是否要在结果上加上标准输出的值
+ * @param withLocals 是否要在结果上加上局部变量集合
  * @param callback 要把结果输出的回调函数
  */
-function processBatch(batch,debugId,parseNames,withStdout,callback){
+function processBatch(batch,debugId,parseNames,withStdout,withLocals,callback){
     //解析gdb输出
     Q.denodeify(doParses)(batch,parseNames)
         .then(function(result){
             //将程序本身的标准输出结果加到结果对象上
             if(withStdout)
                 return Q.denodeify(appendStdout)(result,debugId);
+            return result;
+        })
+        .then(function(result){
+            //添加局部变量值
+            if(withLocals && !result.exit )
+                return Q.denodeify(appendLocals)(result,debugId);
             return result;
         })
         //返回结果
@@ -271,6 +307,7 @@ function processBatch(batch,debugId,parseNames,withStdout,callback){
             return callback(err);
         });
 }
+
 /**
  * 根据传入的parse函数的名称数组逐个解析，返回第一个解析成功的结果
  * @param batch
@@ -323,4 +360,24 @@ function appendStdout(result,debugId,callback){
                 callback(err);
             });
     });
+}
+
+/**
+ * 给结果加上局部变量的统计值
+ * @param result
+ * @param debugId
+ * @param callback
+ */
+function appendLocals(result,debugId,callback){
+    //如果调试的程序已经退出则直接返回
+    if(result.exit)
+        return callback(null,result);
+
+    dbr.locals(debugId,function(err,localsResult){
+        if(err) callback(err);
+
+        util.extend(result,localsResult);
+
+        callback(null,result);
+    })
 }

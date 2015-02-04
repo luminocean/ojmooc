@@ -145,102 +145,24 @@ dbr.printVal = function(debugId,varName,callback){
 };
 
 /**
- * 执行一个debug会话，取得执行结果（遇到断点或者运行结束）
+ * 取得局部变量的值
  * @param debugId
- * @param callback callback(err,exit,breakPoint,stdout)
- * exit:是否结束的flag   breakPoint:遇到的断点信息
+ * @param callback
  */
-dbr.run = function(debugId,callback){
-    sendRequest.call(this,{
-        "run":{
-            "debugId":debugId
-        }
-    },function(err,result){
-        if(err) return callback(err);
+dbr.locals = function(debugId,callback){
+    sendRequest.call(this,
+        {
+            "locals":{
+                "debugId":debugId
+            }
+        },function(err,result){
+            if(err) return callback(err);
+            if(!result.locals){
+                return console.error(new Error('*异常返回值'+JSON.stringify(result)));
+            }
 
-        var stdout = result.stdout;
-
-        if(result.breakPoint)
-            return callback(null,false,result.breakPoint,stdout);
-
-        if(result.normalExit)
-            return callback(null,true,result.normalExit,stdout);
-
-        console.error(new Error('异常返回值'+JSON.stringify(result)));
-    });
-};
-
-/**
- * 单步进入
- * @param debugId
- * @param callback callback(err,exit,breakPoint,stdout)
- * exit:是否结束的flag   breakPoint:遇到的断点信息
- */
-dbr.stepInto = function(debugId,callback){
-    sendRequest.call(this,{
-        "stepInto": {
-            "debugId": debugId
-        }
-    },function(err,result){
-        if(err) return callback(err);
-        var stdout = result.stdout;
-
-        if(result.breakPoint)
-            return callback(null,false,result.breakPoint,stdout);
-        if(result.normalExit)
-            return callback(null,true,result.normalExit,stdout);
-
-        console.error(new Error('异常返回值'+JSON.stringify(result)));
-    });
-};
-
-/**
- * 单步跨越
- * @param debugId
- * @param callback callback(err,exit,breakPoint,stdout)
- * exit:是否结束的flag   breakPoint:遇到的断点信息
- */
-dbr.stepOver = function(debugId,callback){
-    sendRequest.call(this,{
-        "stepOver": {
-            "debugId": debugId
-        }
-    },function(err,result){
-        if(err) return callback(err);
-        var stdout = result.stdout;
-
-        if(result.breakPoint)
-            return callback(null,false,result.breakPoint,stdout);
-        if(result.normalExit)
-            return callback(null,true,result.normalExit,stdout);
-
-        console.error(new Error('异常返回值'+JSON.stringify(result)));
-    });
-};
-
-/**
- * 继续
- * @param debugId
- * @param callback callback(err,exit,breakPoint,stdout)
- * exit:是否结束的flag   breakPoint:遇到的断点信息
- */
-dbr.continue = function(debugId,callback){
-    sendRequest.call(this,{
-        "continue": {
-            "debugId": debugId
-        }
-    },function(err,result){
-        if(err) return callback(err);
-        var stdout = result.stdout;
-
-        if(result.breakPoint)
-            return callback(null,false,result.breakPoint,stdout);
-
-        if(result.normalExit)
-            return callback(null,true,result.normalExit,stdout);
-
-        console.error(new Error('异常返回值'+JSON.stringify(result)));
-    });
+            callback(null,result.locals);
+        });
 };
 
 /**
@@ -259,6 +181,44 @@ dbr.exit = function(debugId,callback){
         callback(null,result.debugId);
     });
 };
+
+/**
+ * 与运行相关的方法，回调函数的格式统一为： callback(err,exit,breakPoint,stdout,locals)
+ */
+var methodNames = ['run','continue','stepInto','stepOver'];
+methodNames.forEach(function(methodName){
+    dbr[methodName] = function(debugId,callback){
+        var requestObj = {};
+        requestObj[methodName] = {
+            "debugId":debugId
+        };
+        sendRequest.call(this,requestObj,function(err,result){
+            if(err) return callback(err);
+
+            var stdout = result.stdout;
+            var originLocals = result.locals;
+            var locals = null;
+            //调整locals返回值的格式
+            if(originLocals){
+                locals = {};
+                var varNames = originLocals.varName;
+                var varVals = originLocals.varVal;
+                for(var i=0;i<varNames.length;i++){
+                    locals[varNames[i]] = varVals[i];
+                }
+            }
+
+            if(result.breakPoint)
+                return callback(null,false,result.breakPoint,stdout,locals);
+
+            if(result.normalExit)
+                return callback(null,true,result.normalExit,stdout,locals);
+
+            console.error(new Error('异常返回值'+JSON.stringify(result)));
+        });
+    }
+});
+
 
 /**
  * 向debugger服务器发出请求，并接收返回值

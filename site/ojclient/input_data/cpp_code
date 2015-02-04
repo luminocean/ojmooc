@@ -6,8 +6,6 @@ int main ()
 {
 	int a,b,c;
 
-	double arr[500];
-
 	cin>>a>>b>>c;
 
 	int acc = 0;

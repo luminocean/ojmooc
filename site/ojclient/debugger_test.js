@@ -9,7 +9,7 @@ var dbr = require('./app.js').debugger;
 dbr.setPort(23333);
 
 //测试的编译类型
-var srcType = 'bas';
+var srcType = 'cpp';
 //读取测试用源文件
 var srcCode = fs.readFileSync('./input_data/'+srcType+'_code','utf-8');
 //读取测试用数据
@@ -21,7 +21,7 @@ Q.denodeify(dbr.debug)(srcCode,srcType,inputData)
     //加入断点
     .then(function(id){
         debugId = id;
-        return Q.denodeify(dbr.breakPoint)(debugId,[3]);
+        return Q.denodeify(dbr.breakPoint)(debugId,[16]);
     })
     //运行程序
     .then(function(){
@@ -30,6 +30,7 @@ Q.denodeify(dbr.debug)(srcCode,srcType,inputData)
     //查看断点信息
     .then(function(results){
         console.log(JSON.stringify(results[1]));
+        console.log('--'+JSON.stringify(results[3]));
     })
     //查看变量值
     /*.then(function(){
