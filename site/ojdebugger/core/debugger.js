@@ -41,8 +41,8 @@ for(var methodName in methods){
             //截获batch事件及其带来的数据
             gdb.stdout.removeAllListeners('batch').on('batch',function(batch){
                 console.log(debugId+' '+methodName+' resolve');
-                console.log('read complete-----------------\n'+batch);
-                console.log('-------------------------------\n');
+                //console.log('read complete-----------------\n'+batch);
+                //console.log('-------------------------------\n');
 
                 //配置好的parse函数的名称
                 var parseNames = methodConfig.parseNames;
@@ -201,9 +201,9 @@ dbr.locals = function(debugId,callback){
     var methodConfig = methods['locals'];
 
     gdb.stdout.removeAllListeners('batch').on('batch',function(batch){
-        console.log(debugId+'   LOCALS resolve');
-        //console.log('read complete-----------------\n'+batch);
-        //console.log('-------------------------------\n');
+        console.log(debugId+' LOCALS resolve');
+        console.log('read complete-----------------\n'+batch);
+        console.log('-------------------------------\n');
 
         //parse函数的名称
         var parseNames = methodConfig.parseNames;
@@ -271,6 +271,7 @@ dbr.exit = function(debugId,callback){
 
     gdb.stdin.write('q \n');
 };
+
 
 /**
  * 处理batch数据，将处理完的结果传入回调函数
@@ -379,5 +380,5 @@ function appendLocals(result,debugId,callback){
         util.extend(result,localsResult);
 
         callback(null,result);
-    })
+    });
 }

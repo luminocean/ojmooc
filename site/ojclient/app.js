@@ -52,22 +52,24 @@ dbr.setPort = function(port){
 
 /**
  * 一个便利方法，等同于debug+breakPoint+run操作
- * @param programName
+ * @param srcCode
+ * @param srcType
+ * @param inputData
  * @param breakLines
  * @param callback callback(err,debugId,exit,breakPoint)
  * exit:是否结束的flag   breakPoint:遇到的断点信息
  */
-dbr.launchDebug = function(programName,breakLines,callback){
-    dbr.debug(programName,function(err,debugId){
+dbr.launchDebug = function(srcCode,srcType,inputData,breakLines,callback){
+    dbr.debug(srcCode,srcType,inputData,function(err,debugId){
         if(err) return callback(err);
 
         dbr.breakPoint(debugId,breakLines,function(err){
             if(err) return callback(err);
 
-            dbr.run(debugId,function(err,exit,breakPoint){
+            dbr.run(debugId,function(err,exit,breakPoint,stdout,locals){
                 if(err) return callback(err);
 
-                callback(null,debugId,exit,breakPoint);
+                callback(null,debugId,exit,breakPoint,stdout,locals);
             });
         });
     });

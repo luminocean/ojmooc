@@ -1,3 +1,4 @@
+var util = require('./util');
 //引用同目录下的ojclient
 var dbr = require('../ojclient/app').debugger;
 
@@ -31,16 +32,23 @@ config.forEach(function(item){
     });
 });
 
+/**
+ * gui侧启动debug(debug+breakPoint+run)
+ * @returns {*}
+ */
 function launchDebug(){
-    var programName = $('#programName').val();
-    if(!programName) return console.error('没有指定程序名');
+    var programSuffix = $('#programSuffix').val();
+    if(!programSuffix) return console.error('没有指定程序后缀');
     var breakLine = $('#breakLine').val();
 
-    dbr.launchDebug(programName,[breakLine],function(err,debugId,exit,breakPoint){
-        if(err) return callback(err);
+    util.getData(programSuffix,function(err,sourceCode,inputData){
+        if(err) return console.error(err.stack);
 
-        $("#debugId").val(debugId);
-        display((exit?'exit:':'')+JSON.stringify(breakPoint));
+        dbr.launchDebug(sourceCode,programSuffix,inputData,[breakLine],function(err,debugId,exit,breakPoint,stdout,locals){
+            if(err) return console.error(err.stack);
+
+            displayInfo(debugId,exit,breakPoint,stdout,locals);
+        });
     });
 }
 
@@ -63,10 +71,10 @@ function stepInto(){
     var debugId = $('#debugId').val();
     if(!debugId) return console.error('找不到从服务器获取的debugId，是否正处于调试？');
 
-    dbr.stepInto(debugId,function(err,exit,breakPoint){
+    dbr.stepInto(debugId,function(err,exit,breakPoint,stdout,locals){
         if(err) return callback(err);
 
-        display((exit?'exit:':'')+JSON.stringify(breakPoint));
+        displayInfo(debugId,exit,breakPoint,stdout,locals);
     });
 }
 
@@ -74,10 +82,10 @@ function stepOver(){
     var debugId = $('#debugId').val();
     if(!debugId) return console.error('找不到从服务器获取的debugId，是否正处于调试？');
 
-    dbr.stepOver(debugId,function(err,exit,breakPoint){
+    dbr.stepOver(debugId,function(err,exit,breakPoint,stdout,locals){
         if(err) return callback(err);
 
-        display((exit?'exit:':'')+JSON.stringify(breakPoint));
+        displayInfo(debugId,exit,breakPoint,stdout,locals);
     });
 }
 
@@ -86,10 +94,10 @@ function ctn(){
     var debugId = $('#debugId').val();
     if(!debugId) return console.error('找不到从服务器获取的debugId，是否正处于调试？');
 
-    dbr.continue(debugId,function(err,exit,breakPoint){
+    dbr.continue(debugId,function(err,exit,breakPoint,stdout,locals){
         if(err) return callback(err);
 
-        display((exit?'exit:':'')+JSON.stringify(breakPoint));
+        displayInfo(debugId,exit,breakPoint,stdout,locals);
     });
 }
 
@@ -104,6 +112,36 @@ function exit(){
     });
 }
 
-function display(text){
-    $("#output").text(text);
+/**
+ * 将返回的数据填充到界面的对应位置上
+ * @param debugId
+ * @param exit
+ * @param breakPoint
+ * @param stdout
+ * @param locals
+ */
+function displayInfo(debugId,exit,breakPoint,stdout,locals){
+    $("#debugId").val(debugId);
+    display('response','debugId:'+debugId
+    +'\nexit:'+exit
+    +'\nbreakPoint:'+JSON.stringify(breakPoint)
+    +'\nstdout:'+JSON.stringify(stdout)
+    +'\nlocals:'+JSON.stringify(locals));
+
+    if(stdout)
+        display('stdout',stdout.toString());
+
+    if(locals){
+        var localsStr = '';
+        for(var key in locals){
+            if(!locals.hasOwnProperty(key)) continue;
+
+            localsStr += key+':'+locals[key]+'\n';
+        }
+        display('locals',localsStr);
+    }
+}
+
+function display(type,text){
+    $("#"+type).text(text);
 }

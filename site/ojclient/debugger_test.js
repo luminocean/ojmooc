@@ -15,7 +15,17 @@ var srcCode = fs.readFileSync('./input_data/'+srcType+'_code','utf-8');
 //读取测试用数据
 var inputData = fs.readFileSync('./input_data/'+srcType+'_data','utf-8');
 
-var debugId = null;
+//var debugId = null;
+
+Q.denodeify(dbr.launchDebug)(srcCode,srcType,inputData,[16])
+    .then(function(results){
+        console.log(JSON.stringify(results));
+    })
+    .catch(function(err){
+        console.error(err);
+    });
+
+/**
 //开启debug会话
 Q.denodeify(dbr.debug)(srcCode,srcType,inputData)
     //加入断点
@@ -33,12 +43,12 @@ Q.denodeify(dbr.debug)(srcCode,srcType,inputData)
         console.log('--'+JSON.stringify(results[3]));
     })
     //查看变量值
-    /*.then(function(){
+    .then(function(){
         return Q.denodeify(dbr.printVal)(debugId,'indata');
     })
     .then(function(value){
         console.log('value of lastname:'+value);
-    })*/
+    })
     //继续程序
     .then(function(){
         return Q.denodeify(dbr.continue)(debugId);
@@ -55,7 +65,7 @@ Q.denodeify(dbr.debug)(srcCode,srcType,inputData)
     })
     .catch(function(err){
         console.error(err.stack);
-    });
+    });*/
 
 
 

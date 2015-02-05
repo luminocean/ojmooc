@@ -2,18 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="6e762905-2113-4904-b61f-d060467ebbd4" name="Default" comment="添加oj后台构建指南">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../ojdebugger/test.js" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../ojclient/app.js" afterPath="$PROJECT_DIR$/../ojclient/app.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../ojdebugger/config/config.js" afterPath="$PROJECT_DIR$/../ojdebugger/config/config.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../ojclient/input_data/cpp_code" afterPath="$PROJECT_DIR$/../ojclient/input_data/cpp_code" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../ojdebugger/core/debugger.js" afterPath="$PROJECT_DIR$/../ojdebugger/core/debugger.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../ojclient/debugger_test.js" afterPath="$PROJECT_DIR$/../ojclient/debugger_test.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../hawatcher/config/haproxy.cfg" afterPath="$PROJECT_DIR$/../hawatcher/config/haproxy.cfg" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../hawatcher/log/hawatch.pid" afterPath="$PROJECT_DIR$/../hawatcher/log/hawatch.pid" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../hawatcher/log/log" afterPath="$PROJECT_DIR$/../hawatcher/log/log" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../ojdebugger/core/parser.js" afterPath="$PROJECT_DIR$/../ojdebugger/core/parser.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../ojclient/.idea/workspace.xml" afterPath="$PROJECT_DIR$/../ojclient/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="ojrunner.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -665,7 +657,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-1" y="-1" width="1922" height="946" extended-state="0" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
