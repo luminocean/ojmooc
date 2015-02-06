@@ -11,6 +11,9 @@ var util = require('../util/util');
 var methods = require('../config/config').methods;
 var config = require('../config/config').settings;
 
+//debug设置
+Q.longStackSupport = true;
+
 //debugger对象
 var dbr = {};
 module.exports = dbr;
@@ -174,14 +177,12 @@ dbr.printVal = function(debugId,varName,callback){
 
     gdb.stdout.removeAllListeners('batch').on('batch',function(batch){
         console.log(debugId+' PRINT resolve');
-        console.log('read complete-----------------\n'+batch);
-        console.log('-------------------------------\n');
+        //console.log('read complete-----------------\n'+batch);
+        //console.log('-------------------------------\n');
 
         //parse函数的名称
         var parseNames = methods['printVal'].parseNames;
-        doParses(batch,parseNames,function(err,result){
-            callback(null, result);
-        });
+        processBatch(batch,debugId,parseNames,false,false,callback);
     });
 
     gdb.stdin.write('p '+varName+'\n');
@@ -202,8 +203,8 @@ dbr.locals = function(debugId,callback){
 
     gdb.stdout.removeAllListeners('batch').on('batch',function(batch){
         console.log(debugId+' LOCALS resolve');
-        console.log('read complete-----------------\n'+batch);
-        console.log('-------------------------------\n');
+        //console.log('read complete-----------------\n'+batch);
+        //console.log('-------------------------------\n');
 
         //parse函数的名称
         var parseNames = methodConfig.parseNames;
@@ -303,7 +304,6 @@ function processBatch(batch,debugId,parseNames,withStdout,withLocals,callback){
         })
         //截获出错结果
         .catch(function(err){
-            console.error(err);
             console.error(err.stack);
             return callback(err);
         });
@@ -320,10 +320,14 @@ function doParses(batch,parseNames,finish){
     for(var i=0; i<parseNames.length; i++){
         var funcName = parseNames[i];
         result = parser[funcName](batch);
-        if(result){
-            finish(null, result);
-            break;
+        if(result && !result.info){
+            return finish(null, result);
         }
+    }
+
+    if(!result || !result.info) {
+        throw Error('没有一个解析方法可以解析batch的内容\n'
+            +'batch内容：'+batch);
     }
 }
 

@@ -23,6 +23,7 @@ for(var func in parseConfig){
                 var reg = attr.reg;
                 var metas = attr.meta;
                 var exit = attr.exit;
+                var info = attr.info;
 
                 //遍历要解析的数据的每一行
                 lines.forEach(function(line){
@@ -39,6 +40,8 @@ for(var func in parseConfig){
 
             if(exit && object)
                 object.exit = true;
+            if(info && object)
+                object.info = true;
 
             return object;
         };

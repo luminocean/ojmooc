@@ -1,7 +1,15 @@
 /**
- * oj客户端的主程序，只要负责发出传入的参数，从后台的oj服务器获取运行的结果并返回调用方
+ * oj客户端的主程序
+ * 主要功能：
+ * 1、封装ojdebugger提供的接口，对使用者提供更容易使用的接口
+ * 2、组合多个底层接口，提供一些便利接口
+ * 3、对某些返回值进行一定处理，对使用者更友好
  */
 var request = require('request');
+var Q = require('q');
+
+//debug设置
+Q.longStackSupport = true;
 
 //对外提供的ojrunner客户端对象
 var runner = {};
@@ -12,18 +20,11 @@ var dbr = {};
 exports.debugger = dbr;
 
 /**
- * 设置runner端口，否则会使用默认值
- * @param port
- */
-runner.setPort = function(port){
-    this.port = port;
-};
-/**
  * oj的编译执行接口，返回执行的结果以及相关的运行参数
  * @param srcCode
  * @param srcType
  * @param inputData
- * @param callback
+ * @param callback callback(err,result,params)
  */
 runner.run = function(srcCode,srcType,inputData,callback){
     sendRequest.call(this,{
@@ -36,22 +37,25 @@ runner.run = function(srcCode,srcType,inputData,callback){
             console.log(err);
             return callback(err);
         }
+        if(!body.result || !body.params){
+            return callback(new Error('返回值中没有运行结果或者运行参数'));
+        }
 
-        callback(null,body);
+        callback(null,body.result,body.params);
     });
 };
 
-
 /**
- * 设置debugger的端口，否则使用默认值
+ * 设置runner端口
  * @param port
  */
-dbr.setPort = function(port){
+runner.setPort = function(port){
     this.port = port;
 };
 
+
 /**
- * 一个便利方法，等同于debug+breakPoint+run操作
+ * 一个便利方法，组合了ebug+breakPoint+run操作
  * @param srcCode
  * @param srcType
  * @param inputData
@@ -60,19 +64,33 @@ dbr.setPort = function(port){
  * exit:是否结束的flag   breakPoint:遇到的断点信息
  */
 dbr.launchDebug = function(srcCode,srcType,inputData,breakLines,callback){
-    dbr.debug(srcCode,srcType,inputData,function(err,debugId){
-        if(err) return callback(err);
+    var debugId = null;
 
-        dbr.breakPoint(debugId,breakLines,function(err){
-            if(err) return callback(err);
+    //开启debug会话
+    Q.denodeify(dbr.debug)(srcCode,srcType,inputData)
+        //打断点
+        .then(function(createdDebugId){
+            debugId = createdDebugId;
+            return Q.denodeify(dbr.breakPoint)(debugId,breakLines);
+        })
+        //启动程序
+        .then(function(){
+            return Q.denodeify(dbr.run)(debugId);
+        })
+        //获取结果
+        .then(function(results){
+            var exit = results[0];
+            var breakPoint = results[1];
+            var stdout = results[2];
+            var locals = results[3];
 
-            dbr.run(debugId,function(err,exit,breakPoint,stdout,locals){
-                if(err) return callback(err);
-
-                callback(null,debugId,exit,breakPoint,stdout,locals);
-            });
+            callback(null,debugId,exit,breakPoint,stdout,locals);
+        })
+        //处理异常
+        .catch(function(err){
+            console.error(err.stack);
+            callback(err);
         });
-    });
 };
 
 /**
@@ -80,7 +98,7 @@ dbr.launchDebug = function(srcCode,srcType,inputData,breakLines,callback){
  * @param srcCode
  * @param srcType
  * @param inputData
- * @param callback
+ * @param callback callback(err,debugId)
  */
 dbr.debug = function(srcCode,srcType,inputData,callback){
     //开启debug
@@ -149,7 +167,7 @@ dbr.printVal = function(debugId,varName,callback){
 /**
  * 取得局部变量的值
  * @param debugId
- * @param callback
+ * @param callback callback(err,locals)
  */
 dbr.locals = function(debugId,callback){
     sendRequest.call(this,
@@ -185,7 +203,16 @@ dbr.exit = function(debugId,callback){
 };
 
 /**
- * 与运行相关的方法，回调函数的格式统一为： callback(err,exit,breakPoint,stdout,locals)
+ * 设置debugger的端口
+ * @param port
+ */
+dbr.setPort = function(port){
+    this.port = port;
+};
+
+/**
+ * 建立与运行相关的方法（run,continue,stepInto,stepOver），因为他们的逻辑是一样的
+ * 回调函数的格式统一为： callback(err,exit,breakPoint,stdout,locals)
  */
 var methodNames = ['run','continue','stepInto','stepOver'];
 methodNames.forEach(function(methodName){
@@ -216,7 +243,7 @@ methodNames.forEach(function(methodName){
             if(result.normalExit)
                 return callback(null,true,result.normalExit,stdout,locals);
 
-            console.error(new Error('异常返回值'+JSON.stringify(result)));
+            callback(new Error('异常返回值'+JSON.stringify(result)));
         });
     }
 });

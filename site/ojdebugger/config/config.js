@@ -43,6 +43,19 @@ var parseConfig = {
             "reg": /&"(No frame selected)/,
             "meta":["msg"]
         }
+    },
+    "parseInfo":{
+        "running":{
+            "reg":/\*(running)/,
+            "meta":["msg"],
+            //是否是信息输出，是的话不会作为结果返回
+            "info":true
+        },
+        "stopped":{
+            "reg":/\*(stopped)/,
+            "meta":["msg"],
+            "info":true
+        }
     }
 };
 
@@ -73,21 +86,23 @@ var methods = {
     },
     "printVal":{
         "paramNames":["debugId","varName"],
-        "parseNames":['parsePrintVal']
+        "parseNames":['parsePrintVal','parseInfo']
     },
     "locals":{
         "paramNames":["debugId"],
-        "parseNames":['parseLocals']
+        "parseNames":['parseLocals','parseInfo']
     },
     "run":{
         "paramNames":["debugId"],
-        "parseNames":['parseStopPoint','parseExit'],
+        "parseNames":['parseStopPoint','parseExit','parseInfo'],
+        //是否在返回值上带有标准输出
         "stdout":true,
+        //是否在返回值上带上局部变量列表
         "locals":true
     },
     "continue":{
         "paramNames":["debugId"],
-        "parseNames":['parseStopPoint','parseExit'],
+        "parseNames":['parseStopPoint','parseExit','parseInfo'],
         //提供了command表示该方法的debugger实现将自动生成
         "command":"c",
         "stdout":true,
@@ -95,14 +110,14 @@ var methods = {
     },
     "stepInto":{
         "paramNames":["debugId"],
-        "parseNames":['parseStopPoint','parseExit'],
+        "parseNames":['parseStopPoint','parseExit','parseInfo'],
         "command":"step",
         "stdout":true,
         "locals":true
     },
     "stepOver":{
         "paramNames":["debugId"],
-        "parseNames":['parseStopPoint','parseExit'],
+        "parseNames":['parseStopPoint','parseExit','parseInfo'],
         "command":"next",
         "stdout":true,
         "locals":true

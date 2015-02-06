@@ -2,6 +2,14 @@
 
 using namespace std;
 
+int getNum(){
+    int num = 0;
+    for(int i=0; i<500; i++){
+    		num = i*2;
+    }
+    return num;
+}
+
 int main ()
 {
 	int a,b,c;
@@ -9,9 +17,7 @@ int main ()
 	cin>>a>>b>>c;
 
 	int acc = 0;
-	for(int i=0; i<500; i++){
-		acc = i*2;
-	}
+	acc = getNum();
 
 	cout<<"read:"<<a<<","<<b<<","<<c<<endl;
 

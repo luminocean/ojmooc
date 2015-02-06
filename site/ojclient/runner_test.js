@@ -14,11 +14,14 @@ var srcCode = fs.readFileSync('./input_data/'+srcType+'_code','utf-8');
 //读取测试用数据
 var inputData = fs.readFileSync('./input_data/'+srcType+'_data','utf-8');
 
+runner.setPort(23333);
+
 for(var i=0; i<5; i++){
-    runner.run(srcCode,srcType,inputData,function(err,results) {
+    runner.run(srcCode,srcType,inputData,function(err,result,params) {
         if (err) return console.error(err);
 
-        console.log(JSON.stringify(results));
+        console.log(result);
+        console.log(JSON.stringify(params));
     });
 }
 

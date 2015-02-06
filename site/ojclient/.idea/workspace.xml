@@ -2,22 +2,16 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="582b7e87-3bf0-403b-b0ca-3ca91db83a7a" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../ojdebugger-gui/input_data/bas_code" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../ojdebugger-gui/input_data/bas_data" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../ojdebugger-gui/input_data/cpp_code" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../ojdebugger-gui/input_data/cpp_data" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../ojdebugger-gui/input_data/pas_code" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../ojdebugger-gui/input_data/pas_data" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../ojdebugger-gui/util.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app.js" afterPath="$PROJECT_DIR$/app.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../ojdebugger-gui/core.js" afterPath="$PROJECT_DIR$/../ojdebugger-gui/core.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../ojdebugger/config/config.js" afterPath="$PROJECT_DIR$/../ojdebugger/config/config.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../ojdebugger-gui/input_data/cpp_code" afterPath="$PROJECT_DIR$/../ojdebugger-gui/input_data/cpp_code" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../ojdebugger/core/debugger.js" afterPath="$PROJECT_DIR$/../ojdebugger/core/debugger.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/debugger_test.js" afterPath="$PROJECT_DIR$/debugger_test.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../hawatcher/config/haproxy.cfg" afterPath="$PROJECT_DIR$/../hawatcher/config/haproxy.cfg" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../hawatcher/log/hawatch.pid" afterPath="$PROJECT_DIR$/../hawatcher/log/hawatch.pid" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../ojdebugger-gui/index.html" afterPath="$PROJECT_DIR$/../ojdebugger-gui/index.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../hawatcher/log/log" afterPath="$PROJECT_DIR$/../hawatcher/log/log" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../ojdebugger-gui/package.json" afterPath="$PROJECT_DIR$/../ojdebugger-gui/package.json" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../ojdebugger/core/parser.js" afterPath="$PROJECT_DIR$/../ojdebugger/core/parser.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/runner_test.js" afterPath="$PROJECT_DIR$/runner_test.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../ojrunner/.idea/workspace.xml" afterPath="$PROJECT_DIR$/../ojrunner/.idea/workspace.xml" />
     </list>
@@ -46,13 +40,31 @@
       <file leaf-file-name="app.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.38003838" vertical-offset="4886" max-vertical-offset="6417">
-              <caret line="209" column="17" selection-start-line="209" selection-start-column="17" selection-end-line="209" selection-end-column="17" />
+            <state vertical-scroll-proportion="0.7024952" vertical-offset="4253" max-vertical-offset="4960">
+              <caret line="247" column="5" selection-start-line="247" selection-start-column="5" selection-end-line="247" selection-end-column="5" />
               <folding>
-                <element signature="e#2377#2779#0" expanded="false" />
-                <element signature="e#2924#3446#0" expanded="false" />
-                <element signature="e#3545#3913#0" expanded="false" />
+                <element signature="e#338#478#0" expanded="false" />
+                <element signature="e#536#973#0" expanded="false" />
+                <element signature="e#976#1012#0" expanded="false" />
+                <element signature="e#1044#1069#0" expanded="false" />
+                <element signature="e#2310#2738#0" expanded="false" />
+                <element signature="e#2904#3306#0" expanded="false" />
+                <element signature="e#3451#3973#0" expanded="false" />
+                <element signature="e#4093#4461#0" expanded="false" />
+                <element signature="e#4579#4783#0" expanded="false" />
+                <element signature="n#!!doc;n#sendRequest#0" expanded="false" />
+                <element signature="n#!!block;n#sendRequest#0" expanded="false" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="runner_test.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/runner_test.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0" vertical-offset="99" max-vertical-offset="1085">
+              <caret line="19" column="34" selection-start-line="19" selection-start-column="34" selection-end-line="19" selection-end-column="34" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -60,8 +72,8 @@
       <file leaf-file-name="debugger_test.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/debugger_test.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="440" max-vertical-offset="2418">
-              <caret line="21" column="30" selection-start-line="21" selection-start-column="30" selection-end-line="21" selection-end-column="30" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="93" max-vertical-offset="2418">
+              <caret line="25" column="7" selection-start-line="25" selection-start-column="7" selection-end-line="25" selection-end-column="7" />
               <folding />
             </state>
           </provider>
@@ -90,6 +102,7 @@
         <option value="$PROJECT_DIR$/input_data/pas_code" />
         <option value="$PROJECT_DIR$/input_data/cpp_code" />
         <option value="$PROJECT_DIR$/debugger_test.js" />
+        <option value="$PROJECT_DIR$/runner_test.js" />
         <option value="$PROJECT_DIR$/app.js" />
       </list>
     </option>
@@ -145,20 +158,6 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="ojclient" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="ojclient" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="input_data" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
         </subPane>
       </pane>
     </panes>
@@ -181,6 +180,13 @@
       <method />
     </configuration>
     <configuration default="false" name="debugger_test.js" type="NodeJSConfigurationType" factoryName="Node.js" temporary="true" path-to-node="/usr/bin/nodejs" path-to-js-file="debugger_test.js" working-dir="$PROJECT_DIR$">
+      <RunnerSettings RunnerId="Basic" />
+      <RunnerSettings RunnerId="debuggableProgram" />
+      <ConfigurationWrapper RunnerId="Basic" />
+      <ConfigurationWrapper RunnerId="debuggableProgram" />
+      <method />
+    </configuration>
+    <configuration default="false" name="runner_test.js" type="NodeJSConfigurationType" factoryName="Node.js" temporary="true" path-to-node="/usr/bin/nodejs" path-to-js-file="runner_test.js" working-dir="$PROJECT_DIR$">
       <RunnerSettings RunnerId="Basic" />
       <ConfigurationWrapper RunnerId="Basic" />
       <method />
@@ -223,14 +229,16 @@
       <envs />
       <method />
     </configuration>
-    <list size="2">
+    <list size="3">
       <item index="0" class="java.lang.String" itemvalue="Node.js.test.js" />
       <item index="1" class="java.lang.String" itemvalue="Node.js.debugger_test.js" />
+      <item index="2" class="java.lang.String" itemvalue="Node.js.runner_test.js" />
     </list>
     <recent_temporary>
-      <list size="2">
+      <list size="3">
         <item index="0" class="java.lang.String" itemvalue="Node.js.debugger_test.js" />
-        <item index="1" class="java.lang.String" itemvalue="Node.js.test.js" />
+        <item index="1" class="java.lang.String" itemvalue="Node.js.runner_test.js" />
+        <item index="2" class="java.lang.String" itemvalue="Node.js.test.js" />
       </list>
     </recent_temporary>
   </component>
@@ -271,7 +279,7 @@
       <window_info id="Structure" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.24972972" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.19700214" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.39900866" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.31226766" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
@@ -307,7 +315,7 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="1" />
+      <option name="time" value="2" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -317,9 +325,17 @@
         <state vertical-scroll-proportion="0.0" vertical-offset="7967" max-vertical-offset="8525">
           <caret line="257" column="12" selection-start-line="257" selection-start-column="12" selection-end-line="257" selection-end-column="12" />
           <folding>
-            <element signature="e#2377#2779#0" expanded="false" />
-            <element signature="e#2924#3446#0" expanded="false" />
-            <element signature="e#3545#3913#0" expanded="false" />
+            <element signature="e#338#478#0" expanded="false" />
+            <element signature="e#536#973#0" expanded="false" />
+            <element signature="e#976#1012#0" expanded="false" />
+            <element signature="e#1044#1069#0" expanded="false" />
+            <element signature="e#2310#2738#0" expanded="false" />
+            <element signature="e#2904#3306#0" expanded="false" />
+            <element signature="e#3451#3973#0" expanded="false" />
+            <element signature="e#4093#4461#0" expanded="false" />
+            <element signature="e#4579#4783#0" expanded="false" />
+            <element signature="n#!!doc;n#sendRequest#0" expanded="false" />
+            <element signature="n#!!block;n#sendRequest#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -345,9 +361,17 @@
         <state vertical-scroll-proportion="0.0" vertical-offset="744" max-vertical-offset="8370">
           <caret line="24" column="30" selection-start-line="24" selection-start-column="30" selection-end-line="24" selection-end-column="30" />
           <folding>
-            <element signature="e#2377#2779#0" expanded="false" />
-            <element signature="e#2924#3446#0" expanded="false" />
-            <element signature="e#3545#3913#0" expanded="false" />
+            <element signature="e#338#478#0" expanded="false" />
+            <element signature="e#536#973#0" expanded="false" />
+            <element signature="e#976#1012#0" expanded="false" />
+            <element signature="e#1044#1069#0" expanded="false" />
+            <element signature="e#2310#2738#0" expanded="false" />
+            <element signature="e#2904#3306#0" expanded="false" />
+            <element signature="e#3451#3973#0" expanded="false" />
+            <element signature="e#4093#4461#0" expanded="false" />
+            <element signature="e#4579#4783#0" expanded="false" />
+            <element signature="n#!!doc;n#sendRequest#0" expanded="false" />
+            <element signature="n#!!block;n#sendRequest#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -392,14 +416,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/runner_test.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="229" max-vertical-offset="992">
-          <caret line="25" column="0" selection-start-line="25" selection-start-column="0" selection-end-line="25" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/input_data/cpp_code">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="93" max-vertical-offset="775">
@@ -410,20 +426,36 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/debugger_test.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="440" max-vertical-offset="2418">
-          <caret line="21" column="30" selection-start-line="21" selection-start-column="30" selection-end-line="21" selection-end-column="30" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="465" max-vertical-offset="2418">
+          <caret line="25" column="7" selection-start-line="25" selection-start-column="7" selection-end-line="25" selection-end-column="7" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/runner_test.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="99" max-vertical-offset="1085">
+          <caret line="19" column="34" selection-start-line="19" selection-start-column="34" selection-end-line="19" selection-end-column="34" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.38003838" vertical-offset="4886" max-vertical-offset="6417">
-          <caret line="209" column="17" selection-start-line="209" selection-start-column="17" selection-end-line="209" selection-end-column="17" />
+        <state vertical-scroll-proportion="0.7024952" vertical-offset="4253" max-vertical-offset="4960">
+          <caret line="247" column="5" selection-start-line="247" selection-start-column="5" selection-end-line="247" selection-end-column="5" />
           <folding>
-            <element signature="e#2377#2779#0" expanded="false" />
-            <element signature="e#2924#3446#0" expanded="false" />
-            <element signature="e#3545#3913#0" expanded="false" />
+            <element signature="e#338#478#0" expanded="false" />
+            <element signature="e#536#973#0" expanded="false" />
+            <element signature="e#976#1012#0" expanded="false" />
+            <element signature="e#1044#1069#0" expanded="false" />
+            <element signature="e#2310#2738#0" expanded="false" />
+            <element signature="e#2904#3306#0" expanded="false" />
+            <element signature="e#3451#3973#0" expanded="false" />
+            <element signature="e#4093#4461#0" expanded="false" />
+            <element signature="e#4579#4783#0" expanded="false" />
+            <element signature="n#!!doc;n#sendRequest#0" expanded="false" />
+            <element signature="n#!!block;n#sendRequest#0" expanded="false" />
           </folding>
         </state>
       </provider>
