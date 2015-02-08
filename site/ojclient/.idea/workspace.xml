@@ -1,17 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="582b7e87-3bf0-403b-b0ca-3ca91db83a7a" name="Default" comment="">
+    <list default="true" id="582b7e87-3bf0-403b-b0ca-3ca91db83a7a" name="Default" comment="ojdebugger可返回调试中局部变量的列表（只能是简单变量）">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../ojdebugger/script/destroy.sh" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../ojdebugger/script/up.sh" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../ojrunner/config/Dockerfile" afterPath="$PROJECT_DIR$/../ojrunner/config/Dockerfile" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app.js" afterPath="$PROJECT_DIR$/app.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../ojdebugger/config/config.js" afterPath="$PROJECT_DIR$/../ojdebugger/config/config.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../ojdebugger-gui/input_data/cpp_code" afterPath="$PROJECT_DIR$/../ojdebugger-gui/input_data/cpp_code" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../ojdebugger/core/debugger.js" afterPath="$PROJECT_DIR$/../ojdebugger/core/debugger.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../ojdebugger/app.js" afterPath="$PROJECT_DIR$/../ojdebugger/app.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../ojrunner/app.js" afterPath="$PROJECT_DIR$/../ojrunner/app.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../ojdebugger-gui/core.js" afterPath="$PROJECT_DIR$/../ojdebugger-gui/core.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/debugger_test.js" afterPath="$PROJECT_DIR$/debugger_test.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../hawatcher/config/haproxy.cfg" afterPath="$PROJECT_DIR$/../hawatcher/config/haproxy.cfg" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../hawatcher/log/hawatch.pid" afterPath="$PROJECT_DIR$/../hawatcher/log/hawatch.pid" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../ojdebugger-gui/index.html" afterPath="$PROJECT_DIR$/../ojdebugger-gui/index.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../hawatcher/log/log" afterPath="$PROJECT_DIR$/../hawatcher/log/log" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../ojdebugger/core/parser.js" afterPath="$PROJECT_DIR$/../ojdebugger/core/parser.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/runner_test.js" afterPath="$PROJECT_DIR$/runner_test.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../ojrunner/script/setup.sh" afterPath="$PROJECT_DIR$/../ojrunner/script/setup.sh" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../ojrunner/script/up.sh" afterPath="$PROJECT_DIR$/../ojrunner/script/up.sh" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../ojrunner/.idea/workspace.xml" afterPath="$PROJECT_DIR$/../ojrunner/.idea/workspace.xml" />
     </list>
@@ -40,20 +44,11 @@
       <file leaf-file-name="app.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.7024952" vertical-offset="4253" max-vertical-offset="4960">
-              <caret line="247" column="5" selection-start-line="247" selection-start-column="5" selection-end-line="247" selection-end-column="5" />
+            <state vertical-scroll-proportion="0.86283183" vertical-offset="633" max-vertical-offset="8401">
+              <caret line="39" column="41" selection-start-line="39" selection-start-column="41" selection-end-line="39" selection-end-column="41" />
               <folding>
                 <element signature="e#338#478#0" expanded="false" />
-                <element signature="e#536#973#0" expanded="false" />
                 <element signature="e#976#1012#0" expanded="false" />
-                <element signature="e#1044#1069#0" expanded="false" />
-                <element signature="e#2310#2738#0" expanded="false" />
-                <element signature="e#2904#3306#0" expanded="false" />
-                <element signature="e#3451#3973#0" expanded="false" />
-                <element signature="e#4093#4461#0" expanded="false" />
-                <element signature="e#4579#4783#0" expanded="false" />
-                <element signature="n#!!doc;n#sendRequest#0" expanded="false" />
-                <element signature="n#!!block;n#sendRequest#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -62,8 +57,8 @@
       <file leaf-file-name="runner_test.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/runner_test.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="99" max-vertical-offset="1085">
-              <caret line="19" column="34" selection-start-line="19" selection-start-column="34" selection-end-line="19" selection-end-column="34" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1054">
+              <caret line="8" column="22" selection-start-line="8" selection-start-column="22" selection-end-line="8" selection-end-column="22" />
               <folding />
             </state>
           </provider>
@@ -72,18 +67,8 @@
       <file leaf-file-name="debugger_test.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/debugger_test.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="93" max-vertical-offset="2418">
-              <caret line="25" column="7" selection-start-line="25" selection-start-column="7" selection-end-line="25" selection-end-column="7" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="cpp_code" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/input_data/cpp_code">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="93" max-vertical-offset="775">
-              <caret line="13" column="5" selection-start-line="13" selection-start-column="5" selection-end-line="13" selection-end-column="5" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="62" max-vertical-offset="930">
+              <caret line="13" column="10" selection-start-line="13" selection-start-column="10" selection-end-line="13" selection-end-column="10" />
               <folding />
             </state>
           </provider>
@@ -139,7 +124,6 @@
       <sortByType />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -160,10 +144,11 @@
           </PATH>
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../ojdebugger-gui" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="recentsLimit" value="5" />
     <property name="HbShouldOpenHtmlAsHb" value="" />
@@ -191,10 +176,25 @@
       <ConfigurationWrapper RunnerId="Basic" />
       <method />
     </configuration>
+    <configuration default="true" type="DartCommandLineRunConfigurationType" factoryName="Dart Command Line Application">
+      <method />
+    </configuration>
     <configuration default="true" type="DartUnitRunConfigurationType" factoryName="DartUnit">
       <method />
     </configuration>
-    <configuration default="true" type="DartCommandLineRunConfigurationType" factoryName="Dart Command Line Application">
+    <configuration default="true" type="BashConfigurationType" factoryName="Bash">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="INTERPRETER_PATH" value="/bin/bash" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SCRIPT_NAME" value="" />
+      <option name="PARAMETERS" value="" />
+      <module name="" />
+      <envs />
+      <method />
+    </configuration>
+    <configuration default="true" type="JavaScriptTestRunnerKarma" factoryName="Karma" config-file="">
+      <envs />
       <method />
     </configuration>
     <configuration default="true" type="JSTestDriver:ConfigurationType" factoryName="JsTestDriver">
@@ -202,10 +202,6 @@
       <setting name="settingsFile" value="" />
       <setting name="serverType" value="INTERNAL" />
       <setting name="preferredDebugBrowser" value="Chrome" />
-      <method />
-    </configuration>
-    <configuration default="true" type="JavaScriptTestRunnerKarma" factoryName="Karma" config-file="">
-      <envs />
       <method />
     </configuration>
     <configuration default="true" type="JavascriptDebugType" factoryName="JavaScript Debug">
@@ -269,16 +265,15 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-1" y="-1" width="1922" height="946" extended-state="6" />
+    <frame x="-1" y="-1" width="1922" height="946" extended-state="0" />
     <editor active="false" />
     <layout>
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.23602484" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.24972972" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.19700214" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.1996788" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.39900866" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.31226766" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="true" content_ui="tabs" />
@@ -286,11 +281,12 @@
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.23602484" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
   <component name="Vcs.Log.UiProperties">
@@ -322,20 +318,46 @@
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/app.js">
       <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="4960">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="e#338#478#0" expanded="false" />
+            <element signature="e#976#1012#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/runner_test.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="99" max-vertical-offset="1085">
+          <caret line="19" column="34" selection-start-line="19" selection-start-column="34" selection-end-line="19" selection-end-column="34" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/debugger_test.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="93" max-vertical-offset="2418">
+          <caret line="25" column="7" selection-start-line="25" selection-start-column="7" selection-end-line="25" selection-end-column="7" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/input_data/cpp_code">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="403" max-vertical-offset="775">
+          <caret line="13" column="5" selection-start-line="13" selection-start-column="5" selection-end-line="13" selection-end-column="5" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app.js">
+      <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="7967" max-vertical-offset="8525">
           <caret line="257" column="12" selection-start-line="257" selection-start-column="12" selection-end-line="257" selection-end-column="12" />
           <folding>
             <element signature="e#338#478#0" expanded="false" />
-            <element signature="e#536#973#0" expanded="false" />
             <element signature="e#976#1012#0" expanded="false" />
-            <element signature="e#1044#1069#0" expanded="false" />
-            <element signature="e#2310#2738#0" expanded="false" />
-            <element signature="e#2904#3306#0" expanded="false" />
-            <element signature="e#3451#3973#0" expanded="false" />
-            <element signature="e#4093#4461#0" expanded="false" />
-            <element signature="e#4579#4783#0" expanded="false" />
-            <element signature="n#!!doc;n#sendRequest#0" expanded="false" />
-            <element signature="n#!!block;n#sendRequest#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -362,16 +384,7 @@
           <caret line="24" column="30" selection-start-line="24" selection-start-column="30" selection-end-line="24" selection-end-column="30" />
           <folding>
             <element signature="e#338#478#0" expanded="false" />
-            <element signature="e#536#973#0" expanded="false" />
             <element signature="e#976#1012#0" expanded="false" />
-            <element signature="e#1044#1069#0" expanded="false" />
-            <element signature="e#2310#2738#0" expanded="false" />
-            <element signature="e#2904#3306#0" expanded="false" />
-            <element signature="e#3451#3973#0" expanded="false" />
-            <element signature="e#4093#4461#0" expanded="false" />
-            <element signature="e#4579#4783#0" expanded="false" />
-            <element signature="n#!!doc;n#sendRequest#0" expanded="false" />
-            <element signature="n#!!block;n#sendRequest#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -404,7 +417,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="651">
           <caret line="7" column="15" selection-start-line="7" selection-start-column="15" selection-end-line="7" selection-end-column="15" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -412,7 +424,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="248">
           <caret line="2" column="13" selection-start-line="2" selection-start-column="13" selection-end-line="2" selection-end-column="13" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -424,38 +435,37 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/debugger_test.js">
+    <entry file="file://$USER_HOME$/.WebStorm9/system/extLibs/nodejs-v0.10.25-src/core-modules-sources/lib/net.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="465" max-vertical-offset="2418">
-          <caret line="25" column="7" selection-start-line="25" selection-start-column="7" selection-end-line="25" selection-end-column="7" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="27138" max-vertical-offset="40920">
+          <caret line="900" column="10" selection-start-line="900" selection-start-column="10" selection-end-line="900" selection-end-column="10" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/runner_test.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="99" max-vertical-offset="1085">
-          <caret line="19" column="34" selection-start-line="19" selection-start-column="34" selection-end-line="19" selection-end-column="34" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1054">
+          <caret line="8" column="22" selection-start-line="8" selection-start-column="22" selection-end-line="8" selection-end-column="22" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/debugger_test.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="62" max-vertical-offset="930">
+          <caret line="13" column="10" selection-start-line="13" selection-start-column="10" selection-end-line="13" selection-end-column="10" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.7024952" vertical-offset="4253" max-vertical-offset="4960">
-          <caret line="247" column="5" selection-start-line="247" selection-start-column="5" selection-end-line="247" selection-end-column="5" />
+        <state vertical-scroll-proportion="0.86283183" vertical-offset="633" max-vertical-offset="8401">
+          <caret line="39" column="41" selection-start-line="39" selection-start-column="41" selection-end-line="39" selection-end-column="41" />
           <folding>
             <element signature="e#338#478#0" expanded="false" />
-            <element signature="e#536#973#0" expanded="false" />
             <element signature="e#976#1012#0" expanded="false" />
-            <element signature="e#1044#1069#0" expanded="false" />
-            <element signature="e#2310#2738#0" expanded="false" />
-            <element signature="e#2904#3306#0" expanded="false" />
-            <element signature="e#3451#3973#0" expanded="false" />
-            <element signature="e#4093#4461#0" expanded="false" />
-            <element signature="e#4579#4783#0" expanded="false" />
-            <element signature="n#!!doc;n#sendRequest#0" expanded="false" />
-            <element signature="n#!!block;n#sendRequest#0" expanded="false" />
           </folding>
         </state>
       </provider>

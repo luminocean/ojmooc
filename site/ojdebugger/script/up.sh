@@ -4,9 +4,9 @@
 #获取宿主机ojrunner项目的路径
 rl=$(readlink -f $0)
 config_dir=$(dirname $rl)
-host_ojrunner_path=${config_dir%/*}
+host_ojdebugger_path=${config_dir%/*}
 #docker内的ojrunner路径
-docker_ojrunner_path="/home/ojrunner"
+docker_ojdebugger_path="/home/ojdebugger"
 
 #docker内服务器监听的端口
 docker_port=23333
@@ -17,5 +17,5 @@ img_name="oj-img"
 
 #将服务器运行为守护进程，加入docker容器列表
 sudo docker run -d -P -p "$docker_port" \
-    -v "$host_ojrunner_path":"$docker_ojrunner_path" \
-    "$img_name" nodejs "${docker_ojrunner_path}/${docker_main}"
+    -v "$host_ojdebugger_path":"$docker_ojdebugger_path" \
+    "$img_name" nodejs "${docker_ojdebugger_path}/${docker_main}"

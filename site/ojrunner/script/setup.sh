@@ -6,7 +6,9 @@
 sudo apt-get update
 
 ### 安装依赖程序
-sudo apt-get install -y nodejs npm gdb haproxy docker.io
+sudo apt-get install -y nodejs npm haproxy docker.io
+#测试环境下的依赖安装 sudo apt-get install -y gdb nodejs npm haproxy docker.io valgrind
+#其中valgrind可能会有版本上的问题需要下载源码编译安装
 ###
 
 ### 开启haproxy的脚本控制
@@ -15,7 +17,7 @@ sudo sed -i 's/ENABLED=0/ENABLED=1/g' /etc/default/haproxy
 
 ### 开启docker.io的tcp通讯接口
 #docker配置文件的位置
-docker_config_path="/etc/default/docker.io"
+docker_config_path="/etc/default/docker"
 if [ ! -f "$docker_config_path" ]; then
     echo "/etc/default/docker处找不到docker.io配置文件"
     exit 1
@@ -33,7 +35,7 @@ fi
 
 #开始下载并安装docker镜像
 #生成的docker镜像名
-img_name="ojrunner-img"
+img_name="oj-img"
 rl=$(readlink -f $0)
 dir=$(dirname $rl)
 root_path=${dir%/*}

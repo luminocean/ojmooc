@@ -23,7 +23,9 @@ http.createServer(function (req, res) {
             reply(res,result);
         });
     });
-}).listen(23333);
+}).listen(23333,function(){
+    console.log('debugger服务器已启动');
+});
 
 /**
  * 将响应json写回http响应对象中

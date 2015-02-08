@@ -102,7 +102,7 @@ dbr.launchDebug = function(srcCode,srcType,inputData,breakLines,callback){
  */
 dbr.debug = function(srcCode,srcType,inputData,callback){
     //开启debug
-    sendRequest.call(this,{
+    sendRequest.call(dbr,{
         "debug":{
                 "srcCode":srcCode,
                 "srcType":srcType,
@@ -124,7 +124,7 @@ dbr.debug = function(srcCode,srcType,inputData,callback){
  * @param callback callback(err,breakPointNum)
  */
 dbr.breakPoint = function(debugId,breakLines,callback){
-    sendRequest.call(this,
+    sendRequest.call(dbr,
             {"breakPoint":{
                 "debugId":debugId,
                 "breakLines":breakLines
@@ -145,7 +145,7 @@ dbr.breakPoint = function(debugId,breakLines,callback){
  * @param callback callback(err,value)
  */
 dbr.printVal = function(debugId,varName,callback){
-    sendRequest.call(this,
+    sendRequest.call(dbr,
         {
             "printVal":{
                 "debugId":debugId,
@@ -170,7 +170,7 @@ dbr.printVal = function(debugId,varName,callback){
  * @param callback callback(err,locals)
  */
 dbr.locals = function(debugId,callback){
-    sendRequest.call(this,
+    sendRequest.call(dbr,
         {
             "locals":{
                 "debugId":debugId
@@ -191,7 +191,7 @@ dbr.locals = function(debugId,callback){
  * @param callback callback(err,debugId)
  */
 dbr.exit = function(debugId,callback){
-    sendRequest.call(this,{
+    sendRequest.call(dbr,{
         "exit": {
             "debugId": debugId
         }
@@ -221,7 +221,7 @@ methodNames.forEach(function(methodName){
         requestObj[methodName] = {
             "debugId":debugId
         };
-        sendRequest.call(this,requestObj,function(err,result){
+        sendRequest.call(dbr,requestObj,function(err,result){
             if(err) return callback(err);
 
             var stdout = result.stdout;
@@ -259,6 +259,7 @@ function sendRequest(body,callback){
         "method":"POST",
         "json":true
     };
+
     //拼出请求服务器的url，如果没有提供则设置为默认值
     requestObj.url = 'http://'+(this.host||'localhost')
         +':'+(this.port||'23333');

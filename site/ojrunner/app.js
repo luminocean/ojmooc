@@ -20,7 +20,7 @@ util.prepareDir();
 
 //启动服务器，指定绑定端口
 http.createServer(handleRequest).listen(23333,function(){
-    console.log('服务器已启动');
+    console.log('runner服务器已启动');
 });
 
 /**
