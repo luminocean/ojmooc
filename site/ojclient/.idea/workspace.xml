@@ -2,21 +2,14 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="582b7e87-3bf0-403b-b0ca-3ca91db83a7a" name="Default" comment="ojdebugger可返回调试中局部变量的列表（只能是简单变量）">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../ojdebugger/script/destroy.sh" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../ojdebugger/script/up.sh" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../ojrunner/config/Dockerfile" afterPath="$PROJECT_DIR$/../ojrunner/config/Dockerfile" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app.js" afterPath="$PROJECT_DIR$/app.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../ojdebugger/util/request_queue.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../ojdebugger/app.js" afterPath="$PROJECT_DIR$/../ojdebugger/app.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../ojrunner/app.js" afterPath="$PROJECT_DIR$/../ojrunner/app.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../ojdebugger-gui/core.js" afterPath="$PROJECT_DIR$/../ojdebugger-gui/core.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/debugger_test.js" afterPath="$PROJECT_DIR$/debugger_test.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../hawatcher/config/haproxy.cfg" afterPath="$PROJECT_DIR$/../hawatcher/config/haproxy.cfg" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../hawatcher/log/hawatch.pid" afterPath="$PROJECT_DIR$/../hawatcher/log/hawatch.pid" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../hawatcher/log/log" afterPath="$PROJECT_DIR$/../hawatcher/log/log" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/runner_test.js" afterPath="$PROJECT_DIR$/runner_test.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../ojrunner/script/setup.sh" afterPath="$PROJECT_DIR$/../ojrunner/script/setup.sh" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../ojrunner/script/up.sh" afterPath="$PROJECT_DIR$/../ojrunner/script/up.sh" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../ojrunner/.idea/workspace.xml" afterPath="$PROJECT_DIR$/../ojrunner/.idea/workspace.xml" />
     </list>
     <ignored path="ojclient.iws" />
@@ -41,11 +34,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="app.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="app.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.86283183" vertical-offset="633" max-vertical-offset="8401">
-              <caret line="39" column="41" selection-start-line="39" selection-start-column="41" selection-end-line="39" selection-end-column="41" />
+            <state vertical-scroll-proportion="-3.405797" vertical-offset="633" max-vertical-offset="8401">
+              <caret line="34" column="16" selection-start-line="34" selection-start-column="16" selection-end-line="34" selection-end-column="16" />
               <folding>
                 <element signature="e#338#478#0" expanded="false" />
                 <element signature="e#976#1012#0" expanded="false" />
@@ -57,18 +50,18 @@
       <file leaf-file-name="runner_test.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/runner_test.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1054">
-              <caret line="8" column="22" selection-start-line="8" selection-start-column="22" selection-end-line="8" selection-end-column="22" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="372" max-vertical-offset="1085">
+              <caret line="18" column="0" selection-start-line="18" selection-start-column="0" selection-end-line="18" selection-end-column="25" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="debugger_test.js" pinned="false" current-in-tab="false">
+      <file leaf-file-name="debugger_test.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/debugger_test.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="62" max-vertical-offset="930">
-              <caret line="13" column="10" selection-start-line="13" selection-start-column="10" selection-end-line="13" selection-end-column="10" />
+            <state vertical-scroll-proportion="0.4049904" vertical-offset="347" max-vertical-offset="992">
+              <caret line="18" column="17" selection-start-line="18" selection-start-column="17" selection-end-line="18" selection-end-column="17" />
               <folding />
             </state>
           </provider>
@@ -86,9 +79,9 @@
         <option value="$PROJECT_DIR$/.gitignore" />
         <option value="$PROJECT_DIR$/input_data/pas_code" />
         <option value="$PROJECT_DIR$/input_data/cpp_code" />
-        <option value="$PROJECT_DIR$/debugger_test.js" />
-        <option value="$PROJECT_DIR$/runner_test.js" />
         <option value="$PROJECT_DIR$/app.js" />
+        <option value="$PROJECT_DIR$/runner_test.js" />
+        <option value="$PROJECT_DIR$/debugger_test.js" />
       </list>
     </option>
   </component>
@@ -261,13 +254,20 @@
       <option name="project" value="LOCAL" />
       <updated>1423032879982</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="ojdebugger docker支持">
+      <created>1423383480729</created>
+      <option name="number" value="00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1423383480729</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="ToolWindowManager">
     <frame x="-1" y="-1" width="1922" height="946" extended-state="0" />
     <editor active="false" />
     <layout>
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.23602484" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -283,7 +283,6 @@
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.23602484" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
@@ -307,7 +306,8 @@
     </option>
     <MESSAGE value="runner和debugger可统一使用ojclient来访问" />
     <MESSAGE value="ojdebugger可返回调试中局部变量的列表（只能是简单变量）" />
-    <option name="LAST_COMMIT_MESSAGE" value="ojdebugger可返回调试中局部变量的列表（只能是简单变量）" />
+    <MESSAGE value="ojdebugger docker支持" />
+    <option name="LAST_COMMIT_MESSAGE" value="ojdebugger docker支持" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -443,30 +443,30 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/app.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-3.405797" vertical-offset="633" max-vertical-offset="8401">
+          <caret line="34" column="16" selection-start-line="34" selection-start-column="16" selection-end-line="34" selection-end-column="16" />
+          <folding>
+            <element signature="e#338#478#0" expanded="false" />
+            <element signature="e#976#1012#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/runner_test.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1054">
-          <caret line="8" column="22" selection-start-line="8" selection-start-column="22" selection-end-line="8" selection-end-column="22" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="372" max-vertical-offset="1085">
+          <caret line="18" column="0" selection-start-line="18" selection-start-column="0" selection-end-line="18" selection-end-column="25" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/debugger_test.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="62" max-vertical-offset="930">
-          <caret line="13" column="10" selection-start-line="13" selection-start-column="10" selection-end-line="13" selection-end-column="10" />
+        <state vertical-scroll-proportion="0.4049904" vertical-offset="347" max-vertical-offset="992">
+          <caret line="18" column="17" selection-start-line="18" selection-start-column="17" selection-end-line="18" selection-end-column="17" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.86283183" vertical-offset="633" max-vertical-offset="8401">
-          <caret line="39" column="41" selection-start-line="39" selection-start-column="41" selection-end-line="39" selection-end-column="41" />
-          <folding>
-            <element signature="e#338#478#0" expanded="false" />
-            <element signature="e#976#1012#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>

@@ -2,30 +2,41 @@
  * ojdebugger入口
  */
 var http = require('http');
+var Q = require('q');
 var requestParser = require('./util/request_parser');
 var controller = require('./core/controller');
 var util = require('./util/util');
+
+//请求队列
+var RequestQueue = require('./util/request_queue').RequestQueue;
+//初始化队列，设置回调函数
+var queue = new RequestQueue([perform]);
 
 //准备好各种临时文件需要的目录
 util.prepareDir();
 
 http.createServer(function (req, res) {
-    //解析用户传来的http报文为json对象
-    requestParser.parseRequest(req,function(err,body){
-        if(err){
-            return reply(res,err,500);
-        }
-        //解析完传给controller处理
-        controller.process(body,function(err,result){
-            if(err){
-                return reply(res,err,500);
-            }
-            reply(res,result);
-        });
-    });
+    //将req,res加入队列，等调度到该次请求的时候再把req,res传给配置好的回调函数
+    queue.push(req, res);
+
 }).listen(23333,function(){
     console.log('debugger服务器已启动');
 });
+
+function perform(req,res,next){
+    Q.denodeify(requestParser.parseRequest)(req)
+        .then(function(body){
+            return Q.denodeify(controller.process)(body);
+        })
+        .then(function(result){
+            reply(res,result);
+            next();
+        })
+        .catch(function(err){
+            reply(res,err,500);
+            next();
+        });
+}
 
 /**
  * 将响应json写回http响应对象中

@@ -19,19 +19,14 @@ var queue = new RequestQueue([heartBeat,perform]);
 util.prepareDir();
 
 //启动服务器，指定绑定端口
-http.createServer(handleRequest).listen(23333,function(){
+http.createServer(function(req,res){
+    //将req,res加入队列，等调度到该次请求的时候再把req,res传给配置好的回调函数
+    queue.push(req, res);
+
+}).listen(23333,function(){
     console.log('runner服务器已启动');
 });
 
-/**
- * 服务器处理的入口方法
- * @param req 执行请求
- * @param res 执行结果
- */
-function handleRequest(req,res){
-    //将req,res加入队列，等调度到该次请求的时候再把req,res传给配置好的回调函数
-    queue.push(req, res);
-}
 
 /**
  * 心跳响应中间件，负责响应心跳检测请求
