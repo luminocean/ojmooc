@@ -2,14 +2,16 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="582b7e87-3bf0-403b-b0ca-3ca91db83a7a" name="Default" comment="ojdebugger可返回调试中局部变量的列表（只能是简单变量）">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../ojdebugger/util/request_queue.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app.js" afterPath="$PROJECT_DIR$/app.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../ojdebugger/app.js" afterPath="$PROJECT_DIR$/../ojdebugger/app.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../ojrunner/app.js" afterPath="$PROJECT_DIR$/../ojrunner/app.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../ojdebugger-gui/core.js" afterPath="$PROJECT_DIR$/../ojdebugger-gui/core.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/debugger_test.js" afterPath="$PROJECT_DIR$/debugger_test.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../hawatcher/config/haproxy.cfg" afterPath="$PROJECT_DIR$/../hawatcher/config/haproxy.cfg" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../hawatcher/log/hawatch.pid" afterPath="$PROJECT_DIR$/../hawatcher/log/hawatch.pid" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../hawatcher/log/log" afterPath="$PROJECT_DIR$/../hawatcher/log/log" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/runner_test.js" afterPath="$PROJECT_DIR$/runner_test.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../hawatcher/core/system.js" afterPath="$PROJECT_DIR$/../hawatcher/core/system.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../ojrunner/.idea/workspace.xml" afterPath="$PROJECT_DIR$/../ojrunner/.idea/workspace.xml" />
     </list>
     <ignored path="ojclient.iws" />
@@ -37,12 +39,9 @@
       <file leaf-file-name="app.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-3.405797" vertical-offset="633" max-vertical-offset="8401">
-              <caret line="34" column="16" selection-start-line="34" selection-start-column="16" selection-end-line="34" selection-end-column="16" />
-              <folding>
-                <element signature="e#338#478#0" expanded="false" />
-                <element signature="e#976#1012#0" expanded="false" />
-              </folding>
+            <state vertical-scroll-proportion="0.0" vertical-offset="8761" max-vertical-offset="9548">
+              <caret line="290" column="0" selection-start-line="290" selection-start-column="0" selection-end-line="290" selection-end-column="0" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -51,7 +50,7 @@
         <entry file="file://$PROJECT_DIR$/runner_test.js">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0" vertical-offset="372" max-vertical-offset="1085">
-              <caret line="18" column="0" selection-start-line="18" selection-start-column="0" selection-end-line="18" selection-end-column="25" />
+              <caret line="12" column="18" selection-start-line="12" selection-start-column="18" selection-end-line="12" selection-end-column="18" />
               <folding />
             </state>
           </provider>
@@ -60,8 +59,8 @@
       <file leaf-file-name="debugger_test.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/debugger_test.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.4049904" vertical-offset="347" max-vertical-offset="992">
-              <caret line="18" column="17" selection-start-line="18" selection-start-column="17" selection-end-line="18" selection-end-column="17" />
+            <state vertical-scroll-proportion="0.7140115" vertical-offset="0" max-vertical-offset="1023">
+              <caret line="12" column="9" selection-start-line="12" selection-start-column="9" selection-end-line="12" selection-end-column="9" />
               <folding />
             </state>
           </provider>
@@ -79,8 +78,8 @@
         <option value="$PROJECT_DIR$/.gitignore" />
         <option value="$PROJECT_DIR$/input_data/pas_code" />
         <option value="$PROJECT_DIR$/input_data/cpp_code" />
-        <option value="$PROJECT_DIR$/app.js" />
         <option value="$PROJECT_DIR$/runner_test.js" />
+        <option value="$PROJECT_DIR$/app.js" />
         <option value="$PROJECT_DIR$/debugger_test.js" />
       </list>
     </option>
@@ -141,10 +140,11 @@
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../hawatcher" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="recentsLimit" value="5" />
     <property name="HbShouldOpenHtmlAsHb" value="" />
+    <property name="restartRequiresConfirmation" value="true" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
@@ -271,9 +271,9 @@
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Structure" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.24972972" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.15899357" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.1996788" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.1996788" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.39900866" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.31226766" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="true" content_ui="tabs" />
@@ -320,10 +320,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="4960">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#338#478#0" expanded="false" />
-            <element signature="e#976#1012#0" expanded="false" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -355,10 +352,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="7967" max-vertical-offset="8525">
           <caret line="257" column="12" selection-start-line="257" selection-start-column="12" selection-end-line="257" selection-end-column="12" />
-          <folding>
-            <element signature="e#338#478#0" expanded="false" />
-            <element signature="e#976#1012#0" expanded="false" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -382,10 +376,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="744" max-vertical-offset="8370">
           <caret line="24" column="30" selection-start-line="24" selection-start-column="30" selection-end-line="24" selection-end-column="30" />
-          <folding>
-            <element signature="e#338#478#0" expanded="false" />
-            <element signature="e#976#1012#0" expanded="false" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -443,29 +434,26 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app.js">
+    <entry file="file://$PROJECT_DIR$/runner_test.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-3.405797" vertical-offset="633" max-vertical-offset="8401">
-          <caret line="34" column="16" selection-start-line="34" selection-start-column="16" selection-end-line="34" selection-end-column="16" />
-          <folding>
-            <element signature="e#338#478#0" expanded="false" />
-            <element signature="e#976#1012#0" expanded="false" />
-          </folding>
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1085">
+          <caret line="12" column="18" selection-start-line="12" selection-start-column="18" selection-end-line="12" selection-end-column="18" />
+          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/runner_test.js">
+    <entry file="file://$PROJECT_DIR$/app.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="372" max-vertical-offset="1085">
-          <caret line="18" column="0" selection-start-line="18" selection-start-column="0" selection-end-line="18" selection-end-column="25" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="8761" max-vertical-offset="9548">
+          <caret line="290" column="0" selection-start-line="290" selection-start-column="0" selection-end-line="290" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/debugger_test.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.4049904" vertical-offset="347" max-vertical-offset="992">
-          <caret line="18" column="17" selection-start-line="18" selection-start-column="17" selection-end-line="18" selection-end-column="17" />
+        <state vertical-scroll-proportion="0.7140115" vertical-offset="0" max-vertical-offset="1023">
+          <caret line="12" column="9" selection-start-line="12" selection-start-column="9" selection-end-line="12" selection-end-column="9" />
           <folding />
         </state>
       </provider>

@@ -40,7 +40,8 @@ function format(entries){
     var configText = '';
     for(var i=0; i<entries.length; i++){
         var entry = entries[i];
-        configText+='    server '+entry.server+' '+entry.ip+":"+entry.port+'\\n';
+        configText+='    server '+entry.server+' '+entry.ip+':'
+            +entry.port+' check cookie '+entry.server+'\\n';
     }
 
     return configText;

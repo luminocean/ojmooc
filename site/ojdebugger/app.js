@@ -10,7 +10,7 @@ var util = require('./util/util');
 //请求队列
 var RequestQueue = require('./util/request_queue').RequestQueue;
 //初始化队列，设置回调函数
-var queue = new RequestQueue([perform]);
+var queue = new RequestQueue([heartBeat,perform]);
 
 //准备好各种临时文件需要的目录
 util.prepareDir();
@@ -22,6 +22,27 @@ http.createServer(function (req, res) {
 }).listen(23333,function(){
     console.log('debugger服务器已启动');
 });
+
+/**
+ * 心跳响应中间件，负责响应心跳检测请求
+ * @param req 请求对象
+ * @param res 响应对象
+ * @param next 处理下一个中间件，如果没有的话就处理下一个请求
+ */
+function heartBeat(req,res,next){
+    requestParser.parseRequest(req,function(err, body){
+        //如果请求是心跳检测，那么返回响应
+        if(body.heartBeat){
+            reply(res,{
+                "isAlive":"I'm alive"
+            });
+            next(false);
+        }else{
+            //否则继续处理
+            next();
+        }
+    });
+}
 
 function perform(req,res,next){
     Q.denodeify(requestParser.parseRequest)(req)
