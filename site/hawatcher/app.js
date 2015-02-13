@@ -1,5 +1,7 @@
+#!/usr/bin/nodejs
 var request = require('request');
 var Q = require('q');
+var commander = require('commander');
 var util = require('./util/util');
 var controller = require('./core/proxy_controller');
 var config = require('./config/config');
@@ -8,6 +10,24 @@ var config = require('./config/config');
 var lastContainers = [];
 //开启Q的debug模式
 Q.longStackSupport = true;
+
+//命令行参数的解析配置
+commander
+    .option('-r, --runner', 'Watch OJRunner docker comtainers')
+    .option('-d, --debugger', 'Watch OJDebugger docker comtainers')
+    .parse(process.argv);
+
+//设置当前的运行模式
+var mode = null;
+if(commander.runner){
+    mode = config.modes.runner;
+}else if(commander.debugger){
+    mode = config.modes.debugger;
+}else{
+    //默认监视runner
+    mode = config.modes.runner;
+}
+
 
 //开始周期性地检查docker容器变化
 inspectContainers();
@@ -73,6 +93,11 @@ function validateContainers(containers,callback){
     //计数已经检查了几个容器了，全部检查完以后才调用callback
     var counter = 0;
 
+    //如果为空直接返回，否则不会进入下面的循环而卡死
+    if(containers.length == 0){
+        return callback(null,survivors);
+    }
+
     for(var i=0; i<containers.length; i++){
         var container = containers[i];
         var ip = container.ip;
@@ -104,7 +129,7 @@ function validateContainers(containers,callback){
                 //发完请求后就把计数器+1，不管成功还是失败
                 counter++;
                 if(err)
-                    return console.error(err.stack);
+                    return (err.stack);
 
                 if(body.isAlive)
                     survivors.push(container);
@@ -140,8 +165,9 @@ function getContainersOnHost(url,ip,callback){
         var containers = [];
         for(var i=0; i<allContainers.length; i++){
             var container = allContainers[i];
-            if(container.Ports[0]
-                && (container.Ports[0].PrivatePort === config.privatePort)){
+            //如果该容器符合监控的条件，则纳入监控列表
+            var keyFiled = container[mode.field];
+            if(keyFiled && keyFiled.match(mode.keyword)){
                 container.ip = ip;
                 containers.push(container);
             }

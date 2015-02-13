@@ -9,7 +9,8 @@
   "author": "luMinO",
   "license": "BSD-2-Clause",
   "dependencies": {
-    "request": "~2.51.0",
-    "q": "~1.1.2"
+    "commander": "^2.6.0",
+    "q": "~1.1.2",
+    "request": "~2.51.0"
   }
 }
