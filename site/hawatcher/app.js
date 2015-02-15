@@ -3,7 +3,8 @@ var request = require('request');
 var Q = require('q');
 var commander = require('commander');
 var util = require('./util/util');
-var controller = require('./core/proxy_controller');
+var controller = require('./core/controller');
+var system = require('./core/system');
 var config = require('./config/config');
 
 //上次获取的容器列表
@@ -16,7 +17,6 @@ commander
     .option('-r, --runner', 'Watch OJRunner docker comtainers')
     .option('-d, --debugger', 'Watch OJDebugger docker comtainers')
     .parse(process.argv);
-
 //设置当前的运行模式
 var mode = null;
 if(commander.runner){
@@ -28,10 +28,13 @@ if(commander.runner){
     mode = config.modes.runner;
 }
 
-
 //开始周期性地检查docker容器变化
 inspectContainers();
 setInterval(inspectContainers, 5000);
+
+//设定进程退出时的行为
+process.on('SIGINT',exit);
+process.on('exit',exit);
 
 /*
  * 检查docker内配置的容器是否有变化，如果有变化则刷新HAProxy的负载配置
@@ -189,4 +192,16 @@ function processContainerChanges(containers){
     //否则根据新取到的容器信息刷新HAProxy
     lastContainers = containers;
     controller.refresh(containers);
+}
+
+/**
+ * 进程退出时的处理函数
+ * @param code
+ */
+function exit(code){
+    system.cleanupRuntime();
+    if(code)
+        console.log('exits...'+code);
+    else
+        process.exit(0);
 }
