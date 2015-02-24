@@ -37,13 +37,10 @@ runner.run = function(srcCode,srcType,inputData,callback){
         "srcType":srcType,
         "inputData":inputData
     },null,function(err,body){
-        if(err){
-            console.log(err.stack);
-            console.log(err);
-            return callback(err);
-        }
+        if(err) return callback(err);
+
         if(!body.result || !body.params) {
-            console.error(body);
+            console.log(body);
             return callback(new Error('返回值中没有运行结果或者运行参数'));
         }
 
@@ -58,7 +55,6 @@ runner.run = function(srcCode,srcType,inputData,callback){
 runner.setPort = function(port){
     this.port = port;
 };
-
 
 /**
  * 一个便利方法，组合了ebug+breakPoint+run操作
@@ -286,8 +282,17 @@ function sendRequest(body,cookieId,callback){
 
     //发送请求，返回获取的结果
     request(requestObj, function (err, response, body) {
-        if(err)
-            return callback(err);
+        //这里发生错误表示是通讯发生了问题，仅对外提示通讯异常
+        if(err){
+            console.error(err);
+            return callback(new Error('内部通讯异常'));
+        }
+
+        //如果返回的报文表示不成功，返回错误信息
+        if(response.statusCode != 200){
+            console.error(body);
+            return callback(new Error('编译执行错误'));
+        }
 
         var setCookieHeader = response.headers['set-cookie'];
         var setCookie = null;

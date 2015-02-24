@@ -6,8 +6,8 @@ var Q = require('q');
 var dbr = require('./app.js').debugger;
 
 //设置访问runner的端口
-dbr.setPort(8080);
-//dbr.setPort(23333);
+//dbr.setPort(8080);
+dbr.setPort(23333);
 //dbr.setPort(49169);
 
 //测试的编译类型
