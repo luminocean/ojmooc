@@ -2,7 +2,7 @@ var util = require('./util');
 //引用同目录下的ojclient
 var dbr = require('../ojclient/app').debugger;
 
-dbr.setPort(8080);
+dbr.setPort(23333);
 
 var config = [
     {
@@ -41,12 +41,13 @@ config.forEach(function(item){
 function launchDebug(){
     var programSuffix = $('#programSuffix').val();
     if(!programSuffix) return console.error('没有指定程序后缀');
-    var breakLine = $('#breakLine').val();
+    var breakLines = $('#breakLine').val().split(',');
+    console.log(breakLines);
 
     util.getData(programSuffix,function(err,sourceCode,inputData){
         if(err) return console.error(err.stack);
 
-        dbr.launchDebug(sourceCode,programSuffix,inputData,[breakLine],function(err,debugId,exit,breakPoint,stdout,locals){
+        dbr.launchDebug(sourceCode,programSuffix,inputData,breakLines,function(err,debugId,exit,breakPoint,stdout,locals){
             if(err) return console.error(err.stack);
 
             displayInfo(debugId,exit,breakPoint,stdout,locals);

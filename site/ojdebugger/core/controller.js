@@ -13,7 +13,7 @@ module.exports = controller;
  * @param requestJSON 客户端传入的请求数据
  * @param callback
  */
-controller.process = function(requestJSON, callback){
+controller.dispatch = function(requestJSON, callback){
     //找出请求json对象中的方法，只找出第一个就处理返回
     for(var methodName in requestJSON){
         if(!requestJSON.hasOwnProperty(methodName))
@@ -33,7 +33,7 @@ controller.process = function(requestJSON, callback){
                     return callback(new Error('配置中需要的属性在请求中找不到：'+param));
                 paramValues.push(requestParam);
             });
-            //回调函数放在最后
+            //回调函数放在入参列表的最后
             paramValues.push(function(err,result){
                 return callback(err,result);
             });

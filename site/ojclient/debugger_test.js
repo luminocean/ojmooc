@@ -10,6 +10,8 @@ var dbr = require('./app.js').debugger;
 dbr.setPort(23333);
 //dbr.setPort(49169);
 
+Q.longStackSupport = true;
+
 //测试的编译类型
 var srcType = 'cpp';
 //读取测试用源文件

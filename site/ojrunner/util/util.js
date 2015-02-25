@@ -29,7 +29,6 @@ exports.cleanup = function(fileName, dirs){
             else
                 deleteFile(path);
         }
-
     }
 };
 

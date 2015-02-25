@@ -11,9 +11,6 @@ var util = require('../util/util');
 var methods = require('../config/config').methods;
 var config = require('../config/config').settings;
 
-//debug设置
-Q.longStackSupport = true;
-
 //debugger对象
 var dbr = {};
 module.exports = dbr;
@@ -101,10 +98,10 @@ dbr.debug = function(srcCode,srcType,inputData,callback){
             gdb.stdout.on('data',function(chunk){
                 data += chunk;
 
-                //在读到的gdb输出中检索(gdb)分隔标记，每个标记前面的数据都是一个batch
+                //在读到的gdb输出中检索(gdb)分隔标记，每个标记前面的数据都构成一个batch
                 var batchData = data.match(/([\s\S]*?)\(gdb\)\s*/);
                 while(batchData){
-                    //发送batch事件与数据
+                    //触发batch事件，发送数据
                     gdb.stdout.emit('batch',batchData[0]);
 
                     //把发出去的数据去除，再检索还有没有batch
@@ -123,7 +120,6 @@ dbr.debug = function(srcCode,srcType,inputData,callback){
             });
         })
         .catch(function(err){
-            console.error(err);
             console.error(err.stack);
             callback(err);
         });
@@ -140,7 +136,10 @@ dbr.breakPoint = function(debugId,breakLines,callback){
     if(!gdb)
         return callback(new Error('找不到debugId '+debugId+' 对应的进程'));
 
+    //添加断点操作后触发的相应的计数器，最后应该和断点的数目相同
+    //表示所有的断点加入动作都被响应了
     var received = 0;
+    //要返回的result对象的模板
     var result = methods['breakPoint'].result||{};
 
     gdb.stdout.removeAllListeners('batch').on('batch',function(){
@@ -236,10 +235,11 @@ dbr.run = function(debugId,callback){
         //parse函数的名称
         var parseNames = methodConfig.parseNames;
 
-        processBatch(batch,debugId,parseNames
-            ,methodConfig.stdout,methodConfig.locals,callback);
+        processBatch(batch,debugId,parseNames,
+            methodConfig.stdout,methodConfig.locals,callback);
     });
 
+    //这里gdb的r命令需要使用特殊的写法，设置输入输出的重定向
     var runCommand = 'r '
         //输入数据重定向
         +' <'+path.join(__dirname,'../',config.repo.dir.input,debugId+'.txt')
@@ -261,6 +261,8 @@ dbr.exit = function(debugId,callback){
         return callback(new Error('找不到debugId '+debugId+' 对应的进程'));
 
     gdb.on('exit',function(){
+        console.log(debugId+' EXIT resolve');
+
         delete gdb[debugId];
         var result = methods['exit'].result;
         result.debugId = debugId;
@@ -273,9 +275,9 @@ dbr.exit = function(debugId,callback){
     gdb.stdin.write('q \n');
 };
 
-
+//以下为工具方法
 /**
- * 处理batch数据，将处理完的结果传入回调函数
+ * 解析batch数据，将处理完的结果传入回调函数
  * @param batch 获取的gdb输出数据
  * @param debugId 当前debug会话的id
  * @param parseNames 用于解析的函数名称
@@ -325,6 +327,8 @@ function doParses(batch,parseNames,finish){
         }
     }
 
+    //如果经过了所有的parser方法但是还是没有结果或者不是info类的结果
+    //跑到这里则抛错
     if(!result || !result.info) {
         throw Error('没有一个解析方法可以解析batch的内容\n'
             +'batch内容：'+batch);
