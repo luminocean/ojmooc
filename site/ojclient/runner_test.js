@@ -1,3 +1,4 @@
+#!/usr/bin/nodejs
 /**
  * 用于测试oj客户端的测试用例文件，可以作为如何使用该客户端的参考
  */
@@ -6,8 +7,8 @@ var runner = require('./app.js').runner;
 
 //设置访问runner的端口
 //runner.setPort(8080);
-//runner.setPort(49168);
-runner.setPort(23333);
+runner.setPort(49155);
+//runner.setPort(23333);
 
 //测试的编译类型
 var srcType = 'cpp';
@@ -16,7 +17,7 @@ var srcCode = fs.readFileSync('./input_data/'+srcType+'_code','utf-8');
 //读取测试用数据
 var inputData = fs.readFileSync('./input_data/'+srcType+'_data','utf-8');
 
-for(var i=0; i<1; i++){
+for(var i=0; i<5; i++){
     runner.run(srcCode,srcType,inputData,function(err,result,params,host) {
         if (err) return console.error(err);
 

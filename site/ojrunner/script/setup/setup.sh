@@ -7,7 +7,7 @@
 #替换源
 if [ ! -f "/etc/apt/sources.list.backup" ];then
     #如果没有备份过先备份一下
-    sudo cp /etc/apt/sources.list /etc/apt/sources.list.backup		
+    sudo cp /etc/apt/sources.list /etc/apt/sources.list.backup
 fi
 sudo cp ./sources.list /etc/apt
 
@@ -15,7 +15,7 @@ sudo cp ./sources.list /etc/apt
 sudo apt-get update
 
 ### 安装依赖程序
-sudo apt-get install -y nodejs npm haproxy docker.io wget llvm clang gdb fpc vim time valgrind
+sudo apt-get install -y dos2unix nodejs npm haproxy docker.io wget llvm clang gdb fpc vim time valgrind
 #其中valgrind可能会有版本上的问题需要下载源码编译安装(lubuntu上)
 ###
 
@@ -44,6 +44,9 @@ else
 #如果没有配过就加一句
     sudo sed -i '$a DOCKER_OPTS="-H tcp:\/\/0.0.0.0:4243 -H unix:\/\/\/var\/run\/docker.sock"' "$docker_config_path"
 fi
+
+#重启docker
+sudo service docker restart
 
 #安装npm的依赖包
 #备份当前的目录
