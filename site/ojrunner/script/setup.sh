@@ -6,8 +6,7 @@
 sudo apt-get update
 
 ### 安装依赖程序
-sudo apt-get install -y nodejs npm haproxy docker.io
-#测试环境下的依赖安装 sudo apt-get install -y gdb nodejs npm haproxy docker.io valgrind
+sudo apt-get install -y nodejs npm haproxy docker.io wget llvm clang gdb fpc vim time valgrind
 #其中valgrind可能会有版本上的问题需要下载源码编译安装
 ###
 
@@ -17,9 +16,13 @@ sudo sed -i 's/ENABLED=0/ENABLED=1/g' /etc/default/haproxy
 
 ### 开启docker.io的tcp通讯接口
 #docker配置文件的位置
-docker_config_path="/etc/default/docker"
+docker_config_path="/etc/default/docker.io"
 if [ ! -f "$docker_config_path" ]; then
-    echo "/etc/default/docker处找不到docker.io配置文件"
+    docker_config_path="/etc/default/docker"
+fi
+#检查配置文件是否存在
+if [ ! -f "$docker_config_path" ]; then
+    echo "/etc/default/处找不到docker或docker.io配置文件"
     exit 1
 fi
 
