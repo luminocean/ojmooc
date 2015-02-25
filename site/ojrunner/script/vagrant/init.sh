@@ -6,12 +6,6 @@ sudo apt-get install -y git
 mkdir -p /home/vagrant
 cd /home/vagrant \
     && sudo git clone -b paper http://git.iyopu.com:10080/datouxia/ojmooc.git \
-    && cd ./ojmooc/site \
-    && npm install ./hawatcher \
-    && npm install ./ojrunner \
-    && npm install ./ojdebugger \
-    && npm install ./ojclient \
-    && npm install ./ojdebugger-gui \
-    && cd ./ojrunner/script \
+    && cd ./ojmooc/site/ojrunner/script/setup \
     && sudo ./setup.sh \
     && cd /home/vagrant

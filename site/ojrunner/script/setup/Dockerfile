@@ -3,6 +3,9 @@
 #基于ubuntu14.04
 FROM ubuntu:14.04
 
+#替换源
+ADD sources.list /etc/apt/
+
 RUN apt-get update
 
 #安装依赖的工具，尤其是valgrind
