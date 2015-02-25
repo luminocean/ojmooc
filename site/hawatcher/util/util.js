@@ -2,7 +2,9 @@
  * 提供各种工具方法
  */
 var fs = require('fs');
+var path = require('path');
 var moment = require('moment');
+var config = require('../config/config');
 
 /**
  * 判断两个容器数组是否相同（仅根据容器id集合是否完全一致）
@@ -62,3 +64,14 @@ function contains(container, containers){
     }
     return false;
 }
+
+/**
+ * 准备临时文件存放需要的目录，避免找不到目录而出错
+ * 注意本方法调用了同步方法，请不要反复执行，会产生性能问题
+ */
+exports.prepareDir = function(){
+    //创建runtime目录
+    if(!fs.existsSync(path.join(__dirname,'../',config.runtime.dir))){
+        fs.mkdirSync(path.join(__dirname,'../',config.runtime.dir));
+    }
+};

@@ -7,10 +7,12 @@ var controller = require('./core/controller');
 var system = require('./core/system');
 var config = require('./config/config');
 
-//上次获取的容器列表
-var lastContainers = [];
+util.prepareDir();
 //开启Q的debug模式
 Q.longStackSupport = true;
+
+//上次获取的容器列表
+var lastContainers = [];
 
 //命令行参数的解析配置
 commander

@@ -6,8 +6,8 @@ var fs = require('fs');
 var runner = require('./app.js').runner;
 
 //设置访问runner的端口
-//runner.setPort(8080);
-runner.setPort(49155);
+runner.setPort(8080);
+//runner.setPort(49155);
 //runner.setPort(23333);
 
 //测试的编译类型
