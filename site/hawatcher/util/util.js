@@ -1,3 +1,5 @@
+var shell = require('shelljs');
+
 /**
  * 提供各种工具方法
  */
@@ -32,6 +34,13 @@ exports.deleteFile = function(filePaths){
             fs.unlinkSync(filePath);
         }
     });
+};
+
+exports.killProcess = function(pidFilePath){
+    //执行退出脚本
+    //TODO 这里要改为可配置的形式
+    var output = shell.exec('./shell/kill.sh '+pidFilePath).output;
+    console.log(output);
 };
 
 /**

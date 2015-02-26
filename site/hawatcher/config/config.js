@@ -1,4 +1,6 @@
 var config = {
+    //HAProxy监听的默认端口
+    "port":8080,
     //监控docker的时间间隔
     "timeInterval":5000,
     //监控的主机地址，这里可以填写一系列的ip地址从而监控多个docker宿主机

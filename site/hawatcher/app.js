@@ -16,7 +16,9 @@ var lastContainers = [];
 
 //命令行参数的解析配置
 commander
-    .option('-r, --runner', 'Watch OJRunner docker comtainers')
+    .option('-p, --port [portNum]',
+        'Specify the port which HAProxy(managed by HAWatcher) listens to (8080 by default)')
+    .option('-r, --runner', 'Watch OJRunner docker comtainers(defalut)')
     .option('-d, --debugger', 'Watch OJDebugger docker comtainers')
     .parse(process.argv);
 //设置当前的运行模式
@@ -28,6 +30,11 @@ if(commander.runner){
 }else{
     //默认监视runner
     mode = config.modes.runner;
+}
+
+//如果指定了端口，则覆盖配置中的端口设置
+if(commander.port){
+    config.port = commander.port;
 }
 
 //开始周期性地检查docker容器变化

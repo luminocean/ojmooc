@@ -21,7 +21,7 @@ var pidFilePath = path.join(runtimePath,runtimeConfig.pid.replace(/\*/,fileName)
 exports.write = function(entries,callback){
     var configText = format(entries);
     //开启shell执行子进程，将输入数据通过stdin输入
-    var child = cp.execFile(refreshShellPath, [templateConfigFilePath,configFilePath],
+    var child = cp.execFile(refreshShellPath, [templateConfigFilePath,configFilePath,config.port],
         function(err,stdout,stderr){
             if(err) return callback(err);
             if(stderr) return console.warn(stderr);
@@ -43,10 +43,17 @@ exports.reload = function(){
     });
 };
 
-//清理运行时数据
-//由于这是在进程退出时执行的，所以必须要使用同步的文件操作，否则
+var stopped = false;
+//清理运行时数据,在进程退出时候调用
+//注意这里使用的函数一定要是同步的调用，如果使用异步调用等不到回调进程就结束了，没有意义
 exports.cleanupRuntime = function(){
-    util.deleteFile([configFilePath,pidFilePath]);
+    if(!stopped){
+        //关掉Haproxy进程
+        util.killProcess(pidFilePath);
+        //删除运行期文件
+        util.deleteFile([configFilePath,pidFilePath]);
+        stopped = true;
+    }
 };
 
 /**
