@@ -8,12 +8,19 @@ if [ ! -f "/etc/apt/sources.list.backup" ];then
 fi
 sudo cp ./sources.list /etc/apt
 
-#install git
+sudo apt-get update
+#要把项目拖下来，所以先安装git
 sudo apt-get install -y git
-#download ojmooc project and install related software and environments
+
 mkdir -p /home/vagrant
 cd /home/vagrant \
     && git clone -b paper http://git.iyopu.com:10080/datouxia/ojmooc.git \
+    && sudo chown -R vagrant ojmooc \
+    && sudo chgrp -R vagrant ojmooc \
     && cd ./ojmooc/site/ojrunner/script/setup \
     && sudo ./setup.sh \
     && cd /home/vagrant
+
+#把vagrant用户加入docker组，使得docker的相关操作不用写sudo了
+sudo gpasswd -a vagrant docker \
+    && sudo su vagrant
