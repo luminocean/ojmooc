@@ -15,7 +15,7 @@ sudo cp ./sources.list /etc/apt
 sudo apt-get update
 
 ### 安装依赖程序
-sudo apt-get install -y dos2unix nodejs npm haproxy docker.io wget llvm clang gdb fpc vim time valgrind
+sudo apt-get install -y dos2unix nodejs haproxy docker.io wget llvm clang gdb fpc vim time valgrind
 #其中valgrind可能会有版本上的问题需要下载源码编译安装(lubuntu上)
 ###
 
@@ -46,7 +46,12 @@ else
 fi
 
 #重启docker
-sudo service docker restart
+#由于历史原因，有些平台docker的服务叫docker，有些叫docker.io
+#所以这里需要查询后在重启
+docker_service=$(service --status-all 2>/dev/null | grep docker | awk '{print $4}')
+if [ -n "$docker_service" ]; then
+    sudo service "$docker_service" restart
+fi
 
 #安装npm的依赖包
 #备份当前的目录
