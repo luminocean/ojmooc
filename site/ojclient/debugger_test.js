@@ -7,9 +7,9 @@ var Q = require('q');
 var dbr = require('./app.js').debugger;
 
 //设置访问runner的端口
-//dbr.setPort(8081);
-dbr.setPort(23333);
-//dbr.setPort(49169);
+dbr.setPort(8081);
+//dbr.setPort(23333);
+//dbr.setPort(49154);
 
 Q.longStackSupport = true;
 

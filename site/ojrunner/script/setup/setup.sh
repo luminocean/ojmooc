@@ -15,7 +15,7 @@ sudo cp ./sources.list /etc/apt
 sudo apt-get update
 
 ### 安装依赖程序
-sudo apt-get install -y dos2unix nodejs haproxy docker.io wget llvm clang gdb fpc vim time valgrind
+sudo apt-get install -y dos2unix nodejs npm haproxy docker.io wget llvm clang gdb fpc vim time valgrind
 #其中valgrind可能会有版本上的问题需要下载源码编译安装(lubuntu上)
 ###
 
