@@ -2,7 +2,7 @@ var util = require('./util');
 //引用同目录下的ojclient
 var dbr = require('../ojclient/app').debugger;
 
-dbr.setPort(23333);
+dbr.setPort(8081);
 
 var config = [
     {

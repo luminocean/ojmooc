@@ -1,3 +1,4 @@
+#!/usr/bin/nodejs
 /**
  * ojdebugger入口
  */

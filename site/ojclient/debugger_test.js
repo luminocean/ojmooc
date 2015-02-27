@@ -7,7 +7,7 @@ var Q = require('q');
 var dbr = require('./app.js').debugger;
 
 //设置访问runner的端口
-//dbr.setPort(8080);
+//dbr.setPort(8081);
 dbr.setPort(23333);
 //dbr.setPort(49169);
 
@@ -24,6 +24,10 @@ for(var i=0; i<1; i++) {
     Q.denodeify(dbr.launchDebug)(srcCode, srcType, inputData, [16])
         .then(function (results) {
             console.log(JSON.stringify(results));
+            return results[0];
+        })
+        .then(function(debugId){
+            return Q.denodeify(dbr.exit)(debugId);
         })
         .catch(function (err) {
             console.error(err);
