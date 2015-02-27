@@ -9,7 +9,7 @@ ADD sources.list /etc/apt/
 RUN apt-get update
 
 #安装依赖的工具，尤其是valgrind
-RUN apt-get install -y wget llvm clang gdb fpc vim time valgrind nodejs npm
+RUN apt-get install -y wget llvm clang gdb fpc vim time valgrind nodejs
 
 #安装一些不知道为什么缺少的工具
 RUN apt-get install -y --reinstall binutils
