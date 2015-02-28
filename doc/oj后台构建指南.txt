@@ -1,0 +1,98 @@
+********************windows下（基于vagrant）的构建手册********************
+·首先安装vagrant和virtualbox
+
+·获取特定的vagrant的box文件（获取方式请参照附录1），该文件基于ubuntu14.10构建。（为什么要用14.10请看附录2）
+
+·在box文件所在目录下执行 vagrant box add base XXXX.box(你获取到的box文件名)，这个动作会把这个box文件添加到vagrant里面。之后在创建虚拟环境时会把这个事先存好的box文件复制到virtualbox里面，再启动virtualbox虚拟机执行。因此可以认为这个box文件是一个模板，本身不会被改变。命令里面的base指的是给存放在vagrant里面的这个box文件取名叫base。使用vagrant box remove base即可删除vagrant里面存的这个box文件。
+
+·克隆项目
+
+·把ojrunner/script/vagrant目录里面的文件复制到你的文件系统的任意一个目录下。目录中有有一个vagrant配置文件叫Vagrantfile，用来指定启动虚拟机的一些参数，如果能看懂的话可以改改内存啊网络啊什么的。在命令行中进入该目录。检查该Vagrantfile里面的config.vm.box = "base"部分，这一段代码指定了使用哪一个box文件启动。如果你的镜像不叫base请改成对应的镜像名
+
+·使用vagrant up启动虚拟机。如果发生卡死，请参照附录3
+
+·启动后发现什么也没有发生，命令行又重新等待用户的输入了。因为这个时候virtualbox只是在后台运行，而不是经常见到的会有一个virtualbox界面出来。这个时候可以使用vagrant ssh直接连到刚刚开启的虚拟机，就可以操作ubuntu系统了。如果发现这样的连接方法存在一些显示上的问题，可以换用windows版本的Putty连接，连接需要的参数都显示在vagrant up的输出里面了。
+
+·进入/vagrant目录，这个目录其实就是windows下Vagrantfile所在的那个目录的映射。执行sudo ./init.sh即可完成剩下的所有安装过程。如果发现init.sh执行不了，很有可能是因为在windows下的换行符和linux下不一致的原因。这个时候sudo apt-get install dos2unix，再执行 dos2unix init.sh可以清洗一下init.sh文件，然后重新执行。
+
+·参考运行环境启动指南继续接下来的工作
+
+
+
+
+
+********************linux下的构建手册********************
+
+·克隆项目
+
+·ojrunner/script/setup目录，执行setup.sh即可完成所有安装过程
+
+·执行sudo gpasswd -a $USER docker && sudo su $USER，把当前用户加入docker组，这样使用docker相关命令就不用一直在开头输sudo了
+
+·参考运行环境启动指南继续接下来的工作
+
+
+
+
+
+*****运行环境启动指南(windows和linux通用，其中windows要在vagrant环境下执行)*****
+·先说一下这里要干什么事：把ojrunner项目和ojdebugger项目在docker里面启动。然后启动HAWatcher项目，实现复数的ojrunner和ojdebugger执行环境的负载均衡。
+其中：
+ojrunner负责接收用户的请求，编译执行之后返回结果和相关的运行参数，是状态无关的。
+ojdebugger同样负责接收用户的请求（当然请求的报文和ojrunner不同），编译后以debugger状态来运行（使用gdb实现），是状态有关的
+HAWatcher用来完全控制HAProxy（一个负载均衡软件），在实际的使用中只要启动HAWatcher即可，不用在意HAProxy。HAWatcher负责监视docker里面的ojrunner和ojdebugger运行环境，对HAProxy的配置进行动态的删减，从而能够实现比如每增加一个ojrunner的docker容器HAProxy就能立即覆盖到对其的负载均衡。这里要注意的是为了简单起见，一个HAWatcher只能用来监视docker里面的ojrunner或者ojdebugger，但不能同时监视。因此一般需要开启两个HAWatcher，分别监视ojrunner和ojdebugger，这两个的启动参数不同。
+
+具体步骤：
+·执行ojrunner的script文件夹类的up.sh，执行几次就会启动几个ojrunner的docker容器。
+
+·同样的方法启动ojdebugger的容器。
+
+·启动监视ojrunner的hawatcher，执行hawatcher的app.js：./app.js -r -p 8080 &，-r表示启动对runner的监视,-p表示给ojrunner的负载均衡后统一从外部访问的ip地址。即访问8080端口后由haproxy来进行负载均衡。这两个参数都是默认值，所以可以不写，直接执行./app.js &
+
+·启动监视ojdebugger的hawatcher：./app.js -d -p 8081
+
+·在Vagrantfile的配置中如果开启了8080和8081端口的转发，那么在windows宿主机上就可以直接通过转发的端口访问了。
+
+
+
+
+
+********************附录1：自行获取vagrant镜像********************
+我们需要的vagrant镜像要求基于ubuntu14.10,具体原因请参见附录2。
+
+·获取ubuntu14.10的box文件。http://www.vagrantbox.es/，选择 Ubuntu 14.10 (based on amd64 server iso file)下载。或者直接使用链接：https://github.com/kraksoft/vagrant-box-ubuntu/releases/download/14.10/ubuntu-14.10-amd64.box
+
+·有可能直接使用这个box就可以了。请按照手册尝试继续往下走，如果发现vagrant up命令出现无法挂载目录的问题再继续往下看后面的步骤。
+
+·出现无法挂载目录的问题，是由于缺少一个virtualbox的插件。但请注意，出错的时候实际上你的虚拟机已经启动了，启动并没有失败。这个时候输入vagrant ssh直接不要用户名密码就可以连到开启的虚拟机里面，但是一些目录并没有挂载上来，因此这次启动还是可以认为是失败的。请先进入虚拟机环境。（使用putty也可以，但是会出现一个警告，无视即可）
+
+·在你安装的virtualbox的根目录下找到一个VBoxGuestAdditions.iso文件，在virtualbox的界面上找到刚在开启的虚拟机，在设置里面把这个iso文件插入虚拟机。然后在虚拟机里面挂载/dev/cdrom，比如可以挂到/media/cdrom上面。
+
+·直接执行里面的一个run文件就可以安装对应的additions，似乎叫***Linux**.run，具体的名字忘记了。。但是这个时候由于缺少一个依赖程序所以会build失败。所以先使用sudo apt-get install dkms安装一下（如果提示没有这个包就先update一下），然后再次执行这个run文件即可。安装完毕后在主机命令行执行vagrant reload。vagrant会把这个虚拟机关机后在重新启动。如果不幸在重新启动虚拟机的时候卡死了，请重新来一遍。。。- -! 但是第二次就不要再使用vagrant reload了，先vagrant halt。然后杀掉所有的virtualbox的进程，再vagrant up。关于卡死现象的更多信息参见附录3
+
+·重新启动后应该就能挂上了。这个时候这个虚拟机环境就算搭建成功了。使用vagrant package可以把这个虚拟环境打包成box，这个步骤就算完成了。
+
+
+
+
+
+********************附录2:使用ubuntu14.10的原因********************
+本项目在实现debug功能的时候使用了gdb。出于安全和性能考虑将gdb放在docker容器中运行。但是在测试时发现在ubuntu14.04的主机环境和ubuntu14.04的docker环境下gdb会发生运行错误。具体表现是gdb可以打断点但是运行程序的时候会跳过所有断点直接结束，同时报错。但是在开发环境(主机是14.10，docker是14.04)下就没有这样的问题。google上未发现很好的解答，推测是gdb遇到了权限问题。
+
+
+
+
+
+********************附录3:解决vagrant up卡死的问题********************
+可以尝试一下几个操作：
+·先ctrl+c把当前这个vagrant up动作给停掉
+·杀掉所有的virtualbox相关进程(看看所有v开头的进程)
+·手动打开virtualbox界面，完全删除里面那个异常退出的虚拟机
+·把当前目录下的.vagrant目录删除
+·找到virtualbox存放虚拟机的地方，删除刚才创建的虚拟机的文件夹，如果里面有好几个文件夹分不清可根据时间判断（应该是比较小的文件夹或者干脆是空的，因为之前完全删除了）
+
+然后重新vagrant up。如果还是卡死请再来一遍。。实测的结果最多的一次重来了三遍。。
+
+PS:如果想预防这种现象的发生，可以尝试每次up前就把所有的virtualbox进程杀掉再up，如果不是全新的虚拟机建议每次不要halt只是suspend，下次就不用up了用resume会好一些。
+PPS:如果命令行本身是以管理员权限运行的，可能不会卡死，直接报错。这个时候杀掉进程直接再up一次试试。
+PPPS:以上的操作均不能保证不会再次出现卡死。目前认为卡死这个现象是一个概率问题。。（但是概率这个词一般来说是不会用在软件工程里面的）所以这个问题目前一个最简单的解释是。。看脸
