@@ -14,23 +14,8 @@ Q.longStackSupport = true;
 //上次获取的容器列表
 var lastContainers = [];
 
-//命令行参数的解析配置
-commander
-    .option('-p, --port [portNum]',
-        'Specify the port which HAProxy(managed by HAWatcher) listens to (8080 by default)')
-    .option('-r, --runner', 'Watch OJRunner docker comtainers(defalut)')
-    .option('-d, --debugger', 'Watch OJDebugger docker comtainers')
-    .parse(process.argv);
-//设置当前的运行模式
-var mode = null;
-if(commander.runner){
-    mode = config.modes.runner;
-}else if(commander.debugger){
-    mode = config.modes.debugger;
-}else{
-    //默认监视runner
-    mode = config.modes.runner;
-}
+//解析进程参数
+var mode = resolveArgs(process.argv);
 
 //如果指定了端口，则覆盖配置中的端口设置
 if(commander.port){
@@ -43,7 +28,10 @@ setInterval(inspectContainers, 5000);
 
 //设定进程退出时的行为
 process.on('SIGINT',exit);
+process.on('SIGTERM',exit);
 process.on('exit',exit);
+process.on('uncaughtException',exit);
+
 
 /*
  * 检查docker内配置的容器是否有变化，如果有变化则刷新HAProxy的负载配置
@@ -204,13 +192,43 @@ function processContainerChanges(containers){
 }
 
 /**
- * 进程退出时的处理函数
- * @param code
+ * 解析进程参数，返回相应配置文件中的模式对象，表示相应的运行参数
+ * @param args
+ * @returns {*}
  */
-function exit(code){
+function resolveArgs(args){
+    //命令行参数的解析配置
+    commander
+        .option('-p, --port [portNum]',
+        'Specify the port which HAProxy(managed by HAWatcher) listens to (8080 by default)')
+        .option('-r, --runner', 'Watch OJRunner docker comtainers(defalut)')
+        .option('-d, --debugger', 'Watch OJDebugger docker comtainers')
+        .parse(args);
+
+    //根据解析到的命令行参数结果设置当前的运行模式
+    var mode = null;
+    if(commander.runner){
+        mode = config.modes.runner;
+    }else if(commander.debugger){
+        mode = config.modes.debugger;
+    }else{
+        //默认监视runner
+        mode = config.modes.runner;
+    }
+
+    return mode;
+}
+
+/**
+ * 进程退出时的处理函数
+ * @param msg
+ */
+function exit(msg){
     system.cleanupRuntime();
-    if(code)
-        console.log('exits...'+code);
-    else
-        process.exit(0);
+    if(msg instanceof Error)
+        console.log('Exits with error:'+err);
+    else if(msg)
+        console.log('Exits with code:'+err);
+
+    process.exit(0);
 }
