@@ -6,6 +6,9 @@ rl=$(readlink -f $0)
 dir=$(dirname $rl)
 root_path=${dir%/*}
 
+touch "$root_path"/log/hawatch.pid
+touch "$root_path"/log/log
+
 #如果HAProxy没有启动就先启动
 if [ -z "$(ps -e | grep ' haproxy$')" ]; then
     haproxy -f "${root_path}/config/haproxy.cfg"

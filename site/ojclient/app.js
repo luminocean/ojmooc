@@ -8,6 +8,11 @@
 var request = require('request');
 var Q = require('q');
 
+/**
+ * debugId与对应服务器的cookie的映射关系
+ */
+var cookieMap = {};
+
 //debug设置
 Q.longStackSupport = true;
 
@@ -31,17 +36,15 @@ runner.run = function(srcCode,srcType,inputData,callback){
         "srcCode":srcCode,
         "srcType":srcType,
         "inputData":inputData
-    },function(err,body){
-        if(err){
-            console.log(err.stack);
-            console.log(err);
-            return callback(err);
-        }
-        if(!body.result || !body.params){
+    },null,function(err,body){
+        if(err) return callback(err);
+
+        if(!body.result || !body.params) {
+            console.log(body);
             return callback(new Error('返回值中没有运行结果或者运行参数'));
         }
 
-        callback(null,body.result,body.params);
+        callback(null,body.result,body.params,body.host);
     });
 };
 
@@ -52,7 +55,6 @@ runner.run = function(srcCode,srcType,inputData,callback){
 runner.setPort = function(port){
     this.port = port;
 };
-
 
 /**
  * 一个便利方法，组合了ebug+breakPoint+run操作
@@ -108,10 +110,13 @@ dbr.debug = function(srcCode,srcType,inputData,callback){
                 "srcType":srcType,
                 "inputData":inputData
             }
-        },function(err,result){
+        },null,function(err,result,setCookie){
             if(err) return callback(err);
             if(!result.debugId)
                 return console.error(new Error('异常返回值'+JSON.stringify(result)));
+
+            //保存debugId与cookie文本的映射
+            cookieMap[result.debugId] = setCookie;
 
             callback(null,result.debugId);
         });
@@ -129,7 +134,7 @@ dbr.breakPoint = function(debugId,breakLines,callback){
                 "debugId":debugId,
                 "breakLines":breakLines
             }
-        },function(err,result){
+        },debugId,function(err,result){
             if(err) return callback(err);
             if(!result.breakPointNum)
                 return console.error(new Error('异常返回值'+JSON.stringify(result)));
@@ -151,7 +156,7 @@ dbr.printVal = function(debugId,varName,callback){
                 "debugId":debugId,
                 "varName":varName
             }
-        },function(err,result){
+        },debugId,function(err,result){
             if(err) return callback(err);
             if(result.noSymbol){
                 return callback(new Error('变量'+varName+'不存在'));
@@ -175,7 +180,7 @@ dbr.locals = function(debugId,callback){
             "locals":{
                 "debugId":debugId
             }
-        },function(err,result){
+        },debugId,function(err,result){
             if(err) return callback(err);
             if(!result.locals){
                 return console.error(new Error('*异常返回值'+JSON.stringify(result)));
@@ -195,7 +200,7 @@ dbr.exit = function(debugId,callback){
         "exit": {
             "debugId": debugId
         }
-    },function(err,result){
+    },debugId,function(err,result){
         if(err) return callback(err);
 
         callback(null,result.debugId);
@@ -221,7 +226,7 @@ methodNames.forEach(function(methodName){
         requestObj[methodName] = {
             "debugId":debugId
         };
-        sendRequest.call(dbr,requestObj,function(err,result){
+        sendRequest.call(dbr,requestObj,debugId,function(err,result){
             if(err) return callback(err);
 
             var stdout = result.stdout;
@@ -248,17 +253,27 @@ methodNames.forEach(function(methodName){
     }
 });
 
-
 /**
  * 向debugger服务器发出请求，并接收返回值
- * @param body
+ * @param body 请求主体
+ * @param cookieId 该请求所对应的cookieId，用于定位其所对应的服务器。
+ * 为null表示使用默认分配（使用HAProxy的情况下）
+ * 目前cookieId即debugId
  * @param callback
  */
-function sendRequest(body,callback){
+function sendRequest(body,cookieId,callback){
     var requestObj = {
         "method":"POST",
         "json":true
     };
+
+    //设置对应的cookie用于定位到特定的服务器上
+    if(cookieId && cookieMap[cookieId]){
+        var cookie = cookieMap[cookieId];
+        requestObj.headers = {
+            "Cookie": cookie
+        }
+    }
 
     //拼出请求服务器的url，如果没有提供则设置为默认值
     requestObj.url = 'http://'+(this.host||'localhost')
@@ -267,9 +282,27 @@ function sendRequest(body,callback){
 
     //发送请求，返回获取的结果
     request(requestObj, function (err, response, body) {
-        if(err)
-            return callback(err);
+        //这里发生错误表示是通讯发生了问题，仅对外提示通讯异常
+        if(err){
+            console.error(err);
+            return callback(new Error('内部通讯异常'));
+        }
 
-        callback(null,body);
+        //如果返回的报文表示不成功，返回错误信息
+        if(response.statusCode != 200){
+            console.error(body);
+            return callback(new Error('编译执行错误'));
+        }
+
+        var setCookieHeader = response.headers['set-cookie'];
+        var setCookie = null;
+        if(setCookieHeader && setCookieHeader.length){
+            var pieces = setCookieHeader[0].split(";");
+            if(pieces.length > 0){
+                setCookie = pieces[0];
+            }
+        }
+
+        callback(null,body,setCookie);
     });
 }

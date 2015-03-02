@@ -13,23 +13,23 @@ var parseConfig = {
             //解析用正则
             "reg": /~"(\d+)(?:\\t)+(.*)(?:\\n)*/,
             //解析完成后返回的对象所包含的属性
-            "meta":["lineNum","text"]
+            "attrNames":["lineNum","text"]
         }
     },
     "parsePrintVal":{
         "var":{
             "reg":/~"\$\d+\s=\s(.+)"/,
-            "meta":["value"]
+            "attrNames":["value"]
         },
         "noSymbol":{
             "reg": /&"No symbol \\"(.*)\\" in current context/,
-            "meta":["varName"]
+            "attrNames":["varName"]
         }
     },
     "parseExit":{
         "normalExit":{
             "reg":/\(process\s(\d+)\)\sexited normally/,
-            "meta":["processId"],
+            "attrNames":["processId"],
             //解析到这个表示当前debug的程序退出了
             "exit":true
         }
@@ -37,23 +37,23 @@ var parseConfig = {
     "parseLocals":{
         "locals":{
             "reg":/~"(.*) = (.*)"/,
-            "meta":["varName","varVal"]
+            "attrNames":["varName","varVal"]
         },
         "noFrame":{
             "reg": /&"(No frame selected)/,
-            "meta":["msg"]
+            "attrNames":["msg"]
         }
     },
     "parseInfo":{
         "running":{
             "reg":/\*(running)/,
-            "meta":["msg"],
-            //是否是信息输出，是的话不会作为结果返回
+            "attrNames":["msg"],
+            //是否仅是信息输出，是的话不会作为结果返回，类似于log的作用，不是核心业务
             "info":true
         },
         "stopped":{
             "reg":/\*(stopped)/,
-            "meta":["msg"],
+            "attrNames":["msg"],
             "info":true
         }
     }
@@ -128,6 +128,12 @@ var methods = {
  * ojdebugger本身的一些配置属性，其中的根目录指项目的根目录
  */
 var settings = {
+    /**
+     * app本身的配置选项
+     */
+    "app":{
+        "port":23333
+    },
     /**
      * 项目路径相关配置
      */

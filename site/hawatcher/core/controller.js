@@ -10,9 +10,12 @@ var system = require('./system');
 exports.refresh = function(containers){
     var entries = convertToEntries(containers);
     //将新的配置写入HAProxy配置文件
-    system.write(entries);
-    //重启HAProxy
-    system.reload();
+    system.write(entries,function(err){
+        if(!err){
+            //重启HAProxy
+            system.reload();
+        }
+    });
 };
 
 /**

@@ -1,0 +1,70 @@
+********************windows下（基于vagrant）的构建手册********************
+·首先安装vagrant和virtualbox
+
+·获取vagrant的box文件（获取方式请参照附录1），该文件基于ubuntu14.10构建。（为什么要用14.10请看附录2）
+
+·在box文件所在目录下执行 vagrant box add base XXXX.box(你获取到的box文件名)，这个动作会把这个box文件添加到vagrant里面。之后在创建虚拟环境时会把这个事先存好的box文件复制到virtualbox里面，再启动virtualbox虚拟机执行。因此可以认为这个box文件是一个模板，本身不会被改变。命令里面的base指的是给存放在vagrant里面的这个box文件取名叫base。使用vagrant box remove base即可删除vagrant里面存的这个box文件。
+
+·克隆项目
+
+·把ojrunner/script/vagrant目录里面的文件复制到你的文件系统的任意一个目录下。目录中有有一个vagrant配置文件叫Vagrantfile，用来指定启动虚拟机的一些参数，如果能看懂的话可以改改内存啊网络啊什么的。在命令行中进入该目录。检查该Vagrantfile里面的config.vm.box = "base"部分，这一段代码指定了使用哪一个box文件启动。如果你的镜像不叫base请改成对应的镜像名
+
+·使用vagrant up启动虚拟机
+
+·启动后发现什么也没有发生，命令行又重新等待用户的输入了。因为这个时候virtualbox只是在后台运行，而不是经常见到的会有一个virtualbox界面出来。这个时候可以使用vagrant ssh直接连到刚刚开启的虚拟机，就可以操作ubuntu系统了。如果发现这样的连接方法存在一些显示上的问题，可以换用windows版本的Putty连接，连接需要的参数都显示在vagrant up的输出里面了。
+
+·进入/vagrant目录，这个目录其实就是windows下Vagrantfile所在的那个目录的映射。执行sudo ./init.sh即可完成剩下的所有安装过程。如果发现init.sh执行不了，很有可能是因为在windows下的换行符和linux下不一致的原因。这个时候sudo apt-get install dos2unix，再执行 dos2unix init.sh可以清洗一下init.sh文件，然后重新执行。
+
+·参考运行环境启动指南继续接下来的工作
+
+
+
+
+
+********************linux下的构建手册********************
+
+·克隆项目
+
+·ojrunner/script/setup目录，执行setup.sh即可完成所有安装过程
+
+·执行sudo gpasswd -a $USER docker && sudo su $USER，把当前用户加入docker组，这样使用docker相关命令就不用一直在开头输sudo了
+
+·参考运行环境启动指南继续接下来的工作
+
+
+
+
+
+*****运行环境启动指南(windows和linux通用，其中windows要在vagrant环境下执行)*****
+·先说一下这里要干什么事：把ojrunner项目和ojdebugger项目在docker里面启动。然后启动HAWatcher项目，实现复数的ojrunner和ojdebugger执行环境的负载均衡。
+其中：
+ojrunner负责接收用户的请求，编译执行之后返回结果和相关的运行参数，是状态无关的。
+ojdebugger同样负责接收用户的请求（当然请求的报文和ojrunner不同），编译后以debugger状态来运行（使用gdb实现），是状态有关的
+HAWatcher用来完全控制HAProxy（一个负载均衡软件），在实际的使用中只要启动HAWatcher即可，不用在意HAProxy。HAWatcher负责监视docker里面的ojrunner和ojdebugger运行环境，对HAProxy的配置进行动态的删减，从而能够实现比如每增加一个ojrunner的docker容器HAProxy就能立即覆盖到对其的负载均衡。这里要注意的是为了简单起见，一个HAWatcher只能用来监视docker里面的ojrunner或者ojdebugger，但不能同时监视。因此一般需要开启两个HAWatcher，分别监视ojrunner和ojdebugger，这两个的启动参数不同。
+
+具体步骤：
+·执行ojrunner的script文件夹类的up.sh，执行几次就会启动几个ojrunner的docker容器。
+
+·同样的方法启动ojdebugger的容器。
+
+·启动监视ojrunner的hawatcher，执行hawatcher的app.js：./app.js -r -p 8080 &，-r表示启动对runner的监视,-p表示给ojrunner的负载均衡后统一从外部访问的ip地址。即访问8080端口后由haproxy来进行负载均衡。这两个参数都是默认值，所以可以不写，直接执行./app.js &
+
+·启动监视ojdebugger的hawatcher：./app.js -d -p 8081
+
+·在Vagrantfile的配置中如果开启了8080和8081端口的转发，那么在windows宿主机上就可以直接通过转发的端口访问了。
+
+
+
+
+
+********************附录1：获取vagrant镜像********************
+我们需要的vagrant镜像要求基于ubuntu14.10,具体原因请参见附录2。
+
+·访问https://atlas.hashicorp.com/boxes/search，搜索14.10获取最近的官方ubuntu14.10 vagrant镜像。比如当前的镜像为https://cloud-images.ubuntu.com/vagrant/utopic/20150224/utopic-server-cloudimg-amd64-vagrant-disk1.box，可以直接用这个下载。
+
+
+
+
+
+********************附录2:使用ubuntu14.10的原因********************
+本项目在实现debug功能的时候使用了gdb。出于安全和性能考虑将gdb放在docker容器中运行。但是在测试时发现在ubuntu14.04的主机环境和ubuntu14.04的docker环境下gdb会发生运行错误。具体表现是gdb可以打断点但是运行程序的时候会跳过所有断点直接结束，同时报错。但是在开发环境(主机是14.10，docker是14.04)下就没有这样的问题。google上未发现很好的解答，推测是gdb遇到了权限问题。

@@ -23,6 +23,7 @@ exports.compile = function(srcFileType, srcFilePath, buildFilePath, callback){
     cp.execFile(compileShellPath,[compiler,srcFilePath,buildFilePath],options,
         function(err){
             if(err) return callback(err);
+
             callback();
     });
 };

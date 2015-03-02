@@ -5,25 +5,27 @@ var parser = {};
 module.exports = parser;
 
 //根据配置自动构建parser对外接口
-for(var func in parseConfig){
-    if(!parseConfig.hasOwnProperty(func)) continue;
-
-    (function(func){
-        //给parser对象添加一个接口
-        parser[func] = function(text){
+for(var methodName in parseConfig){
+    if(!parseConfig.hasOwnProperty(methodName)) continue;
+    //methodName即parser对外提供的解析方法的名字
+    (function(methodName){
+        //给parser对象添加一个方法
+        parser[methodName] = function(text){
             var lines = text.split('\n');
             var object = null;
 
-            var funcConfig = parseConfig[func];
-            //遍历每一类属性
-            for(var key in funcConfig){
-                if(!funcConfig.hasOwnProperty(key)) continue;
-                //取出该类的正则以及子属性名称列表
-                var attr = funcConfig[key];
-                var reg = attr.reg;
-                var metas = attr.meta;
-                var exit = attr.exit;
-                var info = attr.info;
+            //该方法的解析配置
+            var methodConfig = parseConfig[methodName];
+            //遍历配置内的每一类属性
+            for(var aspectName in methodConfig){
+                if(!methodConfig.hasOwnProperty(aspectName)) continue;
+
+                //取出该类别的正则、子属性名称列表等信息
+                var aspect = methodConfig[aspectName];
+                var reg = aspect.reg;
+                var attrNames = aspect.attrNames;
+                var exit = aspect.exit;
+                var info = aspect.info;
 
                 //遍历要解析的数据的每一行
                 lines.forEach(function(line){
@@ -31,21 +33,19 @@ for(var func in parseConfig){
                     if(!regResults) return;
 
                     object = object || {};
-                    object[key] = object[key] || {};
-                    for(var i=0; i<metas.length; i++){
-                        addValue(object[key],metas[i],regResults[i+1]);
+                    object[aspectName] = object[aspectName] || {};
+                    for(var i=0; i<attrNames.length; i++){
+                        addValue(object[aspectName],attrNames[i],regResults[i+1]);
                     }
                 });
             }
 
-            if(exit && object)
-                object.exit = true;
-            if(info && object)
-                object.info = true;
+            if(exit && object) object.exit = true;
+            if(info && object) object.info = true;
 
             return object;
         };
-    })(func);
+    })(methodName);
 }
 
 /**
