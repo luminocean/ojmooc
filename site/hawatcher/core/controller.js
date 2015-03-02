@@ -28,8 +28,10 @@ function convertToEntries(containers){
     for(var i=0; i<containers.length; i++){
         var container = containers[i];
         var entry = convert(container);
-        if(entry)
+        if(entry){
+            entry.isSticky = container.isSticky;
             entries.push(entry);
+        }
     }
     return entries;
 }

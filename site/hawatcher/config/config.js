@@ -27,11 +27,14 @@ var config = {
             //识别的字段
             "field":"Command",
             //识别的关键字
-            "keyword":"ojrunner"
+            "keyword":"ojrunner",
+            //需不需要添加cookie从而能够记忆之前被负载均衡到的服务器
+            "isSticky":false
         },
         "debugger":{
             "field":"Command",
-            "keyword":"ojdebugger"
+            "keyword":"ojdebugger",
+            "isSticky":true
         }
     }
 };

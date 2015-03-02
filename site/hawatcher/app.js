@@ -160,7 +160,7 @@ function getContainersOnHost(url,ip,callback){
     request(requestObj,function(err, response, body){
         if(err) return callback(err);
 
-        //从所有containers里面找出ojrunner的containers进行处理
+        //从所有containers里面找出当前hawatcher所负责的containers进行处理
         var allContainers = JSON.parse(body);
         var containers = [];
         for(var i=0; i<allContainers.length; i++){
@@ -186,6 +186,13 @@ function processContainerChanges(containers){
     if(util.isSame(containers, lastContainers)) return;
 
     console.log('docker列表发生变化，准备刷新HAProxy配置');
+
+    //设定负载这些containers的时候需不需要设定cookie，从而可以记忆之前负载均衡的服务器
+    var isSticky = mode.isSticky || false;
+    containers.forEach(function(container){
+        container.isSticky = isSticky;
+    });
+
     //否则根据新取到的容器信息刷新HAProxy
     lastContainers = containers;
     controller.refresh(containers);
