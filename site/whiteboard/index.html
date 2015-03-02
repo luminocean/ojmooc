@@ -10,15 +10,20 @@
 
 <div id="whiteboard">
     <div id="menu">
-        <button id="penButton" class="menuButton"></button>
-        <button id="textButton" class="menuButton"></button>
-        <button id="imageButton" class="menuButton"></button>
+        <button id="penButton" class="menuButton"></button><button id="penMenu" class="downMenu"></button>
+        <button id="textButton" class="menuButton"></button><button id="textMenu" class="downMenu"></button>
+        <button id="imageButton" class="menuButton"></button><button id="imageMenu" class="downMenu"></button>
 
         <button id="clearButton" class="menuButton"></button>
         <button id="redoButton" class="menuButton"></button>
         <button id="undoButton" class="menuButton"></button>
     </div>
     <div id="mainBoard">
+        <div>
+            <button id="aboutButton">说明</button>
+            <button id="addButton">添加</button>
+            <input id="add" type="text"/>
+        </div>
         <div id="graphBoard"></div>
     </div>
 
@@ -45,8 +50,9 @@
 <script src="js/whiteboard.js"></script>
 
 <script src="js/graphboard.js"></script>
+<script src="js/draw.js"></script>
 <script src="js/text.js"></script>
 <script src="js/graph.js"></script>
-
+<script src="js/quickAdd.js"></script>
 </body>
 </html>

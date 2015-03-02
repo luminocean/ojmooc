@@ -4,7 +4,7 @@
 //双击初始时间
 var dbClickStartTime;
 var textFont = "Arial";
-var textSize = "20px";
+var textSize = "10px";
 var textColor = "black";
 
 function getTextFont(){
@@ -50,12 +50,13 @@ function createText(xLoc,yLoc,x,y){
             zr.render();
         }
     });
+
 }
 
 
 //添加文本
 function addText(txt,x,y){
-    var shape = new Text({
+    var text = new Text({
         style: {
             text: txt,
             x: x,
@@ -65,12 +66,12 @@ function addText(txt,x,y){
         },
         draggable:true
     });
-    shape.bind("dragend",textDragged);
+    text.bind("dragend",textDragged);
 
     dbClickStartTime = new Date().getTime();
-    shape.bind("mousedown",dbClicked);
+    text.bind("mousedown",dbClicked);
 
-    zr.addShape(shape);
+    zr.addShape(text);
     zr.render();
     console.log("add text");
 }
@@ -119,6 +120,8 @@ function dbClicked(params){
     }
     dbClickStartTime = currentTime;
 }
+
+
 
 function editText(){
     var currentTime = new Date().getTime();

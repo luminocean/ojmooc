@@ -14,6 +14,8 @@ var graphBoard = $("#graphBoard")[0];
 var Base;
 var Text;
 var Circle;
+var Rectangle;
+var IsogonShape;
 var ImageShape;
 
 require.config({
@@ -33,6 +35,8 @@ require(
         "zrender/shape/Base",
         "zrender/shape/Text",
         "zrender/shape/Circle",
+        "zrender/shape/Rectangle",
+        "zrender/shape/Isogon",
         "zrender/shape/Image",
         "zrender/shape/BrokenLine"
     ],
@@ -42,37 +46,12 @@ require(
         Text = require("zrender/shape/Text");
         ImageShape = require('zrender/shape/Image');
         Circle = require("zrender/shape/Circle");
+        Rectangle = require("zrender/shape/Rectangle");
+        IsogonShape = require("zrender/shape/Isogon");
         Base = require("zrender/shape/Base");
 
 
-        //var BrokenLineShape = require('zrender/shape/BrokenLine');
-        //zr.addShape(new BrokenLineShape({
-        //    style : {
-        //        pointList : [[10, 10], [60, 100], [148, 130], [250, 40], [446, 100]],
-        //        lineWidth : 3,
-        //        text : 'brokenLine'
-        //    },
-        //    draggable:true
-        //}));
-
-
-
-        addText("text",100,100);
-        //addArray();
-        //addCircle();
-        //addStack();
-        //addQueue();
-        //addImage();
-
+        addImage();
         zr.render();
     }
 );
-
-
-
-
-
-//function changeToGraphBoard(){
-//    $("#drawBoard")[0].style.zIndex = 1;
-//    $("#graphBoard")[0].style.zIndex = 2;
-//}

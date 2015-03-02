@@ -3,22 +3,34 @@
  */
 var states = {
     free:"free",
-    text:"text"
+    text:"text",
+    pen:"pen",
+    graph:"graph"
 }
 
-var currentState = states.text;
-var timer = null;
+function Operation(){
+
+}
+
+var currentState = states.free;
+var dbClickTimer = null;
+var timer = 0;
+
+var whiteBoardSates = new Array();
+var objects = new Array();
+var operations = new Array();
 
 //双击回到初始状态
 $("#graphBoard").bind("dblclick",function(){
-    clearTimeout(timer);
+    clearTimeout(dbClickTimer);
     currentState = states.free;
 });
 
+//单击监听
 $("#graphBoard").bind("click",function(e){
-    clearTimeout(timer);
+    clearTimeout(dbClickTimer);
 
-    timer = setTimeout(function(){
+    dbClickTimer = setTimeout(function(){
         var xLoc = e.pageX - $("#graphBoard").offset().left;
         var yLoc = e.pageY - $("#graphBoard").offset().top;
 
@@ -26,9 +38,35 @@ $("#graphBoard").bind("click",function(e){
             case states.text:         //文本模式，点击界面添加文本
                 createText(e.pageX, e.pageY,xLoc,yLoc);
                 break;
+            case states.pen:
+                addLine(xLoc,yLoc);
+                break;
         }
     },300);
 });
+
+$("#penButton").bind("click",function(e){
+    changeToPenMode();
+});
+
+
+$("#penMenu").bind("click",function(e){
+    var xLoc = $("#penButton").offset().left;
+    var yLoc = $("#penButton").offset().top + $("#penButton").outerHeight(true);
+
+    var penStyle = $.layer({
+        type: 2,
+        shade:[1],
+        title: false,
+        closeBtn:false,
+        shadeClose:true,
+        border:[0],
+        offset:[yLoc.toString()+"px",xLoc.toString()+"px"],
+        area: ["400px","200px"],
+        iframe: {src : "penStyle.html"}
+    });
+})
+
 
 //文本按钮点击监听，添加文本
 $("#textButton").bind("click",function(e){
@@ -36,8 +74,7 @@ $("#textButton").bind("click",function(e){
 });
 
 //文本按钮点击监听，显示修改文本样式
-$("#textButton").bind("click",function(e){
-
+$("#textMenu").bind("click",function(e){
     var xLoc = $("#textButton").offset().left;
     var yLoc = $("#textButton").offset().top + $("#textButton").outerHeight(true);
 
@@ -54,13 +91,25 @@ $("#textButton").bind("click",function(e){
     });
 });
 
-//鼠标移出文本按钮监听，隐藏修改文本样式
-$("#textButton").bind("mouseleave",function(e){
-    //layer.close(textStyle);
+$("#imageButton").bind("mousedown",function(e){
+    changeToGraphMode();
 });
 
-$("#imageButton").bind("mousedown",function(e){
-    //changeToGraphMode();
+$("#imageMenu").bind("mousedown",function(e){
+    var xLoc = $("#imageButton").offset().left;
+    var yLoc = $("#imageButton").offset().top + $("#imageButton").outerHeight(true);
+
+    var graphs = $.layer({
+        type: 2,
+        shade:[1],
+        title: false,
+        closeBtn:false,
+        shadeClose:true,
+        border:[0],
+        offset:[yLoc.toString()+"px",xLoc.toString()+"px"],
+        area: ["250px","150px"],
+        iframe: {src : "graphs.html"}
+    });
 });
 
 //画笔键按下，开启画笔模式
@@ -89,6 +138,15 @@ $("#clearButton").bind("mousedown",function(e){
 
 function changeToTextMode(){
     currentState = states.text;
+}
+
+function changeToPenMode(){
+    currentState = states.pen;
+    newLine();
+}
+
+function changeToGraphMode(){
+    currentState = states.graph;
 }
 
 
