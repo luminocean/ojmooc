@@ -57,6 +57,14 @@ runner.setPort = function(port){
 };
 
 /**
+ * 设置runner的主机位置
+ * @param host
+ */
+runner.setHost = function(host){
+    this.host = host;
+};
+
+/**
  * 一个便利方法，组合了ebug+breakPoint+run操作
  * @param srcCode
  * @param srcType
@@ -213,6 +221,14 @@ dbr.exit = function(debugId,callback){
  */
 dbr.setPort = function(port){
     this.port = port;
+};
+
+/**
+ * 设置debugger的主机位置
+ * @param host
+ */
+dbr.setHost = function(host){
+    this.host = host;
 };
 
 /**

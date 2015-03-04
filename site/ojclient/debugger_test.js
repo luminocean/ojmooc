@@ -11,6 +11,8 @@ dbr.setPort(8081);
 //dbr.setPort(23333);
 //dbr.setPort(49154);
 
+//dbr.setHost('121.42.155.75');
+
 Q.longStackSupport = true;
 
 //测试的编译类型
