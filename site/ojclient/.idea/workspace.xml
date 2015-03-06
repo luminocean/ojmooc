@@ -1,7 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
+<<<<<<< HEAD
     <list default="true" id="582b7e87-3bf0-403b-b0ca-3ca91db83a7a" name="Default" comment="ojdebugger可返回调试中局部变量的列表（只能是简单变量）" />
+=======
+    <list default="true" id="582b7e87-3bf0-403b-b0ca-3ca91db83a7a" name="Default" comment="ojdebugger可返回调试中局部变量的列表（只能是简单变量）">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/input_data/cpp_code_backup" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../ojdebugger-gui/input_data/cpp_code_backup" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/input_data/cpp_data_backup" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../ojdebugger-gui/input_data/cpp_data_backup" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../ojdebugger/parser_test.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../ojdebugger/program/template.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app.js" afterPath="$PROJECT_DIR$/app.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../ojdebugger/shell/compile.sh" afterPath="$PROJECT_DIR$/../ojdebugger/shell/compile.sh" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../hawatcher/config/config.js" afterPath="$PROJECT_DIR$/../hawatcher/config/config.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../ojdebugger/config/config.js" afterPath="$PROJECT_DIR$/../ojdebugger/config/config.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/input_data/cpp_code" afterPath="$PROJECT_DIR$/input_data/cpp_code" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../ojdebugger-gui/input_data/cpp_code" afterPath="$PROJECT_DIR$/../ojdebugger-gui/input_data/cpp_code" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/debugger_test.js" afterPath="$PROJECT_DIR$/debugger_test.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../ojdebugger-gui/index.html" afterPath="$PROJECT_DIR$/../ojdebugger-gui/index.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../ojdebugger/core/parser.js" afterPath="$PROJECT_DIR$/../ojdebugger/core/parser.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+    </list>
+>>>>>>> e349cb0d749024baf1ef94256c659cb2b6937a19
     <ignored path="ojclient.iws" />
     <ignored path=".idea/workspace.xml" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -27,6 +48,7 @@
       <file leaf-file-name="app.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app.js">
           <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
             <state vertical-scroll-proportion="8.0939045" vertical-offset="127" max-vertical-offset="6260">
               <caret line="252" column="0" selection-start-line="252" selection-start-column="0" selection-end-line="252" selection-end-column="0" />
               <folding />
@@ -39,6 +61,10 @@
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0" vertical-offset="200" max-vertical-offset="720">
               <caret line="10" column="24" selection-start-line="10" selection-start-column="24" selection-end-line="10" selection-end-column="24" />
+=======
+            <state vertical-scroll-proportion="0.4676724" vertical-offset="7471" max-vertical-offset="9889">
+              <caret line="248" column="39" selection-start-line="248" selection-start-column="39" selection-end-line="248" selection-end-column="39" />
+>>>>>>> e349cb0d749024baf1ef94256c659cb2b6937a19
               <folding />
             </state>
           </provider>
@@ -47,8 +73,23 @@
       <file leaf-file-name="debugger_test.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/debugger_test.js">
           <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
             <state vertical-scroll-proportion="0.0" vertical-offset="560" max-vertical-offset="820">
               <caret line="28" column="32" selection-start-line="28" selection-start-column="32" selection-end-line="28" selection-end-column="32" />
+=======
+            <state vertical-scroll-proportion="0.0" vertical-offset="1025" max-vertical-offset="2015">
+              <caret line="43" column="6" selection-start-line="43" selection-start-column="6" selection-end-line="43" selection-end-column="6" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="cpp_code" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/input_data/cpp_code">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0" vertical-offset="343" max-vertical-offset="1488">
+              <caret line="22" column="29" selection-start-line="22" selection-start-column="29" selection-end-line="22" selection-end-column="29" />
+>>>>>>> e349cb0d749024baf1ef94256c659cb2b6937a19
               <folding />
             </state>
           </provider>
@@ -66,9 +107,9 @@
         <option value="$PROJECT_DIR$/.gitignore" />
         <option value="$PROJECT_DIR$/input_data/pas_code" />
         <option value="$PROJECT_DIR$/runner_test.js" />
-        <option value="$PROJECT_DIR$/app.js" />
         <option value="$PROJECT_DIR$/input_data/cpp_code" />
         <option value="$PROJECT_DIR$/debugger_test.js" />
+        <option value="$PROJECT_DIR$/app.js" />
       </list>
     </option>
   </component>
@@ -76,10 +117,15 @@
     <detection-done>true</detection-done>
   </component>
   <component name="ProjectFrameBounds">
+<<<<<<< HEAD
     <option name="x" value="-8" />
     <option name="y" value="-8" />
     <option name="width" value="1382" />
     <option name="height" value="744" />
+=======
+    <option name="width" value="1920" />
+    <option name="height" value="941" />
+>>>>>>> e349cb0d749024baf1ef94256c659cb2b6937a19
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="false">
     <OptionsSetting value="true" id="Add" />
@@ -132,7 +178,11 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
+<<<<<<< HEAD
               <option name="myItemId" value="node_modules" />
+=======
+              <option name="myItemId" value="input_data" />
+>>>>>>> e349cb0d749024baf1ef94256c659cb2b6937a19
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -154,6 +204,7 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/input_data" />
       <recent name="$PROJECT_DIR$" />
     </key>
   </component>
@@ -258,7 +309,11 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
+<<<<<<< HEAD
     <frame x="-8" y="-8" width="1382" height="744" extended-state="0" />
+=======
+    <frame x="0" y="0" width="1920" height="941" extended-state="6" />
+>>>>>>> e349cb0d749024baf1ef94256c659cb2b6937a19
     <editor active="false" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -266,7 +321,13 @@
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.15885799" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+<<<<<<< HEAD
       <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.14641288" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+=======
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.14989293" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.39855942" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.3667906" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+>>>>>>> e349cb0d749024baf1ef94256c659cb2b6937a19
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -312,12 +373,17 @@
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/app.js">
       <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="6260">
+=======
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="10199">
+>>>>>>> e349cb0d749024baf1ef94256c659cb2b6937a19
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
+<<<<<<< HEAD
     <entry file="file://$PROJECT_DIR$/runner_test.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="200" max-vertical-offset="720">
@@ -338,13 +404,23 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="240" max-vertical-offset="6260">
           <caret line="12" column="3" selection-start-line="12" selection-start-column="3" selection-end-line="12" selection-end-column="3" />
+=======
+    <entry file="file://$PROJECT_DIR$/app.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="9703">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+>>>>>>> e349cb0d749024baf1ef94256c659cb2b6937a19
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/debugger_test.js">
       <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
         <state vertical-scroll-proportion="0.0" vertical-offset="560" max-vertical-offset="820">
+=======
+        <state vertical-scroll-proportion="0.0" vertical-offset="591" max-vertical-offset="1271">
+>>>>>>> e349cb0d749024baf1ef94256c659cb2b6937a19
           <caret line="28" column="32" selection-start-line="28" selection-start-column="32" selection-end-line="28" selection-end-column="32" />
           <folding />
         </state>
@@ -564,22 +640,40 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/input_data/cpp_data">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="493">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="773">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/input_data/cpp_data_backup">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="773">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/input_data/cpp_code_backup">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="775">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/input_data/cpp_code">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.19496855" vertical-offset="93" max-vertical-offset="775">
-          <caret line="6" column="14" selection-start-line="6" selection-start-column="14" selection-end-line="6" selection-end-column="14" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="343" max-vertical-offset="1488">
+          <caret line="22" column="29" selection-start-line="22" selection-start-column="29" selection-end-line="22" selection-end-column="29" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/debugger_test.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="591" max-vertical-offset="1271">
-          <caret line="28" column="32" selection-start-line="28" selection-start-column="32" selection-end-line="28" selection-end-column="32" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="1025" max-vertical-offset="2015">
+          <caret line="43" column="6" selection-start-line="43" selection-start-column="6" selection-end-line="43" selection-end-column="6" />
           <folding />
         </state>
       </provider>
@@ -594,8 +688,13 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app.js">
       <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
         <state vertical-scroll-proportion="8.0939045" vertical-offset="127" max-vertical-offset="6260">
           <caret line="252" column="0" selection-start-line="252" selection-start-column="0" selection-end-line="252" selection-end-column="0" />
+=======
+        <state vertical-scroll-proportion="0.4676724" vertical-offset="7471" max-vertical-offset="9889">
+          <caret line="248" column="39" selection-start-line="248" selection-start-column="39" selection-end-line="248" selection-end-column="39" />
+>>>>>>> e349cb0d749024baf1ef94256c659cb2b6937a19
           <folding />
         </state>
       </provider>
