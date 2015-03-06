@@ -246,17 +246,7 @@ methodNames.forEach(function(methodName){
             if(err) return callback(err);
 
             var stdout = result.stdout;
-            var originLocals = result.locals;
-            var locals = null;
-            //调整locals返回值的格式
-            if(originLocals){
-                locals = {};
-                var varNames = originLocals.varName;
-                var varVals = originLocals.varVal;
-                for(var i=0;i<varNames.length;i++){
-                    locals[varNames[i]] = varVals[i];
-                }
-            }
+            var locals = result.locals;
 
             if(result.breakPoint)
                 return callback(null,false,result.breakPoint,stdout,locals);

@@ -8,7 +8,8 @@
 var parseConfig = {
     //parser对外提供的方法
     "parseStopPoint":{
-        //解析某一行获取有用的信息
+        //解析某一行获取有用的信息,在最后返回的结果中会有以该属性为key的一个对象
+        //该对象自身的属性即attrNames里指定的那些
         "breakPoint":{
             //解析用正则
             "reg": /~"(\d+)(?:\\t)+(.*)(?:\\n)*/,
@@ -35,15 +36,13 @@ var parseConfig = {
         }
     },
     "parseLocals":{
-        "locals":{
-            "reg":/~"(.*) = (.*)"/,
-            "attrNames":["varName","varVal"]
-        },
-        "noFrame":{
-            "reg": /&"(No frame selected)/,
-            "attrNames":["msg"]
-        }
+        //表示该方法将手动构建
+        "_auto":false,
+        //下面的空对象仅作为文档作用，表示本方法返回的对象可能有那些属性
+        "locals":{},
+        "noFrame":{}
     },
+    //基本就是用作殿后，防止一个gdb的info输出没有方法去截获
     "parseInfo":{
         "running":{
             "reg":/\*(running)/,
@@ -132,7 +131,8 @@ var settings = {
      * app本身的配置选项
      */
     "app":{
-        "port":23333
+        //"port":23333
+        "port":8081
     },
     /**
      * 项目路径相关配置
@@ -169,8 +169,8 @@ var settings = {
     "compile":{
         //某种源码后缀使用的编译器的配置
         "compiler":{
-            "c":"clang",
-            "cpp":"clang++",
+            "c":"gcc",
+            "cpp":"g++",
             "pas":"fpc",
             "bas":"fbc"
         },

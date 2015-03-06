@@ -9,7 +9,19 @@ for(var methodName in parseConfig){
     if(!parseConfig.hasOwnProperty(methodName)) continue;
     //methodName即parser对外提供的解析方法的名字
     (function(methodName){
-        //给parser对象添加一个方法
+
+        //过滤，如果该方法配置了_auto=false则不进行自动构建，直接跳过
+        var methodConfig = parseConfig[methodName];
+        //遍历配置内的每一类属性
+        for(var key in methodConfig){
+            if(!methodConfig.hasOwnProperty(key)) continue;
+
+            if(key === '_auto' && methodConfig[key] === false){
+                return;
+            }
+        }
+
+        //否则给parser对象添加一个方法
         parser[methodName] = function(text){
             var lines = text.split('\n');
             var object = null;
@@ -47,6 +59,54 @@ for(var methodName in parseConfig){
         };
     })(methodName);
 }
+
+//以下为特殊的定制解析方法
+/**
+ * 局部变量解析
+ * @param data
+ * @returns {{}}
+ */
+parser.parseLocals = function(data){
+    //截取处要处理的部分
+    var resolveArea = data.match(/(~[\S\s]*)\^done/)[1];
+
+    //把每行外面包的~" "去掉后拼在一起
+    var resolveText = "";
+    var areaLines = resolveArea.split(/\n/);
+    areaLines.forEach(function(line){
+        var lineMatches = line.match(/~\"(.*)\"/);
+        if(lineMatches)
+            resolveText += lineMatches[1];
+    });
+
+    //把合起来的大文本按照各个local变量切分开，此时里面的文本是转义过的
+    var escapedLocalTexts = resolveText.split(/\\n/).filter(function(element){
+        //剔除空行
+        if(element) return true;
+    });
+
+    //反转义一次
+    var localTexts = [];
+    escapedLocalTexts.forEach(function(escapedText){
+        var localText = escapedText.replace(/\\"/g,'"');
+        localTexts.push(localText);
+    });
+
+    var locals = {};
+    localTexts.forEach(function(localText){
+        var localTextMatches = localText.match(/(.*?)\s=\s(.*)/);
+        if(localTextMatches)
+            locals[localTextMatches[1]] = localTextMatches[2];
+    });
+
+    //构造返回的对象
+    var object = {};
+    object.locals = locals;
+    object.exit = false;
+    object.info = false;
+
+    return object;
+};
 
 /**
  * 给一个对象的某个属性添加值，如果没有这个属性则新建，如果已经有了就改变为数组继续添加

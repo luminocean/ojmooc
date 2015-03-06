@@ -1,19 +1,42 @@
-#include <iostream>
+#include<iostream>
+#include<string>
+#include<vector>
 
-using namespace std;
+using std::cout;
+using std::cin;
+using std::endl;
 
-int main ()
-{
-	int a,b,c;
+struct Tool{
+	std::string name;
+	int level;
+	std::vector<std::string> alias = {"aa","bb","cc"};
+	int data[3]; 
+};
 
-	cin>>a>>b>>c;
-
-	int acc = 0;
-	for(int i=0; i<500; i++){
-		acc = i*2;
+class Student{
+public:
+	Student(std::string name,int power):name(name),power(power){}
+	std::string greeting() const{
+		std::string greeting = "Hello I'm "+name;
+		return greeting;
 	}
+	std::string info() const{
+		return name+":"+std::to_string(power);	
+	}
+	void powerup(int delta){
+		power += delta;
+	}
+private:
+	std::string name;
+	int power;
+	Tool tool;
+};
 
-	cout<<"read:"<<a<<","<<b<<","<<c<<endl;
+int main(){
+	Student student("luMinO",100);
 
-	return 0 ;
+	cout<<student.greeting()<<endl;	
+	cout<<student.info()<<endl;	
+
+	return 0;
 }
