@@ -10,16 +10,9 @@ for(var methodName in parseConfig){
     //methodName即parser对外提供的解析方法的名字
     (function(methodName){
 
-        //过滤，如果该方法配置了_auto=false则不进行自动构建，直接跳过
-        var methodConfig = parseConfig[methodName];
-        //遍历配置内的每一类属性
-        for(var key in methodConfig){
-            if(!methodConfig.hasOwnProperty(key)) continue;
-
-            if(key === '_auto' && methodConfig[key] === false){
-                return;
-            }
-        }
+        //过滤，如果该方法配置了auto=false则不进行自动构建，直接跳过
+        if(parseConfig[methodName]['auto'] === false)
+            return;
 
         //否则给parser对象添加一个方法
         parser[methodName] = function(text){
@@ -67,50 +60,84 @@ for(var methodName in parseConfig){
  * @returns {{}}
  */
 parser.parseLocals = function(batch){
-    var resolveText = getResolveText(batch);
+    //要返回的对象
+    var object = null;
 
-    //把合起来的大文本按照各个local变量切分开，此时里面的文本是转义过的
+    //处理noFrame的情况
+    var noFrameMatch = batch.match(/&"(No frame selected)/);
+    if(noFrameMatch){
+        object = {};
+        object.noFrame = noFrameMatch[1];
+        return object;
+    }
+    //处理noLocals的情况
+    var noLocalsMatch = batch.match(/~"(No locals.)/);
+    if(noLocalsMatch){
+        object = {};
+        object.noLocals = noLocalsMatch[1];
+        return object;
+    }
+
+    //要解析的文本
+    var resolveText = getResolveText(batch);
+    //把合起来的大文本按照各个local变量切分开
     var localTexts = resolveText.split(/\\n/).filter(function(element){
         //剔除空行
         if(element) return true;
     });
 
-    var locals = {};
+    var locals = null;
     localTexts.forEach(function(localText){
         var localTextMatches = localText.match(/(.*?)\s=\s(.*)/);
-        if(localTextMatches)
+        if(localTextMatches){
+            //如果匹配到了，locals才不再是null
+            if(!locals) locals = locals || {};
             locals[localTextMatches[1]] = localTextMatches[2];
+        }
     });
 
-    //构造返回的对象
-    var object = {};
-    object.locals = locals;
-    object.exit = false;
-    object.info = false;
+    if(locals){
+        object = object || {};
+        object.locals = locals;
+    }
 
+
+    //返回的object可能是null，也可能包含locals属性
     return object;
 };
 
 parser.parsePrintVal = function(batch){
-    var resolveText = getResolveText(batch);
+    //要返回的对象
+    var object = null;
 
+    //处理noSymbol的情况
+    var noSymbolMatch = batch.match(/&"No symbol \\"(.*)\\" in current context/);
+    if(noSymbolMatch){
+        object = {};
+        object.noSymbol = noSymbolMatch[1];
+        return object;
+    }
+
+    var resolveText = getResolveText(batch);
     //把合起来的大文本按照各个local变量切分开
     var valueText = resolveText.replace(/\\n/,'');
 
-    var varObj = {};
+    var varObj = null;
     //分解键值对
     var localTextMatches = valueText.match(/(.*?)\s=\s(.*)/);
     if(localTextMatches){
+        if(!varObj) varObj = varObj || {};
+
         varObj.id = localTextMatches[1];
         varObj.value = localTextMatches[2];
     }
 
-    //构造返回的对象
-    var object = {};
-    object.var = varObj;
-    object.exit = false;
-    object.info = false;
+    if(varObj){
+        object = object || {};
+        object.var = varObj;
+    }
 
+    //返回的object可能是null，也可能包含var属性
     return object;
 };
 

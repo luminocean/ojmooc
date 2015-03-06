@@ -166,6 +166,7 @@ dbr.printVal = function(debugId,varName,callback){
             }
         },debugId,function(err,result){
             if(err) return callback(err);
+
             if(result.noSymbol){
                 return callback(new Error('变量'+varName+'不存在'));
             }

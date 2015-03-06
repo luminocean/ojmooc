@@ -64,9 +64,11 @@ function printVal(){
     }
 
     dbr.printVal(debugId,varName,function(err,value){
-        if(err) return display(err.message);
+        if(err) {
+            return display('varVal',err.message);
+        }
 
-        $('#varVal').val(value);
+        display('varVal',value);
     });
 }
 
@@ -146,5 +148,5 @@ function displayInfo(debugId,exit,breakPoint,stdout,locals){
 }
 
 function display(type,text){
-    $("#"+type).text(text);
+    $("#"+type).val(text);
 }
