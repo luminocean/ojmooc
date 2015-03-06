@@ -63,33 +63,16 @@ for(var methodName in parseConfig){
 //以下为特殊的定制解析方法
 /**
  * 局部变量解析
- * @param data
+ * @param batch
  * @returns {{}}
  */
-parser.parseLocals = function(data){
-    //截取处要处理的部分
-    var resolveArea = data.match(/(~[\S\s]*)\^done/)[1];
-
-    //把每行外面包的~" "去掉后拼在一起
-    var resolveText = "";
-    var areaLines = resolveArea.split(/\n/);
-    areaLines.forEach(function(line){
-        var lineMatches = line.match(/~\"(.*)\"/);
-        if(lineMatches)
-            resolveText += lineMatches[1];
-    });
+parser.parseLocals = function(batch){
+    var resolveText = getResolveText(batch);
 
     //把合起来的大文本按照各个local变量切分开，此时里面的文本是转义过的
-    var escapedLocalTexts = resolveText.split(/\\n/).filter(function(element){
+    var localTexts = resolveText.split(/\\n/).filter(function(element){
         //剔除空行
         if(element) return true;
-    });
-
-    //反转义一次
-    var localTexts = [];
-    escapedLocalTexts.forEach(function(escapedText){
-        var localText = escapedText.replace(/\\"/g,'"');
-        localTexts.push(localText);
     });
 
     var locals = {};
@@ -107,6 +90,51 @@ parser.parseLocals = function(data){
 
     return object;
 };
+
+parser.parsePrintVal = function(batch){
+    var resolveText = getResolveText(batch);
+
+    //把合起来的大文本按照各个local变量切分开
+    var valueText = resolveText.replace(/\\n/,'');
+
+    var varObj = {};
+    //分解键值对
+    var localTextMatches = valueText.match(/(.*?)\s=\s(.*)/);
+    if(localTextMatches){
+        varObj.id = localTextMatches[1];
+        varObj.value = localTextMatches[2];
+    }
+
+    //构造返回的对象
+    var object = {};
+    object.var = varObj;
+    object.exit = false;
+    object.info = false;
+
+    return object;
+};
+
+/**
+ * 把一段batch文本里面所有的~" "之间的内容取出来合并到一起,并把\"还原为"
+ * 起到还原gdb输出的效果
+ * @param batch
+ * @returns {string}
+ */
+function getResolveText(batch){
+    //截取处要处理的部分
+    var resolveArea = batch.match(/(~[\S\s]*)\^done/)[1];
+
+    //把每行外面包的~" "去掉后拼在一起
+    var resolveText = "";
+    var areaLines = resolveArea.split(/\n/);
+    areaLines.forEach(function(line){
+        var lineMatches = line.match(/~\"(.*)\"/);
+        if(lineMatches)
+            resolveText += lineMatches[1];
+    });
+
+    return resolveText.replace(/\\"/g,'"');
+}
 
 /**
  * 给一个对象的某个属性添加值，如果没有这个属性则新建，如果已经有了就改变为数组继续添加

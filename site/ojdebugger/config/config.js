@@ -8,23 +8,13 @@
 var parseConfig = {
     //parser对外提供的方法
     "parseStopPoint":{
-        //解析某一行获取有用的信息,在最后返回的结果中会有以该属性为key的一个对象
+        //解析某一行获取有用的信息,在最后返回的结果中可能会有以该属性为key的一个对象（并非一定有）
         //该对象自身的属性即attrNames里指定的那些
         "breakPoint":{
             //解析用正则
             "reg": /~"(\d+)(?:\\t)+(.*)(?:\\n)*/,
             //解析完成后返回的对象所包含的属性
             "attrNames":["lineNum","text"]
-        }
-    },
-    "parsePrintVal":{
-        "var":{
-            "reg":/~"\$\d+\s=\s(.+)"/,
-            "attrNames":["value"]
-        },
-        "noSymbol":{
-            "reg": /&"No symbol \\"(.*)\\" in current context/,
-            "attrNames":["varName"]
         }
     },
     "parseExit":{
@@ -35,12 +25,24 @@ var parseConfig = {
             "exit":true
         }
     },
-    "parseLocals":{
+    "parsePrintVal":{
         //表示该方法将手动构建
         "_auto":false,
-        //下面的空对象仅作为文档作用，表示本方法返回的对象可能有那些属性
-        "locals":{},
-        "noFrame":{}
+        //下面的空对象仅作为文档与参考作用，表示本方法返回的对象可能有那些属性
+        "var":{
+            "id":"",
+            "value":""
+        },
+        "noFrame":{
+            "reg":/&"No symbol \\"(.*)\\" in current context/
+        }
+    },
+    "parseLocals":{
+        "_auto":false,
+        "locals":{/*键值对*/},
+        "noFrame":{
+            "reg":/&"(No frame selected)/
+        }
     },
     //基本就是用作殿后，防止一个gdb的info输出没有方法去截获
     "parseInfo":{
