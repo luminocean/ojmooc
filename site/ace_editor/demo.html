@@ -1,14 +1,13 @@
 <html>
 	<head>
 		<style type="text/css">
-		    .editor {
+		    #editor {
                 width: 500px;
                 height: 400px;
                 margin-left: 30px;
                 font-size: 12px;
     	    }
             .optionPanel{
-                /*background-color: rgb(192,192,192);*/
                 width:500px;
                 height:30px;
                 margin-left: 30px;
@@ -23,7 +22,7 @@
 		</style>
         
 	</head>
-	<body>
+	<body onbeforeunload="check()">
         <div>
             <div id="optionPanel"   class="optionPanel">
                 <table>
@@ -44,9 +43,9 @@
                     <td>
                         <label>language:</label>
                         <select id="language" size="1" onchange="changeLanguage(this)">
-                            <option value="C/C++">C/C++</option>
+                            <option value="C/C++" selected = "selected">C/C++</option>
                             <option value="pascal">pascal</option>
-                            <option value="Qbasic" selected="selected">Qbasic</option>
+                            <option value="Qbasic">Qbasic</option>
                         </select>
                     </td>
                     <td>
@@ -55,7 +54,7 @@
                 </tr>
             </table>
             </div>
-            <div id="debugPanel"    class="optionPanel" style="display:none">
+            <div id="debugPanel" class="optionPanel" style="display:none">
                 <table>
                     <tr>
                         <td><input type="button" value="breakpoint"></td>
@@ -65,65 +64,27 @@
                     </tr>
                 </table>
             </div>
-            <div id="Qbasiceditor" class="editor">
-            REM get the area of triangle
-            DEF fnadd(b,h) = b * h
-            LET area = fnadd(4,5)
-            a = INT(4.5)
-            b = ABS(-4)
-            PRINT area,a,b
-            END
-        </div>
-            <div id="Pascaleditor"  class="editor" style="display:none">
-            (* Sort using bubble sort. *)
-            FOR i := size - 1 DOWNTO 1 DO
-            FOR j := 1 TO i DO 
-                IF arr[j] > arr[j + 1] THEN BEGIN
-                    tmp := arr[j];
-                    arr[j] := arr[j + 1];
-                    arr[j + 1] := tmp;
-                END;
-        </div>
-		    <div id="Ceditor" class="editor" style="display:none">
-            int main (){
-                int a, b=3; /* foobar */
-                a = b;
-                a+=2; // equivalent to a=a+2
-                cout << a;
-                #if VERBOSE >= 2
-                prints("trace message");
-                #endif
-                return 0;
-                }
-		</div>
-            <div id = "command"></div>
+            <div id="editor">
+            </div>
+            <div id = "command">
+            </div>
         </div>
         <script src="src/ace.js"></script>
 
         <script>
             function changeSize(item){
-                var editor = document.getElementsByClassName("editor");
-                for (var i = editor.length - 1; i >= 0; i--) {
-                    editor[i].style.fontSize = item.value;
-                };
+                var editor = document.getElementById('editor');
+                editor.style.fontSize = item.value;
             }
 
             function changeLanguage(item){
-                var Ceditor = document.getElementById("Ceditor");
-                var Pascaleditor = document.getElementById("Pascaleditor");
-                var Qbasiceditor = document.getElementById("Qbasiceditor");
+                var editor = ace.edit("editor");
                 if(item.value == "C/C++"){
-                    Ceditor.style.display = "block";
-                    Pascaleditor.style.display = "none";
-                    Qbasiceditor.style.display = "none";
+                    editor.getSession().setMode("ace/mode/c_cpp");
                 }else if(item.value == "pascal"){
-                    Ceditor.style.display = "none";
-                    Pascaleditor.style.display = "block";
-                    Qbasiceditor.style.display = "none";
+                    editor.getSession().setMode("ace/mode/pascal");
                 }else {
-                    Ceditor.style.display = "none";
-                    Pascaleditor.style.display = "none";
-                    Qbasiceditor.style.display = "block";
+                    editor.getSession().setMode("ace/mode/qbasic");
                 }
             }
 
@@ -140,17 +101,16 @@
                 optionPanel.style.display = "block";
                 debugPanel.style.display = "none";
             }
+
+            function check(){
+                document.getElementById("fontsize").value="12px";
+                document.getElementById("language").value="C/C++";
+            }
         </script>
 
     	<script>
-            var Ceditor = ace.edit("Ceditor");
-            Ceditor.getSession().setMode("ace/mode/c_cpp");
-
-            var Pascaleditor = ace.edit("Pascaleditor");
-            Pascaleditor.getSession().setMode("ace/mode/pascal");
-
-            var Qbasiceditor = ace.edit("Qbasiceditor");
-            Qbasiceditor.getSession().setMode("ace/mode/qbasic");
+            var editor = ace.edit("editor");
+            editor.getSession().setMode("ace/mode/c_cpp");
     	</script>
 
         <script type="text/javascript" charset="utf-8"></script>
