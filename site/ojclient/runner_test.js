@@ -10,8 +10,6 @@ runner.setPort(8080);
 //runner.setPort(49155);
 //runner.setPort(23333);
 
-//runner.setHost('121.42.155.75');
-
 //测试的编译类型
 var srcType = 'cpp';
 //读取测试用源文件

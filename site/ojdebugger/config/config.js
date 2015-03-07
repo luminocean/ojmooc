@@ -8,13 +8,22 @@
 var parseConfig = {
     //parser对外提供的方法
     "parseStopPoint":{
-        //解析某一行获取有用的信息,在最后返回的结果中可能会有以该属性为key的一个对象（并非一定有）
-        //该对象自身的属性即attrNames里指定的那些
+        //解析某一行获取有用的信息
         "breakPoint":{
             //解析用正则
             "reg": /~"(\d+)(?:\\t)+(.*)(?:\\n)*/,
             //解析完成后返回的对象所包含的属性
             "attrNames":["lineNum","text"]
+        }
+    },
+    "parsePrintVal":{
+        "var":{
+            "reg":/~"\$\d+\s=\s(.+)"/,
+            "attrNames":["value"]
+        },
+        "noSymbol":{
+            "reg": /&"No symbol \\"(.*)\\" in current context/,
+            "attrNames":["varName"]
         }
     },
     "parseExit":{
@@ -51,7 +60,6 @@ var parseConfig = {
             "attrNames":["msg"]
         }
     },
-    //基本就是用作殿后，防止一个gdb的info输出没有方法去截获
     "parseInfo":{
         "running":{
             "reg":/\*(running)/,
@@ -140,8 +148,7 @@ var settings = {
      * app本身的配置选项
      */
     "app":{
-        //"port":23333
-        "port":8081
+        "port":23333
     },
     /**
      * 项目路径相关配置
@@ -178,8 +185,8 @@ var settings = {
     "compile":{
         //某种源码后缀使用的编译器的配置
         "compiler":{
-            "c":"gcc",
-            "cpp":"g++",
+            "c":"clang",
+            "cpp":"clang++",
             "pas":"fpc",
             "bas":"fbc"
         },

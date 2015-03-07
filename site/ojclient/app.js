@@ -57,14 +57,6 @@ runner.setPort = function(port){
 };
 
 /**
- * 设置runner的主机位置
- * @param host
- */
-runner.setHost = function(host){
-    this.host = host;
-};
-
-/**
  * 一个便利方法，组合了ebug+breakPoint+run操作
  * @param srcCode
  * @param srcType
@@ -225,14 +217,6 @@ dbr.setPort = function(port){
 };
 
 /**
- * 设置debugger的主机位置
- * @param host
- */
-dbr.setHost = function(host){
-    this.host = host;
-};
-
-/**
  * 建立与运行相关的方法（run,continue,stepInto,stepOver），因为他们的逻辑是一样的
  * 回调函数的格式统一为： callback(err,exit,breakPoint,stdout,locals)
  */
@@ -247,7 +231,17 @@ methodNames.forEach(function(methodName){
             if(err) return callback(err);
 
             var stdout = result.stdout;
-            var locals = result.locals;
+            var originLocals = result.locals;
+            var locals = null;
+            //调整locals返回值的格式
+            if(originLocals){
+                locals = {};
+                var varNames = originLocals.varName;
+                var varVals = originLocals.varVal;
+                for(var i=0;i<varNames.length;i++){
+                    locals[varNames[i]] = varVals[i];
+                }
+            }
 
             if(result.breakPoint)
                 return callback(null,false,result.breakPoint,stdout,locals);

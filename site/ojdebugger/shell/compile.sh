@@ -28,9 +28,9 @@ case "$compiler" in
 	#qbasic
 	"fbc")
 		"$compiler" -lang qb "$srcPath" -x "$buildPath" -g;;
-	#其他，如clang,clang++,g++,gcc，注意这里的c++11是临时的参数，只用于测试方便
+	#其他，如clang,clang++
 	*)
-		"$compiler" -std=c++11 -g "$srcPath" -o "$buildPath";;
+		"$compiler" -g "$srcPath" -o "$buildPath";;
 esac
 
 if [ "$?" -ne 0 ];then

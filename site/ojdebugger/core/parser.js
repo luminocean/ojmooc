@@ -10,12 +10,7 @@ for(var methodName in parseConfig){
     if(!parseConfig.hasOwnProperty(methodName)) continue;
     //methodName即parser对外提供的解析方法的名字
     (function(methodName){
-
-        //过滤，如果该方法配置了auto=false则不进行自动构建，直接跳过
-        if(parseConfig[methodName]['auto'] === false)
-            return;
-
-        //否则给parser对象添加一个方法
+        //给parser对象添加一个方法
         parser[methodName] = function(text){
             var lines = text.split('\n');
             var object = null;
