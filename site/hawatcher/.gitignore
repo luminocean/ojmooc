@@ -31,4 +31,6 @@ node_modules
 # runtime files
 runtime
 
+.idea/workspace.xml
+
 
