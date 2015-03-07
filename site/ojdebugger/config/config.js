@@ -15,6 +15,14 @@ var parseConfig = {
             "reg": /~"(\d+)(?:\\t)+(.*)(?:\\n)*/,
             //解析完成后返回的对象所包含的属性
             "attrNames":["lineNum","text"]
+        },
+        "endSteppingRange":{
+            "reg": /\*stopped,reason="(end\-stepping\-range)"/,
+            "attrNames":["msg"]
+        },
+        "notRunning":{
+            "reg": /&"(The program is not being run)/,
+            "attrNames":["msg"]
         }
     },
     "parseExit":{
@@ -73,7 +81,9 @@ var parseConfig = {
 var methods = {
     "debug":{
       //该方法需要从请求中读取的参数的名称
+      //如果请求的json对象里面不含这些参数应当报错
       "paramNames":["srcCode","srcType","inputData"],
+      //result属性仅作为文档的作用，用于参考，表明返回值里面有什么
       "result":{
           //之后的会话中一直要使用的id
           "debugId":undefined
@@ -94,6 +104,7 @@ var methods = {
     },
     "printVal":{
         "paramNames":["debugId","varName"],
+        //该方法需要的解析方法的名称，对应parseConfig里面配置的方法
         "parseNames":['parsePrintVal','parseInfo']
     },
     "locals":{

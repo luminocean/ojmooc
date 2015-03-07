@@ -330,9 +330,11 @@ function doParses(batch,parseNames,finish){
     //如果经过了所有的parser方法但是还是没有结果或者不是info类的结果
     //跑到这里则抛错
     if(!result || !result.info) {
-        finish(new Error('没有一个解析方法可以解析batch的内容\n'
+        return finish(new Error('没有一个解析方法可以解析batch的内容\n'
             +'batch内容：'+batch));
     }
+
+    console.log(result);
 }
 
 /**

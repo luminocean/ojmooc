@@ -77,7 +77,7 @@ function stepInto(){
     if(!debugId) return console.error('找不到从服务器获取的debugId，是否正处于调试？');
 
     dbr.stepInto(debugId,function(err,exit,breakPoint,stdout,locals){
-        if(err) return callback(err);
+        if(err) return console.error(err);
 
         displayInfo(debugId,exit,breakPoint,stdout,locals);
     });
@@ -88,7 +88,7 @@ function stepOver(){
     if(!debugId) return console.error('找不到从服务器获取的debugId，是否正处于调试？');
 
     dbr.stepOver(debugId,function(err,exit,breakPoint,stdout,locals){
-        if(err) return callback(err);
+        if(err) return console.error(err);
 
         displayInfo(debugId,exit,breakPoint,stdout,locals);
     });
@@ -100,7 +100,7 @@ function ctn(){
     if(!debugId) return console.error('找不到从服务器获取的debugId，是否正处于调试？');
 
     dbr.continue(debugId,function(err,exit,breakPoint,stdout,locals){
-        if(err) return callback(err);
+        if(err) return console.error(err);
 
         displayInfo(debugId,exit,breakPoint,stdout,locals);
     });
@@ -111,7 +111,7 @@ function exit(){
     if(!debugId) return console.error('找不到从服务器获取的debugId，是否正处于调试？');
 
     dbr.exit(debugId,function(err,debugId){
-        if(err) return callback(err);
+        if(err) return console.error(err);
 
         display('DEBUG OVER:'+debugId);
     });

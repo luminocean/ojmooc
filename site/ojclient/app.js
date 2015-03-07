@@ -255,6 +255,12 @@ methodNames.forEach(function(methodName){
             if(result.normalExit)
                 return callback(null,true,result.normalExit,stdout,locals);
 
+            if(result.endSteppingRange)
+                return callback(null,false,result.endSteppingRange,stdout,locals);
+
+            if(result.notRunning)
+                return callback(null,false,result.notRunning,stdout,locals);
+
             callback(new Error('异常返回值'+JSON.stringify(result)));
         });
     }
