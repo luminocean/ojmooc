@@ -1,3 +1,4 @@
+var util = require('../util/util');
 var parseConfig = require('../config/config').parseConfig;
 
 //要导出的parser对象
@@ -27,6 +28,10 @@ for(var methodName in parseConfig){
 
                 //取出该类别的正则、子属性名称列表等信息
                 var aspect = methodConfig[aspectName];
+                //需要手动构建的属性直接跳过
+                if(aspect.auto === false)
+                    continue;
+
                 var reg = aspect.reg;
                 var attrNames = aspect.attrNames;
                 var exit = aspect.exit;
@@ -59,24 +64,9 @@ for(var methodName in parseConfig){
  * @param batch
  * @returns {{}}
  */
-parser.parseLocals = function(batch){
+parser.parseLocals = util.mergeMethod(parser,'parseLocals',function(batch){
     //要返回的对象
     var object = null;
-
-    //处理noFrame的情况
-    var noFrameMatch = batch.match(/&"(No frame selected)/);
-    if(noFrameMatch){
-        object = {};
-        object.noFrame = noFrameMatch[1];
-        return object;
-    }
-    //处理noLocals的情况
-    var noLocalsMatch = batch.match(/~"(No locals.)/);
-    if(noLocalsMatch){
-        object = {};
-        object.noLocals = noLocalsMatch[1];
-        return object;
-    }
 
     //要解析的文本
     var resolveText = getResolveText(batch);
@@ -101,22 +91,13 @@ parser.parseLocals = function(batch){
         object.locals = locals;
     }
 
-
     //返回的object可能是null，也可能包含locals属性
     return object;
-};
+});
 
-parser.parsePrintVal = function(batch){
+parser.parsePrintVal = util.mergeMethod(parser,'parsePrintVal',function(batch){
     //要返回的对象
     var object = null;
-
-    //处理noSymbol的情况
-    var noSymbolMatch = batch.match(/&"No symbol \\"(.*)\\" in current context/);
-    if(noSymbolMatch){
-        object = {};
-        object.noSymbol = noSymbolMatch[1];
-        return object;
-    }
 
     var resolveText = getResolveText(batch);
     //把合起来的大文本按照各个local变量切分开
@@ -139,7 +120,7 @@ parser.parsePrintVal = function(batch){
 
     //返回的object可能是null，也可能包含var属性
     return object;
-};
+});
 
 /**
  * 把一段batch文本里面所有的~" "之间的内容取出来合并到一起,并把\"还原为"

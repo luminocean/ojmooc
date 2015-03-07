@@ -20,6 +20,39 @@ exports.extend = function(obj1,obj2){
 };
 
 /**
+ * 合并一个对象的两个方法。
+ * ->如果object包含methodName方法，且返回值可转换为false
+ * 则调用newMethod，返回newMethod的返回值
+ * ->如果object包含methodName方法，且返回值可转换为true
+ * 则直接返回结果，不调用newMethod
+ * ->如果object不含methodName方法，则将newMethod作为object的methodName方法
+ * @param object
+ * @param methodName
+ * @param newMethod
+ * @returns {Function}
+ */
+exports.mergeMethod = function(object,methodName,newMethod){
+    //如果没有这个方法，直接添加
+    if(!object[methodName]){
+        object[methodName] = newMethod;
+        return;
+    }
+
+    //原来的方法
+    var originMethod = object[methodName];
+
+    return function(){
+        var originReturn = originMethod.apply(object,arguments);
+        //如果原来的方法有正常的返回值就直接返回
+        if(originReturn)
+            return originReturn;
+        //否则调用新方法
+        else
+            return newMethod.apply(object,arguments);
+    };
+};
+
+/**
  * 根据当前时间自动生成debugId
  * @returns {*}
  */

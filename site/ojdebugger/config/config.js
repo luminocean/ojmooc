@@ -26,20 +26,30 @@ var parseConfig = {
         }
     },
     "parsePrintVal":{
-        //表示该方法将手动构建,不再进行自动处理
-        "auto":false,
-        //下面的空对象仅作为文档与参考作用，表示本方法返回的对象可能有那些属性
         "var":{
-            "id":"",
-            "value":""
+            //表示该属性手动构建,不再进行自动处理
+            "auto":false
+            /*var属性里面包含id和value两个属性
+            分别表示查看变量时gdb输出的代号和这个变量的值*/
         },
-        "noSymbol":{}
+        "noSymbol":{
+            "reg":/&"(No symbol \\".*\\" in current context)/,
+            "attrNames":["msg"]
+        }
     },
     "parseLocals":{
-        "auto":false,
-        "locals":{/*键值对*/},
-        "noFrame":{},
-        "noLocals":{}
+        "locals":{
+            "auto":false
+            /*locals属性里面包含的都是键值对*/
+        },
+        "noFrame":{
+            "reg":/&"(No frame selected)/,
+            "attrNames":["msg"]
+        },
+        "noLocals":{
+            "reg":/~"(No locals.)/,
+            "attrNames":["msg"]
+        }
     },
     //基本就是用作殿后，防止一个gdb的info输出没有方法去截获
     "parseInfo":{
