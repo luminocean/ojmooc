@@ -57,6 +57,14 @@ runner.setPort = function(port){
 };
 
 /**
+ * 设置runner的主机位置
+ * @param host
+ */
+runner.setHost = function(host){
+    this.host = host;
+};
+
+/**
  * 一个便利方法，组合了ebug+breakPoint+run操作
  * @param srcCode
  * @param srcType
@@ -106,20 +114,20 @@ dbr.debug = function(srcCode,srcType,inputData,callback){
     //开启debug
     sendRequest.call(dbr,{
         "debug":{
-                "srcCode":srcCode,
-                "srcType":srcType,
-                "inputData":inputData
-            }
-        },null,function(err,result,setCookie){
-            if(err) return callback(err);
-            if(!result.debugId)
-                return console.error(new Error('异常返回值'+JSON.stringify(result)));
+            "srcCode":srcCode,
+            "srcType":srcType,
+            "inputData":inputData
+        }
+    },null,function(err,result,setCookie){
+        if(err) return callback(err);
+        if(!result.debugId)
+            return console.error(new Error('异常返回值'+JSON.stringify(result)));
 
-            //保存debugId与cookie文本的映射
-            cookieMap[result.debugId] = setCookie;
+        //保存debugId与cookie文本的映射
+        cookieMap[result.debugId] = setCookie;
 
-            callback(null,result.debugId);
-        });
+        callback(null,result.debugId);
+    });
 };
 
 /**
@@ -130,10 +138,10 @@ dbr.debug = function(srcCode,srcType,inputData,callback){
  */
 dbr.breakPoint = function(debugId,breakLines,callback){
     sendRequest.call(dbr,
-            {"breakPoint":{
-                "debugId":debugId,
-                "breakLines":breakLines
-            }
+        {"breakPoint":{
+            "debugId":debugId,
+            "breakLines":breakLines
+        }
         },debugId,function(err,result){
             if(err) return callback(err);
             if(!result.breakPointNum)
@@ -217,6 +225,14 @@ dbr.setPort = function(port){
 };
 
 /**
+ * 设置debugger的主机位置
+ * @param host
+ */
+dbr.setHost = function(host){
+    this.host = host;
+};
+
+/**
  * 建立与运行相关的方法（run,continue,stepInto,stepOver），因为他们的逻辑是一样的
  * 回调函数的格式统一为： callback(err,exit,breakPoint,stdout,locals)
  */
@@ -231,17 +247,7 @@ methodNames.forEach(function(methodName){
             if(err) return callback(err);
 
             var stdout = result.stdout;
-            var originLocals = result.locals;
-            var locals = null;
-            //调整locals返回值的格式
-            if(originLocals){
-                locals = {};
-                var varNames = originLocals.varName;
-                var varVals = originLocals.varVal;
-                for(var i=0;i<varNames.length;i++){
-                    locals[varNames[i]] = varVals[i];
-                }
-            }
+            var locals = result.locals;
 
             if(result.breakPoint)
                 return callback(null,false,result.breakPoint,stdout,locals);
@@ -278,7 +284,7 @@ function sendRequest(body,cookieId,callback){
 
     //拼出请求服务器的url，如果没有提供则设置为默认值
     requestObj.url = 'http://'+(this.host||'localhost')
-        +':'+(this.port||'23333');
+    +':'+(this.port||'23333');
     requestObj.body = body;
 
     //发送请求，返回获取的结果

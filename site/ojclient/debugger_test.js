@@ -11,6 +11,8 @@ dbr.setPort(8081);
 //dbr.setPort(23333);
 //dbr.setPort(49154);
 
+//dbr.setHost('121.42.155.75');
+
 Q.longStackSupport = true;
 
 //测试的编译类型
@@ -20,16 +22,37 @@ var srcCode = fs.readFileSync('./input_data/'+srcType+'_code','utf-8');
 //读取测试用数据
 var inputData = fs.readFileSync('./input_data/'+srcType+'_data','utf-8');
 
-for(var i=0; i<1; i++) {
-    Q.denodeify(dbr.launchDebug)(srcCode, srcType, inputData, [16])
-        .then(function (results) {
-            console.log(JSON.stringify(results));
-            return results[0];
-        })
-        .then(function(debugId){
-            return Q.denodeify(dbr.exit)(debugId);
-        })
-        .catch(function (err) {
-            console.error(err);
-        });
-}
+
+/*Q.denodeify(dbr.launchDebug)(srcCode, srcType, inputData, [16])
+ .then(function (results) {
+ console.log(JSON.stringify(results));
+ return results[0];
+ })
+ .then(function(debugId){
+ return Q.denodeify(dbr.exit)(debugId);
+ })
+ .catch(function (err) {
+ console.error(err);
+ });*/
+
+var currentDebugId = null;
+
+Q.denodeify(dbr.launchDebug)(srcCode, srcType, inputData, [39])
+    .then(function (results) {
+        console.log(JSON.stringify(results));
+        return results[0];
+    })
+    .then(function(debugId){
+        currentDebugId = debugId;
+        return Q.denodeify(dbr.printVal)(debugId,"student");
+    })
+    .then(function(value){
+        console.log("value:"+value);
+        return currentDebugId;
+    })
+    .then(function(debugId){
+        return Q.denodeify(dbr.exit)(debugId);
+    })
+    .catch(function (err) {
+        console.error(err);
+    });
