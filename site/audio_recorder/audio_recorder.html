@@ -9,7 +9,7 @@
             width: 10em;
         }
     </style>
-    <script src = "./RecordRTC.js"> </script>
+    <script src = "./library/RecordRTC.js"> </script>
     <script src = "./library/jquery-1.7.2.min.js"> </script>
 </head>
 <body>
@@ -82,9 +82,9 @@
                     recorder.stopRecording(function(url) {
                         audio.src = url;
                         audio.muted = false;
-                        //audio.play();  //消除停止录音后自动播放
+                        //audio.play();
 
-                        $("#audio-url-preview").innerHTML = '<a href="' + url + '" target="_blank">Recorded Audio URL</a>';
+                        $('#audio-url-preview').innerHTML = '<a href="' + url + '" target="_blank">Recorded Audio URL</a>';
                     });
             };
      </script>
