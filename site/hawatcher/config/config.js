@@ -11,7 +11,8 @@ var config = {
     "runtime":{
         "dir":"/runtime",
         "config":"*.cfg",
-        "pid":"*.pid"
+        "pid":"*.pid",
+        "watcherPid":"*.watcher.pid"
     },
     //对于docker的配置
     //docker的restful api参数，和inpectIps里面的ip地址组合起来就是完整的docker api地址

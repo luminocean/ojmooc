@@ -2,6 +2,7 @@
  * HAWatcher在系统层的模块，用于和文件系统以及shell交互
  */
 var path = require('path');
+var fs = require('fs');
 var cp =require('child_process');
 var config = require('../config/config');
 var util = require('../util/util');
@@ -17,6 +18,15 @@ var runtimePath = path.join(__dirname,'../', runtimeConfig.dir);
 //拼接出运行期文件路径
 var configFilePath = path.join(runtimePath,runtimeConfig.config.replace(/\*/,fileName));
 var pidFilePath = path.join(runtimePath,runtimeConfig.pid.replace(/\*/,fileName));
+var watcherPidFilePath
+    = path.join(runtimePath,runtimeConfig.watcherPid.replace(/\*/,fileName));
+
+//写入HAWatcher本身的pid
+//这里需要同步的写法，因为这个动作是一次性的，直到进程的结束
+exports.writeWatcherPid = function(){
+    fs.writeFileSync(watcherPidFilePath,process.pid);
+};
+
 
 exports.write = function(entries,callback){
     var configText = format(entries);
@@ -51,7 +61,7 @@ exports.cleanupRuntime = function(){
         //关掉Haproxy进程
         util.killProcess(pidFilePath);
         //删除运行期文件
-        util.deleteFile([configFilePath,pidFilePath]);
+        util.deleteFile([configFilePath,pidFilePath,watcherPidFilePath]);
         stopped = true;
     }
 };

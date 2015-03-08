@@ -1,4 +1,5 @@
 #!/usr/bin/nodejs
+var events = require('events');
 var request = require('request');
 var Q = require('q');
 var commander = require('commander');
@@ -22,16 +23,27 @@ if(commander.port){
     config.port = commander.port;
 }
 
-//开始周期性地检查docker容器变化
+//同步写入自己的pid,从而可以写脚本去通过写入的pid手动触发hawatcher的检查
+system.writeWatcherPid();
+
 inspectContainers();
-setInterval(inspectContainers, 5000);
+//十分钟检查一次
+setInterval(inspectContainers, 1000*60*10);
+
+var emitter = new events.EventEmitter();
+emitter.on('reinspect',function(){
+    console.log('手动刷新docker容器列表');
+    inspectContainers();
+});
 
 //设定进程退出时的行为
 process.on('SIGINT',exit);
 process.on('SIGTERM',exit);
 process.on('exit',exit);
 process.on('uncaughtException',exit);
-
+process.on('SIGUSR2', function(){
+    emitter.emit('reinspect');
+});
 
 /*
  * 检查docker内配置的容器是否有变化，如果有变化则刷新HAProxy的负载配置
