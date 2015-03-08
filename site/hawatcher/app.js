@@ -28,7 +28,7 @@ system.writeWatcherPid();
 
 inspectContainers();
 //十分钟检查一次
-setInterval(inspectContainers, 1000*60*10);
+setInterval(inspectContainers, config.inspectTimeInterval);
 
 var emitter = new events.EventEmitter();
 emitter.on('reinspect',function(){
@@ -41,6 +41,7 @@ process.on('SIGINT',exit);
 process.on('SIGTERM',exit);
 process.on('exit',exit);
 process.on('uncaughtException',exit);
+//收到信号时出发reinspect事件
 process.on('SIGUSR2', function(){
     emitter.emit('reinspect');
 });

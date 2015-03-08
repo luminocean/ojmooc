@@ -61,7 +61,7 @@ exports.cleanupRuntime = function(){
         //关掉Haproxy进程
         util.killProcess(pidFilePath);
         //删除运行期文件
-        util.deleteFile([configFilePath,pidFilePath]);
+        util.deleteFile([configFilePath,pidFilePath,watcherPidFilePath]);
         stopped = true;
     }
 };
