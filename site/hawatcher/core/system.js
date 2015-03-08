@@ -7,9 +7,9 @@ var cp =require('child_process');
 var config = require('../config/config');
 var util = require('../util/util');
 
-var refreshShellPath = path.join(__dirname,'../','/shell/refresh.sh');
-var reloadShellPath = path.join(__dirname,'../','/shell/reload.sh');
-var templateConfigFilePath = path.join(__dirname,'../','/config/haproxy.cfg');
+var refreshShellPath = path.join(__dirname,'../',config.shell.refresh);
+var reloadShellPath = path.join(__dirname,'../',config.shell.reload);
+var templateConfigFilePath = path.join(__dirname,'../',config.runtime.configTemplate);
 
 //准备运行期文件目录及文件名
 var fileName = util.generateFileName();
@@ -61,7 +61,7 @@ exports.cleanupRuntime = function(){
         //关掉Haproxy进程
         util.killProcess(pidFilePath);
         //删除运行期文件
-        util.deleteFile([configFilePath,pidFilePath,watcherPidFilePath]);
+        util.deleteFile([configFilePath,pidFilePath]);
         stopped = true;
     }
 };
@@ -74,7 +74,7 @@ function format(entries){
     var configText = '';
     for(var i=0; i<entries.length; i++){
         var entry = entries[i];
-        var setCookieStr = entry.isSticky?' check cookie '+entry.server:'';
+        var setCookieStr = entry.isSticky?' cookie '+entry.server:'';
 
         configText+='    server '+entry.server+' '+entry.ip+':'
             +entry.port + setCookieStr + '\\n';

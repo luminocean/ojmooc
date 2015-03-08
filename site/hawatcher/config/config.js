@@ -10,9 +10,16 @@ var config = {
     ],
     "runtime":{
         "dir":"/runtime",
+        "configTemplate":"/config/haproxy.cfg",
         "config":"*.cfg",
         "pid":"*.pid",
         "watcherPid":"*.watcher.pid"
+    },
+    "shell":{
+        "base":"/shell",
+        "refresh":"/shell/refresh.sh",
+        "reload":"/shell/reload.sh",
+        "kill":"/shell/kill.sh"
     },
     //对于docker的配置
     //docker的restful api参数，和inpectIps里面的ip地址组合起来就是完整的docker api地址

@@ -1,10 +1,9 @@
-var shell = require('shelljs');
-
 /**
  * 提供各种工具方法
  */
-var fs = require('fs');
 var path = require('path');
+var fs = require('fs');
+var shell = require('shelljs');
 var moment = require('moment');
 var config = require('../config/config');
 
@@ -37,9 +36,9 @@ exports.deleteFile = function(filePaths){
 };
 
 exports.killProcess = function(pidFilePath){
+    var killScript = path.join(__dirname,'..',config.shell.kill);
     //执行退出脚本
-    //TODO 这里要改为可配置的形式
-    var output = shell.exec('./shell/kill.sh '+pidFilePath).output;
+    var output = shell.exec(killScript+' '+pidFilePath).output;
     console.log(output);
 };
 
