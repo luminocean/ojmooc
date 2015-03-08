@@ -18,10 +18,10 @@
             Record Audio
         </h2>
 
-        <div class="inner" style="height: 5em;">
-            <audio id="audio" controls></audio>
-            <button id="record-audio">Record</button>
-            <button id="stop-recording-audio" disabled>Stop</button>
+        <div class="inner" style="height: 50px;width: 700px">
+            <audio id="audio" controls style="height: 50px;width: 300px"></audio>
+            <button id="record-audio" style="height: 30px;width: 70px">Record</button>
+            <button id="stop-recording-audio" disabled style="height: 30px;width: 70px">Stop</button>
             <h2 id="audio-url-preview"></h2>
         </div>
     </section>
@@ -84,7 +84,7 @@
                         audio.muted = false;
                         //audio.play();
 
-                        $('#audio-url-preview').innerHTML = '<a href="' + url + '" target="_blank">Recorded Audio URL</a>';
+                        document.getElementById('audio-url-preview').innerHTML = '<a href="' + url + '" target="_blank">Recorded Audio URL</a>';
                     });
             };
      </script>
