@@ -2,19 +2,21 @@
  * Created by blueking on 2015/3/7.
  */
 var mysql = require('../node_modules/mysql');
-exports.queryInfo = function(tablename,conditon,value) {
-    var database_name = 'ojmooc';
-    var table_name = tablename;
-
-    var client = mysql.createConnection({
+getConnect = function(){
+    var connect = mysql.createConnection({
         user: 'root',
         password: '123456'
     });
+    return connect;
+}
+exports.queryInfo = function(tablename,conditon,value) {
+    var connect = getConnect();
+    var table_name = tablename;
+    var database_name = 'ojmooc';
+    connect.connect();
+    connect.query("use " + database_name);
 
-    client.connect();
-    client.query("use " + database_name);
-
-    client.query(
+    connect.query(
         'SELECT * FROM '+table_name + ' where ' + conditon + ' = ?', [value],
         function selectCb(err, results, fields) {
             if (err) {
@@ -26,7 +28,41 @@ exports.queryInfo = function(tablename,conditon,value) {
                     console.log("%d\t%s\t%s", results[i].cid, results[i].cname, results[i].csection);
                 }
             }
-            client.end();
+            connect.end();
         }
     );
+}
+
+exports.insert = function(tablename,values){
+    var connect = getConnect();
+    var table_name = tablename;
+    var database_name = 'ojmooc';
+    connect.connect();
+    connect.query("use " + database_name);
+    connect.query('insert into ' + table_name + ' set ?',values,function(err,result){
+        if(err){
+            throw err;
+        }
+        else {
+            console.log("insert success");
+        }
+        connect.end();
+    });
+}
+
+exports.delete = function(tablename,condition,value){
+    var connect = getConnect();
+    var table_name = tablename;
+    var database_name = 'ojmooc';
+    connect.connect();
+    connect.query("use " + database_name);
+    connect.query('delete from ' + table_name + ' where ' + condition + ' = ?',value,function(err,result){
+        if(err){
+            throw err;
+        }
+        else {
+            console.log("delete success");
+        }
+        connect.end();
+    });
 }
