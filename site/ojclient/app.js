@@ -252,7 +252,8 @@ methodNames.forEach(function(methodName){
             var locals = result.locals;
 
             var resultValue = result.breakPoint || result.normalExit
-                || result.endSteppingRange || result.notRunning;
+                || result.endSteppingRange || result.notRunning
+                || result.noFileOrDirectory;
 
             if(resultValue)
                 return callback(null,result.finish||false,resultValue,stdout,locals);

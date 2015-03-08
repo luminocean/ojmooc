@@ -26,6 +26,11 @@ var parseConfig = {
             "reg": /&"(The program is not being run)/,
             "attrNames":["msg"],
             "finish":true
+        },
+        "noFileOrDirectory":{
+            "reg": /(No such file or directory)/,
+            "attrNames":["msg"],
+            "finish":true
         }
     },
     "parseExit":{
@@ -153,8 +158,8 @@ var settings = {
      * app本身的配置选项
      */
     "app":{
-        //"port":23333
-        "port":8081
+        "port":23333
+        //"port":8081
     },
     /**
      * 项目路径相关配置
