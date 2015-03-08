@@ -29,7 +29,7 @@ for(var methodName in parseConfig){
 
                 var reg = aspect.reg;
                 var attrNames = aspect.attrNames;
-                var exit = aspect.exit;
+                var finish = aspect.finish;
                 var info = aspect.info;
 
                 //遍历要解析的数据的每一行
@@ -42,11 +42,14 @@ for(var methodName in parseConfig){
                     for(var i=0; i<attrNames.length; i++){
                         addValue(object[aspectName],attrNames[i],regResults[i+1]);
                     }
-                });
-            }
 
-            if(exit && object) object.exit = true;
-            if(info && object) object.info = true;
+                    if(finish && object) object.finish = true;
+                    if(info && object) object.info = true;
+                });
+
+                //一旦某一个属性有结果了，就不再循环其他的属性了
+                if(object) break;
+            }
 
             return object;
         };

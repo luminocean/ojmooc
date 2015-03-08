@@ -334,7 +334,7 @@ function doParses(batch,parseNames,finish){
             +'batch内容：'+batch));
     }
 
-    console.log(result);
+    //console.log(result);
 }
 
 /**

@@ -18,19 +18,21 @@ var parseConfig = {
         },
         "endSteppingRange":{
             "reg": /\*stopped,reason="(end\-stepping\-range)"/,
-            "attrNames":["msg"]
+            "attrNames":["msg"],
+            //表示运行是否结束的flag
+            "finish":true
         },
         "notRunning":{
             "reg": /&"(The program is not being run)/,
-            "attrNames":["msg"]
+            "attrNames":["msg"],
+            "finish":true
         }
     },
     "parseExit":{
         "normalExit":{
             "reg":/\(process\s(\d+)\)\sexited normally/,
             "attrNames":["processId"],
-            //解析到这个表示当前debug的程序退出了
-            "exit":true
+            "finish":true
         }
     },
     "parsePrintVal":{

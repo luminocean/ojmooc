@@ -138,12 +138,14 @@ dbr.debug = function(srcCode,srcType,inputData,callback){
  */
 dbr.breakPoint = function(debugId,breakLines,callback){
     sendRequest.call(dbr,
-        {"breakPoint":{
-            "debugId":debugId,
-            "breakLines":breakLines
-        }
+        {
+            "breakPoint":{
+                "debugId":debugId,
+                "breakLines":breakLines
+            }
         },debugId,function(err,result){
             if(err) return callback(err);
+
             if(!result.breakPointNum)
                 return console.error(new Error('异常返回值'+JSON.stringify(result)));
 
@@ -234,7 +236,7 @@ dbr.setHost = function(host){
 
 /**
  * 建立与运行相关的方法（run,continue,stepInto,stepOver），因为他们的逻辑是一样的
- * 回调函数的格式统一为： callback(err,exit,breakPoint,stdout,locals)
+ * 回调函数的格式统一为： callback(err,finish,breakPoint,stdout,locals)
  */
 var methodNames = ['run','continue','stepInto','stepOver'];
 methodNames.forEach(function(methodName){
@@ -249,17 +251,11 @@ methodNames.forEach(function(methodName){
             var stdout = result.stdout;
             var locals = result.locals;
 
-            if(result.breakPoint)
-                return callback(null,false,result.breakPoint,stdout,locals);
+            var resultValue = result.breakPoint || result.normalExit
+                || result.endSteppingRange || result.notRunning;
 
-            if(result.normalExit)
-                return callback(null,true,result.normalExit,stdout,locals);
-
-            if(result.endSteppingRange)
-                return callback(null,false,result.endSteppingRange,stdout,locals);
-
-            if(result.notRunning)
-                return callback(null,false,result.notRunning,stdout,locals);
+            if(resultValue)
+                return callback(null,result.finish||false,resultValue,stdout,locals);
 
             callback(new Error('异常返回值'+JSON.stringify(result)));
         });

@@ -47,10 +47,10 @@ function launchDebug(){
     util.getData(programSuffix,function(err,sourceCode,inputData){
         if(err) return console.error(err.stack);
 
-        dbr.launchDebug(sourceCode,programSuffix,inputData,breakLines,function(err,debugId,exit,breakPoint,stdout,locals){
+        dbr.launchDebug(sourceCode,programSuffix,inputData,breakLines,function(err,debugId,finish,breakPoint,stdout,locals){
             if(err) return console.error(err.stack);
 
-            displayInfo(debugId,exit,breakPoint,stdout,locals);
+            displayInfo(debugId,finish,breakPoint,stdout,locals);
         });
     });
 }
@@ -76,10 +76,10 @@ function stepInto(){
     var debugId = $('#debugId').val();
     if(!debugId) return console.error('找不到从服务器获取的debugId，是否正处于调试？');
 
-    dbr.stepInto(debugId,function(err,exit,breakPoint,stdout,locals){
+    dbr.stepInto(debugId,function(err,finish,breakPoint,stdout,locals){
         if(err) return console.error(err);
 
-        displayInfo(debugId,exit,breakPoint,stdout,locals);
+        displayInfo(debugId,finish,breakPoint,stdout,locals);
     });
 }
 
@@ -87,10 +87,10 @@ function stepOver(){
     var debugId = $('#debugId').val();
     if(!debugId) return console.error('找不到从服务器获取的debugId，是否正处于调试？');
 
-    dbr.stepOver(debugId,function(err,exit,breakPoint,stdout,locals){
+    dbr.stepOver(debugId,function(err,finish,breakPoint,stdout,locals){
         if(err) return console.error(err);
 
-        displayInfo(debugId,exit,breakPoint,stdout,locals);
+        displayInfo(debugId,finish,breakPoint,stdout,locals);
     });
 }
 
@@ -99,10 +99,10 @@ function ctn(){
     var debugId = $('#debugId').val();
     if(!debugId) return console.error('找不到从服务器获取的debugId，是否正处于调试？');
 
-    dbr.continue(debugId,function(err,exit,breakPoint,stdout,locals){
+    dbr.continue(debugId,function(err,finish,breakPoint,stdout,locals){
         if(err) return console.error(err);
 
-        displayInfo(debugId,exit,breakPoint,stdout,locals);
+        displayInfo(debugId,finish,breakPoint,stdout,locals);
     });
 }
 
@@ -120,15 +120,15 @@ function exit(){
 /**
  * 将返回的数据填充到界面的对应位置上
  * @param debugId
- * @param exit
+ * @param finish
  * @param breakPoint
  * @param stdout
  * @param locals
  */
-function displayInfo(debugId,exit,breakPoint,stdout,locals){
+function displayInfo(debugId,finish,breakPoint,stdout,locals){
     $("#debugId").val(debugId);
     display('response','debugId:'+debugId
-    +'\nexit:'+exit
+    +'\nfinish:'+finish
     +'\nbreakPoint:'+JSON.stringify(breakPoint)
     +'\nstdout:'+JSON.stringify(stdout)
     +'\nlocals:'+JSON.stringify(locals));
