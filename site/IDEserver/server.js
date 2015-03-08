@@ -1,19 +1,10 @@
 // server.js
-// load the things we need
-var fs = require('fs');
-var runner = require('../ojclient/app.js').runner;
 
+//var runner = require('../ojclient/app.js').runner;
 var express = require('express');
 var app = express();
 
-// set the view engine to ejs
 app.set('view engine', 'ejs');
-
-
-
-
-
-// use res.render to load up an ejs view file
 
 // index page
 app.get('/', function(req, res) {
@@ -22,7 +13,7 @@ app.get('/', function(req, res) {
         { name: 'Martini', drunkness: 5 },
         { name: 'Scotch', drunkness: 10 }
     ];
-    var tagline = "Any code of your own that you haven't looked at for six or more months might as well have been written by someone else.";
+    var tagline = "Hello,World!";
 
     res.render('pages/index', {
         drinks: drinks,
@@ -31,24 +22,23 @@ app.get('/', function(req, res) {
 });
 
 // about page
-app.get('/about', function(req, res) {
-    res.render('pages/about');
-});
 
-app.get('/begin', function (req,res) {
-    runner.setPort(8080);
-    var srcType = 'cpp';
+app.get('/IDE', function (req,res) {
+    //runner.setPort(8080);
+    //runner.setHost('121.42.155.75');
+    //var srcType = 'pas';
     //读取测试用源文件
-    var srcCode = fs.readFileSync('../ojclient/input_data/'+srcType+'_code','utf-8');
+    //var srcCode = fs.readFileSync('../ojclient/input_data/'+srcType+'_code','utf-8');
     //读取测试用数据
-    var inputData = fs.readFileSync('../ojclient/input_data/'+srcType+'_data','utf-8');
-    for(var i=0; i<5; i++){
-        runner.run(srcCode,srcType,inputData,function(err,result,params,host) {
-            if (err) return console.error(err);
+    //var inputData = fs.readFileSync('../ojclient/input_data/'+srcType+'_data','utf-8');
+    //    runner.run(srcCode,srcType,inputData,function(err,result,params,host) {
+    //        if (err) return console.error(err);
 
-            res.send(host+':\n'+result + JSON.stringify(params));
-        });
-    }
+    //        res.render('pages/about',{
+    //            result:result
+    //        })
+    //    });
+    res.render('pages/IDE');
 })
 
 app.listen(8080);

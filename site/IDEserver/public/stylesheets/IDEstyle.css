@@ -1,0 +1,18 @@
+#editor {
+    width: 500px;
+    height: 400px;
+    margin-left: 30px;
+    font-size: 12px;
+}
+.optionPanel{
+    width:500px;
+    height:30px;
+    margin-left: 30px;
+    font-family: sans-serif;
+}
+#command{
+    border: groove;
+    width:500px;
+    height:150px;
+    margin-left: 30px;
+}
