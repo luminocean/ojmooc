@@ -38,7 +38,7 @@ if [ ! -f "$report_path/${exe_name}_rawmemusg.txt" ];then
         (/usr/bin/time -v "$build_path/$exe_name">/dev/null) 2>&1 \
         | sed -n '10p' | awk '{print $6}')
     max_rss=$((max_rss*1000))
-    echo "rss $max_rss" >> "$report_path/${exe_name}".txt
+    echo "mem $max_rss" >> "$report_path/${exe_name}".txt
     exit 0
 fi
 
