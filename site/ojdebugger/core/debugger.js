@@ -15,8 +15,85 @@ var config = require('../config/config').settings;
 var dbr = {};
 module.exports = dbr;
 
-//存放所有gdb进程的map对象
-var gdbMap = {};
+//存放所有gdb进程的对象
+var gdbContainer = {
+    "gdbMap":{},
+    "timeoutMap":{},
+    /**
+     * 将gdb进程对象放入map中
+     * @param debugId
+     * @param gdb
+     */
+    "put":function(debugId,gdb){
+        this.gdbMap[debugId] = gdb;
+        this.initTimeout(debugId);
+    },
+    /**
+     * 根据debugId获取debugId对应的gdb进程对象
+     * 同时重置对应的计时器。一旦超时改gdb进程将会被退出
+     * @param debugId
+     */
+    "fetch":function(debugId){
+        this.initTimeout(debugId);
+        return this.gdbMap[debugId];
+    },
+    /**
+     * 初始化gdb的超时时间，然后每秒递减直到超时
+     * @param debugId
+     */
+    "initTimeout":function(debugId){
+        if(this.gdbMap[debugId]){
+            this.timeoutMap[debugId] = config.app.gdbTimeout;
+        }
+    },
+    /**
+     * 递减gdb时间，如果小于0则回收该gdb进程
+     * @param debugId
+     */
+    "decrease":function(debugId){
+        if(this.gdbMap[debugId] && (this.timeoutMap[debugId] !== undefined)){
+            var timeout = --this.timeoutMap[debugId];
+            //超时
+            if(timeout < 0){
+                this.clear(debugId);
+            }
+        }
+    },
+    /**
+     * 退出gdb进程，清除map数据
+     * @param debugId
+     */
+    "clear":function(debugId){
+        //退出gdb进程
+        dbr.exit(debugId,function(err/*,result*/){
+            if(err) throw err;
+            //console.log(result);
+        });
+        delete this.gdbMap[debugId];
+        delete this.timeoutMap[debugId];
+    },
+    /**
+     * 把每个debugId对应的时间递减，并退出超时的进程
+     * 每个周期执行一次
+     */
+    "tick":function(){
+        var ids = [];
+        for(var debugId in this.gdbMap){
+            if(!this.gdbMap.hasOwnProperty(debugId)) continue;
+            ids.push(debugId);
+        }
+        var that = this;
+        ids.forEach(function(debugId){
+            that.decrease(debugId);
+            //console.log('剩余时间：'+that.timeoutMap[debugId]);
+        });
+    }
+};
+
+//每秒tick一次
+setInterval(function(){
+    gdbContainer.tick();
+},1000);
 
 var srcPath = path.join(__dirname, '../', config.repo.dir.src);
 var buildPath = path.join(__dirname, '../', config.repo.dir.build);
@@ -34,7 +111,7 @@ for(var methodName in methods){
     (function(methodName,methodConfig){
         dbr[methodName] = function(debugId,callback){
             //取出gdb实例
-            var gdb = gdbMap[debugId];
+            var gdb = gdbContainer.fetch(debugId);
             if(!gdb)
                 return callback(new Error('找不到debugId '+debugId+' 对应的进程'));
 
@@ -92,7 +169,7 @@ dbr.debug = function(srcCode,srcType,inputData,callback){
         .then(function(){
             //开启gdb子进程
             var gdb = cp.spawn('gdb',['--interpreter=mi',buildFilePath]);
-            gdbMap[debugId] = gdb;
+            gdbContainer.put(debugId,gdb);
 
             var data = '';
             gdb.stdout.on('data',function(chunk){
@@ -132,7 +209,7 @@ dbr.debug = function(srcCode,srcType,inputData,callback){
  * @param callback
  */
 dbr.breakPoint = function(debugId,breakLines,callback){
-    var gdb = gdbMap[debugId];
+    var gdb = gdbContainer.fetch(debugId);
     if(!gdb)
         return callback(new Error('找不到debugId '+debugId+' 对应的进程'));
 
@@ -170,7 +247,7 @@ dbr.breakPoint = function(debugId,breakLines,callback){
  * @param callback
  */
 dbr.printVal = function(debugId,varName,callback){
-    var gdb = gdbMap[debugId];
+    var gdb = gdbContainer.fetch(debugId);
     if(!gdb)
         return callback(new Error('找不到debugId '+debugId+' 对应的进程'));
 
@@ -194,7 +271,7 @@ dbr.printVal = function(debugId,varName,callback){
  * @returns {*}
  */
 dbr.locals = function(debugId,callback){
-    var gdb = gdbMap[debugId];
+    var gdb = gdbContainer.fetch(debugId);
     if(!gdb)
         return callback(new Error('找不到debugId '+debugId+' 对应的进程'));
 
@@ -221,7 +298,7 @@ dbr.locals = function(debugId,callback){
  * @returns {*}
  */
 dbr.run = function(debugId,callback){
-    var gdb = gdbMap[debugId];
+    var gdb = gdbContainer.fetch(debugId);
     if(!gdb)
         return callback(new Error('找不到debugId '+debugId+' 对应的进程'));
 
@@ -256,14 +333,17 @@ dbr.run = function(debugId,callback){
  * @param callback
  */
 dbr.exit = function(debugId,callback){
-    var gdb = gdbMap[debugId];
+    var gdb = gdbContainer.fetch(debugId);
     if(!gdb)
         return callback(new Error('找不到debugId '+debugId+' 对应的进程'));
 
     gdb.on('exit',function(){
         console.log(debugId+' EXIT resolve');
 
-        delete gdb[debugId];
+        //清除数据,注意这里不能调用gdbContainer的clear方法，会造成循环调用
+        delete gdbContainer.gdbMap[debugId];
+        delete gdbContainer.timeoutMap[debugId];
+
         var result = methods['exit'].result;
         result.debugId = debugId;
 

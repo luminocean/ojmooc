@@ -37,14 +37,14 @@ var inputData = fs.readFileSync('./input_data/'+srcType+'_data','utf-8');
 
 var currentDebugId = null;
 
-Q.denodeify(dbr.launchDebug)(srcCode, srcType, inputData, [39])
+Q.denodeify(dbr.launchDebug)(srcCode, srcType, inputData, [27])
     .then(function (results) {
         console.log(JSON.stringify(results));
         return results[0];
     })
     .then(function(debugId){
         currentDebugId = debugId;
-        return Q.denodeify(dbr.printVal)(debugId,"student");
+        return Q.denodeify(dbr.printVal)(debugId,"acc");
     })
     .then(function(value){
         console.log("value:"+value);
