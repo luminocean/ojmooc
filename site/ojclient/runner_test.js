@@ -6,9 +6,9 @@ var fs = require('fs');
 var runner = require('./app.js').runner;
 
 //设置访问runner的端口
-//runner.setPort(8080);
+runner.setPort(8080);
 //runner.setPort(49154);
-runner.setPort(23333);
+//runner.setPort(23333);
 
 //runner.setHost('121.42.155.75');
 

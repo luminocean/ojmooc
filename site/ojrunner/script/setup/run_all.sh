@@ -11,6 +11,13 @@ function get_ojmooc_path(){
     echo "$ojmooc_path"
 }
 
+#获取当前路径
+function get_current_path(){
+    local rl=$(readlink -f $0)
+    local dir=$(dirname $rl)
+    echo "$dir"
+}
+
 #site目录
 site_path=$(get_ojmooc_path)"/site"
 
@@ -19,12 +26,16 @@ if [ ! -d "$site_path" ];then
     exit 0
 fi
 
+echo "关闭已开启的docker环境以及负载均衡"
+current_path=$(get_current_path)
+"${current_path}/destroy_all.sh"
+
 echo "开启runner和debugger的docker环境..."
 runner_up_script_path="${site_path}/ojrunner/script/up.sh"
 debugger_up_script_path="${site_path}/ojdebugger/script/up.sh"
 
 #一起开启多少个runner以及debugger
-up_num=1
+up_num=3
 
 counter=0
 while [ "$counter" -lt "$up_num" ]

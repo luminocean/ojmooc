@@ -95,10 +95,10 @@ setInterval(function(){
     gdbContainer.tick();
 },1000);
 
-var srcPath = path.join(__dirname, '../', config.repo.dir.src);
-var buildPath = path.join(__dirname, '../', config.repo.dir.build);
-var inputPath = path.join(__dirname, '..', config.repo.dir.input);
-var outputPath = path.join(__dirname, '..', config.repo.dir.output);
+var srcPath = util.absPath(config.repo.dir.src);
+var buildPath = util.absPath(config.repo.dir.build);
+var inputPath = util.absPath(config.repo.dir.input);
+var outputPath = util.absPath(config.repo.dir.output);
 
 //使用配置对象自动构建常规的debugger方法
 for(var methodName in methods){
@@ -319,9 +319,9 @@ dbr.run = function(debugId,callback){
     //这里gdb的r命令需要使用特殊的写法，设置输入输出的重定向
     var runCommand = 'r '
         //输入数据重定向
-        +' <'+path.join(__dirname,'../',config.repo.dir.input,debugId+'.txt')
+        +' <'+path.join(util.absPath(config.repo.dir.input),debugId+'.txt')
         //输出数据重定向
-        +' >'+path.join(__dirname,'../',config.repo.dir.output,debugId+'.txt')
+        +' >'+path.join(util.absPath(config.repo.dir.output),debugId+'.txt')
         +'\n';
 
     gdb.stdin.write(runCommand);

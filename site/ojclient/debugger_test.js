@@ -22,19 +22,6 @@ var srcCode = fs.readFileSync('./input_data/'+srcType+'_code','utf-8');
 //读取测试用数据
 var inputData = fs.readFileSync('./input_data/'+srcType+'_data','utf-8');
 
-
-/*Q.denodeify(dbr.launchDebug)(srcCode, srcType, inputData, [16])
- .then(function (results) {
- console.log(JSON.stringify(results));
- return results[0];
- })
- .then(function(debugId){
- return Q.denodeify(dbr.exit)(debugId);
- })
- .catch(function (err) {
- console.error(err);
- });*/
-
 var currentDebugId = null;
 
 Q.denodeify(dbr.launchDebug)(srcCode, srcType, inputData, [27])

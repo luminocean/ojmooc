@@ -169,11 +169,11 @@ var settings = {
     "repo": {
         //源码文件、可执行文件、报告文件所在的目录
         "dir": {
-            "base":"/repo",
-            "src": "/repo/src",
-            "build": "/repo/build",
-            "input": "/repo/input",
-            "output": "/repo/output"
+            "base":"/tmp/ojdebugger/repo",
+            "src": "/tmp/ojdebugger/repo/src",
+            "build": "/tmp/ojdebugger/repo/build",
+            "input": "/tmp/ojdebugger/repo/input",
+            "output": "/tmp/ojdebugger/repo/output"
         },
         //清理dir中各路径的某文件时搜索的扩展名
         //比如要清理程序abc的各中间文件，则会依次搜索abc,abc.cpp,abc.pas等等
@@ -189,8 +189,8 @@ var settings = {
      * shell文件相关配置
      */
     "shell":{
-        "base":"/shell",
-        "compile":"/shell/compile.sh"
+        "base":"./shell",
+        "compile":"./shell/compile.sh"
     },
     /**
      * 编译相关配置
