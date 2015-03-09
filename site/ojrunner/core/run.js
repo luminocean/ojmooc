@@ -10,11 +10,11 @@ var util = require('../util/util.js');
 var config = require('../config/config.js');
 
 //要编译的源文件的存放路径
-var srcPath = path.join(__dirname,'../',config.repo.dir.src);
+var srcPath = util.absPath(config.repo.dir.src);
 //编译完的可执行文件的存放路径
-var buildPath = path.join(__dirname,'../',config.repo.dir.build);
+var buildPath = util.absPath(config.repo.dir.build);
 //报告文件存放路径
-var reportPath = path.join(__dirname,'../',config.repo.dir.report);
+var reportPath = util.absPath(config.repo.dir.report);
 
 /**
  * 编译执行的入口方法

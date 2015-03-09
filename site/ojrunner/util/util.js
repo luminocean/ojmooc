@@ -5,7 +5,10 @@ var config = require('../config/config.js');
 
 //可用的扩展名
 var extNames = config.repo.cleanExt;
-var reportRepo = path.join(__dirname,'..',config.repo.dir.report);
+var reportRepo = absPath(config.repo.dir.report);
+
+//项目的根目录，作为所有其它相对路径拼接的基准目录
+var basePath = path.join(__dirname,'..');
 
 /**
  * 根据当前时间生成唯一文件名
@@ -13,6 +16,8 @@ var reportRepo = path.join(__dirname,'..',config.repo.dir.report);
 exports.generateFileName = function(){
     return moment().format('YYYYMMDDx');
 };
+
+exports.absPath = absPath;
 
 /**
  * 清理中间文件
@@ -71,8 +76,8 @@ exports.readReportParams = function(programName, callback){
  */
 exports.prepareDir = function(){
     //如果repo目录本身就不存在就先创建
-    if(!fs.existsSync(path.join(__dirname,'../',config.repo.dir.base))){
-        fs.mkdirSync(path.join(__dirname,'../',config.repo.dir.base));
+    if(!fs.existsSync(absPath(config.repo.dir.base))){
+        mkdirsSync(absPath(config.repo.dir.base));
     }
 
     //获取各临时目录
@@ -81,12 +86,37 @@ exports.prepareDir = function(){
         //跳过继承属性
         if( !dirs.hasOwnProperty(key) ) continue;
 
-        var dir = path.join(__dirname,'../',dirs[key]);
+        var dir = absPath(dirs[key]);
         if( !fs.existsSync(dir) ){
             fs.mkdirSync(dir);
         }
     }
 };
+
+/**
+ * 获取一个路径的绝对路径
+ * 如果传入的就是绝对路径则直接返回
+ * 如果传入相对路径则以项目根目录为基准返回处理后的绝对路径
+ */
+function absPath(inputPath){
+    //绝对路径
+    if(inputPath.substring(0,1) == '/'){
+        return inputPath;
+    }else{
+        return path.join(basePath,inputPath);
+    }
+}
+
+/**
+ * 创建目录，如果父目录不存在则自动创建父目录
+ * @param dirpath
+ */
+function mkdirsSync(dirpath) {
+    if(!fs.existsSync(dirpath)){
+        mkdirsSync(path.dirname(dirpath));
+        fs.mkdirSync(dirpath);
+    }
+}
 
 function convertToSeconds(timeStr){
     if(!timeStr) return;

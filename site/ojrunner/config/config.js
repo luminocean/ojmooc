@@ -17,10 +17,11 @@ var config={
     "repo": {
         //源码文件、可执行文件、报告文件所在的目录
         "dir": {
-          "base":"/repo",
-          "src": "/repo/src",
-          "build": "/repo/build",
-          "report": "/repo/report"
+
+            "base":"/tmp/ojrunner/repo",
+            "src": "/tmp/ojrunner/repo/src",
+            "build": "/tmp/ojrunner/repo/build",
+            "report": "/tmp/ojrunner/repo/report"
         },
         //清理dir中各路径的某文件时搜索的扩展名
         //比如要清理程序abc的各中间文件，则会依次搜索abc,abc.cpp,abc.pas等等
@@ -36,9 +37,9 @@ var config={
     * shell文件相关配置
     */
     "shell":{
-        "base":"/shell",
-        "compile":"/shell/compile.sh",
-        "exec":"/shell/exec.sh"
+        "base":"./shell",
+        "compile":"./shell/compile.sh",
+        "exec":"./shell/exec.sh"
     },
     /**
     * 编译相关配置
