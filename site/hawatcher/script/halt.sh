@@ -1,13 +1,8 @@
 #!/bin/bash
 #关闭所有开启的hawatcher和haproxy进程
 
-#获取当前项目的根目录
-rl=$(readlink -f $0)
-dir=$(dirname $rl)
-root_path=${dir%/*}
-
 #运行期文件目录
-runtime_dir="$root_path"/runtime
+runtime_dir="/tmp/hawatcher/runtime"
 
 for file in $(ls "$runtime_dir");do
     watcher_pid_file_name=$(echo "$file" | grep watcher)

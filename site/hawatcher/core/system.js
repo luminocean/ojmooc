@@ -7,14 +7,14 @@ var cp =require('child_process');
 var config = require('../config/config');
 var util = require('../util/util');
 
-var refreshShellPath = path.join(__dirname,'../',config.shell.refresh);
-var reloadShellPath = path.join(__dirname,'../',config.shell.reload);
-var templateConfigFilePath = path.join(__dirname,'../',config.runtime.configTemplate);
+var refreshShellPath = util.absPath(config.shell.refresh);
+var reloadShellPath = util.absPath(config.shell.reload);
+var templateConfigFilePath = util.absPath(config.runtime.configTemplate);
 
 //准备运行期文件目录及文件名
 var fileName = util.generateFileName();
 var runtimeConfig = config.runtime;
-var runtimePath = path.join(__dirname,'../', runtimeConfig.dir);
+var runtimePath = util.absPath(runtimeConfig.dir);
 //拼接出运行期文件路径
 var configFilePath = path.join(runtimePath,runtimeConfig.config.replace(/\*/,fileName));
 var pidFilePath = path.join(runtimePath,runtimeConfig.pid.replace(/\*/,fileName));
