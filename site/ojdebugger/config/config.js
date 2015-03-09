@@ -158,8 +158,8 @@ var settings = {
      * app本身的配置选项
      */
     "app":{
-        //"port":23333,
-        "port":8081,
+        "port":23333,
+        //"port":8081,
         //一个gdb进程无操作等待的最长时间，超时则gdb进程被回收
         "gdbTimeout":60
     },

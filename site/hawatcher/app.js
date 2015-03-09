@@ -92,6 +92,8 @@ function inspectContainers(){
             //console.log('共检测到容器数：'+containers.length+' 存活容器数:'+survivors.length);
             processContainerChanges(survivors);
         });
+
+        //processContainerChanges(containers);
     });
 }
 
