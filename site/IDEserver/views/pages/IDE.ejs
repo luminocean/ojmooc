@@ -2,12 +2,14 @@
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <% include ../partials/head %>
-    <link rel="stylesheet" href="../../public/stylesheets/IDEstyle.css">
-    <script type = "text/javascript" src="../../public/scripts/aceJS/ace.js"></script>
+    <link rel="stylesheet" href="/stylesheets/IDEstyle.css">
+    <script type = "text/javascript" src="/scripts/aceJS/ace.js"></script>
 </head>
-<body class="container">
+
+<body class="container" onbeforeunload="check()">
 
     <header>
         <% include ../partials/header %>
@@ -16,8 +18,7 @@
     <main>
         <div class="row">
             <div class="col-sm-8">
-                <div class="jumbotron">
-                    <div id="optionPanel"   class="optionPanel">
+                    <div id="optionPanel">
                         <table>
                             <tr>
                                 <td>
@@ -38,33 +39,29 @@
                                     </select>
                                 </td>
                                 <td>
-                                    <input type="submit" value="debug" onclick="intoDebug()">
+                                    <input type="submit" value="RUN">
                                 </td>
-                            </tr>
-                        </table>
-                    </div>
-                    <div id="debugPanel" class="optionPanel" style="display:none">
-                        <table>
-                            <tr>
-                                <td><input type="button" value="breakpoint"></td>
-                                <td><input type="button" value="step in"></td>
-                                <td><input type="button" value="step out"></td>
-                                <td><input type="button" value="exit" onclick="outDebug()"></td>
+                                <td>
+                                    <input type="submit" value="DEBUG">
+                                </td>
                             </tr>
                         </table>
                     </div>
                     <div id="editor">
                     </div>
-                </div>
-
+                    <div id="inputEditor"><p>hello,this is a test</p>
+                    </div>
+                    <div id="outputEditor">
+                    </div>
             </div>
+
             <div class="col-sm-4">
-                
                 <div class="well">
                     <h3>Look I'm A Sidebar!</h3>
+                    <%= result%>
                 </div>
-
             </div>
+
         </div>
     </main>
 
@@ -92,28 +89,24 @@
         }
     }
 
-    function intoDebug(){
-        var debugPanel = document.getElementById("debugPanel");
-        var optionPanel = document.getElementById("optionPanel");
-        optionPanel.style.display = "none";
-        debugPanel.style.display = "block";
-    }
-
-    function outDebug(item){
-        var debugPanel = document.getElementById("debugPanel");
-        var optionPanel = document.getElementById("optionPanel");
-        optionPanel.style.display = "block";
-        debugPanel.style.display = "none";
-    }
-
     function check(){
         document.getElementById("fontsize").value="12px";
         document.getElementById("language").value="C/C++";
     }
+
+    function sendData(){
+
+    }
 </script>
 
 <script>
+    var inputEditor = ace.edit("inputEditor");
+    var outputEditor = ace.edit("outputEditor");
     var editor = ace.edit("editor");
+
+    inputEditor.setTheme("ace/theme/twilight");
+    outputEditor.setTheme("ace/theme/twilight");
+    editor.setTheme("ace/theme/monokai");
     editor.getSession().setMode("ace/mode/c_cpp");
 </script>
 

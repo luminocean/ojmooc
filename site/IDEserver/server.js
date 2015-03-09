@@ -1,10 +1,14 @@
 // server.js
 
-//var runner = require('../ojclient/app.js').runner;
+var runner = require('../ojclient/app.js').runner;
+var fs = require('fs');
+
 var express = require('express');
 var app = express();
+var path = require('path');
 
 app.set('view engine', 'ejs');
+app.use(express.static(path.join(__dirname, 'public')));
 
 // index page
 app.get('/', function(req, res) {
@@ -24,21 +28,20 @@ app.get('/', function(req, res) {
 // about page
 
 app.get('/IDE', function (req,res) {
-    //runner.setPort(8080);
-    //runner.setHost('121.42.155.75');
-    //var srcType = 'pas';
+    runner.setPort(8080);
+    runner.setHost('121.42.155.75');
+    var srcType = 'pas';
     //读取测试用源文件
-    //var srcCode = fs.readFileSync('../ojclient/input_data/'+srcType+'_code','utf-8');
+    var srcCode = fs.readFileSync('../ojclient/input_data/'+srcType+'_code','utf-8');
     //读取测试用数据
-    //var inputData = fs.readFileSync('../ojclient/input_data/'+srcType+'_data','utf-8');
-    //    runner.run(srcCode,srcType,inputData,function(err,result,params,host) {
-    //        if (err) return console.error(err);
+    var inputData = fs.readFileSync('../ojclient/input_data/'+srcType+'_data','utf-8');
+        runner.run(srcCode,srcType,inputData,function(err,result,params,host) {
+            if (err) return console.error(err);
 
-    //        res.render('pages/about',{
-    //            result:result
-    //        })
-    //    });
-    res.render('pages/IDE');
+            res.render('pages/IDE',{
+                result:result
+            })
+        });
 })
 
 app.listen(8080);
