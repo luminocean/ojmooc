@@ -8,7 +8,11 @@ var states = {
     graph:"graph"
 }
 
-function Operation(){
+function Operation(id,operation,val,preVal){
+    this.id = id;
+    this.operation = operation;
+    this.val = val;
+    this.preVal = preVal;
 
 }
 
@@ -16,9 +20,11 @@ var currentState = states.free;
 var dbClickTimer = null;
 var timer = 0;
 
-var whiteBoardSates = new Array();
-var objects = new Array();
-var operations = new Array();
+var objs = new Array();
+var opes = new Array();
+var undoIndex = -1;
+var haveUndo = false;
+//var haveRedo = false;
 
 //双击回到初始状态
 $("#graphBoard").bind("dblclick",function(){
@@ -38,9 +44,9 @@ $("#graphBoard").bind("click",function(e){
             case states.text:         //文本模式，点击界面添加文本
                 createText(e.pageX, e.pageY,xLoc,yLoc);
                 break;
-            case states.pen:
-                addLine(xLoc,yLoc);
-                break;
+            //case states.pen:
+            //    addLine(xLoc,yLoc);
+            //    break;
         }
     },300);
 });
@@ -107,7 +113,7 @@ $("#imageMenu").bind("mousedown",function(e){
         shadeClose:true,
         border:[0],
         offset:[yLoc.toString()+"px",xLoc.toString()+"px"],
-        area: ["250px","150px"],
+        area: ["220px","150px"],
         iframe: {src : "graphs.html"}
     });
 });
@@ -121,7 +127,6 @@ $("#penButton").bind("mousedown",function(e){
 //撤销键按下，撤销
 $("#undoButton").bind("mousedown",function(e){
     undo();
-    console.log("undo");
 });
 
 //重做键按下，重做
@@ -142,11 +147,167 @@ function changeToTextMode(){
 
 function changeToPenMode(){
     currentState = states.pen;
-    newLine();
 }
 
 function changeToGraphMode(){
     currentState = states.graph;
+}
+
+function undo(){
+    if(haveUndo == false){
+        haveUndo = true;
+        undoIndex = opes.length;
+    }
+    undoIndex--;
+    if(undoIndex < 0){
+        undoIndex = 0;
+        return;
+    }
+    //console.log(undoIndex);
+    var ope = opes[undoIndex];
+    switch(ope.operation){
+        case "addText":
+            shapeInvisible(ope.id,true);
+            //opes.push(new Operation(ope.id,"shapeVisible",[true],[false]));
+            break;
+        case "shapeVisible":
+            shapeInvisible(ope.id,ope.preVal[0]);
+            undo();
+            break;
+        case "editText":
+            changeText(ope.id,ope.preVal[0]);
+            break;
+        case "drag":
+            changeLocation(ope.id,ope.preVal);
+            //console.log(ope.val[0] + " " + ope.val[1]);
+            //console.log(ope.preVal[0] + " " + ope.preVal[1]);
+            break;
+        case "addLine":
+            shapeInvisible(ope.id,true);
+            break;
+        case "resizeCircle":
+            resizeCircleAndTriangle(ope.id,ope.preVal);
+            break;
+        case "resizeArray":
+            resizeDataStructure(ope.id,ope.preVal);
+            break;
+        case "resizeIf":
+            resizeCondition(ope.id,ope.preVal);
+            break;
+        case "resizeRectangle":
+            resizeRecAndImg(ope.id,ope.preVal);
+            break;
+        default :
+            break;
+    }
+    console.log(ope);
+}
+
+function redo(){
+    if((haveUndo == false)||(undoIndex > opes.length-1)){
+        return;
+    }
+    var ope = opes[undoIndex];
+    switch (ope.operation){
+        case "drag":
+            changeLocation(ope.id,ope.val);
+            break;
+        case "editText":
+            changeText(ope.id,ope.val[0]);
+            break;
+        case "shapeVisible":
+            shapeInvisible(ope.id,ope.val[0]);
+            break;
+        case "addText":
+            shapeInvisible(ope.id,false);
+            break;
+        case "addLine":
+            shapeInvisible(ope.id,false);
+            break;
+        case "resizeCircle":
+            resizeCircleAndTriangle(ope.id,ope.val);
+            break;
+        case "resizeArray":
+            resizeDataStructure(ope.id,ope.val);
+            break;
+        case "resizeIf":
+            resizeCondition(ope.id,ope.val);
+            break;
+        case "resizeRectangle":
+            resizeRecAndImg(ope.id,ope.val);
+            break;
+        default :
+            break;
+    }
+    undoIndex++;
+}
+
+//修改圆，三角的大小
+function resizeCircleAndTriangle(id,val){
+    zr.modShape(id, {style: {r: val}});
+    zr.refresh();
+}
+
+//修改数组，栈，队列的大小
+function resizeDataStructure(id,val){
+    zr.modShape(id, {style: {width: val}});
+    zr.refresh();
+}
+
+//修改if,while,dowhile的大小
+function resizeCondition(id,val){
+    zr.modShape(id, {style: {length: val}});
+    zr.refresh();
+}
+
+//修改长方形，图片的大小
+function resizeRecAndImg(id,val){
+    zr.modShape(id, {style: {width: val[0],height:val[1]}});
+    zr.refresh();
+}
+
+//修改位置，用于拖动
+function changeLocation(id,val){
+    zr.modShape(id, {style: {x: val[0], y:val[1]}});
+    zr.refresh();
+}
+//修改文本
+function changeText(id,val){
+    zr.modShape(id, {style: {text:val}});
+    zr.refresh();
+}
+//修改能否看见，用于删除
+function shapeInvisible(id,val){
+    zr.modShape(id, {ignore:val});
+    zr.refresh();
+}
+
+
+
+
+function clear(){
+    for(var i = 0; i < objs.length; i++){
+        zr.delShape(objs[i]);
+    }
+    zr.render();
+    objs = new Array();
+    opes = new Array();
+    haveUndo = false;
+    //haveRedo = false;
+    undoIndex = -1;
+
+}
+
+function addOpes(op){
+    if(haveUndo == true){
+        opes.splice(undoIndex,opes.length-undoIndex);
+        haveUndo = false;
+    }
+    opes.push(op);
+}
+
+function addObjs(ob){
+    objs.push(ob);
 }
 
 

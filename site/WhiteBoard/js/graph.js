@@ -372,13 +372,121 @@ MyDoWhile.prototype = {
     }
 };
 
+//operation图形设计
+function MyOperation(options) {
+    Base.call(this, options);
+}
+MyOperation.prototype = {
+    type: "operation",
+    brush: function (ctx, isHighlight) {
+        var style = this.style || {};
+        var x = style.x;
+        var y = style.y;
+        var length = style.length;
+        var val = style.val;
+
+        ctx.beginPath();
+        ctx.moveTo(x, y);
+        ctx.lineTo(x, y+length);
+        ctx.lineTo(x-(length/10), y + length -(length/10));
+        ctx.moveTo(x, y+length);
+        ctx.lineTo(x+(length/10), y + length -(length/10));
+        ctx.moveTo(x, y+length);
+        ctx.lineTo(x-length, y+length);
+        ctx.lineTo(x-length, y+2*length);
+        ctx.lineTo(x+length, y+2*length);
+        ctx.lineTo(x+length, y+length);
+        ctx.lineTo(x, y+length);
+        ctx.stroke();
+        ctx.strokeText(val[0],x-length, y+length+length/2);
+        return;
+    },
+
+    drift: function (dx, dy) {
+        this.style.x += dx;
+        this.style.y += dy;
+    },
+
+    isCover: function (x, y) {
+        var originPos = this.getTansform(x, y);
+        x = originPos[0];
+        y = originPos[1];
+
+        if (x >= (this.style.x - this.style.length)
+            && x <= (this.style.x + this.style.length)
+            && y >= (this.style.y)
+            && y <= (this.style.y + 2*this.style.length)
+        ) {
+            return true;
+        }
+        return false;
+    }
+};
+
+function addOperation(val){
+    require("zrender/tool/util").inherits(MyOperation, Base);
+    var o = new MyOperation({
+        style : {
+            x : 150,
+            y : 50,
+            preLocation:[150,50],
+            length:30,
+            val:val,
+            color : '#1e90ff',
+            lineWidth : 1
+        },
+        draggable : true
+    });
+    o.bind("mousewheel",resizeIf);
+    o.bind("mousedown",editOperation);
+    o.bind("dragend",Dragged);
+    zr.addShape(o);
+    zr.render();
+}
+
+function editOperation(params){
+    var currentTime = new Date().getTime();
+    if((currentTime - dbcstart) < 300){
+        var shape = params.target;
+        var event = require("zrender/tool/event");
+        var yLoc = (event.getY(params.event)+graphBoard.offsetTop);
+        var xLoc = (event.getX(params.event)+graphBoard.offsetLeft);
+
+        var editVal = $.layer({
+            type: 1,
+            title: false,
+            offset:[yLoc.toString()+"px",xLoc.toString()+"px"],
+            area: ["220px","20px"],
+            border: [0], //去掉默认边框
+            shade: [0], //去掉遮罩
+            closeBtn: [0, true],
+            page: {
+                html: '<div style="width:220px; height:20px;">' +
+                '<label>do</label><input id="operation" class="textField" type="text"><br>' +
+                '</div>'
+            }
+        });
+        $("#operation").val(params.target.style.val[0]);
+
+        $(".textField").bind("keydown",function(e){
+            if(e.keyCode == 13){
+                params.target.style.val[0] = $("#operation").val();
+                layer.close(editVal);
+                zr.render();
+            }
+        });
+    }
+    dbcstart = currentTime;
+}
+
 function addDoWhile(val){
     require("zrender/tool/util").inherits(MyDoWhile, Base);
     var d = new MyDoWhile({
         style : {
             x : 150,
             y : 50,
-            length:50,
+            preLocation:[150,50],
+            length:30,
             val:val,
             color : '#1e90ff',
             lineWidth : 1
@@ -387,6 +495,7 @@ function addDoWhile(val){
     });
     d.bind("mousewheel",resizeIf);
     d.bind("mousedown",editDoWhile);
+    d.bind("dragend",Dragged);
     zr.addShape(d);
     zr.render();
 }
@@ -434,7 +543,8 @@ function addWhile(val){
         style : {
             x : 150,
             y : 50,
-            length:50,
+            preLocation:[150,50],
+            length:30,
             val:val,
             color : '#1e90ff',
             lineWidth : 1
@@ -443,6 +553,7 @@ function addWhile(val){
     });
     w.bind("mousewheel",resizeIf);
     w.bind("mousedown",editWhile);
+    w.bind("dragend",Dragged);
     zr.addShape(w);
     zr.render();
 }
@@ -491,7 +602,8 @@ function addIf(val){
         style : {
             x : 150,
             y : 50,
-            length:50,
+            preLocation:[150,50],
+            length:30,
             val:val,
             color : '#1e90ff',
             lineWidth : 1
@@ -500,6 +612,7 @@ function addIf(val){
     });
     i.bind("mousewheel",resizeIf);
     i.bind("mousedown",editIf);
+    i.bind("dragend",Dragged);
     zr.addShape(i);
     zr.render();
 }
@@ -552,7 +665,8 @@ function addArray(val){
         style : {
             x : 50,
             y : 50,
-            width:40,
+            preLocation:[50,50],
+            width:30,
             n:val.length,
             val:val,
             color : '#1e90ff',
@@ -619,6 +733,7 @@ function addQueue(val){
         style : {
             x : 50,
             y : 50,
+            preLocation:[50,50],
             width:40,
             n:val.length,
             val:val,
@@ -641,6 +756,7 @@ function addStack(val){
         style : {
             x : 50,
             y : 150,
+            preLocation:[50,150],
             width:40,
             n:val.length,
             val:val,
@@ -664,6 +780,7 @@ function addCircle(r,x,y){
         style: {
             x: x,
             y: y,
+            preLocation:[x,y],
             r: r,
             brushType: 'both',
             color: "lightblue",
@@ -686,6 +803,7 @@ function addSquare(r,x,y){
         style: {
             x: x,
             y: y,
+            preLocation:[x,y],
             width: r,
             height: r,
             brushType: 'both',
@@ -710,6 +828,7 @@ function addRectangle(w,h,x,y){
         style: {
             x: x,
             y: y,
+            preLocation:[x,y],
             width: w,
             height: h,
             brushType: 'both',
@@ -731,6 +850,7 @@ function addTriangle(r,x,y){
         style : {
             x : x,
             y : y,
+            preLocation:[x,y],
             r : r,
             n : 3,
             brushType : 'both',
@@ -755,6 +875,7 @@ function addImage(){
             image: "img/img.jpg",
             x: 50,
             y: 50,
+            preLocation:[50,50],
             width:50,
             height:50
         },
@@ -778,9 +899,8 @@ function Dragged(params){
     var shape = params.target;
     var xLoc = event.getX(params.event);
     var yLoc = event.getY(params.event);
-    console.log(event.getX(params.event).toString()+"px");
-    console.log(event.getY(params.event).toString()+"px");
-    console.log(shape.style.x);
+    //opes.push(new Operation(shape.id,"drag",[shape.style.x,shape.style.y],[shape.style.preLocation[0],shape.style.preLocation[1]]));
+    addOpes(new Operation(shape.id,"drag",[shape.style.x,shape.style.y],[shape.style.preLocation[0],shape.style.preLocation[1]]));
     if((xLoc <= 1)||(xLoc >= 498)||(yLoc <= 1)||(yLoc >= 468)){
         $.layer({
             shade: [0],
@@ -799,12 +919,15 @@ function Dragged(params){
                 },
                 no: function(){                                //按钮2，确定监听
                     shape.ignore = true;
+                    //opes.push(new Operation(shape.id,"shapeVisible",[true],[false]));
+                    addOpes(new Operation(shape.id,"shapeVisible",[true],[false]));
                     zr.render();
                 }
             }
         });
     }
 }
+
 
 //调整大小
 //圆，三角
@@ -820,6 +943,9 @@ function resizeCircle(params){
             r -= 5;
         }
     }
+    var preVal = params.target.style.r;
+    var val = r;
+    addOpes(new Operation(params.target.id,"resizeCircle",val,preVal));
     zr.modShape(params.target.id, {style: {r: r}});
     zr.refresh();
     event.stop(params.event);
@@ -837,6 +963,9 @@ function resizeArray(params){
             width -= 5;
         }
     }
+    var preVal = params.target.style.width;
+    var val = width;
+    addOpes(new Operation(params.target.id,"resizeArray",val,preVal));
     zr.modShape(params.target.id, {style: {width: width}});
     zr.refresh();
     event.stop(params.event);
@@ -854,11 +983,14 @@ function resizeIf(params){
             length -= 5;
         }
     }
+    var preVal = params.target.style.length;
+    var val = length;
+    addOpes(new Operation(params.target.id,"resizeIf",val,preVal));
     zr.modShape(params.target.id, {style: {length: length}});
     zr.refresh();
     event.stop(params.event);
 }
-//长方形
+//长方形,图片
 function resizeRectangle(params){
     var event = require("zrender/tool/event");
     var delta = event.getDelta(params.event);
@@ -875,6 +1007,9 @@ function resizeRectangle(params){
             height -= 5*height/width;
         }
     }
+    var preVal = [params.target.style.width,params.target.style.height];
+    var val = [width,height];
+    addOpes(new Operation(params.target.id,"resizeRectangle",val,preVal));
     zr.modShape(params.target.id, {style: {width:width,height:height}});
     zr.refresh();
     event.stop(params.event);
@@ -896,6 +1031,9 @@ function resizeSquare(params){
             height -= 5;
         }
     }
+    var preVal = [params.target.style.width,params.target.style.height];
+    var val = [width,height];
+    addOpes(new Operation(params.target.id,"resizeRectangle",val,preVal));
     zr.modShape(params.target.id, {style: {width:width,height:height}});
     zr.refresh();
     event.stop(params.event);

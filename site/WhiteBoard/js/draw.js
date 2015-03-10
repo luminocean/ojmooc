@@ -3,6 +3,7 @@
  */
 var penColor = "blue";
 var penSize = 5;
+var onDraw = false;
 
 var currentLine = null;
 
@@ -22,41 +23,49 @@ function setPenSize(size){
     penSize = size;
 }
 
-function newLine(){
-    currentLine = null;
-}
 
 function addLine(x,y){
-    if(currentLine == null){
-        var BrokenLineShape = require("zrender/shape/BrokenLine");
-        var line = new BrokenLineShape({
-            style : {
-                pointList : [[x,y],[x+2,y+2]],
-                lineWidth : penSize,
-                color:penColor
-            },
-            draggable:true
-        });
-        zr.addShape(line);
-        currentLine = line;
-    }
-    else{
-        currentLine.style.pointList.push([x,y]);
-    }
-    zr.render();
-}
 
-
-function quickAddLine(pointList){
     var BrokenLineShape = require("zrender/shape/BrokenLine");
     var line = new BrokenLineShape({
         style : {
-            pointList : pointList,
+            pointList : [[x,y]],
             lineWidth : penSize,
             color:penColor
         },
-        draggable:true
+        draggable:false
     });
     zr.addShape(line);
+    currentLine = line;
     zr.render();
 }
+
+$("#graphBoard").bind("mousedown",function(e){
+    if(currentState == states.pen){
+        onDraw = true;
+    }
+});
+
+$("#graphBoard").bind("mousemove",function(e){
+    if((onDraw == true)&&(currentState == states.pen)){
+        var xLoc = e.pageX - $("#graphBoard").offset().left;
+        var yLoc = e.pageY - $("#graphBoard").offset().top;
+
+        if(currentLine == null){
+            addLine(xLoc,yLoc);
+        }
+        //console.log(xLoc + " " + yLoc);
+        currentLine.style.pointList.push([xLoc,yLoc]);
+        zr.render();
+    }
+});
+
+$("#graphBoard").bind("mouseup",function(e){
+    if(currentLine != null){
+        addObjs(currentLine);
+        var id = currentLine.id;
+        addOpes(new Operation(id,"addLine"));
+        currentLine = null;
+    }
+    onDraw = false;
+});

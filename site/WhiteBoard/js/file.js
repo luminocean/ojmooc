@@ -1,13 +1,6 @@
 /**
  * Created by YBH on 2015/1/16.
  */
-function readFile(filename){
-
-}
-
-function writeFile(){
-
-}
 
 //添加文件拖动监听
 function addFileListener(){
@@ -50,7 +43,7 @@ function handleDrop(event){
         img.width = 32;
         img.height = 32;
         name.innerHTML = file.name;
-                                                                                                                             //根据文件后缀选择图片
+        //根据文件后缀选择图片
         li.appendChild(img);
         li.appendChild(name);
         li.appendChild(progressbar);
@@ -96,7 +89,7 @@ function uploadProgress(event)
 //上传成功，
 function uploadSucceed(event)
 {
-    event.target.progressbar.firstChild.style.width = "50px";
+    event.target.progressbar.firstChild.style.width = "30px";
     event.target.progressbar.firstChild.textContent = "100%";
 }
 //上传失败，弹出警告

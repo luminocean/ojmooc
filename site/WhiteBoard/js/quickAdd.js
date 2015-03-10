@@ -1,7 +1,7 @@
 /**
  * Created by YBH on 2015/2/26.
  */
-var type = ["line","text","circle","square","rectangle","triangle","array","stack","queue","if","while","dowhile"];
+var type = ["line","text","circle","square","rectangle","triangle","array","stack","queue","if","while","dowhile","do"];
 //弹出说明
 $("#aboutButton").bind("click",function(){
 
@@ -200,7 +200,7 @@ function quickAdd(string){
 
         case type[6]:                                              //array
             if(arr.length == 1){
-                addArray(["","","","",""]);
+                addArray([" "," "," "," "," "]);
             }
             else if(arr.length == 2){
                 var val = arr[1].split(",");
@@ -210,7 +210,7 @@ function quickAdd(string){
 
         case type[7]:                                              //stack
             if(arr.length == 1){
-                addStack(["","","","",""]);
+                addStack([" "," "," "," "," "]);
             }
             else if(arr.length == 2){
                 var val = arr[1].split(",");
@@ -220,7 +220,7 @@ function quickAdd(string){
 
         case type[8]:                                              //queue
             if(arr.length == 1){
-                addQueue(["","","","",""]);
+                addQueue([" "," "," "," "," "]);
             }
             else if(arr.length == 2){
                 var val = arr[1].split(",");
@@ -230,15 +230,15 @@ function quickAdd(string){
 
         case type[9]:                                              //if
             if(arr.length == 1){
-                addIf(["","",""]);
+                addIf([" "," "," "]);
             }
             else if(arr.length == 2){
                 var val = arr[1].split(",");
-                addIf([arr[1],"",""]);
+                addIf([arr[1]," "," "]);
             }
             else if(arr.length == 3){
                 var val = arr[1].split(",");
-                addIf([arr[1],arr[2],""]);
+                addIf([arr[1],arr[2]," "]);
             }
             else if(arr.length == 5){
                 var val = arr[1].split(",");
@@ -247,11 +247,11 @@ function quickAdd(string){
             break;
         case type[10]:                                          //while
             if(arr.length == 1){
-                addWhile(["",""]);
+                addWhile([" "," "]);
             }
             else if(arr.length == 2){
                 var val = arr[1].split(",");
-                addWhile([arr[1],""]);
+                addWhile([arr[1]," "]);
             }
             else if(arr.length == 3){
                 var val = arr[1].split(",");
@@ -260,15 +260,24 @@ function quickAdd(string){
             break;
         case type[11]:                                          //dowhile
             if(arr.length == 1){
-                addDoWhile(["",""]);
+                addDoWhile([" "," "]);
             }
             else if(arr.length == 2){
                 var val = arr[1].split(",");
-                addDoWhile([arr[1],""]);
+                addDoWhile([arr[1]," "]);
             }
             else if(arr.length == 3){
                 var val = arr[1].split(",");
                 addDoWhile([arr[1],arr[2]]);
+            }
+            break;
+        case type[12]:                                          //do
+            if(arr.length == 1){
+                addOperation([" "]);
+            }
+            else if(arr.length == 2){
+                var val = arr[1].split(",");
+                addOperation([arr[1]]);
             }
             break;
         default:

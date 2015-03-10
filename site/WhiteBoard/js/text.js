@@ -62,18 +62,30 @@ function addText(txt,x,y){
             x: x,
             y: y,
             textFont: textSize+" "+textFont,
-            color: textColor
+            color: textColor,
+            preLocation:[x,y]
         },
         draggable:true
     });
-    text.bind("dragend",textDragged);
+
+    text.bind("dragend",Dragged);
 
     dbClickStartTime = new Date().getTime();
     text.bind("mousedown",dbClicked);
-
+    text.bind("mousedown",getLocation);
+    text.drift = drift;
     zr.addShape(text);
     zr.render();
-    console.log("add text");
+    addObjs(text);
+    addOpes(new Operation(text.id,"addText",[txt,x,y]));
+    //objs.push(text);
+    //opes.push(new Operation(text.id,"addText",[txt,x,y]));
+    //haveUndo = false;
+}
+
+function getLocation(params){
+    params.target.style.preLocation[0] = params.target.style.x;
+    params.target.style.preLocation[1] = params.target.style.y;
 }
 
 //文本拖动监听，记录位置
@@ -108,28 +120,18 @@ function dbClicked(params){
         });
 
         var textField = $("#textField");
-        textField.val(textShape.style.text);
+        var preVal = textShape.style.text;
+        textField.val(preVal);
         textField.bind("keydown",function(e){
             if(e.keyCode == 13){
                 textShape.style.text = textField.val();
                 layer.close(editText);
                 zr.render();
+                //opes.push(new Operation(textShape.id,"editText",[textShape.style.text],[preVal]));
+                addOpes(new Operation(textShape.id,"editText",[textShape.style.text],[preVal]));
             }
         });
         console.log("edit text");
-    }
-    dbClickStartTime = currentTime;
-}
-
-
-
-function editText(){
-    var currentTime = new Date().getTime();
-    if((currentTime - dbClickStartTime) < 250) {
-
-        var event = require("zrender/tool/event");
-        var yLoc = (event.getY(params.event)+graphBoard.offsetTop);
-        var xLoc = (event.getX(params.event)+graphBoard.offsetLeft);
     }
     dbClickStartTime = currentTime;
 }

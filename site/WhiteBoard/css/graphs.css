@@ -32,6 +32,9 @@
 #queue{
     background-image: url("../img/queue.png");
 }
+#operation{
+    background-image: url("../img/rectangle.jpg");
+}
 #if{
     background-image: url("../img/if.png");
 }

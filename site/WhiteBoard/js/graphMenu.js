@@ -16,22 +16,25 @@ $("#triangle").bind("click",function(){
     parent.addTriangle(50,50,50);
 });
 $("#array").bind("click",function(){
-    parent.addArray(["","","","",""]);
+    parent.addArray([" "," "," "," "," "]);
 });
 $("#stack").bind("click",function(){
-    parent.addStack(["","","","",""]);
+    parent.addStack([" "," "," "," "," "]);
 });
 $("#queue").bind("click",function(){
-    parent.addQueue(["","","","",""]);
+    parent.addQueue([" "," "," "," "," "]);
+});
+$("#operation").bind("click",function(){
+    parent.addOperation([" "]);
 });
 $("#if").bind("click",function(){
-    parent.addIf(["","",""]);
+    parent.addIf([" "," "," "]);
 });
 $("#while").bind("click",function(){
-    parent.addWhile(["",""]);
+    parent.addWhile([" "," "]);
 });
 $("#dowhile").bind("click",function(){
-    parent.addDoWhile(["",""]);
+    parent.addDoWhile([" "," "]);
 });
 
 
