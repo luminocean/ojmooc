@@ -7,17 +7,23 @@ var cp =require('child_process');
 var config = require('../config/config');
 var util = require('../util/util');
 
+//各种shell文件的路径
 var refreshShellPath = util.absPath(config.shell.refresh);
 var reloadShellPath = util.absPath(config.shell.reload);
+var restartContainerShellPath = util.absPath(config.shell.restartContainer);
+
+//haproxy模板配置文件的路径
 var templateConfigFilePath = util.absPath(config.runtime.configTemplate);
 
-//准备运行期文件目录及文件名
+//准备运行期文件目录及文件名，拼接出运行期文件路径
 var fileName = util.generateFileName();
 var runtimeConfig = config.runtime;
 var runtimePath = util.absPath(runtimeConfig.dir);
-//拼接出运行期文件路径
+//实例haproxy配置文件路径
 var configFilePath = path.join(runtimePath,runtimeConfig.config.replace(/\*/,fileName));
+//实例haproxy的pid
 var pidFilePath = path.join(runtimePath,runtimeConfig.pid.replace(/\*/,fileName));
+//管理该haproxy的hawatcher的pid
 var watcherPidFilePath
     = path.join(runtimePath,runtimeConfig.watcherPid.replace(/\*/,fileName));
 
@@ -51,6 +57,29 @@ exports.reload = function(){
 
         console.log('HAProxy重加载完毕');
     });
+};
+
+/**
+ * 重启容器
+ * @param container
+ * @param callback
+ */
+exports.restartContainer = function(container,callback){
+    var containerId = container['Id'];
+    var mode = container['mode'];
+
+    if(containerId && mode){
+        cp.execFile(restartContainerShellPath,[containerId,mode.id],function(err, stdout, stderr){
+            if(err) return console.error(err);
+            if(stderr) return console.warn(stderr);
+
+            console.log('docker容器重启完毕');
+            callback();
+        });
+    }else{
+        callback(new Error('要重启的容器缺少id或模式信息. id:'+containerId
+            +",mode:"+JSON.stringify(mode)));
+    }
 };
 
 var stopped = false;

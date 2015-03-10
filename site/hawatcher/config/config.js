@@ -19,7 +19,8 @@ var config = {
         "base":"./shell",
         "refresh":"./shell/refresh.sh",
         "reload":"./shell/reload.sh",
-        "kill":"./shell/kill.sh"
+        "kill":"./shell/kill.sh",
+        "restartContainer":"./shell/restart_container.sh"
     },
     //对于docker的配置
     //docker的restful api参数，和inpectIps里面的ip地址组合起来就是完整的docker api地址
@@ -33,6 +34,8 @@ var config = {
     "modes":{
         //ojrunner模式的配置
         "runner":{
+            //运行模式的识别符
+            "id":"ojrunner",
             //识别的字段
             "field":"Command",
             //识别的关键字
@@ -41,6 +44,7 @@ var config = {
             "isSticky":false
         },
         "debugger":{
+            "id":"ojdebugger",
             "field":"Command",
             "keyword":"ojdebugger",
             "isSticky":true

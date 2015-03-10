@@ -16,6 +16,6 @@ docker_main="app.js"
 img_name="oj-img"
 
 #将服务器运行为守护进程，加入docker容器列表
-sudo docker run -d -P -p "$docker_port" \
+docker run -d -P -p "$docker_port" \
     -v "$host_ojrunner_path":"$docker_ojrunner_path" \
     "$img_name" nodejs "${docker_ojrunner_path}/${docker_main}"

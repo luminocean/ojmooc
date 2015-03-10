@@ -88,9 +88,19 @@ function inspectContainers(){
         }
 
         //进行容器的心跳检查，如果存活则进行容器的变更处理
-        validateContainers(containers,function(err,survivors){
-            //console.log('共检测到容器数：'+containers.length+' 存活容器数:'+survivors.length);
-            processContainerChanges(survivors);
+        validateContainers(containers,function(err,survivors,zombies){
+            if(zombies.length > 0){
+                //复活死亡的容器(如果有),但不是立即更新负载均衡
+                //因为不能保证重启成功了，要等下一次
+                bringBackToLife(zombies,function(err){
+                    if(err) return console.error(err);
+                });
+                //设定1秒后重新检查
+                setTimeout(inspectContainers,1000);
+            }else{
+                //console.log('共检测到容器数：'+containers.length+' 存活容器数:'+survivors.length);
+                processContainerChanges(survivors);
+            }
         });
 
         //processContainerChanges(containers);
@@ -103,8 +113,11 @@ function inspectContainers(){
  * @param callback
  */
 function validateContainers(containers,callback){
-    //还存活着的容器，将会作为callback的参数返回
+    //还存活着的容器
     var survivors = [];
+    //已经卡死的容器
+    var zombies = [];
+
     //计数已经检查了几个容器了，全部检查完以后才调用callback
     var counter = 0;
 
@@ -143,19 +156,47 @@ function validateContainers(containers,callback){
             request(requestObj,function(err, response, body){
                 //发完请求后就把计数器+1，不管成功还是失败
                 counter++;
-                if(err)
-                    return (err.stack);
 
-                if(body.isAlive)
+                //如果容器还活着则加入幸存者名单
+                if(body && body.isAlive)
                     survivors.push(container);
+                else
+                    //否则加入僵尸名单，准备将其复活
+                    zombies.push(container);
 
-                //所有容器都检查完毕后调用回调函数回传幸存容器
+                if(err)
+                    console.error(err.stack);
+
+                //所有容器都检查完毕后调用回调函数回传检查后的容器
                 if(counter===containers.length){
-                    callback(null,survivors);
+                    callback(null,survivors,zombies);
                 }
             });
         })(requestObj,container);
     }
+}
+
+/**
+ * 复活容器
+ * @param zombies
+ * @param callback
+ */
+function bringBackToLife(zombies,callback){
+    //处理的容器计数
+    var processedCount = 0;
+
+    zombies.forEach(function(container){
+        //给要重启的容器添加模式信息，这样shell脚本才知道要重启哪一种docker容器
+        container.mode = mode;
+        system.restartContainer(container,function(err){
+            processedCount++;
+            if(err) return callback(err);
+            //全部处理完，回调
+            if(processedCount == zombies.length){
+                callback();
+            }
+        });
+    });
 }
 
 /**
@@ -248,9 +289,9 @@ function resolveArgs(args){
 function exit(msg){
     system.cleanupRuntime();
     if(msg instanceof Error)
-        console.log('Exits with error:'+err);
+        console.log('Exits with error:'+msg);
     else if(msg)
-        console.log('Exits with code:'+err);
+        console.log('Exits with code:'+msg);
 
     process.exit(0);
 }
