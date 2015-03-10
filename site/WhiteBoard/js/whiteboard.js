@@ -163,12 +163,10 @@ function undo(){
         undoIndex = 0;
         return;
     }
-    //console.log(undoIndex);
     var ope = opes[undoIndex];
     switch(ope.operation){
-        case "addText":
+        case "addShape":
             shapeInvisible(ope.id,true);
-            //opes.push(new Operation(ope.id,"shapeVisible",[true],[false]));
             break;
         case "shapeVisible":
             shapeInvisible(ope.id,ope.preVal[0]);
@@ -179,11 +177,6 @@ function undo(){
             break;
         case "drag":
             changeLocation(ope.id,ope.preVal);
-            //console.log(ope.val[0] + " " + ope.val[1]);
-            //console.log(ope.preVal[0] + " " + ope.preVal[1]);
-            break;
-        case "addLine":
-            shapeInvisible(ope.id,true);
             break;
         case "resizeCircle":
             resizeCircleAndTriangle(ope.id,ope.preVal);
@@ -192,10 +185,16 @@ function undo(){
             resizeDataStructure(ope.id,ope.preVal);
             break;
         case "resizeIf":
-            resizeCondition(ope.id,ope.preVal);
+            resizeGraph(ope.id,ope.preVal);
             break;
         case "resizeRectangle":
             resizeRecAndImg(ope.id,ope.preVal);
+            break;
+        case "editDataStructure":
+            editDataStructure(ope.id,ope.preVal);
+            break;
+        case "editGraph":
+            editGraph(ope.id,ope.preVal);
             break;
         default :
             break;
@@ -218,10 +217,7 @@ function redo(){
         case "shapeVisible":
             shapeInvisible(ope.id,ope.val[0]);
             break;
-        case "addText":
-            shapeInvisible(ope.id,false);
-            break;
-        case "addLine":
+        case "addShape":
             shapeInvisible(ope.id,false);
             break;
         case "resizeCircle":
@@ -231,15 +227,30 @@ function redo(){
             resizeDataStructure(ope.id,ope.val);
             break;
         case "resizeIf":
-            resizeCondition(ope.id,ope.val);
+            resizeGraph(ope.id,ope.val);
             break;
         case "resizeRectangle":
             resizeRecAndImg(ope.id,ope.val);
             break;
+        case "editDataStructure":
+            editDataStructure(ope.id,ope.val);
+            break;
+        case "editGraph":
+            editGraph(ope.id,ope.val);
         default :
             break;
     }
     undoIndex++;
+}
+
+function editGraph(id,val){
+    zr.modShape(id, {style: {val: val}});
+    zr.refresh();
+}
+
+function editDataStructure(id,val){
+    zr.modShape(id, {style: {n:val.length,val: val}});
+    zr.refresh();
 }
 
 //修改圆，三角的大小
@@ -255,7 +266,7 @@ function resizeDataStructure(id,val){
 }
 
 //修改if,while,dowhile的大小
-function resizeCondition(id,val){
+function resizeGraph(id,val){
     zr.modShape(id, {style: {length: val}});
     zr.refresh();
 }

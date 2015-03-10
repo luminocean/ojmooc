@@ -442,6 +442,10 @@ function addOperation(val){
     o.bind("dragend",Dragged);
     zr.addShape(o);
     zr.render();
+
+    var id = o.id;
+    addObjs(o);
+    addOpes(new Operation(id,"addShape"));
 }
 
 function editOperation(params){
@@ -470,9 +474,15 @@ function editOperation(params){
 
         $(".textField").bind("keydown",function(e){
             if(e.keyCode == 13){
+                var preVal = [params.target.style.val[0]];
+
                 params.target.style.val[0] = $("#operation").val();
                 layer.close(editVal);
                 zr.render();
+
+                var id = shape.id;
+                var val = [shape.style.val[0],shape.style.val[1],shape.style.val[2]];
+                addOpes(new Operation(id,"editGraph",val,preVal));
             }
         });
     }
@@ -498,6 +508,10 @@ function addDoWhile(val){
     d.bind("dragend",Dragged);
     zr.addShape(d);
     zr.render();
+
+    var id = d.id;
+    addObjs(d);
+    addOpes(new Operation(id,"addShape"));
 }
 
 function editDoWhile(params){
@@ -527,10 +541,16 @@ function editDoWhile(params){
 
         $(".textField").bind("keydown",function(e){
             if(e.keyCode == 13){
+                var preVal = [ params.target.style.val[0], params.target.style.val[1]];
+
                 params.target.style.val[0] = $("#do").val();
                 params.target.style.val[1] = $("#while").val();
                 layer.close(editVal);
                 zr.render();
+
+                var id = shape.id;
+                var val = [shape.style.val[0],shape.style.val[1],shape.style.val[2]];
+                addOpes(new Operation(id,"editGraph",val,preVal));
             }
         });
     }
@@ -556,6 +576,10 @@ function addWhile(val){
     w.bind("dragend",Dragged);
     zr.addShape(w);
     zr.render();
+
+    var id = w.id;
+    addObjs(w);
+    addOpes(new Operation(id,"addShape"));
 }
 
 function editWhile(params){
@@ -585,10 +609,16 @@ function editWhile(params){
 
         $(".textField").bind("keydown",function(e){
             if(e.keyCode == 13){
+                var preVal = [params.target.style.val[0],params.target.style.val[1]];
+
                 params.target.style.val[0] = $("#while").val();
                 params.target.style.val[1] = $("#do").val();
                 layer.close(editVal);
                 zr.render();
+
+                var id = shape.id;
+                var val = [shape.style.val[0],shape.style.val[1],shape.style.val[2]];
+                addOpes(new Operation(id,"editGraph",val,preVal));
             }
         });
     }
@@ -615,6 +645,10 @@ function addIf(val){
     i.bind("dragend",Dragged);
     zr.addShape(i);
     zr.render();
+
+    var id = i.id;
+    addObjs(i);
+    addOpes(new Operation(id,"addShape"));
 }
 
 function editIf(params){
@@ -640,17 +674,22 @@ function editIf(params){
                 '<label>else</label><input id="else" class="textField" type="text"></div>'
             }
         });
-        $("#if").val(params.target.style.val[0]);
-        $("#do").val(params.target.style.val[1]);
-        $("#else").val(params.target.style.val[2]);
+        $("#if").val(shape.style.val[0]);
+        $("#do").val(shape.style.val[1]);
+        $("#else").val(shape.style.val[2]);
 
         $(".textField").bind("keydown",function(e){
             if(e.keyCode == 13){
-                params.target.style.val[0] = $("#if").val();
-                params.target.style.val[1] = $("#do").val();
-                params.target.style.val[2] = $("#else").val();
+                var preVal = [shape.style.val[0],shape.style.val[1],shape.style.val[2]];
+                shape.style.val[0] = $("#if").val();
+                shape.style.val[1] = $("#do").val();
+                shape.style.val[2] = $("#else").val();
                 layer.close(editVal);
                 zr.render();
+
+                var id = shape.id;
+                var val = [shape.style.val[0],shape.style.val[1],shape.style.val[2]];
+                addOpes(new Operation(id,"editGraph",val,preVal));
             }
         });
     }
@@ -679,52 +718,13 @@ function addArray(val){
     arr.bind("dragend",Dragged);
     zr.addShape(arr);
     zr.render();
+
+    var id = arr.id;
+    addObjs(arr);
+    addOpes(new Operation(id,"addShape"));
 }
 
-function dbClick(params){
-    var currentTime = new Date().getTime();
-    if((currentTime - dbcstart) < 300){
-        var shape = params.target;
-        var event = require("zrender/tool/event");
-        var yLoc = (event.getY(params.event)+graphBoard.offsetTop);
-        var xLoc = (event.getX(params.event)+graphBoard.offsetLeft);
 
-        var editVal = $.layer({
-            type: 1,
-            title: false,
-            offset:[yLoc.toString()+"px",xLoc.toString()+"px"],
-            area: ["170px","20px"],
-            border: [0], //去掉默认边框
-            shade: [0], //去掉遮罩
-            closeBtn: [0, true],
-            page: {
-                html: '<div style="width:180px; height:20px;"><input id="textField" type="text"></div>'
-            }
-        });
-
-        var textField = $("#textField");
-        var val = shape.style.val;
-        var s = new String();
-        for(var i = 0; i < val.length; i++){
-            s+=val[i];
-            if(i != val.length-1){
-                s+=",";
-            }
-        }
-        textField.val(s);
-
-        textField.bind("keydown",function(e){
-            if(e.keyCode == 13){
-                var arr = textField.val().split(",");
-                shape.style.n = arr.length;
-                shape.style.val = arr;
-                layer.close(editVal);
-                zr.render();
-            }
-        });
-    }
-    dbcstart = currentTime;
-}
 
 
 function addQueue(val){
@@ -747,6 +747,10 @@ function addQueue(val){
     que.bind("dragend",Dragged);
     zr.addShape(que);
     zr.render();
+
+    var id = que.id;
+    addObjs(que);
+    addOpes(new Operation(id,"addShape"));
 }
 
 
@@ -770,6 +774,10 @@ function addStack(val){
     sta.bind("dragend",Dragged);
     zr.addShape(sta);
     zr.render();
+
+    var id = sta.id;
+    addObjs(sta);
+    addOpes(new Operation(id,"addShape"));
 }
 
 
@@ -794,6 +802,10 @@ function addCircle(r,x,y){
     circle.drift = drift;
     zr.addShape(circle);
     zr.render();
+
+    var id = circle.id;
+    addObjs(circle);
+    addOpes(new Operation(id,"addShape"));
 }
 
 
@@ -818,6 +830,10 @@ function addSquare(r,x,y){
     shape.drift = drift;
     zr.addShape(shape);
     zr.render();
+
+    var id = shape.id;
+    addObjs(shape);
+    addOpes(new Operation(id,"addShape"));
 }
 
 
@@ -843,6 +859,10 @@ function addRectangle(w,h,x,y){
     shape.drift = drift;
     zr.addShape(shape);
     zr.render();
+
+    var id = shape.id;
+    addObjs(shape);
+    addOpes(new Operation(id,"addShape"));
 }
 
 function addTriangle(r,x,y){
@@ -865,6 +885,10 @@ function addTriangle(r,x,y){
     shape.drift = drift;
     zr.addShape(shape);
     zr.render();
+
+    var id = shape.id;
+    addObjs(shape);
+    addOpes(new Operation(id,"addShape"));
 }
 
 
@@ -886,6 +910,11 @@ function addImage(){
     image.bind("dragend",Dragged);
     image.drift = drift;
     zr.addShape(image);
+    zr.render();
+
+    var id = image.id;
+    addObjs(image);
+    addOpes(new Operation(id,"addShape"));
 }
 
 function drift(dx,dy){
@@ -926,6 +955,57 @@ function Dragged(params){
             }
         });
     }
+}
+
+//数组，栈，队列双击，修改内容
+function dbClick(params){
+    var currentTime = new Date().getTime();
+    if((currentTime - dbcstart) < 300){
+        var shape = params.target;
+        var event = require("zrender/tool/event");
+        var yLoc = (event.getY(params.event)+graphBoard.offsetTop);
+        var xLoc = (event.getX(params.event)+graphBoard.offsetLeft);
+
+        var editVal = $.layer({
+            type: 1,
+            title: false,
+            offset:[yLoc.toString()+"px",xLoc.toString()+"px"],
+            area: ["170px","20px"],
+            border: [0], //去掉默认边框
+            shade: [0], //去掉遮罩
+            closeBtn: [0, true],
+            page: {
+                html: '<div style="width:180px; height:20px;"><input id="textField" type="text"></div>'
+            }
+        });
+
+        var textField = $("#textField");
+        var val = shape.style.val;
+
+        var s = new String();
+        for(var i = 0; i < val.length; i++){
+            s+=val[i];
+            if(i != val.length-1){
+                s+=",";
+            }
+        }
+        textField.val(s);
+
+        textField.bind("keydown",function(e){
+            if(e.keyCode == 13){
+                var arr = textField.val().split(",");
+                shape.style.n = arr.length;
+                var preVal = shape.style.val;
+                shape.style.val = arr;
+                layer.close(editVal);
+                zr.render();
+
+                var id = shape.id;
+                addOpes(new Operation(id,"editDataStructure",arr,preVal));
+            }
+        });
+    }
+    dbcstart = currentTime;
 }
 
 

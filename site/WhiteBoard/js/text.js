@@ -77,7 +77,7 @@ function addText(txt,x,y){
     zr.addShape(text);
     zr.render();
     addObjs(text);
-    addOpes(new Operation(text.id,"addText",[txt,x,y]));
+    addOpes(new Operation(text.id,"addShape",[txt,x,y]));
     //objs.push(text);
     //opes.push(new Operation(text.id,"addText",[txt,x,y]));
     //haveUndo = false;

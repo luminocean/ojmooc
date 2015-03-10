@@ -64,7 +64,7 @@ $("#graphBoard").bind("mouseup",function(e){
     if(currentLine != null){
         addObjs(currentLine);
         var id = currentLine.id;
-        addOpes(new Operation(id,"addLine"));
+        addOpes(new Operation(id,"addShape"));
         currentLine = null;
     }
     onDraw = false;
