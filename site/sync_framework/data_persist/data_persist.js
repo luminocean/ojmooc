@@ -66,3 +66,7 @@ exports.delete = function(tablename,condition,value){
         connect.end();
     });
 }
+
+course = function (cid) {
+    this.cid = cid;
+}
