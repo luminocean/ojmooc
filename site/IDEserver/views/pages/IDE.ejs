@@ -39,7 +39,7 @@
                                     </select>
                                 </td>
                                 <td>
-                                    <input type="submit" value="RUN">
+                                    <input type="submit" value="RUN" onclick="sendData()">
                                 </td>
                                 <td>
                                     <input type="submit" value="DEBUG">
@@ -58,7 +58,6 @@
             <div class="col-sm-4">
                 <div class="well">
                     <h3>Look I'm A Sidebar!</h3>
-                    <%= result%>
                 </div>
             </div>
 
@@ -95,6 +94,30 @@
     }
 
     function sendData(){
+        var editor = ace.edit("editor");
+        var inputEditor = ace.edit("inputEditor");
+        var xmlhttp;
+        var content = editor.getValue();
+        if (window.XMLHttpRequest)
+        {// code for IE7+, Firefox, Chrome, Opera, Safari
+            xmlhttp=new XMLHttpRequest();
+        }
+        else
+        {// code for IE6, IE5
+            xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+        }
+        xmlhttp.onreadystatechange=function()
+        {
+            if (xmlhttp.readyState==4 && xmlhttp.status==200)
+            {
+                var outputEditor = ace.edit("outputEditor");
+                outputEditor.setValue(xmlhttp.responseText);
+                outputEditor.setReadOnly(true);
+            }
+        }
+        xmlhttp.open("POST","/IDE/handle",true);
+        xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+        xmlhttp.send("code="+content);
 
     }
 </script>
