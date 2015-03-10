@@ -33,7 +33,11 @@ exports.writeWatcherPid = function(){
     fs.writeFileSync(watcherPidFilePath,process.pid);
 };
 
-
+/**
+ * 将新的配置写入HAProxy配置文件
+ * @param entries
+ * @param callback
+ */
 exports.write = function(entries,callback){
     var configText = format(entries);
     //开启shell执行子进程，将输入数据通过stdin输入
