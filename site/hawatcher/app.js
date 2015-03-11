@@ -19,11 +19,6 @@ var lastContainers = [];
 //解析进程参数
 var mode = resolveArgs(process.argv);
 
-//如果指定了端口，则覆盖配置中的端口设置
-if(commander.port){
-    config.port = commander.port;
-}
-
 //同步写入自己的pid,从而可以写脚本去通过写入的pid手动触发hawatcher的检查
 system.writeWatcherPid();
 
@@ -32,7 +27,6 @@ var d = domain.create();
 //异步异常处理
 d.on('error',function(err){
     console.error(err);
-    system.logError(err,'*domainException*');
 });
 
 inspect();
@@ -46,14 +40,12 @@ emitter.on('reinspect',function(){
     inspect();
 });
 
-//设定进程退出时的行为
+//设定进程事件
 process.on('SIGINT',exit);
 process.on('SIGTERM',exit);
 process.on('exit',exit);
 process.on('uncaughtException',function(err){
     console.error(err);
-    system.logError(err,'*uncaughtException*');
-    exit();
 });
 //收到信号时出发reinspect事件
 process.on('SIGUSR2', function(){
@@ -307,6 +299,11 @@ function resolveArgs(args){
     }else{
         //默认监视runner
         mode = config.modes.runner;
+    }
+
+    //如果指定了端口，则覆盖配置中的端口设置
+    if(commander.port){
+        config.port = commander.port;
     }
 
     return mode;

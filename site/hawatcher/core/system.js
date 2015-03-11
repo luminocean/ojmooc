@@ -104,12 +104,12 @@ exports.cleanupRuntime = function(){
  * @param err
  * @param msg
  */
-exports.logError = function(err,msg){
+/*exports.logError = function(err,msg){
     fs.writeFileSync(path.join(config.runtime.dir,'err.txt'),err.stack);
     fs.writeFileSync(path.join(config.runtime.dir,'err.txt'), '\n-->'+msg+'\n',{
         "flag":"a"
     });
-};
+};*/
 
 /**
  * 将entry格式化成HAProxy识别的配置格式
