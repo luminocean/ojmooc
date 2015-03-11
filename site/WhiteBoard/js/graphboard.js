@@ -50,8 +50,6 @@ require(
         IsogonShape = require("zrender/shape/Isogon");
         Base = require("zrender/shape/Base");
 
-
-        addImage();
         zr.render();
     }
 );

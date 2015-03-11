@@ -893,12 +893,12 @@ function addTriangle(r,x,y){
 
 
 
-function addImage(){
+function addImage(img,x,y){
     var image = new ImageShape({
         style: {
-            image: "img/img.jpg",
-            x: 50,
-            y: 50,
+            image: img,
+            x: x,
+            y: y,
             preLocation:[50,50],
             width:50,
             height:50
