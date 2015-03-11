@@ -15,7 +15,6 @@ var config = require('./config/config');
 util.prepareDir();
 Q.longStackSupport = true;
 system.writeWatcherPid();
-setupEvents();
 
 //上次获取的容器列表
 var lastContainers = [];
@@ -23,9 +22,9 @@ var lastContainers = [];
 var mode = resolveArgs(process.argv);
 //使用domain处理异常
 var d = domain.create();
-d.on('error',function(err){
-    console.error(err); //捕获到的异常就直接打印出来
-});
+
+setupEvents();
+
 
 /**
  * 周期性地检查docker容器的健康状况，业务核心
@@ -249,40 +248,48 @@ function processContainerChanges(containers){
  * 设置相关事件处理
  */
 function setupEvents(){
-    //设定进程事件
-    process.on('SIGINT',exitWithSignal);
-    process.on('SIGTERM',exitWithSignal);
-    process.on('exit',exit);
-    process.on('uncaughtException',function(err){
-        console.error(err);
-        exit(1);
+    //退出信号
+    process.on('SIGINT',function(){
+        process.exit(0);
+    });
+    process.on('SIGTERM',function(){
+        process.exit(0);
     });
 
-    //手动刷新事件注册
     var emitter = new events.EventEmitter();
+    //手动刷新事件
     emitter.on('reinspect',function(){
         console.log('手动刷新docker容器列表');
         inspectContainers();
     });
-    //收到信号时出发reinspect事件
+    //刷新信号
     process.on('SIGUSR2', function(){
         emitter.emit('reinspect');
     });
 
+    //未捕获异常的处理，必须退出
+    process.on('uncaughtException',function(err){
+        console.error(err);
+        process.exit(0);
+    });
+
+    //domain异常的处理
+    d.on('error',function(err){
+        console.error(err); //捕获到的异常就直接打印出来
+        process.exit(1);
+    });
+
+    //注册退出时的处理函数，不可停止
+    process.on('exit',exitHandler);
+
     /**
-     * 进程退出时的处理函数
+     * 进程退出时的处理函数,这是进程退出时最后执行的一个函数
      * @param code 退出code
      */
-    function exit(code){
-        system.cleanupRuntime();
+    function exitHandler(code){
         console.log('Exit with code:'+code);
-    }
-    /**
-     * 信号退出的处理函数
-     */
-    function exitWithSignal(){
+        //退出前的清理
         system.cleanupRuntime();
-        process.exit(0);
     }
 }
 
