@@ -9,52 +9,43 @@ var controller = require('./core/controller');
 var system = require('./core/system');
 var config = require('./config/config');
 
+/**
+ * 应用初始化部分
+ */
 util.prepareDir();
-//开启Q的debug模式
 Q.longStackSupport = true;
+system.writeWatcherPid();
+setupEvents();
 
 //上次获取的容器列表
 var lastContainers = [];
-
 //解析进程参数
 var mode = resolveArgs(process.argv);
-
-//同步写入自己的pid,从而可以写脚本去通过写入的pid手动触发hawatcher的检查
-system.writeWatcherPid();
-
-//使用domain来捕获异步异常
+//使用domain处理异常
 var d = domain.create();
-//异步异常处理
 d.on('error',function(err){
-    console.error(err);
+    console.error(err); //捕获到的异常就直接打印出来
 });
-
-inspect();
-//每过一定时间检查一次
-setInterval(inspect, config.inspectTimeInterval);
-
-//手动刷新事件处理
-var emitter = new events.EventEmitter();
-emitter.on('reinspect',function(){
-    console.log('手动刷新docker容器列表');
-    inspect();
-});
-//设置process相关事件
-setupProcessEvents();
 
 /**
- * 在domain内运行inspectContainers
+ * 周期性地检查docker容器的健康状况，业务核心
  */
-function inspect(){
+inspectContainers();
+setInterval(inspectContainers, config.inspectTimeInterval); //每过一定时间检查一次
+
+/**
+ * 在domain内运行容器监控函数
+ */
+function inspectContainers(){
     d.run(function(){
-        //console.error('inspect');
-        inspectContainers();
+        doInspectingContainers();
     });
 }
+
 /**
  * 检查docker内配置的容器是否有变化，如果有变化则刷新HAProxy的负载配置
  */
-function inspectContainers(){
+function doInspectingContainers(){
     //将异步的检查动作promise化，所有的docker宿主机的容器列表都取得后统一处理
     var promises = [];
     for(var i=0; i<config.inspectIps.length; i++){
@@ -80,7 +71,6 @@ function inspectContainers(){
                 console.error(result.reason.stack);
             }
         });
-
         //所有宿主机上配置的docker容器集合
         //仅仅是将containerGroups里面的元素展开而已
         var containers = [];
@@ -101,14 +91,11 @@ function inspectContainers(){
                     if(err) return console.error(err);
                 });
                 //设定1秒后重新检查
-                setTimeout(inspectContainers,1000);
+                setTimeout(doInspectingContainers,1000);
             }else{
-                //console.log('共检测到容器数：'+containers.length+' 存活容器数:'+survivors.length);
                 processContainerChanges(survivors);
             }
         });
-
-        //processContainerChanges(containers);
     });
 }
 
@@ -125,10 +112,9 @@ function validateContainers(containers,callback){
 
     //计数已经检查了几个容器了，全部检查完以后才调用callback
     var counter = 0;
-
     //如果为空直接返回，否则不会进入下面的循环而卡死
     if(containers.length == 0){
-        return callback(null,survivors);
+        return callback(null,survivors,zombies);
     }
 
     for(var i=0; i<containers.length; i++){
@@ -260,9 +246,9 @@ function processContainerChanges(containers){
 }
 
 /**
- * 设置process相关事件
+ * 设置相关事件处理
  */
-function setupProcessEvents(){
+function setupEvents(){
     //设定进程事件
     process.on('SIGINT',exitWithSignal);
     process.on('SIGTERM',exitWithSignal);
@@ -272,6 +258,12 @@ function setupProcessEvents(){
         exit(1);
     });
 
+    //手动刷新事件注册
+    var emitter = new events.EventEmitter();
+    emitter.on('reinspect',function(){
+        console.log('手动刷新docker容器列表');
+        inspectContainers();
+    });
     //收到信号时出发reinspect事件
     process.on('SIGUSR2', function(){
         emitter.emit('reinspect');

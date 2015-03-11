@@ -27,8 +27,10 @@ var pidFilePath = path.join(runtimePath,runtimeConfig.pid.replace(/\*/,fileName)
 var watcherPidFilePath
     = path.join(runtimePath,runtimeConfig.watcherPid.replace(/\*/,fileName));
 
-//写入HAWatcher本身的pid
-//这里需要同步的写法，因为这个动作是一次性的，直到进程的结束
+/**
+ * 写入HAWatcher本身的pid，从而可以写脚本去通过该pid手动触发hawatcher的检查
+ * 这里需要同步的写法，因为这个动作是一次性的，直到进程的结束
+ */
 exports.writeWatcherPid = function(){
     fs.writeFileSync(watcherPidFilePath,process.pid);
 };
