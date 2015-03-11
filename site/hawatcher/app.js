@@ -30,33 +30,24 @@ d.on('error',function(err){
 });
 
 inspect();
-//十分钟检查一次
+//每过一定时间检查一次
 setInterval(inspect, config.inspectTimeInterval);
 
-//手动刷新事件注册
+//手动刷新事件处理
 var emitter = new events.EventEmitter();
 emitter.on('reinspect',function(){
     console.log('手动刷新docker容器列表');
     inspect();
 });
-
-//设定进程事件
-process.on('SIGINT',exit);
-process.on('SIGTERM',exit);
-process.on('exit',exit);
-process.on('uncaughtException',function(err){
-    console.error(err);
-});
-//收到信号时出发reinspect事件
-process.on('SIGUSR2', function(){
-    emitter.emit('reinspect');
-});
+//设置process相关事件
+setupProcessEvents();
 
 /**
  * 在domain内运行inspectContainers
  */
 function inspect(){
     d.run(function(){
+        //console.error('inspect');
         inspectContainers();
     });
 }
@@ -247,19 +238,11 @@ function getContainersOnHost(url,ip,callback){
     });
 }
 
-//var counter= 0;
 /**
  * 处理Docker容器变化，如果有变化则刷新HAProxy配置信息
  * @param containers
  */
 function processContainerChanges(containers){
-    //手动制造异常的临时代码
-    /*if(counter==2){
-        throw new Error('err!');
-    }else{
-        counter++;
-    }*/
-
     //如果取到的信息和上一次一样则直接跳过
     if(util.isSame(containers, lastContainers)) return;
 
@@ -274,6 +257,41 @@ function processContainerChanges(containers){
     //否则根据新取到的容器信息刷新HAProxy
     lastContainers = containers;
     controller.refresh(containers);
+}
+
+/**
+ * 设置process相关事件
+ */
+function setupProcessEvents(){
+    //设定进程事件
+    process.on('SIGINT',exitWithSignal);
+    process.on('SIGTERM',exitWithSignal);
+    process.on('exit',exit);
+    process.on('uncaughtException',function(err){
+        console.error(err);
+        exit(1);
+    });
+
+    //收到信号时出发reinspect事件
+    process.on('SIGUSR2', function(){
+        emitter.emit('reinspect');
+    });
+
+    /**
+     * 进程退出时的处理函数
+     * @param code 退出code
+     */
+    function exit(code){
+        system.cleanupRuntime();
+        console.log('Exit with code:'+code);
+    }
+    /**
+     * 信号退出的处理函数
+     */
+    function exitWithSignal(){
+        system.cleanupRuntime();
+        process.exit(0);
+    }
 }
 
 /**
@@ -307,18 +325,4 @@ function resolveArgs(args){
     }
 
     return mode;
-}
-
-/**
- * 进程退出时的处理函数
- * @param msg
- */
-function exit(msg){
-    system.cleanupRuntime();
-    if(msg instanceof Error)
-        console.log('Exits with error:'+msg);
-    else if(msg)
-        console.log('Exits with code:'+msg);
-
-    process.exit(0);
 }
