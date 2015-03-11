@@ -102,20 +102,11 @@ exports.cleanupRuntime = function(){
 /**
  * 将错误信息记录到文件系统中，以便查找错误
  * @param err
+ * @param msg
  */
-exports.logError = function(err){
+exports.logError = function(err,msg){
     fs.writeFileSync(path.join(config.runtime.dir,'err.txt'),err.stack);
-
-    var date = new Date();
-    var year = date.getFullYear();
-    var month = date.getMonth()+1;
-    var day = date.getDate();
-    var hour = date.getHours();
-    var minute = date.getMinutes();
-    var second = date.getSeconds();
-    //追加时间
-    fs.writeFileSync(path.join(config.runtime.dir,'err.txt'),
-        '\nlog时间：'+year+'年'+month+'月'+day+'日 '+hour+':'+minute+':'+second+'\n',{
+    fs.writeFileSync(path.join(config.runtime.dir,'err.txt'), '\n-->'+msg+'\n',{
         "flag":"a"
     });
 };

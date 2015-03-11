@@ -1,5 +1,6 @@
 #!/usr/bin/nodejs
 var events = require('events');
+var domain = require('domain');
 var request = require('request');
 var Q = require('q');
 var commander = require('commander');
@@ -26,14 +27,23 @@ if(commander.port){
 //同步写入自己的pid,从而可以写脚本去通过写入的pid手动触发hawatcher的检查
 system.writeWatcherPid();
 
-inspectContainers();
-//十分钟检查一次
-setInterval(inspectContainers, config.inspectTimeInterval);
+//使用domain来捕获异步异常
+var d = domain.create();
+//异步异常处理
+d.on('error',function(err){
+    console.error(err);
+    system.logError(err,'*domainException*');
+});
 
+inspect();
+//十分钟检查一次
+setInterval(inspect, config.inspectTimeInterval);
+
+//手动刷新事件注册
 var emitter = new events.EventEmitter();
 emitter.on('reinspect',function(){
     console.log('手动刷新docker容器列表');
-    inspectContainers();
+    inspect();
 });
 
 //设定进程退出时的行为
@@ -42,16 +52,23 @@ process.on('SIGTERM',exit);
 process.on('exit',exit);
 process.on('uncaughtException',function(err){
     console.error(err);
-    system.logError(err);
-    //发生此类异常暂不退出
-    //exit();
+    system.logError(err,'*uncaughtException*');
+    exit();
 });
 //收到信号时出发reinspect事件
 process.on('SIGUSR2', function(){
     emitter.emit('reinspect');
 });
 
-/*
+/**
+ * 在domain内运行inspectContainers
+ */
+function inspect(){
+    d.run(function(){
+        inspectContainers();
+    });
+}
+/**
  * 检查docker内配置的容器是否有变化，如果有变化则刷新HAProxy的负载配置
  */
 function inspectContainers(){
@@ -238,11 +255,19 @@ function getContainersOnHost(url,ip,callback){
     });
 }
 
+//var counter= 0;
 /**
  * 处理Docker容器变化，如果有变化则刷新HAProxy配置信息
  * @param containers
  */
 function processContainerChanges(containers){
+    //手动制造异常的临时代码
+    /*if(counter==2){
+        throw new Error('err!');
+    }else{
+        counter++;
+    }*/
+
     //如果取到的信息和上一次一样则直接跳过
     if(util.isSame(containers, lastContainers)) return;
 
