@@ -2,7 +2,8 @@ var config = {
     //HAProxy监听的默认端口
     "port":8080,
     //监控docker的时间间隔
-    "inspectTimeInterval":1000*60*10,
+    //"inspectTimeInterval":1000*60*10,
+    "inspectTimeInterval":1000*10,
     //监控的主机地址，这里可以填写一系列的ip地址从而监控多个docker宿主机
     "inspectIps":[
         "127.0.0.1"

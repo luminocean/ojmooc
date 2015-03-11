@@ -40,7 +40,10 @@ emitter.on('reinspect',function(){
 process.on('SIGINT',exit);
 process.on('SIGTERM',exit);
 process.on('exit',exit);
-process.on('uncaughtException',exit);
+process.on('uncaughtException',function(err){
+    system.logError(err);
+    exit();
+});
 //收到信号时出发reinspect事件
 process.on('SIGUSR2', function(){
     emitter.emit('reinspect');
@@ -91,7 +94,7 @@ function inspectContainers(){
         validateContainers(containers,function(err,survivors,zombies){
             if(zombies.length > 0){
                 //复活死亡的容器(如果有),但不是立即更新负载均衡
-                //因为不能保证重启成功了，要等下一次
+                //因为不能保证重启成功了，要等下一次检查
                 bringBackToLife(zombies,function(err){
                     if(err) return console.error(err);
                 });

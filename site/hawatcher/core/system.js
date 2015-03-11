@@ -100,6 +100,14 @@ exports.cleanupRuntime = function(){
 };
 
 /**
+ * 将错误信息记录到文件系统中，以便查找错误
+ * @param err
+ */
+exports.logError = function(err){
+    fs.writeFileSync(path.join(config.runtime.dir,'err.txt'),err.stack);
+};
+
+/**
  * 将entry格式化成HAProxy识别的配置格式
  * @param entries
  */
