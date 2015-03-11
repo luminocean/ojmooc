@@ -28,4 +28,8 @@ echo "关闭负载均衡..."
 watcher_halt_script_path="${site_path}/hawatcher/script/halt.sh"
 sudo "$watcher_halt_script_path"
 
+sleep 3
+app_js_process_count=$(ps -e| grep "app.js" | wc -l)
+haproxy_process_count=$(ps -e| grep "haproxy" | wc -l)
+echo "当前剩余app.js进程${app_js_process_count}个，haproxy进程${haproxy_process_count}个"
 

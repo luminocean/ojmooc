@@ -48,11 +48,32 @@ done
 echo "开启HAProxy和HAWatcher的负载均衡..."
 watcher_app_path="${site_path}/hawatcher/app.js"
 
-#runner负载均衡，默认配置，监听8080
-"${watcher_app_path}" &
+#创建需要的目录和文件（如果没有）
+mkdir -p "/tmp/hawatcher"
+echo "" > "/tmp/hawatcher/runner_output.txt"
+echo "" > "/tmp/hawatcher/debugger_output.txt"
 
-#debugger负载均衡,debugger模式，监听8081
-"${watcher_app_path}" -d -p 8081 &
+#开启runner负载均衡，默认配置，监听8080
+nohup "${watcher_app_path}" &> "/tmp/hawatcher/runner_output.txt" &
+
+#开启debugger负载均衡,debugger模式，监听8081
+nohup "${watcher_app_path}" -d -p 8081 &> "/tmp/hawatcher/debugger_output.txt" &
+
+#停顿一下给需要的进程一点时间准备
+sleep 3
+
+#输出watcher刚才的标准输出
+cat "/tmp/hawatcher/runner_output.txt"
+cat "/tmp/hawatcher/debugger_output.txt"
+
+#统计开启的进程的数量数据
+app_js_process_count=$(ps -e| grep "app.js" | wc -l)
+haproxy_process_count=$(ps -e| grep "haproxy" | wc -l)
+echo "当前app.js进程${app_js_process_count}个，haproxy进程${haproxy_process_count}个"
+
+#记录时间
+echo "记录重启时间到/tmp/oj_restart_timestamp.txt..."
+echo $(date +%c) >> /tmp/oj_restart_timestamp.txt
 
 
 

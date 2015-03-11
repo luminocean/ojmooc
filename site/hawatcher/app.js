@@ -1,5 +1,6 @@
 #!/usr/bin/nodejs
 var events = require('events');
+var domain = require('domain');
 var request = require('request');
 var Q = require('q');
 var commander = require('commander');
@@ -8,48 +9,42 @@ var controller = require('./core/controller');
 var system = require('./core/system');
 var config = require('./config/config');
 
+/**
+ * 应用初始化部分
+ */
 util.prepareDir();
-//开启Q的debug模式
 Q.longStackSupport = true;
+system.writeWatcherPid();
 
 //上次获取的容器列表
 var lastContainers = [];
-
 //解析进程参数
 var mode = resolveArgs(process.argv);
+//使用domain处理异常
+var d = domain.create();
 
-//如果指定了端口，则覆盖配置中的端口设置
-if(commander.port){
-    config.port = commander.port;
-}
+setupEvents();
 
-//同步写入自己的pid,从而可以写脚本去通过写入的pid手动触发hawatcher的检查
-system.writeWatcherPid();
 
+/**
+ * 周期性地检查docker容器的健康状况，业务核心
+ */
 inspectContainers();
-//十分钟检查一次
-setInterval(inspectContainers, config.inspectTimeInterval);
+setInterval(inspectContainers, config.inspectTimeInterval); //每过一定时间检查一次
 
-var emitter = new events.EventEmitter();
-emitter.on('reinspect',function(){
-    console.log('手动刷新docker容器列表');
-    inspectContainers();
-});
-
-//设定进程退出时的行为
-process.on('SIGINT',exit);
-process.on('SIGTERM',exit);
-process.on('exit',exit);
-process.on('uncaughtException',exit);
-//收到信号时出发reinspect事件
-process.on('SIGUSR2', function(){
-    emitter.emit('reinspect');
-});
-
-/*
- * 检查docker内配置的容器是否有变化，如果有变化则刷新HAProxy的负载配置
+/**
+ * 在domain内运行容器监控函数
  */
 function inspectContainers(){
+    d.run(function(){
+        doInspectingContainers();
+    });
+}
+
+/**
+ * 检查docker内配置的容器是否有变化，如果有变化则刷新HAProxy的负载配置
+ */
+function doInspectingContainers(){
     //将异步的检查动作promise化，所有的docker宿主机的容器列表都取得后统一处理
     var promises = [];
     for(var i=0; i<config.inspectIps.length; i++){
@@ -75,7 +70,6 @@ function inspectContainers(){
                 console.error(result.reason.stack);
             }
         });
-
         //所有宿主机上配置的docker容器集合
         //仅仅是将containerGroups里面的元素展开而已
         var containers = [];
@@ -88,12 +82,19 @@ function inspectContainers(){
         }
 
         //进行容器的心跳检查，如果存活则进行容器的变更处理
-        validateContainers(containers,function(err,survivors){
-            //console.log('共检测到容器数：'+containers.length+' 存活容器数:'+survivors.length);
-            processContainerChanges(survivors);
+        validateContainers(containers,function(err,survivors,zombies){
+            if(zombies.length > 0){
+                //复活死亡的容器(如果有),但不是立即更新负载均衡
+                //因为不能保证重启成功了，要等下一次检查
+                bringBackToLife(zombies,function(err){
+                    if(err) return console.error(err);
+                });
+                //设定1秒后重新检查
+                setTimeout(doInspectingContainers,1000);
+            }else{
+                processContainerChanges(survivors);
+            }
         });
-
-        //processContainerChanges(containers);
     });
 }
 
@@ -103,14 +104,16 @@ function inspectContainers(){
  * @param callback
  */
 function validateContainers(containers,callback){
-    //还存活着的容器，将会作为callback的参数返回
+    //还存活着的容器
     var survivors = [];
+    //已经卡死的容器
+    var zombies = [];
+
     //计数已经检查了几个容器了，全部检查完以后才调用callback
     var counter = 0;
-
     //如果为空直接返回，否则不会进入下面的循环而卡死
     if(containers.length == 0){
-        return callback(null,survivors);
+        return callback(null,survivors,zombies);
     }
 
     for(var i=0; i<containers.length; i++){
@@ -143,19 +146,47 @@ function validateContainers(containers,callback){
             request(requestObj,function(err, response, body){
                 //发完请求后就把计数器+1，不管成功还是失败
                 counter++;
-                if(err)
-                    return (err.stack);
 
-                if(body.isAlive)
+                //如果容器还活着则加入幸存者名单
+                if(body && body.isAlive)
                     survivors.push(container);
+                else
+                    //否则加入僵尸名单，准备将其复活
+                    zombies.push(container);
 
-                //所有容器都检查完毕后调用回调函数回传幸存容器
+                if(err)
+                    console.error(err.stack);
+
+                //所有容器都检查完毕后调用回调函数回传检查后的容器
                 if(counter===containers.length){
-                    callback(null,survivors);
+                    callback(null,survivors,zombies);
                 }
             });
         })(requestObj,container);
     }
+}
+
+/**
+ * 复活容器
+ * @param zombies
+ * @param callback
+ */
+function bringBackToLife(zombies,callback){
+    //处理的容器计数
+    var processedCount = 0;
+
+    zombies.forEach(function(container){
+        //给要重启的容器添加模式信息，这样shell脚本才知道要重启哪一种docker容器
+        container.mode = mode;
+        system.restartContainer(container,function(err){
+            processedCount++;
+            if(err) return callback(err);
+            //全部处理完，回调
+            if(processedCount == zombies.length){
+                callback();
+            }
+        });
+    });
 }
 
 /**
@@ -214,6 +245,55 @@ function processContainerChanges(containers){
 }
 
 /**
+ * 设置相关事件处理
+ */
+function setupEvents(){
+    //退出信号
+    process.on('SIGINT',function(){
+        process.exit(0);
+    });
+    process.on('SIGTERM',function(){
+        process.exit(0);
+    });
+
+    var emitter = new events.EventEmitter();
+    //手动刷新事件
+    emitter.on('reinspect',function(){
+        console.log('手动刷新docker容器列表');
+        inspectContainers();
+    });
+    //刷新信号
+    process.on('SIGUSR2', function(){
+        emitter.emit('reinspect');
+    });
+
+    //未捕获异常的处理，必须退出
+    process.on('uncaughtException',function(err){
+        console.error(err);
+        process.exit(0);
+    });
+
+    //domain异常的处理
+    d.on('error',function(err){
+        console.error(err); //捕获到的异常就直接打印出来
+        process.exit(1);
+    });
+
+    //注册退出时的处理函数，不可停止
+    process.on('exit',exitHandler);
+
+    /**
+     * 进程退出时的处理函数,这是进程退出时最后执行的一个函数
+     * @param code 退出code
+     */
+    function exitHandler(code){
+        console.log('Exit with code:'+code);
+        //退出前的清理
+        system.cleanupRuntime();
+    }
+}
+
+/**
  * 解析进程参数，返回相应配置文件中的模式对象，表示相应的运行参数
  * @param args
  * @returns {*}
@@ -238,19 +318,10 @@ function resolveArgs(args){
         mode = config.modes.runner;
     }
 
+    //如果指定了端口，则覆盖配置中的端口设置
+    if(commander.port){
+        config.port = commander.port;
+    }
+
     return mode;
-}
-
-/**
- * 进程退出时的处理函数
- * @param msg
- */
-function exit(msg){
-    system.cleanupRuntime();
-    if(msg instanceof Error)
-        console.log('Exits with error:'+err);
-    else if(msg)
-        console.log('Exits with code:'+err);
-
-    process.exit(0);
 }
