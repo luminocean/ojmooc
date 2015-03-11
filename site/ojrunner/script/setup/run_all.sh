@@ -54,5 +54,13 @@ watcher_app_path="${site_path}/hawatcher/app.js"
 #debugger负载均衡,debugger模式，监听8081
 "${watcher_app_path}" -d -p 8081 &
 
+sleep 3
+app_js_process_count=$(ps -e| grep "app.js" | wc -l)
+haproxy_process_count=$(ps -e| grep "haproxy" | wc -l)
+echo "当前app.js进程${app_js_process_count}个，haproxy进程${haproxy_process_count}个"
+
+echo "记录重启时间到/tmp/oj_restart_timestamp.txt..."
+echo $(date +%c) >> /tmp/oj_restart_timestamp.txt
+
 
 

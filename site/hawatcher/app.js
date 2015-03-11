@@ -41,8 +41,10 @@ process.on('SIGINT',exit);
 process.on('SIGTERM',exit);
 process.on('exit',exit);
 process.on('uncaughtException',function(err){
+    console.error(err);
     system.logError(err);
-    exit();
+    //发生此类异常暂不退出
+    //exit();
 });
 //收到信号时出发reinspect事件
 process.on('SIGUSR2', function(){
