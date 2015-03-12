@@ -89,8 +89,8 @@ function doInspectingContainers(){
                 bringBackToLife(zombies,function(err){
                     if(err) return console.error(err);
                 });
-                //设定1秒后重新检查
-                setTimeout(doInspectingContainers,1000);
+                //重新检查
+                setTimeout(doInspectingContainers,3000);
             }else{
                 processContainerChanges(survivors);
             }
@@ -270,7 +270,7 @@ function setupEvents(){
     //未捕获异常的处理，必须退出
     process.on('uncaughtException',function(err){
         console.error(err);
-        process.exit(0);
+        process.exit(1);
     });
 
     //domain异常的处理

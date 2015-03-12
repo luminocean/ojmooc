@@ -20,7 +20,6 @@ function get_current_path(){
 
 #site目录
 site_path=$(get_ojmooc_path)"/site"
-
 if [ ! -d "$site_path" ];then
     echo "ojmooc下的site目录找不到，获取的site目录为${site_path}"
     exit 0
@@ -36,7 +35,6 @@ debugger_up_script_path="${site_path}/ojdebugger/script/up.sh"
 
 #一起开启多少个runner以及debugger
 up_num=3
-
 counter=0
 while [ "$counter" -lt "$up_num" ]
 do
@@ -45,26 +43,20 @@ do
     ((counter+=1))
 done
 
+#开启HAProxy和HAWatcher的负载均衡
 echo "开启HAProxy和HAWatcher的负载均衡..."
-watcher_app_path="${site_path}/hawatcher/app.js"
+watcher_up_script_path="${site_path}/hawatcher/script/up.sh"
 
-#创建需要的目录和文件（如果没有）
-mkdir -p "/tmp/hawatcher"
-echo "" > "/tmp/hawatcher/runner_output.txt"
-echo "" > "/tmp/hawatcher/debugger_output.txt"
+${watcher_up_script_path} ojrunner
+${watcher_up_script_path} ojdebugger
 
-#开启runner负载均衡，默认配置，监听8080
-nohup "${watcher_app_path}" &> "/tmp/hawatcher/runner_output.txt" &
 
-#开启debugger负载均衡,debugger模式，监听8081
-nohup "${watcher_app_path}" -d -p 8081 &> "/tmp/hawatcher/debugger_output.txt" &
-
-#停顿一下给需要的进程一点时间准备
+#停顿一下，然后做进程信息统计和记录
 sleep 3
 
 #输出watcher刚才的标准输出
-cat "/tmp/hawatcher/runner_output.txt"
-cat "/tmp/hawatcher/debugger_output.txt"
+cat "/tmp/hawatcher/ojrunner_output.txt"
+cat "/tmp/hawatcher/ojdebugger_output.txt"
 
 #统计开启的进程的数量数据
 app_js_process_count=$(ps -e| grep "app.js" | wc -l)

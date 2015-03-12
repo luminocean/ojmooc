@@ -4,10 +4,19 @@
 #运行期文件目录
 runtime_dir="/tmp/hawatcher/runtime"
 
+#关闭守护模式
+echo "关闭守护模式..."
+deamon_ids=$(ps -e | grep script_deamon | awk '{print $1}')
+if [ -n "$deamon_ids" ];then
+    sudo kill $(ps -e | grep script_deamon | awk '{print $1}')
+fi
+
+#关闭hawatcher进程
 for file in $(ls "$runtime_dir");do
-    watcher_pid_file_name=$(echo "$file" | grep watcher)
-    if [ -n "$watcher_pid_file_name" ];then
-        watcher_pid=$(cat "$runtime_dir/$watcher_pid_file_name")
+    pid_file_name=$(echo "$file" | grep watcher)
+    pid_file_path="$runtime_dir/$pid_file_name"
+    if [ -n "$pid_file_name" -a -f "$pid_file_path" ];then
+        watcher_pid=$(cat "$runtime_dir/$pid_file_name")
         #向watcher进程发送信号
         sudo kill "$watcher_pid"
     fi
