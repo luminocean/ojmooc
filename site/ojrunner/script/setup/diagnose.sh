@@ -36,22 +36,22 @@ function test(){
 }
 
 case "$1" in
-    p)
+    -p)
         processStatus
         ;;
-    d)
+    -d)
         dockerStatus
         ;;
-    t)
+    -t)
         test
         ;;
-    a)
+    -a)
         processStatus
         dockerStatus
         test
         ;;
     *)
-        echo "Usage: diagnose.sh {p|d|t|a}"
+        echo "Usage: diagnose.sh {-p|-d|-t|-a}"
         echo ""
         echo "p=process status"
         echo "d=docker status"

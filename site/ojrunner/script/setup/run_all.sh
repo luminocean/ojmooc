@@ -29,6 +29,9 @@ echo "关闭已开启的docker环境以及负载均衡"
 current_path=$(get_current_path)
 "${current_path}/destroy_all.sh"
 
+#关闭和开启之间停顿一下
+sleep 3
+
 echo "开启runner和debugger的docker环境..."
 runner_up_script_path="${site_path}/ojrunner/script/up.sh"
 debugger_up_script_path="${site_path}/ojdebugger/script/up.sh"
