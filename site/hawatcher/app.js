@@ -176,6 +176,9 @@ function bringBackToLife(zombies,callback){
     var processedCount = 0;
 
     zombies.forEach(function(container){
+        //不是本地的docker容器直接跳过，因为没法重启
+        if(!container.isLocal) return;
+
         //给要重启的容器添加模式信息，这样shell脚本才知道要重启哪一种docker容器
         container.mode = mode;
         system.restartContainer(container,function(err){
@@ -215,6 +218,10 @@ function getContainersOnHost(url,ip,callback){
             var keyFiled = container[mode.field];
             if(keyFiled && keyFiled.match(mode.keyword)){
                 container.ip = ip;
+
+                if( ip == "127.0.0.1" || ip == "localhost" )
+                    container.isLocal = true;
+
                 containers.push(container);
             }
         }
