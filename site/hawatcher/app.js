@@ -134,7 +134,7 @@ function validateContainers(containers,callback){
             "url":url,
             "method":"POST",
             "json":true,
-            "timeout":5000,
+            "timeout":config.heartBeatTimeout,
             "body":{
                 "heartBeat":"Are you alive?"
             }
