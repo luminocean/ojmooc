@@ -23,16 +23,17 @@ exports.absPath = absPath;
  * 清理中间文件
  * @param fileName 中间文件的文件名（扩展名前面的部分）
  * @param dirs 查找的目录
+ * @param callback
  */
-exports.cleanup = function(fileName, dirs){
+exports.cleanup = function(fileName, dirs, callback){
     for(var i=0; i<dirs.length; i++){
         var path = dirs[i]+"/"+fileName;
         for(var j=0; j<extNames.length; j++){
             var extName = extNames[j];
             if(extName)
-                deleteFile(path+"."+extName);
+                deleteFile(path+"."+extName,callback);
             else
-                deleteFile(path);
+                deleteFile(path,callback);
         }
     }
 };
@@ -132,13 +133,14 @@ function convertToSeconds(timeStr){
 /**
  * 删除文件
  * @param path 要删除的文件的路径，如src_repo/aa.cpp
+ * @param callback
  */
-function deleteFile(path){
+function deleteFile(path,callback){
     fs.exists(path, function(exists){
         if(exists){
             fs.unlink(path, function(err){
                 if(err) {
-                    console.log(err);
+                    callback(err);
                 }
             });
         }

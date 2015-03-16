@@ -140,7 +140,7 @@ function deleteFile(path){
         if(exists){
             fs.unlink(path, function(err){
                 if(err) {
-                    console.log(err);
+                    console.error(err);
                 }
             });
         }

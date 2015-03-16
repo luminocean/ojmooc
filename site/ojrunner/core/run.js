@@ -51,11 +51,14 @@ exports.run = function(srcCode, inputData, srcType, callback){
             callback(null, result, params);
         })
         .catch(function(err){
+            console.error(err.stack);
             //失败时回传错误
             callback(err);
         })
         //清理临时文件
         .finally(function(){
-            util.cleanup(programName,[srcPath,buildPath,reportPath]);
+            util.cleanup(programName,[srcPath,buildPath,reportPath],function(err){
+                console.error(err.stack);
+            });
         });
 };

@@ -20,6 +20,7 @@ util.prepareDir();
 Q.longStackSupport =true;
 
 var port = config.app.port;
+
 //启动服务器，指定绑定端口
 http.createServer(function(req,res){
     //将req,res加入队列，等调度到该次请求的时候再把req,res传给配置好的回调函数
@@ -55,7 +56,6 @@ function perform(req,res,next){
 
             //将执行结果转成json字符串返回
             reply(res, resultJson);
-            next();
         })
         //如果出错则返回错误
         .catch(function (err) {
@@ -63,8 +63,11 @@ function perform(req,res,next){
             console.error(err.stack);
             //发出响应
             reply(res, err, 500);
+        })
+        .finally(function(){
             next();
-        });
+        })
+        .done();
 }
 
 /**
