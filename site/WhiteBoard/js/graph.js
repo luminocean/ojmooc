@@ -440,6 +440,7 @@ function addOperation(val){
     o.bind("mousewheel",resizeIf);
     o.bind("mousedown",editOperation);
     o.bind("dragend",Dragged);
+    o.bind("mousedown",getLocation);
     zr.addShape(o);
     zr.render();
 
@@ -506,6 +507,7 @@ function addDoWhile(val){
     d.bind("mousewheel",resizeIf);
     d.bind("mousedown",editDoWhile);
     d.bind("dragend",Dragged);
+    d.bind("mousedown",getLocation);
     zr.addShape(d);
     zr.render();
 
@@ -574,6 +576,7 @@ function addWhile(val){
     w.bind("mousewheel",resizeIf);
     w.bind("mousedown",editWhile);
     w.bind("dragend",Dragged);
+    w.bind("mousedown",getLocation);
     zr.addShape(w);
     zr.render();
 
@@ -643,6 +646,7 @@ function addIf(val){
     i.bind("mousewheel",resizeIf);
     i.bind("mousedown",editIf);
     i.bind("dragend",Dragged);
+    i.bind("mousedown",getLocation);
     zr.addShape(i);
     zr.render();
 
@@ -716,6 +720,7 @@ function addArray(val){
     arr.bind("mousedown",dbClick);
     arr.bind("mousewheel",resizeArray);
     arr.bind("dragend",Dragged);
+    arr.bind("mousedown",getLocation);
     zr.addShape(arr);
     zr.render();
 
@@ -745,6 +750,7 @@ function addQueue(val){
     que.bind("mousewheel",resizeArray);
     que.bind("mousedown",dbClick);
     que.bind("dragend",Dragged);
+    que.bind("mousedown",getLocation);
     zr.addShape(que);
     zr.render();
 
@@ -772,6 +778,7 @@ function addStack(val){
     sta.bind("mousedown",dbClick);
     sta.bind("mousewheel",resizeArray);
     sta.bind("dragend",Dragged);
+    sta.bind("mousedown",getLocation);
     zr.addShape(sta);
     zr.render();
 
@@ -799,6 +806,7 @@ function addCircle(r,x,y){
     });
     circle.bind("mousewheel",resizeCircle);
     circle.bind("dragend",Dragged);
+    circle.bind("mousedown",getLocation);
     circle.drift = drift;
     zr.addShape(circle);
     zr.render();
@@ -827,6 +835,7 @@ function addSquare(r,x,y){
     });
     shape.bind("mousewheel",resizeSquare);
     shape.bind("dragend",Dragged);
+    shape.bind("mousedown",getLocation);
     shape.drift = drift;
     zr.addShape(shape);
     zr.render();
@@ -856,6 +865,7 @@ function addRectangle(w,h,x,y){
     });
     shape.bind("mousewheel",resizeRectangle);
     shape.bind("dragend",Dragged);
+    shape.bind("mousedown",getLocation);
     shape.drift = drift;
     zr.addShape(shape);
     zr.render();
@@ -882,6 +892,7 @@ function addTriangle(r,x,y){
     });
     shape.bind("mousewheel",resizeCircle);
     shape.bind("dragend",Dragged);
+    shape.bind("mousedown",getLocation);
     shape.drift = drift;
     zr.addShape(shape);
     zr.render();
@@ -899,15 +910,14 @@ function addImage(img,x,y){
             image: img,
             x: x,
             y: y,
-            preLocation:[50,50],
-            width:50,
-            height:50
+            preLocation:[50,50]
         },
         draggable:true,
         ignore:false
     });
     image.bind("mousewheel",resizeRectangle);
     image.bind("dragend",Dragged);
+    image.bind("mousedown",getLocation);
     image.drift = drift;
     zr.addShape(image);
     zr.render();
@@ -930,7 +940,7 @@ function Dragged(params){
     var yLoc = event.getY(params.event);
     //opes.push(new Operation(shape.id,"drag",[shape.style.x,shape.style.y],[shape.style.preLocation[0],shape.style.preLocation[1]]));
     addOpes(new Operation(shape.id,"drag",[shape.style.x,shape.style.y],[shape.style.preLocation[0],shape.style.preLocation[1]]));
-    if((xLoc <= 1)||(xLoc >= 498)||(yLoc <= 1)||(yLoc >= 468)){
+    if((xLoc <= 1)||(xLoc >= 498)||(yLoc <= 1)||(yLoc >= 430)){
         $.layer({
             shade: [0],
             area: ['auto','auto'],
@@ -956,6 +966,7 @@ function Dragged(params){
         });
     }
 }
+
 
 //数组，栈，队列双击，修改内容
 function dbClick(params){
@@ -993,15 +1004,23 @@ function dbClick(params){
 
         textField.bind("keydown",function(e){
             if(e.keyCode == 13){
+                var preVal = new Array();
+                for(var i = 0; i < shape.style.val.length; i++){
+                    preVal[i] = shape.style.val[i];
+                }
+
                 var arr = textField.val().split(",");
                 shape.style.n = arr.length;
-                var preVal = shape.style.val;
                 shape.style.val = arr;
                 layer.close(editVal);
                 zr.render();
 
                 var id = shape.id;
-                addOpes(new Operation(id,"editDataStructure",arr,preVal));
+                var val = new Array();
+                for(var i = 0; i < arr.length; i++){
+                    val[i] = arr[i];
+                }
+                addOpes(new Operation(id,"editDataStructure",val,preVal));
             }
         });
     }
