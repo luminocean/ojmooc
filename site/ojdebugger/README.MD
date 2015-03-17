@@ -1,6 +1,6 @@
 # OJDebugger
 
-##简述
+## 简述
 在ojmooc后台提供debug服务的模块，其基本特点是：
 
 * 本身是一个node的web项目，启动后将会监听某一个端口提供http服务
@@ -16,7 +16,7 @@
 > * 继续 (continue)
 > * 结束debug (exit)
 
-##API 说明
+## API 说明
 
 >注意，一般情况下没有必要直接调用ojdebugger的服务。因为子项目ojclient封装了所有构造请求的操作，对外提供了更友好的接口。因此建议y业务上直接使用ojclient的接口。以下仅作为参考文档使用
 
@@ -45,7 +45,7 @@ http://localhost:23333
 ```
 具体例子请看API列表
 
-#API 列表
+# API 列表
 
 以下列出所有debug请求的json对象：
 
@@ -163,7 +163,7 @@ http://localhost:23333
 开始debug | 单步进入 | 单步越过 | 继续
 这几个动作的请求（除了具体的动作字符串）和返回是一样的，因此写在一起，以下均以 **stepInto** 为例，可替换成其他动作。
 
-*强调注：下文中所有说到 **单步** 的地方都泛指run,stepInto,stepOver,continue动作*
+*强调注：下文中所有说到单步的地方都泛指run,stepInto,stepOver,continue动作*
 
 ```javascript
 //请求
@@ -235,4 +235,3 @@ http://localhost:23333
     "debugId":debugId //退出的debugger会话的debugId
 }
 ```
-
