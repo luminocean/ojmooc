@@ -3,6 +3,7 @@ var util = require('./util');
 var dbr = require('../ojclient/app').debugger;
 
 dbr.setPort(8081);
+//dbr.setPort(23333);
 
 var config = [
     {
@@ -40,15 +41,15 @@ config.forEach(function(item){
  */
 function launchDebug(){
     var programSuffix = $('#programSuffix').val();
-    if(!programSuffix) return console.error('没有指定程序后缀');
+    if(!programSuffix) return error('没有指定程序后缀');
     var breakLines = $('#breakLine').val().split(',');
     console.log(breakLines);
 
     util.getData(programSuffix,function(err,sourceCode,inputData){
-        if(err) return console.error(err.stack);
+        if(err) return error(err);
 
         dbr.launchDebug(sourceCode,programSuffix,inputData,breakLines,function(err,debugId,finish,breakPoint,stdout,locals){
-            if(err) return console.error(err.stack);
+            if(err) return error(err);
 
             displayInfo(debugId,finish,breakPoint,stdout,locals);
         });
@@ -74,10 +75,10 @@ function printVal(){
 
 function stepInto(){
     var debugId = $('#debugId').val();
-    if(!debugId) return console.error('找不到从服务器获取的debugId，是否正处于调试？');
+    if(!debugId) return error(new Error('找不到从服务器获取的debugId，是否正处于调试？'));
 
     dbr.stepInto(debugId,function(err,finish,breakPoint,stdout,locals){
-        if(err) return console.error(err);
+        if(err) return error(err);
 
         displayInfo(debugId,finish,breakPoint,stdout,locals);
     });
@@ -85,22 +86,21 @@ function stepInto(){
 
 function stepOver(){
     var debugId = $('#debugId').val();
-    if(!debugId) return console.error('找不到从服务器获取的debugId，是否正处于调试？');
+    if(!debugId) return error(new Error('找不到从服务器获取的debugId，是否正处于调试？'));
 
     dbr.stepOver(debugId,function(err,finish,breakPoint,stdout,locals){
-        if(err) return console.error(err);
+        if(err) return error(err);
 
         displayInfo(debugId,finish,breakPoint,stdout,locals);
     });
 }
 
-//continue
 function ctn(){
     var debugId = $('#debugId').val();
-    if(!debugId) return console.error('找不到从服务器获取的debugId，是否正处于调试？');
+    if(!debugId) return error(new Error('找不到从服务器获取的debugId，是否正处于调试？'));
 
     dbr.continue(debugId,function(err,finish,breakPoint,stdout,locals){
-        if(err) return console.error(err);
+        if(err) return error(err);
 
         displayInfo(debugId,finish,breakPoint,stdout,locals);
     });
@@ -108,12 +108,12 @@ function ctn(){
 
 function exit(){
     var debugId = $('#debugId').val();
-    if(!debugId) return console.error('找不到从服务器获取的debugId，是否正处于调试？');
+    if(!debugId) return error(new Error('找不到从服务器获取的debugId，是否正处于调试？'));
 
     dbr.exit(debugId,function(err,debugId){
-        if(err) return console.error(err);
+        if(err) return error(err);
 
-        display('DEBUG OVER:'+debugId);
+        display('response','DEBUG OVER:'+debugId);
     });
 }
 
@@ -149,4 +149,8 @@ function displayInfo(debugId,finish,breakPoint,stdout,locals){
 
 function display(type,text){
     $("#"+type).val(text);
+}
+
+function error(err){
+    display('response',err.msg);
 }

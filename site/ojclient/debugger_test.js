@@ -43,4 +43,5 @@ Q.denodeify(dbr.launchDebug)(srcCode, srcType, inputData, [27])
     })
     .catch(function (err) {
         console.error(err);
-    });
+    })
+    .done();

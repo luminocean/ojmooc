@@ -100,7 +100,8 @@ dbr.launchDebug = function(srcCode,srcType,inputData,breakLines,callback){
         .catch(function(err){
             console.error(err.stack);
             callback(err);
-        });
+        })
+        .done();
 };
 
 /**
@@ -121,7 +122,7 @@ dbr.debug = function(srcCode,srcType,inputData,callback){
     },null,function(err,result,setCookie){
         if(err) return callback(err);
         if(!result.debugId)
-            return console.error(new Error('异常返回值'+JSON.stringify(result)));
+            return callback(new Error('异常返回值'+JSON.stringify(result)));
 
         //保存debugId与cookie文本的映射
         cookieMap[result.debugId] = setCookie;
@@ -147,7 +148,7 @@ dbr.breakPoint = function(debugId,breakLines,callback){
             if(err) return callback(err);
 
             if(!result.breakPointNum)
-                return console.error(new Error('异常返回值'+JSON.stringify(result)));
+                return callback(new Error('异常返回值'+JSON.stringify(result)));
 
             callback(null,result.breakPointNum);
         });
@@ -174,7 +175,7 @@ dbr.printVal = function(debugId,varName,callback){
             }
 
             if(!result.var || !result.var.value)
-                return console.error(new Error('异常返回值'+JSON.stringify(result)));
+                return callback(new Error('异常返回值'+JSON.stringify(result)));
 
             callback(null,result.var.value);
         });
@@ -194,7 +195,7 @@ dbr.locals = function(debugId,callback){
         },debugId,function(err,result){
             if(err) return callback(err);
             if(!result.locals){
-                return console.error(new Error('*异常返回值'+JSON.stringify(result)));
+                return callback(new Error('异常返回值'+JSON.stringify(result)));
             }
 
             callback(null,result.locals);
