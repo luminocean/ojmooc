@@ -129,6 +129,22 @@ dbr.breakPoint(debugId,breakLines,function(err,breakPointNum) {
 >   * err {object} 错误对象
 >   * debugId {string} 结束的debug会话的凭证，等于之前传入的debugId
 
+## 通用API
+有些api并不是特定用来访问ojrunner或者Ojdebugger的，这些API主要用于设定host或者端口参数。
+其中，主机和端口是指要访问的ojdebugger或者ojrunner**所在主机位置**（IP地址）以及**所监听的端口**。
+
+*言下之意，要访问的ojdebugger或者ojrunner未必在本机，可以在远程部署*
+
+简单示例如下：
+```javascript
+client = require('./app.js').runner;
+//client = require('./app.js').debugger;
+
+//设定主机
+client.setHost(host);
+client.setPort(port);
+```
+
 
 
 
