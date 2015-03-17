@@ -2,19 +2,19 @@
 
 ##简述
 在ojmooc后台提供debug服务的模块，其基本特点是：
-> * 本身是一个node的web项目，启动后将会监听某一个端口提供http服务
-> * 所有的操作基于POST请求，请求内部包含操作相关的json数据
-> * 目前提供的操作有：
->> * 开启debug (debug)
->> * 打断点 (breakPoint)
->> * 查看变量值 (printVal)
->> * 查看局部变量列表 (locals)
->> * 单步进入 (stepInto)
->> * 单步越过 (stepOver)
->> * 继续 (continue)
->> * 结束debug (exit)
 
----
+* 本身是一个node的web项目，启动后将会监听某一个端口提供http服务
+* 所有的操作基于POST请求，请求内部包含操作相关的json数据
+
+目前提供的操作有：
+> * 开启debug (debug)
+> * 打断点 (breakPoint)
+> * 查看变量值 (printVal)
+> * 查看局部变量列表 (locals)
+> * 单步进入 (stepInto)
+> * 单步越过 (stepOver)
+> * 继续 (continue)
+> * 结束debug (exit)
 
 ##API 说明
 
@@ -43,17 +43,13 @@ http://localhost:23333
     "resultData3":"data3"
 }
 ```
-
-
 具体例子请看API列表
-
----
 
 #API 列表
 
 以下列出所有debug请求的json对象：
 
-## 1. debug
+### 1. debug
 开启一个debug会话
 
 ```javascript
@@ -74,7 +70,7 @@ http://localhost:23333
 }
 ```
 
-## 2. breakPoint
+### 2. breakPoint
 在当前debug会话中打一个断点
 
 ```javascript
@@ -94,7 +90,7 @@ http://localhost:23333
 }
 ```
 
-## 3.printVal
+### 3.printVal
 查看一个变量的值
 
 ```javascript
@@ -124,7 +120,7 @@ http://localhost:23333
 }
 ```
 
-## 4.locals
+### 4.locals
 查看局部变量列表
 
 ```javascript
@@ -162,7 +158,7 @@ http://localhost:23333
 }
 ```
 
-## 5.run | stepInto | stepOver | continue
+### 5.run | stepInto | stepOver | continue
 
 开始debug | 单步进入 | 单步越过 | 继续
 这几个动作的请求（除了具体的动作字符串）和返回是一样的，因此写在一起，以下均以 **stepInto** 为例，可替换成其他动作。
@@ -191,40 +187,52 @@ http://localhost:23333
 //响应（运行结束）
 {
     "normalExit":{
-        "processId":processId   //刚才被调试的程序在系统中的pid
+        "processId":processId,   //刚才被调试的程序在系统中的pid
+        "finish":true   //表示当前的debug操作已经结束（但gdb进程还没有退出）
     }
 }
 
 //响应（超出调试范围，比如单步到最后一行还往后单的时候会发生）
 {
     "endSteppingRange":{
-        "msg":msg
+        "msg":msg,
+        "finish":true
     }
 }
 
 //响应（程序未启动，程序还没有进入run的状态或者已经结束了run的时候再单步会发生）
 {
     "notRunning":{
-        "msg":msg
+        "msg":msg,
+        "finish":true
     }
 }
 
 //响应（某些环境下gdb会出现这种错误）
 {
     "noFileOrDirectory":{
-        "msg":msg
+        "msg":msg,
+        "finish":true
     }
 }
 ```
 
+### 6. exit
+退出debugger会话
 
+```javascript
+//请求
+{
+    "exit": {
+        "debugId":debugId
+    }
+}
+```
 
-
-
-
-
-
-
-
-
+```javascript
+//响应
+{
+    "debugId":debugId //退出的debugger会话的debugId
+}
+```
 
