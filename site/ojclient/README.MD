@@ -24,16 +24,16 @@ runner.run(srcCode,srcType,inputData,function(err,result,params,host) {
 说明：
 > * srcCode 要进行编译的源码
 > * srcType 源码类型，目前可选的有四个值
-> > * 'c'	c代码，使用clang编译
-> > * 'cpp'	c\+\+代码，使用clang++编译
-> > * 'pas'	pascal代码，使用freepascal编译
-> > * 'bas'	QBasic代码，使用freebasic的QB模式编译
+>   * 'c'	c代码，使用clang编译
+>   * 'cpp'	c\+\+代码，使用clang++编译
+>   * 'pas'	pascal代码，使用freepascal编译
+>   * 'bas'	QBasic代码，使用freebasic的QB模式编译
 > * inputData 编译后程序需要的输入数据
 > * callback 编译执行成功后的回调函数，入参分别为
-> > * err 错误对象
-> > * result 字符串 输出结果
-> > * params 对象 包含运行时间和内存参数的键值对
-> > * host 字符串 表明这个请求是哪一个主机负责的
+>   * err {object} 错误对象
+>   * result {string} 输出结果
+>   * params {object} 包含运行时间和内存参数的键值对
+>   * host {string} 表明这个请求是哪一个主机负责的
 
 
 ## 访问OJDebugger的API
@@ -59,14 +59,14 @@ dbr.breakPoint(debugId,breakLines,function(err,breakPointNum) {
 说明：
 > * srcCode {string} 要进行编译的源码
 > * srcType {string} 源码类型，目前可选的有四个值
-> > * 'c'	c代码，使用clang编译
-> > * 'cpp'	c\+\+代码，使用clang++编译
-> > * 'pas'	pascal代码，使用freepascal编译
-> > * 'bas'	QBasic代码，使用freebasic的QB模式编译
+>   * 'c'	c代码，使用clang编译
+>   * 'cpp'	c\+\+代码，使用clang++编译
+>   * 'pas'	pascal代码，使用freepascal编译
+>   * 'bas'	QBasic代码，使用freebasic的QB模式编译
 > * inputData {string} 编译后程序需要的输入数据
 > * callback {function} 编译执行成功后的回调函数，入参分别为
-> > * err {object} 错误对象
-> > * debugId {string} debug会话的凭证，之后所有的debug操作都需要这个凭证
+>   * err {object} 错误对象
+>   * debugId {string} debug会话的凭证，之后所有的debug操作都需要这个凭证
 
 #### 2. breakPoint
 在当前debug会话中打一个断点
@@ -77,8 +77,8 @@ dbr.breakPoint(debugId,breakLines,function(err,breakPointNum) {
 > * debugId {string} debug凭证
 > * breakLines {number[]} 要打的断点的行数
 > * callback {function} 编译执行成功后的回调函数，入参分别为
-> > * err {object} 错误对象
-> > * breakPointNum {number} 成功打下断点的个数
+>   * err {object} 错误对象
+>   * breakPointNum {number} 成功打下断点的个数
 
 #### 3. printVal
 查看一个变量的值
@@ -89,8 +89,8 @@ dbr.breakPoint(debugId,breakLines,function(err,breakPointNum) {
 > * debugId {string} debug凭证
 > * varName {string} 要查看的变量名称
 > * callback {function} 编译执行成功后的回调函数，入参分别为
-> > * err {object} 错误对象
-> > * value {string|number} 查询到的变量值
+>   * err {object} 错误对象
+>   * value {string|number} 查询到的变量值
 
 #### 4.locals
 查看局部变量列表
@@ -100,8 +100,8 @@ dbr.breakPoint(debugId,breakLines,function(err,breakPointNum) {
 说明：
 > * debugId {string} debug凭证
 > * callback {function} 编译执行成功后的回调函数，入参分别为
-> > * err {object} 错误对象
-> > * locals {object} 所有局部变量的键值对
+>   * err {object} 错误对象
+>   * locals {object} 所有局部变量的键值对
 
 #### 5.run | stepInto | stepOver | continue
 开始debug | 单步进入 | 单步越过 | 继续
@@ -112,11 +112,11 @@ dbr.breakPoint(debugId,breakLines,function(err,breakPointNum) {
 说明：
 > * debugId {string} debug凭证
 > * callback {function} 编译执行成功后的回调函数，入参分别为
-> > * err {object} 错误对象
-> > * finish {boolean} 被调试的程序是否结束
-> > * breakPoint {object} 断点信息
-> > * stdout {string} 标准输出的值
-> > * locals {object} 局部变量键值对
+>   * err {object} 错误对象
+>   * finish {boolean} 被调试的程序是否结束
+>   * breakPoint {object} 断点信息
+>   * stdout {string} 标准输出的值
+>   * locals {object} 局部变量键值对
 
 #### 6.exit
 退出debugger会话
@@ -126,8 +126,8 @@ dbr.breakPoint(debugId,breakLines,function(err,breakPointNum) {
 说明：
 > * debugId {string} debug凭证
 > * callback {function} 编译执行成功后的回调函数，入参分别为
-> > * err {object} 错误对象
-> > * debugId {string} 结束的debug会话的凭证，等于之前传入的debugId
+>   * err {object} 错误对象
+>   * debugId {string} 结束的debug会话的凭证，等于之前传入的debugId
 
 
 
