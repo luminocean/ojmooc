@@ -152,5 +152,5 @@ function display(type,text){
 }
 
 function error(err){
-    display('response',err.msg);
+    display('response',err.msg || err);
 }

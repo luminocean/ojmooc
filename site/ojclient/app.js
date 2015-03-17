@@ -252,13 +252,25 @@ methodNames.forEach(function(methodName){
             var stdout = result.stdout;
             var locals = result.locals;
 
-            var resultValue = result.breakPoint || result.normalExit
-                || result.endSteppingRange || result.notRunning
-                || result.noFileOrDirectory;
+            //断点信息
+            var breakPoint = result.breakPoint;
+            if(breakPoint)
+                return callback(null,false,breakPoint,stdout,locals);
 
-            if(resultValue)
-                return callback(null,result.finish||false,resultValue,stdout,locals);
+            //退出信息
+            var exit = result.normalExit;
+            if(exit){
+                return callback(null,true,null,stdout,locals);
+            }
 
+            //debug执行错误
+            var debugError =  result.endSteppingRange
+            || result.notRunning || result.noFileOrDirectory;
+            if(debugError){
+                return callback(new Error('调试已结束或超出调试范围'));
+            }
+
+            //如果都不是就直接返回错误
             callback(new Error('异常返回值'+JSON.stringify(result)));
         });
     }
