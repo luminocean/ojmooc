@@ -180,7 +180,9 @@ http://localhost:23333
 {
     "breakPoint":{
         "lineNum":lineNum, //断点发生的行数
-        "text":text   //断点所在处的代码内容（主要做调试用，看的方便）
+        "text":text,   //断点所在处的代码内容（主要做调试用，看的方便），
+        "stdout":stdout, //被调试的程序产生的标准输出，每次产生的标准输出都是一次性的，不会再出现第二次。该属性不一定会出现，取决于是不是产生了标准输出
+        "locals":locals	//当前所有局部变量的键值对
     }
 }
 
@@ -188,7 +190,9 @@ http://localhost:23333
 {
     "normalExit":{
         "processId":processId,   //刚才被调试的程序在系统中的pid
-        "finish":true   //表示当前的debug操作已经结束（但gdb进程还没有退出）
+        "finish":true,   //表示当前的debug操作已经结束（但gdb进程还没有退出）
+        "stdout":stdout, //被调试的程序产生的标准输出，每次产生的标准输出都是一次性的，不会再出现第二次。该属性不一定会出现，取决于是不是产生了标准输出
+        "locals":locals	//当前所有局部变量的键值对
     }
 }
 
