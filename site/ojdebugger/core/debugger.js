@@ -344,8 +344,9 @@ dbr.exit = function(debugId,callback){
         delete gdbContainer.gdbMap[debugId];
         delete gdbContainer.timeoutMap[debugId];
 
-        var result = methods['exit'].result;
-        result.debugId = debugId;
+        var result = {
+            "debugId":debugId
+        };
 
         callback(null,result);
 

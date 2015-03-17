@@ -24,7 +24,7 @@ for(var methodName in parseConfig){
                 //取出该类别的正则、子属性名称列表等信息
                 var aspect = methodConfig[aspectName];
                 //需要手动构建的属性直接跳过
-                if(aspect.auto === false)
+                if(aspect.manual === true)
                     continue;
 
                 var reg = aspect.reg;
@@ -57,6 +57,7 @@ for(var methodName in parseConfig){
 }
 
 //以下为特殊的定制解析方法
+//先由配置文件中定义的parser方法进行解析（主要解析的都是异常输出），如果没有得到结果则运行下面定义的方法
 /**
  * 局部变量解析
  * @param batch
@@ -93,6 +94,10 @@ parser.parseLocals = util.mergeMethod(parser,'parseLocals',function(batch){
     return object;
 });
 
+/**
+ * 查看变量值的解析
+ * @type {Function}
+ */
 parser.parsePrintVal = util.mergeMethod(parser,'parsePrintVal',function(batch){
     //要返回的对象
     var object = null;
