@@ -16,6 +16,9 @@ var config = [
         "id":"printValBtn",
         "handler":printVal
     },{
+        "id":"runBtn",
+        "handler":run
+    },{
         "id":"stepIntoBtn",
         "handler":stepInto
     },{
@@ -70,6 +73,17 @@ function printVal(){
         }
 
         display('varVal',value);
+    });
+}
+
+function run(){
+    var debugId = $('#debugId').val();
+    if(!debugId) return error(new Error('找不到从服务器获取的debugId，是否正处于调试？'));
+
+    dbr.run(debugId,function(err,finish,breakPoint,stdout,locals){
+        if(err) return error(err);
+
+        displayInfo(debugId,finish,breakPoint,stdout,locals);
     });
 }
 
