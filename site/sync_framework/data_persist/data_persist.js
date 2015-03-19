@@ -9,33 +9,32 @@ getConnect = function(){
     });
     return connect;
 }
-exports.queryInfo = function(tablename,conditon,value) {
+exports.query_course_info = function(condition,value,callback) {
     var connect = getConnect();
-    var table_name = tablename;
+    var table_name = 't_course_info';
     var database_name = 'ojmooc';
     connect.connect();
     connect.query("use " + database_name);
 
     connect.query(
-        'SELECT * FROM '+table_name + ' where ' + conditon + ' = ?', [value],
-        function selectCb(err, results, fields) {
+        'SELECT * FROM '+table_name + ' where ' + condition + ' = ?', [value], function (err, results, fields) {
             if (err) {
-                throw err;
+                callback(err);
             }
 
             if (results) {
+                callback(null,results);
                 for (var i = 0; i < results.length; i++) {
                     console.log("%d\t%s\t%s", results[i].cid, results[i].cname, results[i].csection);
                 }
             }
             connect.end();
-        }
-    );
+        });
 }
 
-exports.insert = function(tablename,values){
+exports.insert_course_info = function(values){
     var connect = getConnect();
-    var table_name = tablename;
+    var table_name = 't_course_info';
     var database_name = 'ojmooc';
     connect.connect();
     connect.query("use " + database_name);
@@ -50,9 +49,9 @@ exports.insert = function(tablename,values){
     });
 }
 
-exports.delete = function(tablename,condition,value){
+exports.delete_course_info = function(condition,value){
     var connect = getConnect();
-    var table_name = tablename;
+    var table_name = 't_course_info';
     var database_name = 'ojmooc';
     connect.connect();
     connect.query("use " + database_name);
@@ -65,8 +64,4 @@ exports.delete = function(tablename,condition,value){
         }
         connect.end();
     });
-}
-
-course = function (cid) {
-    this.cid = cid;
 }

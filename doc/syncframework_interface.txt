@@ -1,16 +1,28 @@
-syncfw.setPFrame(operList/*操作序列，是一个数组，
-	数组元素为[time|operName|object|parameter]*/,corseName/*对应课程的名称*/,startTime,endTime/*这段操作的起止时间*/){
-	
-}
-	
-syncfw.setFFrame(compomentState/*组件的中间状态*/,corseName/*对应课程的名称*/,currentTime/*当前状态所在的时间*/){
-	
-}
+使用方法参照test_record,如下介绍：
+以editor为例：使用时首先要声明一个editor自身的对象
+然后以该对象为参数声明一个recorder
+再将该recorder注册到timeline上，调用timeline的addRecorder即可
+var editor = new editor();
+var recorder = new recorder(editor);
+var timeline = new timeline();	//该timeline对象由同步框架生成，其他组件调用即可
+timeline.addRecorder(recorder);
 
-syncfw.getPFrame(corseName/*对应课程的名称*/,startTime,endTime/*这段操作的起止时间*/){
+
+同步框架对外提供的方法：
+	recorder.saveStep = function(action){
+		//当有事件触发时调用该方法，将执行的操作写入同步框架
+	}
 	
-}
+其他组件需要提供的方法：
+
+	others.setStep(action){
+		//需要对传来的action解析并执行
+	}
 	
-syncfw.getFFrame(corseName/*对应课程的名称*/,currentTime/*当前状态所在的时间*/){
+	others.getScene(state){
+		//当同步框架调用该方法时将当前的组件状态传递出来
+	}
 	
-}
+	others.setScene(state){
+		//能够对传来的state进行解析并展示在相应组件上
+	}

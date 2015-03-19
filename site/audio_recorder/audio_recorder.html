@@ -139,7 +139,6 @@
             recorder.stopRecording(function(url) {
                 audio.src = url;
                 audio.muted = false;
-                //audio.play();
                 playaudio(url);
                 document.getElementById('audio-url-preview').innerHTML = '<a href="' + url + '" target="_blank">Recorded Audio URL</a>';
             });
