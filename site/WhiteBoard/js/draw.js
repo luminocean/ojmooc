@@ -23,9 +23,26 @@ function setPenSize(size){
     penSize = size;
 }
 
+function quickAddLine(pointList){
+    var BrokenLineShape = require("zrender/shape/BrokenLine");
+    var line = new BrokenLineShape({
+        style : {
+            pointList : pointList,
+            lineWidth : penSize,
+            color:penColor
+        },
+        draggable:false
+    });
+    zr.addShape(line);
+    currentLine = line;
+    zr.render();
+
+    addObjs(currentLine);
+    var id = currentLine.id;
+    addOpes(new Operation(id,"addShape"));
+}
 
 function addLine(x,y){
-
     var BrokenLineShape = require("zrender/shape/BrokenLine");
     var line = new BrokenLineShape({
         style : {
@@ -42,6 +59,7 @@ function addLine(x,y){
 
 $("#graphBoard").bind("mousedown",function(e){
     if(currentState == states.pen){
+        currentLine = null;
         onDraw = true;
     }
 });
@@ -65,7 +83,7 @@ $("#graphBoard").bind("mouseup",function(e){
         addObjs(currentLine);
         var id = currentLine.id;
         addOpes(new Operation(id,"addShape"));
-        currentLine = null;
+        //currentLine = null;
     }
     onDraw = false;
 });

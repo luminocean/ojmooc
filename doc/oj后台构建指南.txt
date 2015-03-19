@@ -54,6 +54,12 @@ HAWatcher用来完全控制HAProxy（一个负载均衡软件），在实际的�
 ·在Vagrantfile的配置中如果开启了8080和8081端口的转发，那么在windows宿主机上就可以直接通过转发的端口访问了。
 
 
+还可以直接使用自动脚本:
+ 执行ojrunner/script/setup/run_all.sh即可直接启动实例环境，包括ojrunner和ojdebugger的docker环境（各3个）以及对应的负载均衡
+
+ 执行destroy_all.sh可关闭（删除）刚才启动的所有环境（run_all.sh也会首先调用destroy_all.sh）
+
+ diagnose.sh用于诊断当前运行的环境是否正常工作，使用方法可直接执行diagnose.sh来查看
 
 
 

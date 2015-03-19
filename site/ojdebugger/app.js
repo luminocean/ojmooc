@@ -36,12 +36,14 @@ function perform(req,res,next){
         })
         .then(function(result){
             reply(res,result);
-            next();
         })
         .catch(function(err){
             reply(res,err,500);
+        })
+        .finally(function(){
             next();
-        });
+        })
+        .done();
 }
 
 /**

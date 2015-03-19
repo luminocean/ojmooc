@@ -1,5 +1,6 @@
 #!/usr/bin/nodejs
 var events = require('events');
+var domain = require('domain');
 var request = require('request');
 var Q = require('q');
 var commander = require('commander');
@@ -8,48 +9,42 @@ var controller = require('./core/controller');
 var system = require('./core/system');
 var config = require('./config/config');
 
+/**
+ * 应用初始化部分
+ */
 util.prepareDir();
-//开启Q的debug模式
 Q.longStackSupport = true;
+system.writeWatcherPid();
 
 //上次获取的容器列表
 var lastContainers = [];
-
 //解析进程参数
 var mode = resolveArgs(process.argv);
+//使用domain处理异常
+var d = domain.create();
 
-//如果指定了端口，则覆盖配置中的端口设置
-if(commander.port){
-    config.port = commander.port;
-}
+setupEvents();
 
-//同步写入自己的pid,从而可以写脚本去通过写入的pid手动触发hawatcher的检查
-system.writeWatcherPid();
 
+/**
+ * 周期性地检查docker容器的健康状况，业务核心
+ */
 inspectContainers();
-//十分钟检查一次
-setInterval(inspectContainers, config.inspectTimeInterval);
+setInterval(inspectContainers, config.inspectTimeInterval); //每过一定时间检查一次
 
-var emitter = new events.EventEmitter();
-emitter.on('reinspect',function(){
-    console.log('手动刷新docker容器列表');
-    inspectContainers();
-});
-
-//设定进程退出时的行为
-process.on('SIGINT',exit);
-process.on('SIGTERM',exit);
-process.on('exit',exit);
-process.on('uncaughtException',exit);
-//收到信号时出发reinspect事件
-process.on('SIGUSR2', function(){
-    emitter.emit('reinspect');
-});
-
-/*
- * 检查docker内配置的容器是否有变化，如果有变化则刷新HAProxy的负载配置
+/**
+ * 在domain内运行容器监控函数
  */
 function inspectContainers(){
+    d.run(function(){
+        doInspectingContainers();
+    });
+}
+
+/**
+ * 检查docker内配置的容器是否有变化，如果有变化则刷新HAProxy的负载配置
+ */
+function doInspectingContainers(){
     //将异步的检查动作promise化，所有的docker宿主机的容器列表都取得后统一处理
     var promises = [];
     for(var i=0; i<config.inspectIps.length; i++){
@@ -75,7 +70,6 @@ function inspectContainers(){
                 console.error(result.reason.stack);
             }
         });
-
         //所有宿主机上配置的docker容器集合
         //仅仅是将containerGroups里面的元素展开而已
         var containers = [];
@@ -91,19 +85,16 @@ function inspectContainers(){
         validateContainers(containers,function(err,survivors,zombies){
             if(zombies.length > 0){
                 //复活死亡的容器(如果有),但不是立即更新负载均衡
-                //因为不能保证重启成功了，要等下一次
+                //因为不能保证重启成功了，要等下一次检查
                 bringBackToLife(zombies,function(err){
                     if(err) return console.error(err);
                 });
-                //设定1秒后重新检查
-                setTimeout(inspectContainers,1000);
+                //重新检查
+                setTimeout(doInspectingContainers,3000);
             }else{
-                //console.log('共检测到容器数：'+containers.length+' 存活容器数:'+survivors.length);
                 processContainerChanges(survivors);
             }
         });
-
-        //processContainerChanges(containers);
     });
 }
 
@@ -120,10 +111,9 @@ function validateContainers(containers,callback){
 
     //计数已经检查了几个容器了，全部检查完以后才调用callback
     var counter = 0;
-
     //如果为空直接返回，否则不会进入下面的循环而卡死
     if(containers.length == 0){
-        return callback(null,survivors);
+        return callback(null,survivors,zombies);
     }
 
     for(var i=0; i<containers.length; i++){
@@ -144,7 +134,7 @@ function validateContainers(containers,callback){
             "url":url,
             "method":"POST",
             "json":true,
-            "timeout":5000,
+            "timeout":config.heartBeatTimeout,
             "body":{
                 "heartBeat":"Are you alive?"
             }
@@ -186,6 +176,9 @@ function bringBackToLife(zombies,callback){
     var processedCount = 0;
 
     zombies.forEach(function(container){
+        //不是本地的docker容器直接跳过，因为没法重启
+        if(!container.isLocal) return;
+
         //给要重启的容器添加模式信息，这样shell脚本才知道要重启哪一种docker容器
         container.mode = mode;
         system.restartContainer(container,function(err){
@@ -225,6 +218,10 @@ function getContainersOnHost(url,ip,callback){
             var keyFiled = container[mode.field];
             if(keyFiled && keyFiled.match(mode.keyword)){
                 container.ip = ip;
+
+                if( ip == "127.0.0.1" || ip == "localhost" )
+                    container.isLocal = true;
+
                 containers.push(container);
             }
         }
@@ -255,6 +252,55 @@ function processContainerChanges(containers){
 }
 
 /**
+ * 设置相关事件处理
+ */
+function setupEvents(){
+    //退出信号
+    process.on('SIGINT',function(){
+        process.exit(0);
+    });
+    process.on('SIGTERM',function(){
+        process.exit(0);
+    });
+
+    var emitter = new events.EventEmitter();
+    //手动刷新事件
+    emitter.on('reinspect',function(){
+        console.log('手动刷新docker容器列表');
+        inspectContainers();
+    });
+    //刷新信号
+    process.on('SIGUSR2', function(){
+        emitter.emit('reinspect');
+    });
+
+    //未捕获异常的处理，必须退出
+    process.on('uncaughtException',function(err){
+        console.error(err);
+        process.exit(1);
+    });
+
+    //domain异常的处理
+    d.on('error',function(err){
+        console.error(err); //捕获到的异常就直接打印出来
+        process.exit(1);
+    });
+
+    //注册退出时的处理函数，不可停止
+    process.on('exit',exitHandler);
+
+    /**
+     * 进程退出时的处理函数,这是进程退出时最后执行的一个函数
+     * @param code 退出code
+     */
+    function exitHandler(code){
+        console.log('Exit with code:'+code);
+        //退出前的清理
+        system.cleanupRuntime();
+    }
+}
+
+/**
  * 解析进程参数，返回相应配置文件中的模式对象，表示相应的运行参数
  * @param args
  * @returns {*}
@@ -279,19 +325,10 @@ function resolveArgs(args){
         mode = config.modes.runner;
     }
 
+    //如果指定了端口，则覆盖配置中的端口设置
+    if(commander.port){
+        config.port = commander.port;
+    }
+
     return mode;
-}
-
-/**
- * 进程退出时的处理函数
- * @param msg
- */
-function exit(msg){
-    system.cleanupRuntime();
-    if(msg instanceof Error)
-        console.log('Exits with error:'+msg);
-    else if(msg)
-        console.log('Exits with code:'+msg);
-
-    process.exit(0);
 }

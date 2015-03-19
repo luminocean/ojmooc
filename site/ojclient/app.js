@@ -100,7 +100,8 @@ dbr.launchDebug = function(srcCode,srcType,inputData,breakLines,callback){
         .catch(function(err){
             console.error(err.stack);
             callback(err);
-        });
+        })
+        .done();
 };
 
 /**
@@ -121,7 +122,7 @@ dbr.debug = function(srcCode,srcType,inputData,callback){
     },null,function(err,result,setCookie){
         if(err) return callback(err);
         if(!result.debugId)
-            return console.error(new Error('异常返回值'+JSON.stringify(result)));
+            return callback(new Error('异常返回值'+JSON.stringify(result)));
 
         //保存debugId与cookie文本的映射
         cookieMap[result.debugId] = setCookie;
@@ -147,7 +148,7 @@ dbr.breakPoint = function(debugId,breakLines,callback){
             if(err) return callback(err);
 
             if(!result.breakPointNum)
-                return console.error(new Error('异常返回值'+JSON.stringify(result)));
+                return callback(new Error('异常返回值'+JSON.stringify(result)));
 
             callback(null,result.breakPointNum);
         });
@@ -174,7 +175,7 @@ dbr.printVal = function(debugId,varName,callback){
             }
 
             if(!result.var || !result.var.value)
-                return console.error(new Error('异常返回值'+JSON.stringify(result)));
+                return callback(new Error('异常返回值'+JSON.stringify(result)));
 
             callback(null,result.var.value);
         });
@@ -194,7 +195,7 @@ dbr.locals = function(debugId,callback){
         },debugId,function(err,result){
             if(err) return callback(err);
             if(!result.locals){
-                return console.error(new Error('*异常返回值'+JSON.stringify(result)));
+                return callback(new Error('异常返回值'+JSON.stringify(result)));
             }
 
             callback(null,result.locals);
@@ -251,13 +252,25 @@ methodNames.forEach(function(methodName){
             var stdout = result.stdout;
             var locals = result.locals;
 
-            var resultValue = result.breakPoint || result.normalExit
-                || result.endSteppingRange || result.notRunning
-                || result.noFileOrDirectory;
+            //断点信息
+            var breakPoint = result.breakPoint;
+            if(breakPoint)
+                return callback(null,false,breakPoint,stdout,locals);
 
-            if(resultValue)
-                return callback(null,result.finish||false,resultValue,stdout,locals);
+            //退出信息
+            var exit = result.normalExit;
+            if(exit){
+                return callback(null,true,null,stdout,locals);
+            }
 
+            //debug执行错误
+            var debugError =  result.endSteppingRange
+            || result.notRunning || result.noFileOrDirectory;
+            if(debugError){
+                return callback(new Error('调试已结束或超出调试范围'));
+            }
+
+            //如果都不是就直接返回错误
             callback(new Error('异常返回值'+JSON.stringify(result)));
         });
     }

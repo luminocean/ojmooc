@@ -5,7 +5,7 @@
 //添加文件拖动监听
 function addFileListener(){
     var container = $("#fileBoard")[0];
-    var fileList = $("#fileList")[0];
+    //var fileList = $("#fileList")[0];
 
     //文件拖进监听
     container.addEventListener("dragenter",function(event){
@@ -27,6 +27,7 @@ function addFileListener(){
 //放下鼠标，添加文件
 function handleDrop(event){
     var files = event.dataTransfer.files;
+    console.log(files);
     event.stopPropagation();
     event.preventDefault();
     var fileList = document.getElementById("fileList");

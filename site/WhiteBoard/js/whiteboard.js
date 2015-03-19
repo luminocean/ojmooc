@@ -65,6 +65,7 @@ $("#penMenu").bind("click",function(e){
         shade:[1],
         title: false,
         closeBtn:false,
+        fix:false,
         shadeClose:true,
         border:[0],
         offset:[yLoc.toString()+"px",xLoc.toString()+"px"],
@@ -90,6 +91,7 @@ $("#textMenu").bind("click",function(e){
         title: false,
         closeBtn:false,
         shadeClose:true,
+        fix:false,
         border:[0],
         offset:[yLoc.toString()+"px",xLoc.toString()+"px"],
         area: ["400px","200px"],
@@ -110,6 +112,7 @@ $("#imageMenu").bind("mousedown",function(e){
         shade:[1],
         title: false,
         closeBtn:false,
+        fix:false,
         shadeClose:true,
         border:[0],
         offset:[yLoc.toString()+"px",xLoc.toString()+"px"],
@@ -164,6 +167,7 @@ function undo(){
         return;
     }
     var ope = opes[undoIndex];
+    console.log(ope);
     switch(ope.operation){
         case "addShape":
             shapeInvisible(ope.id,true);
@@ -199,7 +203,7 @@ function undo(){
         default :
             break;
     }
-    console.log(ope);
+
 }
 
 function redo(){
@@ -243,11 +247,13 @@ function redo(){
     undoIndex++;
 }
 
+//修改图形的值
 function editGraph(id,val){
     zr.modShape(id, {style: {val: val}});
     zr.refresh();
 }
 
+//修改数据结构的值
 function editDataStructure(id,val){
     zr.modShape(id, {style: {n:val.length,val: val}});
     zr.refresh();

@@ -18,14 +18,19 @@ if [ ! -d "$site_path" ];then
     exit 0
 fi
 
+echo "关闭负载均衡..."
+watcher_halt_script_path="${site_path}/hawatcher/script/halt.sh"
+sudo "$watcher_halt_script_path"
+
 echo "删除所有docker容器..."
 docker_ids=$(docker ps -a | awk 'NF>10 {print $1}')
 if [ -n "$docker_ids" ];then
     docker rm -f $(docker ps -a | awk 'NF>10 {print $1}')
 fi
 
-echo "关闭负载均衡..."
-watcher_halt_script_path="${site_path}/hawatcher/script/halt.sh"
-sudo "$watcher_halt_script_path"
-
+#停顿一下，然后统计进程信息
+sleep 3
+app_js_process_count=$(ps -e| grep "app.js" | wc -l)
+haproxy_process_count=$(ps -e| grep "haproxy" | wc -l)
+echo "当前剩余app.js进程${app_js_process_count}个，haproxy进程${haproxy_process_count}个"
 

@@ -8,6 +8,8 @@ var app = express();
 var url = require('url');
 var path = require('path');
 
+//引入body-parser，允许从请求中获得参数
+app.use(require('body-parser').urlencoded({extended: true}))
 app.set('view engine', 'ejs');
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -30,7 +32,7 @@ app.get('/', function(req, res) {
 
 app.get('/IDE', function (req,res) {
     res.render('pages/IDE');
-})
+});
 //    runner.setPort(8080);
 //    runner.setHost('121.42.155.75');
 //    var srcType = 'pas';
@@ -46,10 +48,12 @@ app.get('/IDE', function (req,res) {
 //            })
 //        });
 
-app.get('/IDE/handle', function (req,res) {
-    var content = req.query.code;
+app.post('/IDE/handle', function (req,res) {
+    console.log("IN");
+    var content = req.body.Name;
     console.log(content);
     res.send(content);
-})
+    res.end();
+});
 app.listen(8080);
 console.log('8080 is the magic port');

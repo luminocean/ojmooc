@@ -3,6 +3,7 @@
  * 用于测试oj客户端的测试用例文件，可以作为如何使用该客户端的参考
  */
 var fs = require('fs');
+var path = require('path');
 var Q = require('q');
 var dbr = require('./app.js').debugger;
 
@@ -18,9 +19,9 @@ Q.longStackSupport = true;
 //测试的编译类型
 var srcType = 'cpp';
 //读取测试用源文件
-var srcCode = fs.readFileSync('./input_data/'+srcType+'_code','utf-8');
+var srcCode = fs.readFileSync(path.join(__dirname,'./input_data/'+srcType+'_code'),'utf-8');
 //读取测试用数据
-var inputData = fs.readFileSync('./input_data/'+srcType+'_data','utf-8');
+var inputData = fs.readFileSync(path.join(__dirname,'./input_data/'+srcType+'_data'),'utf-8');
 
 var currentDebugId = null;
 
@@ -42,4 +43,5 @@ Q.denodeify(dbr.launchDebug)(srcCode, srcType, inputData, [27])
     })
     .catch(function (err) {
         console.error(err);
-    });
+    })
+    .done();

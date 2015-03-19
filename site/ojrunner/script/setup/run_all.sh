@@ -20,7 +20,6 @@ function get_current_path(){
 
 #site目录
 site_path=$(get_ojmooc_path)"/site"
-
 if [ ! -d "$site_path" ];then
     echo "ojmooc下的site目录找不到，获取的site目录为${site_path}"
     exit 0
@@ -30,13 +29,15 @@ echo "关闭已开启的docker环境以及负载均衡"
 current_path=$(get_current_path)
 "${current_path}/destroy_all.sh"
 
+#关闭和开启之间停顿一下
+sleep 3
+
 echo "开启runner和debugger的docker环境..."
 runner_up_script_path="${site_path}/ojrunner/script/up.sh"
 debugger_up_script_path="${site_path}/ojdebugger/script/up.sh"
 
 #一起开启多少个runner以及debugger
 up_num=3
-
 counter=0
 while [ "$counter" -lt "$up_num" ]
 do
@@ -45,14 +46,29 @@ do
     ((counter+=1))
 done
 
+#开启HAProxy和HAWatcher的负载均衡
 echo "开启HAProxy和HAWatcher的负载均衡..."
-watcher_app_path="${site_path}/hawatcher/app.js"
+watcher_up_script_path="${site_path}/hawatcher/script/up.sh"
 
-#runner负载均衡，默认配置，监听8080
-"${watcher_app_path}" &
+${watcher_up_script_path} ojrunner
+${watcher_up_script_path} ojdebugger
 
-#debugger负载均衡,debugger模式，监听8081
-"${watcher_app_path}" -d -p 8081 &
+
+#停顿一下，然后做进程信息统计和记录
+sleep 3
+
+#输出watcher刚才的标准输出
+cat "/tmp/hawatcher/ojrunner_output.txt"
+cat "/tmp/hawatcher/ojdebugger_output.txt"
+
+#统计开启的进程的数量数据
+app_js_process_count=$(ps -e| grep "app.js" | wc -l)
+haproxy_process_count=$(ps -e| grep "haproxy" | wc -l)
+echo "当前app.js进程${app_js_process_count}个，haproxy进程${haproxy_process_count}个"
+
+#记录时间
+echo "记录重启时间到/tmp/oj_restart_timestamp.txt..."
+echo $(date +%c) >> /tmp/oj_restart_timestamp.txt
 
 
 

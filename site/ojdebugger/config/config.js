@@ -6,10 +6,10 @@
  * debugger会用到的parse方法的定义
  */
 var parseConfig = {
-    //解析某一行获取有用的信息,在最后返回的结果中可能会有以该属性为key的一个对象（并非一定有）
-    //该对象自身的属性即attrNames里指定的那些
+    //parser提供的parse方法
     "parseStopPoint":{
-        //解析某一行获取有用的信息
+        //解析某一行获取有用的信息,在最后返回的结果中可能会有以该属性为key的一个对象（并非一定有）
+        //该对象自身的属性即attrNames里指定的那些
         "breakPoint":{
             //解析用正则
             "reg": /~"(\d+)(?:\\t)+(.*)(?:\\n)*/,
@@ -41,22 +41,16 @@ var parseConfig = {
         }
     },
     "parsePrintVal":{
-        "var":{
-            //表示该属性手动构建,不再进行自动处理
-            "auto":false
-            /*var属性里面包含id和value两个属性
-            分别表示查看变量时gdb输出的代号和这个变量的值*/
-        },
         "noSymbol":{
             "reg":/&"(No symbol \\".*\\" in current context)/,
             "attrNames":["msg"]
+        },
+        "var":{
+            //表示该属性手动构建,不再进行自动处理
+            "manual":true
         }
     },
     "parseLocals":{
-        "locals":{
-            "auto":false
-            /*locals属性里面包含的都是键值对*/
-        },
         "noFrame":{
             "reg":/&"(No frame selected)/,
             "attrNames":["msg"]
@@ -64,9 +58,12 @@ var parseConfig = {
         "noLocals":{
             "reg":/~"(No locals.)/,
             "attrNames":["msg"]
+        },
+        "locals":{
+            "manual":true
         }
     },
-    //基本就是用作殿后，防止一个gdb的info输出没有方法去截获
+    //作用就是殿后，防止一个gdb的info输出没有方法去截获
     "parseInfo":{
         "running":{
             "reg":/\*(running)/,
@@ -89,29 +86,18 @@ var methods = {
     "debug":{
       //该方法需要从请求中读取的参数的名称
       //如果请求的json对象里面不含这些参数应当报错
-      "paramNames":["srcCode","srcType","inputData"],
-      //result属性仅作为文档的作用，用于参考，表明返回值里面有什么
-      "result":{
-          //之后的会话中一直要使用的id
-          "debugId":undefined
-      }
+      "paramNames":["srcCode","srcType","inputData"]
     },
     "exit":{
-        "paramNames":["debugId"],
-        "result": {
-            "debugId":undefined
-        }
+        "paramNames":["debugId"]
     },
     "breakPoint":{
-        "paramNames":["debugId","breakLines"],
-        "result":{
-            //成功加入的断点的个数
-            "breakPointNum":undefined
-        }
+        "paramNames":["debugId","breakLines"]
     },
     "printVal":{
         "paramNames":["debugId","varName"],
         //该方法需要的解析方法的名称，对应parseConfig里面配置的方法
+        //配置了这个属性表示返回结果将由parser生成
         "parseNames":['parsePrintVal','parseInfo']
     },
     "locals":{
