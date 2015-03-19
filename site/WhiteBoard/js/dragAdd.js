@@ -26,7 +26,7 @@ $("#graphBoard")[0].addEventListener("drop",function(event){
             alert("不是图片文件！");
             break;
         }
-        var reader = new FileReader();
+        var reader = new FileReader();                                  //读取图片并显示
         reader.onload = (function(thefile){
             return function(e){
 
@@ -38,6 +38,9 @@ $("#graphBoard")[0].addEventListener("drop",function(event){
             };
         })(file);
         reader.readAsDataURL(file);
+
+
+
     }
 });
 

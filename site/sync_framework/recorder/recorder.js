@@ -86,8 +86,9 @@ timeline.prototype.record = function(){
     //时间线上显示已经录制的时间
     that.recordTimeInterval = setInterval(function(){
         var i = 0;
-        $("#clock").innerText = i;
-        i++;
+        i = $("#clock").html();                         //获取当前已经录制的时间，秒
+        i++;                                             //增加1000毫秒
+        $("#clock").html(i);                            //设置当前已经录制时间
     },1000);
 
 };
