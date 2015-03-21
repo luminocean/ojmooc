@@ -1,11 +1,10 @@
 <!-- views/pages/IDE.ejs -->
-
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <% include ../partials/head %>
-    <link rel="stylesheet" href="/stylesheets/IDEstyle.css">
+    <link rel="stylesheet" href="/stylesheets/editorStyle.css">
     <script type = "text/javascript" src="/scripts/aceJS/ace.js"></script>
 </head>
 
@@ -23,7 +22,7 @@
                     <tr>
                         <td>
                             <label>fontsize:</label>
-                            <select id="fontsize" size="1" onchange="changeSize(this)">
+                            <select id="fontsize" size="1">
                                 <option value="11px">11px</option>
                                 <option value="12px" selected="selected">12px</option>
                                 <option value="13px">13px</option>
@@ -32,17 +31,17 @@
                         </td>
                         <td>
                             <label>language:</label>
-                            <select id="language" size="1" onchange="changeLanguage(this)">
-                                <option value="C/C++" selected = "selected">C/C++</option>
-                                <option value="pascal">pascal</option>
-                                <option value="Qbasic">Qbasic</option>
+                            <select id="language" size="1">
+                                <option value="cpp" selected = "selected">C/C++</option>
+                                <option value="pas">pascal</option>
+                                <option value="bas">Qbasic</option>
                             </select>
                         </td>
                         <td>
                             <input type="submit" id="run" value="RUN">
                         </td>
                         <td>
-                            <input type="submit" value="DEBUG">
+                            <input type="submit" id="debug" value="DEBUG">
                         </td>
                     </tr>
                 </table>
@@ -67,42 +66,53 @@
 <footer>
     <% include ../partials/footer %>
 </footer>
-
 </body>
-
-
 <script>
-    function changeSize(item){
-        var editor = document.getElementById('editor');
-        editor.style.fontSize = item.value;
-    }
+    $("#fontsize").change(function(){
+        var size = $("#fontsize").val();
+        $("#editor").css("font-size",size);
 
-    function changeLanguage(item){
+    })
+
+    $("#language").change(function(){
         var editor = ace.edit("editor");
-        if(item.value == "C/C++"){
-            editor.getSession().setMode("ace/mode/c_cpp");
-        }else if(item.value == "pascal"){
-            editor.getSession().setMode("ace/mode/pascal");
-        }else {
-            editor.getSession().setMode("ace/mode/qbasic");
+        var lan = $("#language").val();
+        switch (lan){
+            case "cpp":
+                editor.getSession().setMode("ace/mode/c_cpp");
+                break;
+            case "pas":
+                editor.getSession().setMode("ace/mode/pascal");
+                break;
+            case "bas":
+                editor.getSession().setMode("ace/mode/qbasic");
+                break;
+            case "default":
+                break;
         }
-    }
+    })
 
     function check(){
         $("#fontsize").val("12px");
-        $("#language").val("C/C++");
+        $("#language").val("cpp");
     }
 
     $("#run").click(function () {
+        var editor = ace.edit("editor");
+        var inputEditor = ace.edit("inputEditor");
         var outputEditor = ace.edit("outputEditor");
-        var temp = "hello";
+
+        var code = editor.getValue();
+        var lan = $("#language").val();
+        var params = inputEditor.getValue().trim();
+
         $.ajax({
             type:"POST",
             url:"/IDE/handle",
-            data:{Name:"sanmao",Password:"sanmaoword"},
+            data:{code:code,language:lan,params:params},
             dataType:"text",
-            success:function(data) {
-                outputEditor.setValue(data);
+            success:function(result) {
+                outputEditor.setValue(result);
             },
             error : function() {
                 outputEditor.setValue("Error:can not connect to the server!");
@@ -110,9 +120,6 @@
         });
     });
 
-</script>
-
-<script>
     var inputEditor = ace.edit("inputEditor");
     var outputEditor = ace.edit("outputEditor");
     var editor = ace.edit("editor");
@@ -122,5 +129,4 @@
     editor.setTheme("ace/theme/monokai");
     editor.getSession().setMode("ace/mode/c_cpp");
 </script>
-
 </html>
