@@ -18,10 +18,11 @@ Q.longStackSupport = true;
 
 //测试的编译类型
 var srcType = 'cpp';
+
 //读取测试用源文件
-var srcCode = fs.readFileSync(path.join(__dirname,'./input_data/'+srcType+'_code'),'utf-8');
+var srcCode = fs.readFileSync(path.join(__dirname,'./input_data/code.'+srcType),'utf-8');
 //读取测试用数据
-var inputData = fs.readFileSync(path.join(__dirname,'./input_data/'+srcType+'_data'),'utf-8');
+var inputData = fs.readFileSync(path.join(__dirname,'./input_data/'+srcType+'.data'),'utf-8');
 
 var currentDebugId = null;
 
