@@ -1,34 +1,28 @@
-/**
- * Created by YBH on 2015/1/15.
- */
-//双击初始时间
 var dbClickStartTime;
-var textFont = "Arial";
-var textSize = "10px";
-var textColor = "black";
 
 function getTextFont(){
-    return textFont;
+    return whiteboard.textFont;
 }
 function getTextSize(){
-    return textSize;
+    return whiteboard.textSize;
 }
 function getTextColor(){
-    return textColor;
+    return whiteboard.textColor;
 }
-//设置字体类型
 function setTextFont(font){
-    textFont = font;
+    whiteboard.textFont = font;
+    actionPerformed(new Action(0,"setTextFont",font));     //添加改变字体动作
 }
-//设置字体大小
 function setTextSize(size){
-    textSize = size;
+    whiteboard.textSize = size;
+    actionPerformed(new Action(0,"setTextSize",size));     //添加改变字体大小动作
 }
-//设置字体颜色
 function setTextColor(color){
-    textColor = color;
+    whiteboard.textColor = color;
+    actionPerformed(new Action(0,"setTextColor",color));     //添加改变文本颜色动作
 }
 
+//文本模式下点击白板，显示添加文本的文本框
 function createText(xLoc,yLoc,x,y){
     var editText = $.layer({
         type: 1,
@@ -50,7 +44,6 @@ function createText(xLoc,yLoc,x,y){
             zr.render();
         }
     });
-
 }
 
 
@@ -61,8 +54,8 @@ function addText(txt,x,y){
             text: txt,
             x: x,
             y: y,
-            textFont: textSize+" "+textFont,
-            color: textColor,
+            textFont: whiteboard.textSize+" "+whiteboard.textFont,
+            color: whiteboard.textColor,
             preLocation:[x,y]
         },
         draggable:true
@@ -76,24 +69,17 @@ function addText(txt,x,y){
     text.drift = drift;
     zr.addShape(text);
     zr.render();
+
     addObjs(text);
     addOpes(new Operation(text.id,"addShape",[txt,x,y]));
-    //objs.push(text);
-    //opes.push(new Operation(text.id,"addText",[txt,x,y]));
-    //haveUndo = false;
+
+    actionPerformed(new Action(text.id,"addText",[txt,x,y]));               //添加文本操作
 }
 
+//记录拖动之前的位置
 function getLocation(params){
     params.target.style.preLocation[0] = params.target.style.x;
     params.target.style.preLocation[1] = params.target.style.y;
-}
-
-//文本拖动监听，记录位置
-function textDragged(params){
-    var event = require("zrender/tool/event");
-    var xLoc = event.getX(params.event);
-    var yLoc = event.getY(params.event);
-    console.log("text dragged" + xLoc + yLoc);
 }
 
 //文本双击监听，修改文本
@@ -127,11 +113,12 @@ function dbClicked(params){
                 textShape.style.text = textField.val();
                 layer.close(editText);
                 zr.render();
-                //opes.push(new Operation(textShape.id,"editText",[textShape.style.text],[preVal]));
+
                 addOpes(new Operation(textShape.id,"editText",[textShape.style.text],[preVal]));
+
+                actionPerformed(new Action(textShape.id,"editText",[textShape.style.text]));            //修改文本操作
             }
         });
-        console.log("edit text");
     }
     dbClickStartTime = currentTime;
 }

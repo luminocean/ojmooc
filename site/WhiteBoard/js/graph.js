@@ -1,6 +1,3 @@
-/**
- * Created by YBH on 2015/1/15.
- */
 var dbcstart = new Date().getTime();
 
 //数组图形设计
@@ -23,7 +20,6 @@ MyArray.prototype = {
             ctx.strokeText(val[i],xPos+recWidth/4,yPos+recWidth/2+10);
             ctx.strokeText(i,xPos+recWidth/2,yPos+recWidth+10);
         }
-        return;
     },
 
     drift : function(dx, dy) {
@@ -447,6 +443,8 @@ function addOperation(val){
     var id = o.id;
     addObjs(o);
     addOpes(new Operation(id,"addShape"));
+
+    actionPerformed(new Action(id,"addOperation",[val]));                           //添加do图形
 }
 
 function editOperation(params){
@@ -484,6 +482,8 @@ function editOperation(params){
                 var id = shape.id;
                 var val = [shape.style.val[0],shape.style.val[1],shape.style.val[2]];
                 addOpes(new Operation(id,"editGraph",val,preVal));
+
+                actionPerformed(new Action(id,"editOperation",[val]));              //修改do图形
             }
         });
     }

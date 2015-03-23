@@ -1,6 +1,3 @@
-/**
- * Created by YBH on 2015/1/13.
- */
 var states = {
     free:"free",
     text:"text",
@@ -8,31 +5,51 @@ var states = {
     graph:"graph"
 }
 
+var WhiteBoard = function(){
+    this.currentState = states.free;                     //白板当前的状态
+
+    this.objs = new Array();                //记录白板中的所有对象
+    this.opes = new Array();                //记录能够撤销的操作
+    this.undoIndex = -1;                    //记录撤销操作的index
+    this.haveUndo = false;                 //是否撤销过
+
+    this.penColor = "blue";          //画笔颜色
+    this.penSize = 5;                 //粗细
+    this.onDraw = false;             //是否能画
+    this.currentLine = null;         //记录当前的线
+
+    this.textFont = "Arial";        //文本字体
+    this.textSize = "10px";         //文本大小
+    this.textColor = "black";       //文本颜色
+}
+
+var whiteboard = new WhiteBoard();
+var dbClickTimer = null;
+var timer = 0;
+var globalID = 0;
+
+//撤销，重做时记录的操作
 function Operation(id,operation,val,preVal){
     this.id = id;
     this.operation = operation;
     this.val = val;
     this.preVal = preVal;
-
 }
 
-var currentState = states.free;
-var dbClickTimer = null;
-var timer = 0;
-
-var objs = new Array();
-var opes = new Array();
-var undoIndex = -1;
-var haveUndo = false;
-//var haveRedo = false;
+//录制时记录的动作
+function Action(id,actionname,val){
+    this.id = id;
+    this.actionname = actionname;
+    this.val = val;
+}
 
 //双击回到初始状态
 $("#graphBoard").bind("dblclick",function(){
     clearTimeout(dbClickTimer);
-    currentState = states.free;
+    whiteboard.currentState = states.free;
 });
 
-//单击监听
+//单击监听，添加文本
 $("#graphBoard").bind("click",function(e){
     clearTimeout(dbClickTimer);
 
@@ -40,7 +57,7 @@ $("#graphBoard").bind("click",function(e){
         var xLoc = e.pageX - $("#graphBoard").offset().left;
         var yLoc = e.pageY - $("#graphBoard").offset().top;
 
-        switch(currentState){
+        switch(whiteboard.currentState){
             case states.text:         //文本模式，点击界面添加文本
                 createText(e.pageX, e.pageY,xLoc,yLoc);
                 break;
@@ -51,11 +68,12 @@ $("#graphBoard").bind("click",function(e){
     },300);
 });
 
+//点击画笔按钮，转换到画笔模式
 $("#penButton").bind("click",function(e){
     changeToPenMode();
 });
 
-
+//显示画笔菜单，修改画笔属性，颜色，粗细
 $("#penMenu").bind("click",function(e){
     var xLoc = $("#penButton").offset().left;
     var yLoc = $("#penButton").offset().top + $("#penButton").outerHeight(true);
@@ -99,10 +117,12 @@ $("#textMenu").bind("click",function(e){
     });
 });
 
+//切换到图形模式
 $("#imageButton").bind("mousedown",function(e){
     changeToGraphMode();
 });
 
+//显示图形菜单，多种图形
 $("#imageMenu").bind("mousedown",function(e){
     var xLoc = $("#imageButton").offset().left;
     var yLoc = $("#imageButton").offset().top + $("#imageButton").outerHeight(true);
@@ -119,12 +139,6 @@ $("#imageMenu").bind("mousedown",function(e){
         area: ["220px","150px"],
         iframe: {src : "graphs.html"}
     });
-});
-
-//画笔键按下，开启画笔模式
-$("#penButton").bind("mousedown",function(e){
-    //changeToPenMode();
-    console.log("penMode");
 });
 
 //撤销键按下，撤销
@@ -145,28 +159,29 @@ $("#clearButton").bind("mousedown",function(e){
 });
 
 function changeToTextMode(){
-    currentState = states.text;
+    whiteboard.currentState = states.text;
 }
 
 function changeToPenMode(){
-    currentState = states.pen;
+    whiteboard.currentState = states.pen;
 }
 
 function changeToGraphMode(){
-    currentState = states.graph;
+    whiteboard.currentState = states.graph;
 }
 
+//撤销
 function undo(){
-    if(haveUndo == false){
-        haveUndo = true;
-        undoIndex = opes.length;
+    if(whiteboard.haveUndo == false){
+        whiteboard.haveUndo = true;
+        whiteboard.undoIndex = whiteboard.opes.length;
     }
-    undoIndex--;
-    if(undoIndex < 0){
-        undoIndex = 0;
+    whiteboard.undoIndex--;
+    if(whiteboard.undoIndex < 0){
+        whiteboard.undoIndex = 0;
         return;
     }
-    var ope = opes[undoIndex];
+    var ope = whiteboard.opes[whiteboard.undoIndex];
     console.log(ope);
     switch(ope.operation){
         case "addShape":
@@ -206,11 +221,12 @@ function undo(){
 
 }
 
+//重做
 function redo(){
-    if((haveUndo == false)||(undoIndex > opes.length-1)){
+    if((whiteboard.haveUndo == false)||(whiteboard.undoIndex > whiteboard.opes.length-1)){
         return;
     }
-    var ope = opes[undoIndex];
+    var ope = whiteboard.opes[whiteboard.undoIndex];
     switch (ope.operation){
         case "drag":
             changeLocation(ope.id,ope.val);
@@ -244,7 +260,7 @@ function redo(){
         default :
             break;
     }
-    undoIndex++;
+    whiteboard.undoIndex++;
 }
 
 //修改图形的值
@@ -299,32 +315,47 @@ function shapeInvisible(id,val){
     zr.refresh();
 }
 
-
-
-
+//清空
 function clear(){
-    for(var i = 0; i < objs.length; i++){
-        zr.delShape(objs[i]);
+    console.log(whiteboard.objs.length);
+    for(var i = 0; i < whiteboard.objs.length; i++){
+        zr.delShape(whiteboard.objs[i]);
     }
     zr.render();
-    objs = new Array();
-    opes = new Array();
-    haveUndo = false;
-    //haveRedo = false;
-    undoIndex = -1;
+    whiteboard.objs = new Array();
+    whiteboard.opes = new Array();
+    whiteboard.haveUndo = false;
 
+    whiteboard.undoIndex = -1;
+
+    whiteboard.penColor = "blue";
+    whiteboard.penSize = 5;
+    whiteboard.onDraw = false;
+    whiteboard.currentLine = null;
+
+    whiteboard.textFont = "Arial";
+    whiteboard.textSize = "10px";
+    whiteboard.textColor = "black";
 }
 
+//添加操作
 function addOpes(op){
-    if(haveUndo == true){
-        opes.splice(undoIndex,opes.length-undoIndex);
-        haveUndo = false;
+    if(whiteboard.haveUndo == true){
+        whiteboard.opes.splice(whiteboard.undoIndex,whiteboard.opes.length-whiteboard.undoIndex);
+        whiteboard.haveUndo = false;
     }
-    opes.push(op);
+    whiteboard.opes.push(op);
 }
 
+//添加图形对象
 function addObjs(ob){
-    objs.push(ob);
+    whiteboard.objs.push(ob);
 }
+
+function generateID(){
+    globalID++;
+    return globalID;
+}
+
 
 

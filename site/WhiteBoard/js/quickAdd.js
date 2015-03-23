@@ -58,7 +58,7 @@ function quickAdd(string){
             var pointList = new Array();
             if(arr.length <= 1){
                 pointList.push([10,10],[50,10]);
-                quickAddLine(pointList);
+                quickAddLine(generateID(),pointList);
             }
             else{
                 for(var i = 1; i < arr.length; i++){
@@ -72,7 +72,7 @@ function quickAdd(string){
                     point[1] = parseInt(stringPoint[1]);
                     pointList.push(point);
                 }
-                quickAddLine(pointList);
+                quickAddLine(generateID(),pointList);
             }
             break;
 
