@@ -32,6 +32,9 @@ current_path=$(get_current_path)
 #关闭和开启之间停顿一下
 sleep 3
 
+echo "准备相关目录..."
+mkdir -p /tmp/hawatcher/runtime
+
 echo "开启runner和debugger的docker环境..."
 runner_up_script_path="${site_path}/ojrunner/script/up.sh"
 debugger_up_script_path="${site_path}/ojdebugger/script/up.sh"
