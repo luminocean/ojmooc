@@ -40,7 +40,7 @@ function createText(xLoc,yLoc,x,y){
     textField.bind("keydown",function(e){
         if(e.keyCode == 13){
             layer.close(editText);
-            addText(textField.val(),x,y);
+            addText(generateID(),textField.val(),x,y);
             zr.render();
         }
     });
@@ -48,8 +48,9 @@ function createText(xLoc,yLoc,x,y){
 
 
 //添加文本
-function addText(txt,x,y){
+function addText(id,txt,x,y){
     var text = new Text({
+        id:id,
         style: {
             text: txt,
             x: x,
@@ -116,7 +117,7 @@ function dbClicked(params){
 
                 addOpes(new Operation(textShape.id,"editText",[textShape.style.text],[preVal]));
 
-                actionPerformed(new Action(textShape.id,"editText",[textShape.style.text]));            //修改文本操作
+                actionPerformed(new Action(textShape.id,"editText",textShape.style.text));            //修改文本操作
             }
         });
     }

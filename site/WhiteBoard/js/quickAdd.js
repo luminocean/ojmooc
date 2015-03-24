@@ -78,10 +78,10 @@ function quickAdd(string){
 
         case type[1]:                                       //text
             if(arr.length == 1){
-                addText("text",10,10);
+                addText(generateID(),"text",10,10);
             }
             else if(arr.length == 2){
-                addText(arr[1],10,10);
+                addText(generateID(),arr[1],10,10);
             }
             else if(arr.length == 3){
                 if(!isPoint(arr[2])){
@@ -92,7 +92,7 @@ function quickAdd(string){
                 var point = new Array();
                 point[0] = parseInt(stringPoint[0]);
                 point[1] = parseInt(stringPoint[1]);
-                addText(arr[1],point[0],point[1]);
+                addText(generateID(),arr[1],point[0],point[1]);
             }
             else{
                 console.log("error");
@@ -102,7 +102,7 @@ function quickAdd(string){
 
         case type[2]:                                   //circle
             if(arr.length == 1){
-                addCircle(50,50,50);
+                addCircle(generateID(),50,50,50);
             }
             else if(arr.length == 2){
                 var r = parseInt(arr[1]);
@@ -110,7 +110,7 @@ function quickAdd(string){
                     console.log("error");
                     break;
                 }
-                addCircle(r,50,50);
+                addCircle(generateID(),r,50,50);
             }
             else if(arr.length == 3){
                 var r = parseInt(arr[1]);
@@ -126,13 +126,13 @@ function quickAdd(string){
                 var point = new Array();
                 point[0] = parseInt(stringPoint[0]);
                 point[1] = parseInt(stringPoint[1]);
-                addCircle(r,point[0],point[1]);
+                addCircle(generateID(),r,point[0],point[1]);
             }
             break;
 
         case type[3]:                                          //square
             if(arr.length == 1){
-                addSquare(50,50,50);
+                addSquare(generateID(),50,50,50);
             }
             else if(arr.length == 2){
                 var r = parseInt(arr[1]);
@@ -140,7 +140,7 @@ function quickAdd(string){
                     console.log("error");
                     break;
                 }
-                addSquare(r,50,50);
+                addSquare(generateID(),r,50,50);
             }
             else if(arr.length == 3){
                 var r = parseInt(arr[1]);
@@ -156,13 +156,13 @@ function quickAdd(string){
                 var point = new Array();
                 point[0] = parseInt(stringPoint[0]);
                 point[1] = parseInt(stringPoint[1]);
-                addSquare(r,point[0],point[1]);
+                addSquare(generateID(),r,point[0],point[1]);
             }
             break;
 
         case type[4]:                                          //rectangle
             if(arr.length == 1){
-                addRectangle(80,40,50,50);
+                addRectangle(generateID(),80,40,50,50);
             }
             else if(arr.length == 3){
                 var w = parseInt(arr[1]);
@@ -175,7 +175,7 @@ function quickAdd(string){
                     console.log("error");
                     break;
                 }
-                addRectangle(w,h,50,50);
+                addRectangle(generateID(),w,h,50,50);
             }
             else if(arr.length == 4){
                 var w = parseInt(arr[1]);
@@ -196,13 +196,13 @@ function quickAdd(string){
                 var point = new Array();
                 point[0] = parseInt(stringPoint[0]);
                 point[1] = parseInt(stringPoint[1]);
-                addRectangle(w,h,point[0],point[1]);
+                addRectangle(generateID(),w,h,point[0],point[1]);
             }
             break;
 
         case type[5]:                                                   //triangle
             if(arr.length == 1){
-                addTriangle(50,50,50);
+                addTriangle(generateID(),50,50,50);
             }
             else if(arr.length == 2){
                 var r = parseInt(arr[1]);
@@ -210,7 +210,7 @@ function quickAdd(string){
                     console.log("error");
                     break;
                 }
-                addTriangle(r,50,50);
+                addTriangle(generateID(),r,50,50);
             }
             else if(arr.length == 3){
                 var r = parseInt(arr[1]);
@@ -226,90 +226,90 @@ function quickAdd(string){
                 var point = new Array();
                 point[0] = parseInt(stringPoint[0]);
                 point[1] = parseInt(stringPoint[1]);
-                addTriangle(r,point[0],point[1]);
+                addTriangle(generateID(),r,point[0],point[1]);
             }
             break;
 
         case type[6]:                                              //array
             if(arr.length == 1){
-                addArray([" "," "," "," "," "]);
+                addArray(generateID(),[" "," "," "," "," "]);
             }
             else if(arr.length == 2){
                 var val = arr[1].split(",");
-                addArray(val);
+                addArray(generateID(),val);
             }
             break;
 
         case type[7]:                                              //stack
             if(arr.length == 1){
-                addStack([" "," "," "," "," "]);
+                addStack(generateID(),[" "," "," "," "," "]);
             }
             else if(arr.length == 2){
                 var val = arr[1].split(",");
-                addStack(val);
+                addStack(generateID(),val);
             }
             break;
 
         case type[8]:                                              //queue
             if(arr.length == 1){
-                addQueue([" "," "," "," "," "]);
+                addQueue(generateID(),[" "," "," "," "," "]);
             }
             else if(arr.length == 2){
                 var val = arr[1].split(",");
-                addQueue(val);
+                addQueue(generateID(),val);
             }
             break;
 
         case type[9]:                                              //if
             if(arr.length == 1){
-                addIf([" "," "," "]);
+                addIf(generateID(),[" "," "," "]);
             }
             else if(arr.length == 2){
                 var val = arr[1].split(",");
-                addIf([arr[1]," "," "]);
+                addIf(generateID(),[arr[1]," "," "]);
             }
             else if(arr.length == 3){
                 var val = arr[1].split(",");
-                addIf([arr[1],arr[2]," "]);
+                addIf(generateID(),[arr[1],arr[2]," "]);
             }
             else if(arr.length == 5){
                 var val = arr[1].split(",");
-                addIf([arr[1],arr[2],arr[4]]);
+                addIf(generateID(),[arr[1],arr[2],arr[4]]);
             }
             break;
         case type[10]:                                          //while
             if(arr.length == 1){
-                addWhile([" "," "]);
+                addWhile(generateID(),[" "," "]);
             }
             else if(arr.length == 2){
                 var val = arr[1].split(",");
-                addWhile([arr[1]," "]);
+                addWhile(generateID(),[arr[1]," "]);
             }
             else if(arr.length == 3){
                 var val = arr[1].split(",");
-                addWhile([arr[1],arr[2]]);
+                addWhile(generateID(),[arr[1],arr[2]]);
             }
             break;
         case type[11]:                                          //dowhile
             if(arr.length == 1){
-                addDoWhile([" "," "]);
+                addDoWhile(generateID(),[" "," "]);
             }
             else if(arr.length == 2){
                 var val = arr[1].split(",");
-                addDoWhile([arr[1]," "]);
+                addDoWhile(generateID(),[arr[1]," "]);
             }
             else if(arr.length == 3){
                 var val = arr[1].split(",");
-                addDoWhile([arr[1],arr[2]]);
+                addDoWhile(generateID(),[arr[1],arr[2]]);
             }
             break;
         case type[12]:                                          //do
             if(arr.length == 1){
-                addOperation([" "]);
+                addOperation(generateID(),[" "]);
             }
             else if(arr.length == 2){
                 var val = arr[1].split(",");
-                addOperation([arr[1]]);
+                addOperation(generateID(),[arr[1]]);
             }
             break;
         default:
