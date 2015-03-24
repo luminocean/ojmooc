@@ -29,6 +29,12 @@ http.createServer(function (req, res) {
     console.log('debugger服务器已启动');
 });
 
+//捕获万一没有捕获的异常
+process.on('uncaughtException', function(err) {
+    console.error('uncaught exception: ' + err);
+    process.exit(1);
+});
+
 function perform(req,res,next){
     Q.denodeify(requestParser.parseRequest)(req)
         .then(function(body){

@@ -30,6 +30,12 @@ http.createServer(function(req,res){
     console.log('runner服务器已启动');
 });
 
+//捕获万一没有捕获的异常
+process.on('uncaughtException', function(err) {
+    console.error('uncaught exception: ' + err);
+    process.exit(1);
+});
+
 /**
  * 执行服务器处理
  * @param req 请求对象
