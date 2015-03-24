@@ -32,7 +32,7 @@ $("#graphBoard")[0].addEventListener("drop",function(event){
 
                 var image = new Image();
                 image.src = e.target.result;
-                addImage(image,xLoc,yLoc);
+                addImage(generateID(),image,xLoc,yLoc);
 
                 console.log(e.target.result);
             };

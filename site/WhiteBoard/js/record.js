@@ -1,6 +1,22 @@
+var Scene = function(objs,pencolor,pensize,textfont,textcolor,textsize){
+    this.objs = objs;
+    this.pencolor = pencolor;
+    this.pensize = pensize;
+    this.textfont = textfont;
+    this.textcolor = textcolor;
+    this.textsize = textsize;
+}
 //获取某一时间白板的状态
-WhiteBoard.prototype.getScene = function(scene){
+WhiteBoard.prototype.getScene = function(){
+    var scene = new Scene();
+    scene.objs = whiteboard.objs;
+    scene.pencolor = whiteboard.penColor;
+    scene.pensize = whiteboard.penSize;
+    scene.textcolor = whiteboard.textColor;
+    scene.textfont = whiteboard.textFont;
+    scene.textsize = whiteboard.textSize;
 
+    return scene;
 }
 
 var onRecord = false;

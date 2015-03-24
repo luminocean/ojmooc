@@ -19,8 +19,18 @@ WhiteBoard.prototype.setAction = function(action){
 
 //设置白板图形状态
 WhiteBoard.prototype.setScene = function(scene){
+    clear();
+    whiteboard.objs = scene.objs;
+    whiteboard.penColor = scene.pencolor;;
+    whiteboard.penSize = scene.pensize;
+    whiteboard.textColor = scene.textcolor;
+    whiteboard.textFont = scene.textfont;
+    whiteboard.textSize = scene.textsize;
 
-    this.objs = scene;
+    for(var i = 0; i < whiteboard.objs.length; i++){
+        zr.addShape(whiteboard.objs[i]);
+    }
+    zr.render();
 }
 
 function replayScene(scene){

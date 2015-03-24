@@ -336,7 +336,6 @@ function shapeInvisible(id,val){
 
 //清空
 function clear(){
-    console.log(whiteboard.objs.length);
     for(var i = 0; i < whiteboard.objs.length; i++){
         zr.delShape(whiteboard.objs[i]);
     }
