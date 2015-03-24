@@ -419,9 +419,10 @@ MyOperation.prototype = {
     }
 };
 
-function addOperation(val){
+function addOperation(id,val){
     require("zrender/tool/util").inherits(MyOperation, Base);
     var o = new MyOperation({
+        id:id,
         style : {
             x : 150,
             y : 50,
@@ -440,11 +441,10 @@ function addOperation(val){
     zr.addShape(o);
     zr.render();
 
-    var id = o.id;
     addObjs(o);
     addOpes(new Operation(id,"addShape"));
 
-    actionPerformed(new Action(id,"addOperation",[val]));                           //添加do图形
+    actionPerformed(new Action(id,"addOperation",val));                           //添加do图形
 }
 
 function editOperation(params){
@@ -483,16 +483,17 @@ function editOperation(params){
                 var val = [shape.style.val[0],shape.style.val[1],shape.style.val[2]];
                 addOpes(new Operation(id,"editGraph",val,preVal));
 
-                actionPerformed(new Action(id,"editOperation",[val]));              //修改do图形
+                actionPerformed(new Action(id,"editGraph",val));              //修改do图形
             }
         });
     }
     dbcstart = currentTime;
 }
 
-function addDoWhile(val){
+function addDoWhile(id,val){
     require("zrender/tool/util").inherits(MyDoWhile, Base);
     var d = new MyDoWhile({
+        id:id,
         style : {
             x : 150,
             y : 50,
@@ -511,9 +512,10 @@ function addDoWhile(val){
     zr.addShape(d);
     zr.render();
 
-    var id = d.id;
     addObjs(d);
     addOpes(new Operation(id,"addShape"));
+
+    actionPerformed(new Action(id,"addDoWhile",val));                       //添加dowhile操作
 }
 
 function editDoWhile(params){
@@ -553,15 +555,18 @@ function editDoWhile(params){
                 var id = shape.id;
                 var val = [shape.style.val[0],shape.style.val[1],shape.style.val[2]];
                 addOpes(new Operation(id,"editGraph",val,preVal));
+
+                actionPerformed(new Action(id,"editGraph",val));              //修改dowhile图形
             }
         });
     }
     dbcstart = currentTime;
 }
 
-function addWhile(val){
+function addWhile(id,val){
     require("zrender/tool/util").inherits(MyWhile, Base);
     var w = new MyWhile({
+        id:id,
         style : {
             x : 150,
             y : 50,
@@ -580,9 +585,10 @@ function addWhile(val){
     zr.addShape(w);
     zr.render();
 
-    var id = w.id;
     addObjs(w);
     addOpes(new Operation(id,"addShape"));
+
+    actionPerformed(new Action(id,"addWhile",val));                             //添加while图形
 }
 
 function editWhile(params){
@@ -622,6 +628,8 @@ function editWhile(params){
                 var id = shape.id;
                 var val = [shape.style.val[0],shape.style.val[1],shape.style.val[2]];
                 addOpes(new Operation(id,"editGraph",val,preVal));
+
+                actionPerformed(new Action(id,"editGraph",val));              //修改while图形
             }
         });
     }
@@ -629,9 +637,10 @@ function editWhile(params){
 }
 
 
-function addIf(val){
+function addIf(id,val){
     require("zrender/tool/util").inherits(MyIf, Base);
     var i = new MyIf({
+        id:id,
         style : {
             x : 150,
             y : 50,
@@ -650,9 +659,10 @@ function addIf(val){
     zr.addShape(i);
     zr.render();
 
-    var id = i.id;
     addObjs(i);
     addOpes(new Operation(id,"addShape"));
+
+    actionPerformed(new Action(id,"addIf",val));            //添加if图形
 }
 
 function editIf(params){
@@ -694,6 +704,8 @@ function editIf(params){
                 var id = shape.id;
                 var val = [shape.style.val[0],shape.style.val[1],shape.style.val[2]];
                 addOpes(new Operation(id,"editGraph",val,preVal));
+
+                actionPerformed(new Action(id,"editGraph",val));              //修改if图形
             }
         });
     }
@@ -702,9 +714,10 @@ function editIf(params){
 
 
 
-function addArray(val){
+function addArray(id,val){
     require("zrender/tool/util").inherits(MyArray, Base);
     var arr = new MyArray({
+        id:id,
         style : {
             x : 50,
             y : 50,
@@ -724,17 +737,19 @@ function addArray(val){
     zr.addShape(arr);
     zr.render();
 
-    var id = arr.id;
     addObjs(arr);
     addOpes(new Operation(id,"addShape"));
+
+    actionPerformed(new Action(id,"addArray",val));
 }
 
 
 
 
-function addQueue(val){
+function addQueue(id,val){
     require("zrender/tool/util").inherits(MyQueue, Base);
     var que = new MyQueue({
+        id:id,
         style : {
             x : 50,
             y : 50,
@@ -754,15 +769,17 @@ function addQueue(val){
     zr.addShape(que);
     zr.render();
 
-    var id = que.id;
     addObjs(que);
     addOpes(new Operation(id,"addShape"));
+
+    actionPerformed(new Action(id,"addQueue",val));
 }
 
 
-function addStack(val){
+function addStack(id,val){
     require("zrender/tool/util").inherits(MyStack, Base);
     var sta = new MyStack({
+        id:id,
         style : {
             x : 50,
             y : 150,
@@ -782,16 +799,18 @@ function addStack(val){
     zr.addShape(sta);
     zr.render();
 
-    var id = sta.id;
     addObjs(sta);
     addOpes(new Operation(id,"addShape"));
+
+    actionPerformed(new Action(id,"addStack",val));
 }
 
 
 
 
-function addCircle(r,x,y){
+function addCircle(id,r,x,y){
     var circle = new Circle({
+        id:id,
         style: {
             x: x,
             y: y,
@@ -811,15 +830,17 @@ function addCircle(r,x,y){
     zr.addShape(circle);
     zr.render();
 
-    var id = circle.id;
     addObjs(circle);
     addOpes(new Operation(id,"addShape"));
+
+    actionPerformed(new Action(id,"addCircle",[r,x,y]));
 }
 
 
 
-function addSquare(r,x,y){
+function addSquare(id,r,x,y){
     var shape = new Rectangle({
+        id:id,
         style: {
             x: x,
             y: y,
@@ -840,16 +861,18 @@ function addSquare(r,x,y){
     zr.addShape(shape);
     zr.render();
 
-    var id = shape.id;
     addObjs(shape);
     addOpes(new Operation(id,"addShape"));
+
+    actionPerformed(new Action(id,"addSquare",[r,x,y]));
 }
 
 
 
 
-function addRectangle(w,h,x,y){
+function addRectangle(id,w,h,x,y){
     var shape = new Rectangle({
+        id:id,
         style: {
             x: x,
             y: y,
@@ -870,13 +893,15 @@ function addRectangle(w,h,x,y){
     zr.addShape(shape);
     zr.render();
 
-    var id = shape.id;
     addObjs(shape);
     addOpes(new Operation(id,"addShape"));
+
+    actionPerformed(new Action(id,"addRectangle",[w,h,x,y]));
 }
 
-function addTriangle(r,x,y){
+function addTriangle(id,r,x,y){
     var shape = new IsogonShape({
+        id:id,
         style : {
             x : x,
             y : y,
@@ -897,15 +922,17 @@ function addTriangle(r,x,y){
     zr.addShape(shape);
     zr.render();
 
-    var id = shape.id;
     addObjs(shape);
     addOpes(new Operation(id,"addShape"));
+
+    actionPerformed(new Action(id,"addTriangle",[r,x,y]));
 }
 
 
 
-function addImage(img,x,y){
+function addImage(id,img,x,y){
     var image = new ImageShape({
+        id:id,
         style: {
             image: img,
             x: x,
@@ -922,9 +949,10 @@ function addImage(img,x,y){
     zr.addShape(image);
     zr.render();
 
-    var id = image.id;
     addObjs(image);
     addOpes(new Operation(id,"addShape"));
+
+    actionPerformed(id,"addImage",[img,x,y]);
 }
 
 function drift(dx,dy){
@@ -932,14 +960,16 @@ function drift(dx,dy){
     this.style.y += dy;
 }
 
-//图片拖动监听
+//图形拖动监听
 function Dragged(params){
     var event = require("zrender/tool/event");
     var shape = params.target;
     var xLoc = event.getX(params.event);
     var yLoc = event.getY(params.event);
-    //opes.push(new Operation(shape.id,"drag",[shape.style.x,shape.style.y],[shape.style.preLocation[0],shape.style.preLocation[1]]));
     addOpes(new Operation(shape.id,"drag",[shape.style.x,shape.style.y],[shape.style.preLocation[0],shape.style.preLocation[1]]));
+
+    actionPerformed(new Action(shape.id,"drag",[shape.style.x,shape.style.y]));                                     //图形拖动操作
+
     if((xLoc <= 1)||(xLoc >= 498)||(yLoc <= 1)||(yLoc >= 430)){
         $.layer({
             shade: [0],
@@ -958,9 +988,11 @@ function Dragged(params){
                 },
                 no: function(){                                //按钮2，确定监听
                     shape.ignore = true;
-                    //opes.push(new Operation(shape.id,"shapeVisible",[true],[false]));
-                    addOpes(new Operation(shape.id,"shapeVisible",[true],[false]));
                     zr.render();
+
+                    addOpes(new Operation(shape.id,"shapeVisible",[true],[false]));
+
+                    actionPerformed(new Action(shape.id,"delShape",false));                                 //删除图形操作
                 }
             }
         });
@@ -1021,6 +1053,8 @@ function dbClick(params){
                     val[i] = arr[i];
                 }
                 addOpes(new Operation(id,"editDataStructure",val,preVal));
+
+                actionPerformed(new Action(id,"editDataStructure",val));
             }
         });
     }
@@ -1044,10 +1078,13 @@ function resizeCircle(params){
     }
     var preVal = params.target.style.r;
     var val = r;
-    addOpes(new Operation(params.target.id,"resizeCircle",val,preVal));
     zr.modShape(params.target.id, {style: {r: r}});
     zr.refresh();
     event.stop(params.event);
+
+    addOpes(new Operation(params.target.id,"resizeCircle",val,preVal));
+
+    actionPerformed(new Action(params.target.id,"resizeCircle",val));
 }
 //数组，栈，队列
 function resizeArray(params){
@@ -1064,10 +1101,13 @@ function resizeArray(params){
     }
     var preVal = params.target.style.width;
     var val = width;
-    addOpes(new Operation(params.target.id,"resizeArray",val,preVal));
     zr.modShape(params.target.id, {style: {width: width}});
     zr.refresh();
     event.stop(params.event);
+
+    addOpes(new Operation(params.target.id,"resizeArray",val,preVal));
+
+    actionPerformed(new Action(params.target.id,"resizeArray",val));
 }
 //if，while，dowhile
 function resizeIf(params){
@@ -1084,10 +1124,13 @@ function resizeIf(params){
     }
     var preVal = params.target.style.length;
     var val = length;
-    addOpes(new Operation(params.target.id,"resizeIf",val,preVal));
     zr.modShape(params.target.id, {style: {length: length}});
     zr.refresh();
     event.stop(params.event);
+
+    addOpes(new Operation(params.target.id,"resizeIf",val,preVal));
+
+    actionPerformed(new Action(params.target.id,"resizeIf",val));
 }
 //长方形,图片
 function resizeRectangle(params){
@@ -1108,10 +1151,13 @@ function resizeRectangle(params){
     }
     var preVal = [params.target.style.width,params.target.style.height];
     var val = [width,height];
-    addOpes(new Operation(params.target.id,"resizeRectangle",val,preVal));
     zr.modShape(params.target.id, {style: {width:width,height:height}});
     zr.refresh();
     event.stop(params.event);
+
+    addOpes(new Operation(params.target.id,"resizeRectangle",val,preVal));
+
+    actionPerformed(new Action(params.target.id,"resizeRectangle",val));
 }
 //正方形
 function resizeSquare(params){
@@ -1132,8 +1178,11 @@ function resizeSquare(params){
     }
     var preVal = [params.target.style.width,params.target.style.height];
     var val = [width,height];
-    addOpes(new Operation(params.target.id,"resizeRectangle",val,preVal));
     zr.modShape(params.target.id, {style: {width:width,height:height}});
     zr.refresh();
     event.stop(params.event);
+
+    addOpes(new Operation(params.target.id,"resizeRectangle",val,preVal));
+
+    actionPerformed(new Action(params.target.id,"resizeRectangle",val));
 }

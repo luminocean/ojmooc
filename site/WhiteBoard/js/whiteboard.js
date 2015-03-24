@@ -186,34 +186,43 @@ function undo(){
     switch(ope.operation){
         case "addShape":
             shapeInvisible(ope.id,true);
+            actionPerformed(new Action(ope.id,"shapeInvisible",true));
             break;
         case "shapeVisible":
             shapeInvisible(ope.id,ope.preVal[0]);
-            undo();
+            actionPerformed(new Action(ope.id,"shapeInvisible",ope.preVal[0]));
             break;
         case "editText":
             changeText(ope.id,ope.preVal[0]);
+            actionPerformed(new Action(ope.id,"editText",ope.preVal[0]));
             break;
         case "drag":
             changeLocation(ope.id,ope.preVal);
+            actionPerformed(new Action(ope.id,"drag",ope.preVal));
             break;
         case "resizeCircle":
             resizeCircleAndTriangle(ope.id,ope.preVal);
+            actionPerformed(new Action(ope.id,"resizeCircle",ope.preVal));
             break;
         case "resizeArray":
             resizeDataStructure(ope.id,ope.preVal);
+            actionPerformed(new Action(ope.id,"resizeArray",ope.preVal));
             break;
         case "resizeIf":
             resizeGraph(ope.id,ope.preVal);
+            actionPerformed(new Action(ope.id,"resizeIf",ope.preVal));
             break;
         case "resizeRectangle":
             resizeRecAndImg(ope.id,ope.preVal);
+            actionPerformed(new Action(ope.id,"resizeRectangle",ope.preVal));
             break;
         case "editDataStructure":
             editDataStructure(ope.id,ope.preVal);
+            actionPerformed(new Action(ope.id,"editDataStructure",ope.preVal));
             break;
         case "editGraph":
             editGraph(ope.id,ope.preVal);
+            actionPerformed(new Action(ope.id,"editGraph",ope.preVal));
             break;
         default :
             break;
@@ -230,33 +239,43 @@ function redo(){
     switch (ope.operation){
         case "drag":
             changeLocation(ope.id,ope.val);
+            actionPerformed(new Action(ope.id,"drag",ope.val));
             break;
         case "editText":
             changeText(ope.id,ope.val[0]);
+            actionPerformed(new Action(ope.id,"editText",ope.val[0]));
             break;
         case "shapeVisible":
             shapeInvisible(ope.id,ope.val[0]);
+            actionPerformed(new Action(ope.id,"shapeVisible",ope.val[0]));
             break;
         case "addShape":
             shapeInvisible(ope.id,false);
+            actionPerformed(new Action(ope.id,"shapeVisible",false));
             break;
         case "resizeCircle":
             resizeCircleAndTriangle(ope.id,ope.val);
+            actionPerformed(new Action(ope.id,"resizeCircle",ope.val));
             break;
         case "resizeArray":
             resizeDataStructure(ope.id,ope.val);
+            actionPerformed(new Action(ope.id,"resizeArray",ope.val));
             break;
         case "resizeIf":
             resizeGraph(ope.id,ope.val);
+            actionPerformed(new Action(ope.id,"resizeIf",ope.val));
             break;
         case "resizeRectangle":
             resizeRecAndImg(ope.id,ope.val);
+            actionPerformed(new Action(ope.id,"resizeRectangle",ope.val));
             break;
         case "editDataStructure":
             editDataStructure(ope.id,ope.val);
+            actionPerformed(new Action(ope.id,"editDataStructure",ope.val));
             break;
         case "editGraph":
             editGraph(ope.id,ope.val);
+            actionPerformed(new Action(ope.id,"editGraph",ope.val));
         default :
             break;
     }
