@@ -57,7 +57,7 @@ if [ -n "$docker_service" ]; then
 fi
 
 #开启docker的complain模式，否则在ubuntu14.04下会有权限问题导致gdb运行失败
-aa-complain /etc/apparmor.d/docker
+sudo aa-complain /etc/apparmor.d/docker
 
 #安装npm的依赖包
 #备份当前的目录
