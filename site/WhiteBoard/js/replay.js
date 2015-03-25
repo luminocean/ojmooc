@@ -33,10 +33,6 @@ WhiteBoard.prototype.setScene = function(scene){
     zr.render();
 }
 
-function replayScene(scene){
-
-}
-
 //回放一个操作
 function replayAction(action){
     switch (action.actionname){
@@ -101,16 +97,16 @@ function replayAction(action){
             editDataStructure(action.id,action.val);
             break;
         case "addCircle":                            //添加circle图形
-            addCircle(action.id,action.val[0],action.val[1],action.val[2]);
+            addCircle(action.id,action.val[0],action.val[1],action.val[2],action.val[3]);
             break;
         case "addSquare":                            //添加square图形
-            addSquare(action.id,action.val[0],action.val[1],action.val[2]);
+            addSquare(action.id,action.val[0],action.val[1],action.val[2],action.val[3]);
             break;
         case "addRectangle":                            //添加rectangle图形
-            addRectangle(action.id,action.val[0],action.val[1],action.val[2],action.val[3]);
+            addRectangle(action.id,action.val[0],action.val[1],action.val[2],action.val[3],action.val[4]);
             break;
         case "addTriangle":                            //添加triangle图形
-            addTriangle(action.id,action.val[0],action.val[1],action.val[2]);
+            addTriangle(action.id,action.val[0],action.val[1],action.val[2],action.val[3]);
             break;
         case "addImage":
             addImage(action.id,action.val[0],action.val[1],action.val[2]);

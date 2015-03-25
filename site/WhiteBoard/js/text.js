@@ -1,4 +1,4 @@
-var dbClickStartTime;
+var dbClickStartTime = new Date().getTime();
 
 function getTextFont(){
     return whiteboard.textFont;
@@ -64,7 +64,7 @@ function addText(id,txt,x,y){
 
     text.bind("dragend",Dragged);
 
-    dbClickStartTime = new Date().getTime();
+
     text.bind("mousedown",dbClicked);
     text.bind("mousedown",getLocation);
     text.drift = drift;

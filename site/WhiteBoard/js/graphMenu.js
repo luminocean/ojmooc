@@ -4,16 +4,16 @@
 var index;
 
 $("#circle").bind("click",function(){
-    parent.addCircle(parent.generateID(),50,50,50);
+    parent.addCircle(parent.generateID(),"",50,50,50);
 });
 $("#square").bind("click",function(){
-    parent.addSquare(parent.generateID(),50,50,50);
+    parent.addSquare(parent.generateID(),"",50,50,50);
 });
 $("#rectangle").bind("click",function(){
-    parent.addRectangle(parent.generateID(),80,40,50,50);
+    parent.addRectangle(parent.generateID(),"",80,40,50,50);
 });
 $("#triangle").bind("click",function(){
-    parent.addTriangle(parent.generateID(),50,50,50);
+    parent.addTriangle(parent.generateID(),"",50,50,50);
 });
 $("#array").bind("click",function(){
     parent.addArray(parent.generateID(),[" "," "," "," "," "]);

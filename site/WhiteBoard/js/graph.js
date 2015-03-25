@@ -808,10 +808,13 @@ function addStack(id,val){
 
 
 
-function addCircle(id,r,x,y){
+function addCircle(id,txt,r,x,y){
     var circle = new Circle({
         id:id,
         style: {
+            text:txt,
+            textColor:"black",
+            textPosition:"inside",
             x: x,
             y: y,
             preLocation:[x,y],
@@ -826,6 +829,7 @@ function addCircle(id,r,x,y){
     circle.bind("mousewheel",resizeCircle);
     circle.bind("dragend",Dragged);
     circle.bind("mousedown",getLocation);
+    circle.bind("mousedown",dbClicked);
     circle.drift = drift;
     zr.addShape(circle);
     zr.render();
@@ -833,15 +837,18 @@ function addCircle(id,r,x,y){
     addObjs(circle);
     addOpes(new Operation(id,"addShape"));
 
-    actionPerformed(new Action(id,"addCircle",[r,x,y]));
+    actionPerformed(new Action(id,"addCircle",[txt,r,x,y]));
 }
 
 
 
-function addSquare(id,r,x,y){
+function addSquare(id,txt,r,x,y){
     var shape = new Rectangle({
         id:id,
         style: {
+            text:txt,
+            textColor:"black",
+            textPosition:"inside",
             x: x,
             y: y,
             preLocation:[x,y],
@@ -857,6 +864,7 @@ function addSquare(id,r,x,y){
     shape.bind("mousewheel",resizeSquare);
     shape.bind("dragend",Dragged);
     shape.bind("mousedown",getLocation);
+    shape.bind("mousedown",dbClicked);
     shape.drift = drift;
     zr.addShape(shape);
     zr.render();
@@ -864,16 +872,19 @@ function addSquare(id,r,x,y){
     addObjs(shape);
     addOpes(new Operation(id,"addShape"));
 
-    actionPerformed(new Action(id,"addSquare",[r,x,y]));
+    actionPerformed(new Action(id,"addSquare",[txt,r,x,y]));
 }
 
 
 
 
-function addRectangle(id,w,h,x,y){
+function addRectangle(id,txt,w,h,x,y){
     var shape = new Rectangle({
         id:id,
         style: {
+            text:txt,
+            textColor:"black",
+            textPosition:"inside",
             x: x,
             y: y,
             preLocation:[x,y],
@@ -889,6 +900,7 @@ function addRectangle(id,w,h,x,y){
     shape.bind("mousewheel",resizeRectangle);
     shape.bind("dragend",Dragged);
     shape.bind("mousedown",getLocation);
+    shape.bind("mousedown",dbClicked);
     shape.drift = drift;
     zr.addShape(shape);
     zr.render();
@@ -896,13 +908,16 @@ function addRectangle(id,w,h,x,y){
     addObjs(shape);
     addOpes(new Operation(id,"addShape"));
 
-    actionPerformed(new Action(id,"addRectangle",[w,h,x,y]));
+    actionPerformed(new Action(id,"addRectangle",[txt,w,h,x,y]));
 }
 
-function addTriangle(id,r,x,y){
+function addTriangle(id,txt,r,x,y){
     var shape = new IsogonShape({
         id:id,
         style : {
+            text:txt,
+            textColor:"black",
+            textPosition:"inside",
             x : x,
             y : y,
             preLocation:[x,y],
@@ -918,6 +933,7 @@ function addTriangle(id,r,x,y){
     shape.bind("mousewheel",resizeCircle);
     shape.bind("dragend",Dragged);
     shape.bind("mousedown",getLocation);
+    shape.bind("mousedown",dbClicked);
     shape.drift = drift;
     zr.addShape(shape);
     zr.render();
@@ -925,7 +941,7 @@ function addTriangle(id,r,x,y){
     addObjs(shape);
     addOpes(new Operation(id,"addShape"));
 
-    actionPerformed(new Action(id,"addTriangle",[r,x,y]));
+    actionPerformed(new Action(id,"addTriangle",[txt,r,x,y]));
 }
 
 
