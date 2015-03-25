@@ -13,7 +13,7 @@
       </controlProperties>
     </control>
     <control controlID="4" controlTypeID="com.balsamiq.mockups::HRule" x="251" y="239" w="606" h="-1" measuredW="100" measuredH="10" zOrder="3" locked="false" isInGroup="-1"/>
-    <control controlID="5" controlTypeID="com.balsamiq.mockups::Button" x="939" y="803" w="-1" h="-1" measuredW="74" measuredH="27" zOrder="4" locked="false" isInGroup="-1">
+    <control controlID="5" controlTypeID="com.balsamiq.mockups::Button" x="1005" y="803" w="-1" h="-1" measuredW="74" measuredH="27" zOrder="4" locked="false" isInGroup="-1">
       <controlProperties>
         <text>%u6DFB%u52A0%u6CE8%u91CA</text>
       </controlProperties>
@@ -186,23 +186,18 @@
       </controlProperties>
     </control>
     <control controlID="30" controlTypeID="com.balsamiq.mockups::VolumeSlider" x="1099" y="808" w="-1" h="-1" measuredW="72" measuredH="16" zOrder="21" locked="false" isInGroup="-1"/>
-    <control controlID="31" controlTypeID="com.balsamiq.mockups::ComboBox" x="1025" y="806" w="-1" h="-1" measuredW="69" measuredH="61" zOrder="22" locked="false" isInGroup="-1">
-      <controlProperties>
-        <text>%u53CC%u7A97%u53E3%0AIDE%u7A97%u53E3%0A%u767D%u677F%u7A97%u53E3</text>
-      </controlProperties>
-    </control>
-    <control controlID="32" controlTypeID="com.balsamiq.mockups::StickyNote" x="93" y="908" w="195" h="351" measuredW="109" measuredH="123" zOrder="23" locked="false" isInGroup="-1">
+    <control controlID="32" controlTypeID="com.balsamiq.mockups::StickyNote" x="93" y="908" w="195" h="351" measuredW="109" measuredH="123" zOrder="22" locked="false" isInGroup="-1">
       <controlProperties>
         <text>%u4E0A%u65B9%u8FDB%u5EA6%u6761%u5C31%u4E00%u6761%u7EBF%0A%20%0A%u7EA2%u70B9%u70B9%u51FB%u5F00%u59CB%u4E0E%u7ED3%u675F%u5F55%u5236%0A%20%0A%u7EA2%u70B9%u4E4B%u540E%u4E3A%u6682%u505C%u4E0E%u64AD%u653E%u6309%u94AE%uFF0C%u70B9%u51FB%u53EF%u4EE5%u6DFB%u52A0%u6CE8%u91CA%0A%20%0A%u5F55%u5236%u65F6%u65F6%u95F4%u5C31%u663E%u793A%u5DF2%u5F55%u5236%u65F6%u95F4%0A%20%0A%u9F20%u6807%u79FB%u5F00%u5C4F%u5E55%u4E0B%u65B9%u533A%u57DF%uFF0C%u4E00%u6BB5%u65F6%u95F4%uFF0C%u5C31%u81EA%u52A8%u9690%u85CF%u8FDB%u5EA6%u6761%0A%u79FB%u5165%u4E0B%u65B9%u533A%u57DF%uFF0C%u81EA%u52A8%u51FA%u73B0</text>
       </controlProperties>
     </control>
-    <control controlID="33" controlTypeID="com.balsamiq.mockups::Image" x="257" y="803" w="26" h="26" measuredW="256" measuredH="256" zOrder="24" locked="false" isInGroup="-1">
+    <control controlID="33" controlTypeID="com.balsamiq.mockups::Image" x="257" y="803" w="26" h="26" measuredW="256" measuredH="256" zOrder="23" locked="false" isInGroup="-1">
       <controlProperties>
         <src>../../../../../../../../../../C%3A/Users/zy/Desktop/%25E6%25AF%2595%25E4%25B8%259A%25E8%25AF%25BE%25E9%25A2%2598/redPoint.png</src>
         <text/>
       </controlProperties>
     </control>
-    <control controlID="34" controlTypeID="__group__" x="351" y="211" w="72" h="27" measuredW="72" measuredH="27" zOrder="25" locked="false" isInGroup="-1">
+    <control controlID="34" controlTypeID="__group__" x="351" y="211" w="72" h="27" measuredW="72" measuredH="27" zOrder="24" locked="false" isInGroup="-1">
       <groupChildrenDescriptors>
         <control controlID="0" controlTypeID="com.balsamiq.mockups::Button" x="24" y="0" w="-1" h="-1" measuredW="48" measuredH="27" zOrder="0" locked="false" isInGroup="34">
           <controlProperties>
@@ -216,7 +211,7 @@
         </control>
       </groupChildrenDescriptors>
     </control>
-    <control controlID="40" controlTypeID="__group__" x="244" y="610" w="613" h="180" measuredW="613" measuredH="180" zOrder="26" locked="false" isInGroup="-1">
+    <control controlID="40" controlTypeID="__group__" x="244" y="610" w="613" h="180" measuredW="613" measuredH="180" zOrder="25" locked="false" isInGroup="-1">
       <groupChildrenDescriptors>
         <control controlID="0" controlTypeID="__group__" x="0" y="0" w="301" h="180" measuredW="301" measuredH="180" zOrder="0" locked="false" isInGroup="40">
           <groupChildrenDescriptors>
@@ -253,6 +248,11 @@
           </controlProperties>
         </control>
       </groupChildrenDescriptors>
+    </control>
+    <control controlID="42" controlTypeID="com.balsamiq.mockups::MenuBar" x="624" y="801" w="211" h="30" measuredW="211" measuredH="29" zOrder="26" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>%u53CC%u7A97%u53E3%2CIDE%u7A97%u53E3%2C%u767D%u677F%u7A97%u53E3</text>
+      </controlProperties>
     </control>
   </controls>
 </mockup>
