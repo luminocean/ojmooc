@@ -1,11 +1,66 @@
-<!DOCTYPE html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
-  <head>
-    <title><%= title %></title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
-  </head>
-  <body>
-    <h1><%= title %></h1>
-    <p>Welcome to <%= title %></p>
-  </body>
+<head>
+  <title><%= title %> - Microblog</title>
+  <link rel='stylesheet' href='/stylesheets/bootstrap.css' />
+  <style type="text/css">
+    body {
+      padding-top: 60px;
+      padding-bottom: 40px;
+    }
+  </style>
+  <link href="stylesheets/bootstrap-responsive.css" rel="stylesheet">
+</head>
+<body>
+<div class="navbar navbar-fixed-top">
+  <div class="navbar-inner">
+    <div class="container">
+      <a class="btn btn-navbar" data-toggle=" collapse" data-target=".nav-collapse">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </a>
+      <a class="brand" href="/">OJMOOC</a>
+      <div class="nav-collapse">
+        <ul class="nav">
+          <li class="active"><a href="/">首页</a></li>
+          <li><a href="/login">登入</a></li>
+          <li><a href="/reg">注册</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="container" class="container">
+  <div class="hero-unit" >
+    <h1>欢迎~</h1>
+    <p>哦哈呦~ </p>
+    <p>
+      <a class="btn btn-primary btn-large" href="/login" >登录</a>
+      <a class="btn btn-large" href="/reg" >立即注册</a>
+    </p>
+  </div>
+  <div class="row" >
+    <div class="span4" >
+      <h2>Carbo 说</h2>
+      <img src="/img/3.jpg" />
+    </div>
+    <div class="span4" >
+      <h2>asfasfasfa 说</h2>
+      <img src="/img/3.jpg" />
+    </div>
+    <div class="span4" >
+      <h2>佛振 说</h2>
+      <img src="/img/3.jpg" />
+    </div>
+  </div>
+  <hr />
+  <footer>
+    <p><a href="" target="_blank">z.y</a> 2015</p>
+  </footer>
+</div>
+</body>
+<script src="/javascripts/jquery.js"></script>
+<script src="/javascripts/bootstrap.js"></script>
 </html>
