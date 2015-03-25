@@ -15,7 +15,7 @@ sudo cp ./sources.list /etc/apt
 sudo apt-get update
 
 ### 安装依赖程序
-sudo apt-get install -y dos2unix nodejs npm haproxy docker.io wget llvm clang gdb fpc vim time valgrind
+sudo apt-get install -y dos2unix apparmor-utils nodejs npm haproxy docker.io wget llvm clang gdb fpc vim time valgrind
 #其中valgrind可能会有版本上的问题需要下载源码编译安装(lubuntu上)
 ###
 
@@ -45,6 +45,9 @@ else
     sudo sed -i '$a DOCKER_OPTS="-H tcp:\/\/0.0.0.0:4243 -H unix:\/\/\/var\/run\/docker.sock"' "$docker_config_path"
 fi
 
+#关闭某端口，否则docker可能无法启动
+sudo route del -net 172.16.0.0 netmask 255.240.0.0
+
 #重启docker
 #由于历史原因，有些平台docker的服务叫docker，有些叫docker.io
 #所以这里需要查询后在重启
@@ -52,6 +55,9 @@ docker_service=$(service --status-all 2>/dev/null | grep docker | awk '{print $4
 if [ -n "$docker_service" ]; then
     sudo service "$docker_service" restart
 fi
+
+#开启docker的complain模式，否则在ubuntu14.04下会有权限问题导致gdb运行失败
+sudo aa-complain /etc/apparmor.d/docker
 
 #安装npm的依赖包
 #备份当前的目录

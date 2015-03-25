@@ -35,6 +35,9 @@ sleep 3
 echo "准备相关目录..."
 mkdir -p /tmp/hawatcher/runtime
 
+echo "修正docker容器权限"
+sudo aa-complain /etc/apparmor.d/docker
+
 echo "开启runner和debugger的docker环境..."
 runner_up_script_path="${site_path}/ojrunner/script/up.sh"
 debugger_up_script_path="${site_path}/ojdebugger/script/up.sh"
