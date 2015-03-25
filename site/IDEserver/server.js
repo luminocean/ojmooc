@@ -31,17 +31,17 @@ app.get('/', function(req, res) {
 
 
 /**
- * IDE page
+ * editor page
  */
-app.get('/IDE', function (req,res) {
-    res.render('pages/IDE');
+app.get('/editor', function (req,res) {
+    res.render('pages/editor');
 });
 
 
 /**
  * 应对客户端的ajax请求
  */
-app.post('/IDE/handle', function (req,res) {
+app.post('/editor/handle', function (req,res) {
     runner.setPort(8080);
     runner.setHost('121.42.155.75');
 
