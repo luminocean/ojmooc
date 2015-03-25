@@ -1,6 +1,16 @@
 /**
  * Created by blueking on 2015/3/16.
  */
+
+/**
+ * constants
+  */
+var STATE_TIME_INTERVAL = 5;    //场景之间的时间间隔
+var timer;
+var playInterval;
+var timelineInterval
+
+
 var timeline = function(){
     this.startTime = 0;
     this.currentTime = 0;
@@ -29,33 +39,66 @@ timeline.prototype.saveOneStep = function(recorder,action){
 }
 
 
-timeline.prototype.play = function(totalTime){
+timeline.prototype.play = function(pastTime,totalTime){
     var that = this;
-    that.startTime = getTimeSeconds(new Date());
+    that.setCurrentTime(pastTime);
     that.totalTime = totalTime;
 
     //页面时间线根据总时间滚动
-    var i = 0;
-    var timer = setInterval(function(){
-        $("#foreline").css("width", i + "%");
+    //var i = 0;
+    var i = Math.round(pastTime/totalTime*1000);  //根据已经过去的时间线和总时间线的比例调整进度条
+    timer = setInterval(function(){
+        $("#foreline").css("width", i/10 + "%");
         i++;
-        if (i > 100) {
+        if (i >= 1000) {
             clearInterval(timer);
         }
-    }, 10*totalTime);
+    }, totalTime);
 
-    //轮询向各recorder发送播放请求，若recorder检测到时间与记录时间相符则向相应组件发送执行动作请求
-    var playInterval = setInterval(function(){
+    //每过100ms轮询向各recorder发送播放请求，若recorder检测到时间与记录时间相符则向相应组件发送执行动作请求
+    playInterval = setInterval(function(){
         var currentTime = that.getCurrentTime();
         var recorderCount = that.recorders.length;
         for(var i=0;i<recorderCount;i++){
             that.recorders[i].play(currentTime);
         }
+        if(0<=currentTime-totalTime && currentTime-totalTime<=0.1){
+            console.log("play finished");
+            clearInterval(playInterval);
+        }
     },100);
-    setTimeout(function(){
-        console.log("play finished");
+
+    //每过1S将时间线上显示的时间减1
+    var clockTotalTime = Math.round(totalTime-pastTime);
+    $("#clock").html(clockTotalTime);
+    timelineInterval = setInterval(function(){
+        var j = $("#clock").html();
+        j--;
+        $("#clock").html(j);
+        if(j<=0){
+            clearInterval(timelineInterval);
+        }
+    },1000);
+
+
+    //总时间不应该变
+    $("#backline").click(function(e){
+        var width = e.pageX - $("#backline").offset().left;
+        var timelineWidth = $("#backline").width();
+        var actulPastTime = Math.round(width/timelineWidth*totalTime);  //从实际时间最近的上一个场景处开始播放
+        var usedPastTime = actulPastTime-actulPastTime%5;   //使用的时间，实际时间最近的上一个场景的时间
         clearInterval(playInterval);
-    },totalTime*1000);
+        clearInterval(timelineInterval);
+        clearInterval(timer);
+        $("#foreline").css("width",timelineWidth*usedPastTime/totalTime + "px");    //根据时间比例设置进度条宽度
+        var recorderCount = that.recorders.length;
+        for(var i=0;i<recorderCount;i++){
+            that.recorders[i].playScene(usedPastTime);
+        }
+        that.play(usedPastTime,totalTime);    //重新设置进度条的位置，重置开始时间，总时间，从当前位置开始播放
+
+    });
+
 };
 
 timeline.prototype.stop = function(){
@@ -78,20 +121,19 @@ timeline.prototype.record = function(){
         var currentTime = that.getCurrentTime();
         console.log(currentTime);
         for(var i=0;i<recorderCount;i++){
-            console.log(that.recorders[i]);
             that.recorders[i].saveScene(currentTime);
         }
-    },5000);
+    },STATE_TIME_INTERVAL*1000);
 
     //时间线上显示已经录制的时间
     that.recordTimeInterval = setInterval(function(){
-        var i = 0;
-        i = $("#clock").html();                         //获取当前已经录制的时间，秒
+        var i = $("#clock").html();                         //获取当前已经录制的时间，秒
         i++;                                             //增加1000毫秒
         $("#clock").html(i);                            //设置当前已经录制时间
     },1000);
 
 };
+
 
 timeline.prototype.getCurrentTime = function(){
     return this.currentTime + getTimeSeconds(new Date()) - this.startTime;
@@ -144,25 +186,6 @@ recorder.prototype.saveStep = function(savetime,action){
     this.step_records.push({time:savetime,action:action});
 };
 
-//播放时
-recorder.prototype.getNextTime = function(time){
-    var that = this;
-    //从timeline取得当前时刻
-    var currentTime = time;
-    var nextTime;
-    var recordsCount = that.step_records.length;
-    for(var i =0;i<recordsCount;i++){
-        var record = that.step_records[i];
-        if(record.time == currentTime){
-            record = that.step_records[i+1];
-            nextTime = record.time;
-            break;
-        }
-    }
-    return nextTime - currentTime;
-    //根据时刻匹配到当前写入点
-    //将下一个读取点与上一个读取点时间差返回
-};
 
 //获取指定时间的操作
 recorder.prototype.getStep = function(time){
@@ -190,13 +213,14 @@ recorder.prototype.saveScene = function(currentTime){
 }
 
 //获取指定时间的场景状态
-recorder.prototype.queryScene = function(time){
+recorder.prototype.playScene = function(currentTime){
     var that = this;
-    var sceneCounts = that.scene_records.length;
-    for(var i=0;i<sceneCounts;i++){
-        var scene = that.scene_records[i];
-        if(scene.time == time){
-            return scene.state;
+    var sceneCount = that.scene_records.length;
+    for(var i=0;i<sceneCount;i++){
+        var recordTime = that.scene_records[i].time;
+        if((recordTime-currentTime)>=0 && (recordTime-currentTime)<=0.1) {
+            var currentState = that.scene_records[i].state;
+            that.instance.setScene(currentState);
         }
     }
 }

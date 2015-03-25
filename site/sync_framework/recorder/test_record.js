@@ -11,13 +11,14 @@ editor.prototype.setAction = function(action){
     $("#editor").val(action);
 }
 editor.prototype.getScene = function(){
-    return this.state;
+    return $("#editor").val();
 }
 
 //当调用该函数时，editor和白板应该将当前状态展现到相应组件
 editor.prototype.setScene = function(state){
     this.state = state;
     console.log(state);
+    $("#editor").val(state);
 }
 
 /**
@@ -34,7 +35,13 @@ whiteboard.prototype.setAction = function(action){
 }
 
 whiteboard.prototype.getScene = function(){
-    return this.state;
+    return $("#whiteboard").val();
+}
+
+whiteboard.prototype.setScene = function(state){
+    this.state = state;
+    console.log(state);
+    $("#whiteboard").val(state);
 }
 
 var editor = new editor();
@@ -70,5 +77,5 @@ function playback(){
     $("#whiteboard").val('');
     //totalTime从存储的地方取出总时间
     var totalTime = timeline.getTotalTime();
-    timeline.play(totalTime);
+    timeline.play(0,totalTime);
 }
