@@ -1,0 +1,20 @@
+#backline {
+
+    width: 500px;
+
+    background-color: #444444;
+
+    height: 8px;
+
+    border:solid 1px #000000;
+
+}
+#foreline {
+
+    width: 2px;
+
+    background-color: #fa6900;
+
+    height: 8px;
+
+}

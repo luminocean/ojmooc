@@ -88,7 +88,7 @@ $("#penMenu").bind("click",function(e){
         border:[0],
         offset:[yLoc.toString()+"px",xLoc.toString()+"px"],
         area: ["400px","200px"],
-        iframe: {src : "penStyle.html"}
+        iframe: {src : "./penStyle.html"}
     });
 })
 
@@ -113,7 +113,7 @@ $("#textMenu").bind("click",function(e){
         border:[0],
         offset:[yLoc.toString()+"px",xLoc.toString()+"px"],
         area: ["400px","200px"],
-        iframe: {src : "textStyle.html"}
+        iframe: {src : "./textStyle.html"}
     });
 });
 
@@ -137,7 +137,7 @@ $("#imageMenu").bind("mousedown",function(e){
         border:[0],
         offset:[yLoc.toString()+"px",xLoc.toString()+"px"],
         area: ["220px","150px"],
-        iframe: {src : "graphs.html"}
+        iframe: {src : "./graphs.html"}
     });
 });
 

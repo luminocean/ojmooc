@@ -1,0 +1,53 @@
+#wrapper{
+    width: 200px;
+    height: 120px;
+    border-radius: 10px;
+    background-color: #b9def0;
+}
+
+.graphButton{
+    width: 30px;
+    height: 30px;
+    margin-top: 5px;
+}
+
+#circle{
+    background-image: url("../img/circle.png");
+}
+#square{
+    background-image: url("../img/square.jpg");
+}
+#rectangle{
+    background-image: url("../img/rectangle.jpg");
+}
+#triangle{
+    background-image: url("../img/triangle.jpg");
+}
+#array{
+    background-image: url("../img/array.png");
+}
+#stack{
+    background-image: url("../img/stack.png");
+}
+#queue{
+    background-image: url("../img/queue.png");
+}
+#operation{
+    background-image: url("../img/rectangle.jpg");
+}
+#if{
+    background-image: url("../img/if.png");
+}
+#while{
+    background-image: url("../img/while.png");
+}
+#dowhile{
+    background-image: url("../img/dowhile.png");
+}
+#close{
+    width: 30px;
+    height: 30px;
+    float: right;
+    border-radius: 20px;
+    background-image: url("../img/clear.jpg");
+}

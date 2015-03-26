@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>WhiteBoard</title>
+    <link rel="stylesheet" type="text/css" href="./css/whiteboard.css">
+    <link rel="stylesheet" type="text/css" href="./bootstrap/dist/css/bootstrap.min.css">
+</head>
+<body>
+<button id ="startRecord">开始</button>
+<button id ="stopRecord">停止</button>
+<button id ="replay">回放</button>
+<div id="whiteboard">
+    <div id="menu">
+        <button id="penButton" class="menuButton"></button><button id="penMenu" class="downMenu"></button>
+        <button id="textButton" class="menuButton"></button><button id="textMenu" class="downMenu"></button>
+        <button id="imageButton" class="menuButton"></button><button id="imageMenu" class="downMenu"></button>
+
+        <button id="clearButton" class="menuButton"></button>
+        <button id="redoButton" class="menuButton"></button>
+        <button id="undoButton" class="menuButton"></button>
+    </div>
+    <div id="mainBoard">
+        <div>
+            <button id="aboutButton">说明</button>
+            <button id="addButton">添加</button>
+            <input id="add" type="text"/>
+        </div>
+        <div id="graphBoard"></div>
+    </div>
+
+    <div id="fileBoard">
+        <p>拖动到此区域来上传文件</p>
+        <ul id="fileList"></ul>
+    </div>
+</div>
+
+<script src="./js/jquery-2.1.3.js"></script>
+<script src="./bootstrap/dist/js/bootstrap.min.js"></script>
+
+<script src="./layer/layer/layer.min.js"></script>
+<script src="./zrender/doc/asset/js/esl/esl.js"></script>
+<script src="./zrender/doc/asset/js/codemirror.js"></script>
+<script src="./zrender/doc/asset/js/javascript.js"></script>
+
+<script src="./js/whiteboard.js"></script>
+
+<script src="./js/graphboard.js"></script>
+<script src="./js/draw.js"></script>
+<script src="./js/text.js"></script>
+<script src="./js/graph.js"></script>
+<script src="./js/quickAdd.js"></script>
+<script src="./js/dragAdd.js"></script>
+<script src="./js/file.js"></script>
+<script src="./js/record.js"></script>
+<script src="./js/replay.js"></script>
+</body>
+</html>
