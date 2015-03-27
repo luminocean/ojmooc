@@ -101,34 +101,23 @@ var parseConfig = {
  * debugger对外提供的方法的配置，最重要
  */
 var methods = {
-    "debug":{
-      //该方法需要从请求中读取的参数的名称
-      //如果请求的json对象里面不含这些参数应当报错
-      "paramNames":["srcCode","srcType","inputData"]
-    },
-    "exit":{
-        "paramNames":["debugId"]
-    },
+    "debug":{},
+    "exit":{},
     "breakPoint":{
-        "paramNames":["debugId","breakLines"],
         "parseNames":['parseBreakPoint','parseInfo']
     },
     "removeBreakPoint":{
-        "paramNames":["debugId","breakLines"],
         "parseNames":['parseBreakPoint','parseInfo']
     },
     "printVal":{
-        "paramNames":["debugId","varName"],
         //该方法需要的解析方法的名称，对应parseConfig里面配置的方法
         //配置了这个属性表示返回结果将由parser生成
         "parseNames":['parsePrintVal','parseInfo']
     },
     "locals":{
-        "paramNames":["debugId"],
         "parseNames":['parseLocals','parseInfo']
     },
     "run":{
-        "paramNames":["debugId"],
         "parseNames":['parseStopPoint','parseExit','parseInfo'],
         //是否在返回值上带有标准输出
         "stdout":true,
@@ -136,7 +125,6 @@ var methods = {
         "locals":true
     },
     "continue":{
-        "paramNames":["debugId"],
         "parseNames":['parseStopPoint','parseExit','parseInfo'],
         //提供了command表示该方法的debugger实现将自动生成
         "command":"c",
@@ -144,14 +132,12 @@ var methods = {
         "locals":true
     },
     "stepInto":{
-        "paramNames":["debugId"],
         "parseNames":['parseStopPoint','parseExit','parseInfo'],
         "command":"step",
         "stdout":true,
         "locals":true
     },
     "stepOver":{
-        "paramNames":["debugId"],
         "parseNames":['parseStopPoint','parseExit','parseInfo'],
         "command":"next",
         "stdout":true,

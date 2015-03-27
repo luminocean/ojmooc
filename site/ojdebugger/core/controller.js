@@ -17,27 +17,26 @@ controller.dispatch = function(requestData, callback){
     //由请求中解析而来的操作请求名称
     var methodName = requestData.methodName;
     //该操作请求附带的数据
-    var body = requestData.body;
+    var data = requestData.body;
 
     //如果在方法配置中有该方法
     if(!methods[methodName]) {
-        return callback(new Error('未知的请求方法:'+methodName));
+        return callback(new Error('未知的请求方法，在配置中找不到:'+methodName));
     }
 
-    //取出该方法需要的入参名称
-    var configParams = methods[methodName].paramNames;
-    //将所有的参数值从请求中取出后存起来，将会作为入参传给debugger
+    //将所有的参数值从请求中一个个取出后存起来，将会作为入参传给debugger
     var paramValues = [];
-    configParams.forEach(function(param){
-        var requestParam = body[param];
-        if(!requestParam)
-            return callback(new Error('配置中需要的属性在请求中找不到：'+param));
-        paramValues.push(requestParam);
-    });
+    for(var attr in data){
+        if(!data.hasOwnProperty(attr)) continue;
+
+        paramValues.push(data[attr]);
+    }
+
     //回调函数放在入参列表的最后
     paramValues.push(function(err,result){
         return callback(err,result);
     });
+
     //使用apply传入所有参数，调用debugger处理
     return dbr[methodName].apply(null,paramValues);
 };
