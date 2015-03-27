@@ -147,7 +147,7 @@ dbr.breakPoint = function(debugId,breakLines,callback){
         },debugId,function(err,result){
             if(err) return callback(err);
 
-            if(!result.breakPointNum)
+            if(result.breakPointNum === undefined)
                 return callback(new Error('异常返回值'+JSON.stringify(result)));
 
             callback(null,result.breakPointNum);
@@ -170,7 +170,7 @@ dbr.removeBreakPoint = function(debugId,breakLines,callback){
         },debugId,function(err,result){
             if(err) return callback(err);
 
-            if(!result.breakPointNum)
+            if(result.breakPointNum === undefined)
                 return callback(new Error('异常返回值'+JSON.stringify(result)));
 
             callback(null,result.breakPointNum);

@@ -216,15 +216,28 @@ dbr.breakPoint = function(debugId,breakLines,callback){
     //添加断点操作后触发的相应的计数器，最后应该和断点的数目相同
     //表示所有的断点加入动作都被响应了
     var received = 0;
+    //成功添加的断点数
+    var added = 0;
+
     //要返回的result的对象
     var result = {};
 
-    gdb.stdout.removeAllListeners('batch').on('batch',function(){
+    gdb.stdout.removeAllListeners('batch').on('batch',function(batch){
         console.log(debugId+" BP resolve");
-
         received++;
+
+        //parse函数的名称
+        var parseNames = methods['breakPoint'].parseNames;
+        doParses(batch,parseNames,function(err,result){
+            if(err) callback(err);
+
+            if(result && result.added){
+                added++;
+            }
+        });
+
         if(received === breakLines.length){
-            result.breakPointNum = breakLines.length;
+            result.breakPointNum = added;
             callback(null,result);
         }
     });
@@ -254,15 +267,29 @@ dbr.removeBreakPoint = function(debugId,breakLines,callback){
     //添加断点操作后触发的相应的计数器，最后应该和断点的数目相同
     //表示所有的断点加入动作都被响应了
     var received = 0;
+    //成功移除的断点数
+    var removed = 0;
+
     //要返回的result的对象
     var result = {};
 
-    gdb.stdout.removeAllListeners('batch').on('batch',function(){
+    gdb.stdout.removeAllListeners('batch').on('batch',function(batch){
         console.log(debugId+" REMOVE BP resolve");
 
         received++;
+
+        //parse函数的名称
+        var parseNames = methods['breakPoint'].parseNames;
+        doParses(batch,parseNames,function(err,result){
+            if(err) callback(err);
+
+            if(result && result.removed){
+                removed++;
+            }
+        });
+
         if(received === breakLines.length){
-            result.breakPointNum = breakLines.length;
+            result.breakPointNum = removed;
             callback(null,result);
         }
     });

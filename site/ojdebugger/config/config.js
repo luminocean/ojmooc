@@ -33,6 +33,24 @@ var parseConfig = {
             "finish":true
         }
     },
+    "parseBreakPoint":{
+        "added":{
+            "reg": /~"Breakpoint (\d)/,
+            "attrNames":["breakPointId"]
+        },
+        "removed":{
+            "reg": /=breakpoint-deleted,id="(\d)"/,
+            "attrNames":["breakPointId"]
+        },
+        "noLine":{
+            "reg": /&"(No line \d)/,
+            "attrNames":["msg"]
+        },
+        "noBreakPoint":{
+            "reg": /&"No breakpoint at (\d)/,
+            "attrNames":["msg"]
+        }
+    },
     "parseExit":{
         "normalExit":{
             "reg":/\(process\s(\d+)\)\sexited normally/,
@@ -92,10 +110,12 @@ var methods = {
         "paramNames":["debugId"]
     },
     "breakPoint":{
-        "paramNames":["debugId","breakLines"]
+        "paramNames":["debugId","breakLines"],
+        "parseNames":['parseBreakPoint','parseInfo']
     },
     "removeBreakPoint":{
-        "paramNames":["debugId","breakLines"]
+        "paramNames":["debugId","breakLines"],
+        "parseNames":['parseBreakPoint','parseInfo']
     },
     "printVal":{
         "paramNames":["debugId","varName"],
