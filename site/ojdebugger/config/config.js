@@ -94,6 +94,9 @@ var methods = {
     "breakPoint":{
         "paramNames":["debugId","breakLines"]
     },
+    "removeBreakPoint":{
+        "paramNames":["debugId","breakLines"]
+    },
     "printVal":{
         "paramNames":["debugId","varName"],
         //该方法需要的解析方法的名称，对应parseConfig里面配置的方法

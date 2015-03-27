@@ -19,6 +19,12 @@ var config = [
         "id":"runBtn",
         "handler":run
     },{
+        "id":"addBreakLineBtn",
+        "handler":addBreakLine
+    },{
+        "id":"removeBreakLineBtn",
+        "handler":removeBreakLine
+    },{
         "id":"stepIntoBtn",
         "handler":stepInto
     },{
@@ -84,6 +90,32 @@ function run(){
         if(err) return error(err);
 
         displayInfo(debugId,finish,breakPoint,stdout,locals);
+    });
+}
+
+function addBreakLine(){
+    var debugId = $('#debugId').val();
+    if(!debugId) return error(new Error('找不到从服务器获取的debugId，是否正处于调试？'));
+
+    var breakLines = $('#addBreakLine').val().split(',');
+
+    dbr.breakPoint(debugId,breakLines,function(err,breakPointNum){
+        if(err) return error(err);
+
+        display('response','BreakPoint num added:'+breakPointNum);
+    });
+}
+
+function removeBreakLine(){
+    var debugId = $('#debugId').val();
+    if(!debugId) return error(new Error('找不到从服务器获取的debugId，是否正处于调试？'));
+
+    var breakLines = $('#removeBreakLine').val().split(',');
+
+    dbr.removeBreakPoint(debugId,breakLines,function(err,breakPointNum){
+        if(err) return error(err);
+
+        display('response','BreakPoint num removed:'+breakPointNum);
     });
 }
 

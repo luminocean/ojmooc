@@ -216,8 +216,8 @@ dbr.breakPoint = function(debugId,breakLines,callback){
     //添加断点操作后触发的相应的计数器，最后应该和断点的数目相同
     //表示所有的断点加入动作都被响应了
     var received = 0;
-    //要返回的result对象的模板
-    var result = methods['breakPoint'].result||{};
+    //要返回的result的对象
+    var result = {};
 
     gdb.stdout.removeAllListeners('batch').on('batch',function(){
         console.log(debugId+" BP resolve");
@@ -236,6 +236,44 @@ dbr.breakPoint = function(debugId,breakLines,callback){
     }else{
         breakLines.forEach(function(lineNum){
             gdb.stdin.write('break '+lineNum+'\n');
+        });
+    }
+};
+
+/**
+ * 移除断点操作
+ * @param debugId
+ * @param breakLines
+ * @param callback
+ */
+dbr.removeBreakPoint = function(debugId,breakLines,callback){
+    var gdb = gdbContainer.fetch(debugId);
+    if(!gdb)
+        return callback(new Error('找不到debugId '+debugId+' 对应的进程'));
+
+    //添加断点操作后触发的相应的计数器，最后应该和断点的数目相同
+    //表示所有的断点加入动作都被响应了
+    var received = 0;
+    //要返回的result的对象
+    var result = {};
+
+    gdb.stdout.removeAllListeners('batch').on('batch',function(){
+        console.log(debugId+" REMOVE BP resolve");
+
+        received++;
+        if(received === breakLines.length){
+            result.breakPointNum = breakLines.length;
+            callback(null,result);
+        }
+    });
+
+    //移除断点
+    if(!breakLines || breakLines.length==0) {
+        result.breakPointNum = 0;
+        callback(null, result);
+    }else{
+        breakLines.forEach(function(lineNum){
+            gdb.stdin.write('clear '+lineNum+'\n');
         });
     }
 };

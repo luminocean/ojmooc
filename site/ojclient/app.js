@@ -155,6 +155,29 @@ dbr.breakPoint = function(debugId,breakLines,callback){
 };
 
 /**
+ * 移除断点
+ * @param debugId
+ * @param breakLines 要移除断点的行数的数组
+ * @param callback callback(err,breakPointNum)
+ */
+dbr.removeBreakPoint = function(debugId,breakLines,callback){
+    sendRequest.call(dbr,
+        {
+            "removeBreakPoint":{
+                "debugId":debugId,
+                "breakLines":breakLines
+            }
+        },debugId,function(err,result){
+            if(err) return callback(err);
+
+            if(!result.breakPointNum)
+                return callback(new Error('异常返回值'+JSON.stringify(result)));
+
+            callback(null,result.breakPointNum);
+        });
+};
+
+/**
  * 打印变量的值
  * @param debugId
  * @param varName
