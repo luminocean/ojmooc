@@ -49,6 +49,7 @@ app.post('/editor/handle', function (req,res) {
     var language = req.body.language;
     var params = req.body.params;
 
+    console.log(language+params);
     runner.run(code,language,params,function(err,result,params,host) {
         if (err) return console.error(err);
         res.send(result);
