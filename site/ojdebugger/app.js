@@ -31,14 +31,14 @@ http.createServer(function (req, res) {
 
 //捕获万一没有捕获的异常
 process.on('uncaughtException', function(err) {
-    console.error('uncaught exception: ' + err);
+    console.error('uncaught exception: ' + err.stack);
     process.exit(1);
 });
 
 function perform(req,res,next){
     Q.denodeify(requestParser.parseRequest)(req)
-        .then(function(body){
-            return Q.denodeify(controller.dispatch)(body);
+        .then(function(requestData){
+            return Q.denodeify(controller.dispatch)(requestData);
         })
         .then(function(result){
             reply(res,result);
@@ -80,9 +80,9 @@ function reply(res, object, code){
  * @param next 处理下一个中间件，如果没有的话就处理下一个请求
  */
 function heartBeat(req,res,next){
-    requestParser.parseRequest(req,function(err, body){
+    requestParser.parseRequest(req,function(err, requestData){
         //如果请求是心跳检测，那么返回响应
-        if(body.heartBeat){
+        if(requestData.body && requestData.body.heartBeat){
             reply(res,{
                 "isAlive":"I'm alive"
             });

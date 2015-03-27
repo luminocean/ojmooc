@@ -32,7 +32,7 @@ exports.debugger = dbr;
  * @param callback callback(err,result,params)
  */
 runner.run = function(srcCode,srcType,inputData,callback){
-    sendRequest.call(this,{
+    sendRequest.call(this,"",{
         "srcCode":srcCode,
         "srcType":srcType,
         "inputData":inputData
@@ -113,12 +113,10 @@ dbr.launchDebug = function(srcCode,srcType,inputData,breakLines,callback){
  */
 dbr.debug = function(srcCode,srcType,inputData,callback){
     //开启debug
-    sendRequest.call(dbr,{
-        "debug":{
-            "srcCode":srcCode,
-            "srcType":srcType,
-            "inputData":inputData
-        }
+    sendRequest.call(dbr,"debug",{
+        "srcCode":srcCode,
+        "srcType":srcType,
+        "inputData":inputData
     },null,function(err,result,setCookie){
         if(err) return callback(err);
         if(!result.debugId)
@@ -138,12 +136,9 @@ dbr.debug = function(srcCode,srcType,inputData,callback){
  * @param callback callback(err,breakPointNum)
  */
 dbr.breakPoint = function(debugId,breakLines,callback){
-    sendRequest.call(dbr,
-        {
-            "breakPoint":{
-                "debugId":debugId,
-                "breakLines":breakLines
-            }
+    sendRequest.call(dbr,"breakPoint",{
+            "debugId":debugId,
+            "breakLines":breakLines
         },debugId,function(err,result){
             if(err) return callback(err);
 
@@ -161,12 +156,9 @@ dbr.breakPoint = function(debugId,breakLines,callback){
  * @param callback callback(err,breakPointNum)
  */
 dbr.removeBreakPoint = function(debugId,breakLines,callback){
-    sendRequest.call(dbr,
-        {
-            "removeBreakPoint":{
-                "debugId":debugId,
-                "breakLines":breakLines
-            }
+    sendRequest.call(dbr,"removeBreakPoint",{
+            "debugId":debugId,
+            "breakLines":breakLines
         },debugId,function(err,result){
             if(err) return callback(err);
 
@@ -184,12 +176,9 @@ dbr.removeBreakPoint = function(debugId,breakLines,callback){
  * @param callback callback(err,value)
  */
 dbr.printVal = function(debugId,varName,callback){
-    sendRequest.call(dbr,
-        {
-            "printVal":{
-                "debugId":debugId,
-                "varName":varName
-            }
+    sendRequest.call(dbr,"printVal",{
+            "debugId":debugId,
+            "varName":varName
         },debugId,function(err,result){
             if(err) return callback(err);
 
@@ -210,11 +199,8 @@ dbr.printVal = function(debugId,varName,callback){
  * @param callback callback(err,locals)
  */
 dbr.locals = function(debugId,callback){
-    sendRequest.call(dbr,
-        {
-            "locals":{
-                "debugId":debugId
-            }
+    sendRequest.call(dbr,"locals",{
+            "debugId":debugId
         },debugId,function(err,result){
             if(err) return callback(err);
             if(!result.locals){
@@ -231,10 +217,8 @@ dbr.locals = function(debugId,callback){
  * @param callback callback(err,debugId)
  */
 dbr.exit = function(debugId,callback){
-    sendRequest.call(dbr,{
-        "exit": {
-            "debugId": debugId
-        }
+    sendRequest.call(dbr,"exit",{
+        "debugId": debugId
     },debugId,function(err,result){
         if(err) return callback(err);
 
@@ -265,11 +249,10 @@ dbr.setHost = function(host){
 var methodNames = ['run','continue','stepInto','stepOver'];
 methodNames.forEach(function(methodName){
     dbr[methodName] = function(debugId,callback){
-        var requestObj = {};
-        requestObj[methodName] = {
+        var requestObj = {
             "debugId":debugId
         };
-        sendRequest.call(dbr,requestObj,debugId,function(err,result){
+        sendRequest.call(dbr,methodName,requestObj,debugId,function(err,result){
             if(err) return callback(err);
 
             var stdout = result.stdout;
@@ -301,13 +284,14 @@ methodNames.forEach(function(methodName){
 
 /**
  * 向debugger服务器发出请求，并接收返回值
- * @param body 请求主体
- * @param cookieId 该请求所对应的cookieId，用于定位其所对应的服务器。
+ * @param method {string} 要向服务器提交的操作
+ * @param body {object} 请求主体
+ * @param cookieId {string} 该请求所对应的cookieId，用于定位其所对应的服务器。
  * 为null表示使用默认分配（使用HAProxy的情况下）
  * 目前cookieId即debugId
- * @param callback
+ * @param callback {function}
  */
-function sendRequest(body,cookieId,callback){
+function sendRequest(method,body,cookieId,callback){
     var requestObj = {
         "method":"POST",
         "json":true
@@ -323,7 +307,7 @@ function sendRequest(body,cookieId,callback){
 
     //拼出请求服务器的url，如果没有提供则设置为默认值
     requestObj.url = 'http://'+(this.host||'localhost')
-    +':'+(this.port||'23333');
+    +':'+(this.port||'23333')+"/"+method;
     requestObj.body = body;
 
     //发送请求，返回获取的结果
