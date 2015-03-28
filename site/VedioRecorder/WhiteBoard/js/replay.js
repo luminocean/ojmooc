@@ -1,20 +1,19 @@
-//$("#replay").bind("click",function(e){
-//    clear();
-//    var i = 0;
-//    var rep = setInterval(function(){
-//        if(i < actions.length){
-//            replayAction(actions[i]);
-//            i++;
-//        }
-//        else{
-//            clearInterval(rep);
-//        }
-//    },100);
-//});
+$("#replay").bind("click",function(e){
+    clear();
+    var i = 0;
+    var rep = setInterval(function(){
+        if(i < actions.length){
+            replayAction(actions[i]);
+            i++;
+        }
+        else{
+            clearInterval(rep);
+        }
+    },100);
+});
 
 //回放操作
 WhiteBoard.prototype.setAction = function(action){
-    console.log("replay action");
     replayAction(action);
 }
 
@@ -34,101 +33,133 @@ WhiteBoard.prototype.setScene = function(scene){
     zr.render();
 }
 
+function replay_setPenColor(action){
+    setPenColor(action.val);
+}
+
+function replay_setPenSize(action){
+    setPenSize(action.val);
+}
+
+function replay_quickAddLine(action){
+    quickAddLine(action.id,action.val);
+}
+
+function replay_addLine(action){
+    addLine(action.id,action.val[0],action.val[1]);
+}
+
+function replay_addLinePoint(action){
+    addLinePoint(action.id,[action.val[0],action.val[1]]);
+}
+
+function replay_setTextFont(action){
+    setTextFont(action.val);
+}
+
+function replay_setTextSize(action){
+    setTextSize(action.val);
+}
+
+function replay_setTextColor(action){
+    setTextColor(action.val);
+}
+
+function replay_addText(action){
+    addText(action.id,action.val[0],action.val[1],action.val[2]);
+}
+
+function replay_editText(action){
+    changeText(action.id,action.val);
+}
+
+function replay_drag(action){
+    changeLocation(action.id,action.val);
+}
+
+function replay_addOperation(action){
+    addOperation(action.id,action.val);
+}
+
+function replay_addDoWhile(action){
+    addDoWhile(action.id,action.val);
+}
+
+function replay_addWhile(action){
+    addWhile(action.id,action.val);
+}
+
+function replay_addIf(action){
+    addIf(action.id,action.val);
+}
+
+function replay_editGraph(action){
+    editGraph(action.id,action.val);
+}
+
+function replay_addArray(action){
+    addArray(action.id,action.val);
+}
+
+function replay_addStack(action){
+    addStack(action.id,action.val);
+}
+
+function replay_addQueue(action){
+    addQueue(action.id,action.val);
+}
+
+function replay_editDataStructure(action){
+    editDataStructure(action.id,action.val);
+}
+
+function replay_addCircle(action){
+    addCircle(action.id,action.val[0],action.val[1],action.val[2],action.val[3]);
+}
+
+function replay_addSquare(action){
+    addSquare(action.id,action.val[0],action.val[1],action.val[2],action.val[3]);
+}
+
+function replay_addRectangle(action){
+    addRectangle(action.id,action.val[0],action.val[1],action.val[2],action.val[3],action.val[4]);
+}
+
+function replay_addTriangle(action){
+    addTriangle(action.id,action.val[0],action.val[1],action.val[2],action.val[3]);
+}
+
+function replay_addImage(action){
+    addImage(action.id,action.val[0],action.val[1],action.val[2]);
+}
+
+function replay_resizeCircleAndTriangle(action){
+    resizeCircleAndTriangle(action.id,action.val);
+}
+
+function replay_resizeDataStructure(action){
+    resizeDataStructure(action.id,action.val);
+}
+
+function replay_resizeGraph(action){
+    resizeGraph(action.id,action.val);
+}
+
+function replay_resizeRecAndImg(action){
+    resizeRecAndImg(action.id,action.val);
+}
+
+function replay_shapeInvisible(action){
+    shapeInvisible(action.id,action.val);
+}
+
+var replay_operationList = ["setPenColor","setPenSize","quickAddLine","addLine","addLinePoint","setTextFont","setTextSize","setTextColor","addText","editText","drag","addOperation","addDoWhile","addWhile","addIf","editGraph","addArray","addQueue","editDataStructure","addCircle","addSquare","addRectangle","addTriangle","addImage","resizeCircle","resizeArray","resizeIf","resizeRectangle","shapeInvisible"];
+var replay_funcs = [replay_setPenColor,replay_setPenSize,replay_quickAddLine,replay_addLine,replay_addLinePoint,replay_setTextFont,replay_setTextSize,replay_setTextColor,replay_addText,replay_editText,replay_drag,replay_addOperation,replay_addDoWhile,replay_addWhile,replay_addIf,replay_editGraph,replay_addArray,replay_addQueue,replay_editDataStructure,replay_addCircle,replay_addSquare,replay_addRectangle,replay_addTriangle,replay_addImage,replay_resizeCircleAndTriangle,replay_resizeDataStructure,replay_resizeGraph,replay_resizeRecAndImg,replay_shapeInvisible];
+
 //回放一个操作
 function replayAction(action){
-    switch (action.actionname){
-        case "setPenColor":                        //设置画笔颜色
-            setPenColor(action.val);
-            break;
-        case "setPenSize":                        //设置画笔粗细
-            setPenSize(action.val);
-            break;
-        case "quickAddLine":                        //快速添加线段
-            quickAddLine(action.id,action.val);
-            break;
-        case "addLine":                             //添加线段
-            addLine(action.id,action.val[0],action.val[1]);
-            break;
-        case "addLinePoint":                        //鼠标拖动画线
-            addLinePoint(action.id,[action.val[0],action.val[1]]);
-            break;
-        case "setTextFont":                        //设置字体
-            setTextFont(action.val);
-            break;
-        case "setTextSize":                        //设置字体大小
-            setTextSize(action.val);
-            break;
-        case "setTextColor":                      //设置文本颜色
-            setTextColor(action.val);
-            break;
-        case "addText":                             //添加文本
-            addText(action.id,action.val[0],action.val[1],action.val[2]);
-            break;
-        case "editText":                            //修改文本
-            changeText(action.id,action.val);
-            break;
-        case "drag":                                //拖动图形
-            changeLocation(action.id,action.val);
-            break;
-        case "addOperation":                       //添加do图形
-            addOperation(action.id,action.val);
-            break;
-        case "addDoWhile":                          //添加dowhile图形
-            addDoWhile(action.id,action.val);
-            break;
-        case "addWhile":                            //添加while图形
-            addWhile(action.id,action.val);
-            break;
-        case "addIf":                               //添加if图形
-            addIf(action.id,action.val);
-            break;
-        case "editGraph":                           //修改图形的值
-            editGraph(action.id,action.val);
-            break;
-        case "addArray":                            //添加array图形
-            addArray(action.id,action.val);
-            break;
-        case "addStack":                            //添加stack图形
-            addStack(action.id,action.val);
-            break;
-        case "addQueue":                            //添加queue图形
-            addQueue(action.id,action.val);
-            break;
-        case "editDataStructure":                   //修改数据结构
-            editDataStructure(action.id,action.val);
-            break;
-        case "addCircle":                            //添加circle图形
-            addCircle(action.id,action.val[0],action.val[1],action.val[2],action.val[3]);
-            break;
-        case "addSquare":                            //添加square图形
-            addSquare(action.id,action.val[0],action.val[1],action.val[2],action.val[3]);
-            break;
-        case "addRectangle":                            //添加rectangle图形
-            addRectangle(action.id,action.val[0],action.val[1],action.val[2],action.val[3],action.val[4]);
-            break;
-        case "addTriangle":                            //添加triangle图形
-            addTriangle(action.id,action.val[0],action.val[1],action.val[2],action.val[3]);
-            break;
-        case "addImage":
-            addImage(action.id,action.val[0],action.val[1],action.val[2]);
-            break;
-        case "resizeCircle":
-            resizeCircleAndTriangle(action.id,action.val);
-            break;
-        case "resizeArray":
-            resizeDataStructure(action.id,action.val);
-            break;
-        case "resizeIf":
-            resizeGraph(action.id,action.val);
-            break;
-        case "resizeRectangle":
-            resizeRecAndImg(action.id,action.val);
-            break;
-        case "shapeInvisible":
-            shapeInvisible(action.id,action.val);
-            break;
-
-    };
+    var i = replay_operationList.indexOf(action.actionname);
+    replay_funcs[i](action);
 }
 //鼠标拖动画线
 function addLinePoint(id,val){
@@ -136,7 +167,3 @@ function addLinePoint(id,val){
     whiteboard.currentLine.style.pointList.push(val);
     zr.render();
 }
-
-
-
-
