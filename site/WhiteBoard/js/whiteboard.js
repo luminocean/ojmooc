@@ -149,13 +149,11 @@ $("#undoButton").bind("mousedown",function(e){
 //重做键按下，重做
 $("#redoButton").bind("mousedown",function(e){
     redo();
-    console.log("redo");
 });
 
 //清空键按下，清空
 $("#clearButton").bind("mousedown",function(e){
     clear();
-    console.log("clear");
 });
 
 function changeToTextMode(){
@@ -170,6 +168,58 @@ function changeToGraphMode(){
     whiteboard.currentState = states.graph;
 }
 
+function undo_addShape(ope){
+    shapeInvisible(ope.id,true);
+    actionPerformed(new Action(ope.id,"shapeInvisible",true));
+}
+
+function undo_shapeVisible(ope){
+    shapeInvisible(ope.id,ope.preVal[0]);
+    actionPerformed(new Action(ope.id,"shapeInvisible",ope.preVal[0]));
+}
+
+function undo_editText(ope){
+    changeText(ope.id,ope.preVal[0]);
+    actionPerformed(new Action(ope.id,"editText",ope.preVal[0]));
+}
+
+function undo_drag(ope){
+    changeLocation(ope.id,ope.preVal);
+    actionPerformed(new Action(ope.id,"drag",ope.preVal));
+}
+
+function undo_resizeCircle(ope){
+    resizeCircleAndTriangle(ope.id,ope.preVal);
+    actionPerformed(new Action(ope.id,"resizeCircle",ope.preVal));
+}
+
+function undo_resizeArray(ope){
+    resizeDataStructure(ope.id,ope.preVal);
+    actionPerformed(new Action(ope.id,"resizeArray",ope.preVal));
+}
+
+function undo_resizeIf(ope){
+    resizeGraph(ope.id,ope.preVal);
+    actionPerformed(new Action(ope.id,"resizeIf",ope.preVal));
+}
+
+function undo_resizeRectangle(ope){
+    resizeRecAndImg(ope.id,ope.preVal);
+    actionPerformed(new Action(ope.id,"resizeRectangle",ope.preVal));
+}
+
+function undo_editDataStructure(ope){
+    editDataStructure(ope.id,ope.preVal);
+    actionPerformed(new Action(ope.id,"editDataStructure",ope.preVal));
+}
+
+function undo_editGraph(ope){
+    editGraph(ope.id,ope.preVal);
+    actionPerformed(new Action(ope.id,"editGraph",ope.preVal));
+}
+
+var undo_operationList = ["addShape","shapeVisible","editText","drag","resizeCircle","resizeArray","resizeIf","resizeRectangle","editDataStructure","editGraph"];
+var undo_funcs = [undo_addShape,undo_shapeVisible,undo_editText,undo_drag,undo_resizeCircle,undo_resizeArray,undo_resizeIf,undo_resizeRectangle,undo_editDataStructure,undo_editGraph];
 //撤销
 function undo(){
     if(whiteboard.haveUndo == false){
@@ -182,53 +232,62 @@ function undo(){
         return;
     }
     var ope = whiteboard.opes[whiteboard.undoIndex];
-    console.log(ope);
-    switch(ope.operation){
-        case "addShape":
-            shapeInvisible(ope.id,true);
-            actionPerformed(new Action(ope.id,"shapeInvisible",true));
-            break;
-        case "shapeVisible":
-            shapeInvisible(ope.id,ope.preVal[0]);
-            actionPerformed(new Action(ope.id,"shapeInvisible",ope.preVal[0]));
-            break;
-        case "editText":
-            changeText(ope.id,ope.preVal[0]);
-            actionPerformed(new Action(ope.id,"editText",ope.preVal[0]));
-            break;
-        case "drag":
-            changeLocation(ope.id,ope.preVal);
-            actionPerformed(new Action(ope.id,"drag",ope.preVal));
-            break;
-        case "resizeCircle":
-            resizeCircleAndTriangle(ope.id,ope.preVal);
-            actionPerformed(new Action(ope.id,"resizeCircle",ope.preVal));
-            break;
-        case "resizeArray":
-            resizeDataStructure(ope.id,ope.preVal);
-            actionPerformed(new Action(ope.id,"resizeArray",ope.preVal));
-            break;
-        case "resizeIf":
-            resizeGraph(ope.id,ope.preVal);
-            actionPerformed(new Action(ope.id,"resizeIf",ope.preVal));
-            break;
-        case "resizeRectangle":
-            resizeRecAndImg(ope.id,ope.preVal);
-            actionPerformed(new Action(ope.id,"resizeRectangle",ope.preVal));
-            break;
-        case "editDataStructure":
-            editDataStructure(ope.id,ope.preVal);
-            actionPerformed(new Action(ope.id,"editDataStructure",ope.preVal));
-            break;
-        case "editGraph":
-            editGraph(ope.id,ope.preVal);
-            actionPerformed(new Action(ope.id,"editGraph",ope.preVal));
-            break;
-        default :
-            break;
-    }
-
+    var i = undo_operationList.indexOf(ope.operation);
+    undo_funcs[i](ope);
 }
+
+function redo_drag(ope){
+    changeLocation(ope.id,ope.val);
+    actionPerformed(new Action(ope.id,"drag",ope.val));
+}
+
+function redo_editText(ope){
+    changeText(ope.id,ope.val[0]);
+    actionPerformed(new Action(ope.id,"editText",ope.val[0]));
+}
+
+function redo_shapeVisible(ope){
+    shapeInvisible(ope.id,ope.val[0]);
+    actionPerformed(new Action(ope.id,"shapeVisible",ope.val[0]));
+}
+
+function redo_addShape(ope){
+    shapeInvisible(ope.id,false);
+    actionPerformed(new Action(ope.id,"shapeVisible",false));
+}
+
+function redo_resizeCircle(ope){
+    resizeCircleAndTriangle(ope.id,ope.val);
+    actionPerformed(new Action(ope.id,"resizeCircle",ope.val));
+}
+
+function redo_resizeArray(ope){
+    resizeDataStructure(ope.id,ope.val);
+    actionPerformed(new Action(ope.id,"resizeArray",ope.val));
+}
+
+function redo_resizeIf(ope){
+    resizeGraph(ope.id,ope.val);
+    actionPerformed(new Action(ope.id,"resizeIf",ope.val));
+}
+
+function redo_resizeRectangle(ope){
+    resizeRecAndImg(ope.id,ope.val);
+    actionPerformed(new Action(ope.id,"resizeRectangle",ope.val));
+}
+
+function redo_editDataStructure(ope){
+    editDataStructure(ope.id,ope.val);
+    actionPerformed(new Action(ope.id,"editDataStructure",ope.val));
+}
+
+function redo_editGraph(ope){
+    editGraph(ope.id,ope.val);
+    actionPerformed(new Action(ope.id,"editGraph",ope.val));
+}
+
+var redo_operationList = ["drag","editText","shapeVisible","addShape","resizeCircle","resizeArray","resizeIf","resizeRectangle","editDataStructure","editGraph"];
+var redo_funcs = [redo_drag,redo_editText,redo_shapeVisible,redo_addShape,redo_resizeCircle,redo_resizeArray,redo_resizeIf,redo_resizeRectangle,redo_editDataStructure,redo_editGraph];
 
 //重做
 function redo(){
@@ -236,49 +295,9 @@ function redo(){
         return;
     }
     var ope = whiteboard.opes[whiteboard.undoIndex];
-    switch (ope.operation){
-        case "drag":
-            changeLocation(ope.id,ope.val);
-            actionPerformed(new Action(ope.id,"drag",ope.val));
-            break;
-        case "editText":
-            changeText(ope.id,ope.val[0]);
-            actionPerformed(new Action(ope.id,"editText",ope.val[0]));
-            break;
-        case "shapeVisible":
-            shapeInvisible(ope.id,ope.val[0]);
-            actionPerformed(new Action(ope.id,"shapeVisible",ope.val[0]));
-            break;
-        case "addShape":
-            shapeInvisible(ope.id,false);
-            actionPerformed(new Action(ope.id,"shapeVisible",false));
-            break;
-        case "resizeCircle":
-            resizeCircleAndTriangle(ope.id,ope.val);
-            actionPerformed(new Action(ope.id,"resizeCircle",ope.val));
-            break;
-        case "resizeArray":
-            resizeDataStructure(ope.id,ope.val);
-            actionPerformed(new Action(ope.id,"resizeArray",ope.val));
-            break;
-        case "resizeIf":
-            resizeGraph(ope.id,ope.val);
-            actionPerformed(new Action(ope.id,"resizeIf",ope.val));
-            break;
-        case "resizeRectangle":
-            resizeRecAndImg(ope.id,ope.val);
-            actionPerformed(new Action(ope.id,"resizeRectangle",ope.val));
-            break;
-        case "editDataStructure":
-            editDataStructure(ope.id,ope.val);
-            actionPerformed(new Action(ope.id,"editDataStructure",ope.val));
-            break;
-        case "editGraph":
-            editGraph(ope.id,ope.val);
-            actionPerformed(new Action(ope.id,"editGraph",ope.val));
-        default :
-            break;
-    }
+    var i = redo_operationList.indexOf(ope.operation);
+    redo_funcs[i](ope);
+
     whiteboard.undoIndex++;
 }
 
