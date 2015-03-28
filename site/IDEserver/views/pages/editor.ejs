@@ -5,7 +5,6 @@
 <head>
     <% include ../partials/head %>
     <link rel="stylesheet" href="/stylesheets/editorStyle.css">
-    <script type="text/javascript" src="/scripts/aceJS/ace.js"></script>
 </head>
 
 <body class="container" onbeforeunload="check()">
@@ -51,32 +50,25 @@
 
             <div id="leftPanel" class="col-sm-3">
                 <div id="variable" class="panel panel-info col-sm-12 debugInfoPanel">
-                    <div class="panel-heading">变量</div>
-                    <table class="table">
-                        <tr>
-                            <td>a</td>
-                            <td>10</td>
-                        </tr>
-                    </table>
+                    <div class="panel-heading">变量
+                        <button type="button" class="btn btn-default" aria-label="Right Align">
+                            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                        </button>
+                    </div>
                 </div>
                 <div id="operate" class="panel panel-info col-sm-12 debugInfoPanel">
                     <div class="panel-heading">操作</div>
-                    <table class="table">
-                        <tr>
-                            <td>a</td>
-                            <td>10</td>
-                        </tr>
-                    </table>
+                    <button type="button" class="btn btn-primary btn-lg btn-block">进入</button>
+                    <button type="button" class="btn btn-primary btn-lg btn-block">单步</button>
+                    <button type="button" class="btn btn-primary btn-lg btn-block">退出函数</button>
+                    <button type="button" class="btn btn-primary btn-lg btn-block">继续</button>
                 </div>
             </div>
 
             <div id="midPanel" class="col-sm-10">
-                <div id="editor" class="col-sm-12">
-                </div>
-                <div id="inputEditor" class="col-sm-6">
-                </div>
-                <div id="outputEditor" class="col-sm-6">
-                </div>
+                <div id="editor" class="col-sm-12"></div>
+                <div id="inputEditor" class="col-sm-6"></div>
+                <div id="outputEditor" class="col-sm-6"></div>
             </div>
 
             <div id="rightPanel" class="col-sm-3">
@@ -100,36 +92,35 @@
                 </div>
             </div>
         </div>
-
-        <div class="col-sm-4">
-            <div class="well">
-                <h3>Look I'm A Sidebar!</h3>
-            </div>
-        </div>
-
     </div>
 </main>
 
 <footer>
     <% include ../partials/footer %>
 </footer>
+
 </body>
 <script>
-
     $(document).ready(function () {
         $("#leftPanel").hide();
         $("#rightPanel").hide();
         $("#debugBegin").hide();
         $("#debugOut").hide();
 
+        ace.require("ace/ext/language_tools");
         var inputEditor = ace.edit("inputEditor");
         var outputEditor = ace.edit("outputEditor");
         var editor = ace.edit("editor");
-
         inputEditor.setTheme("ace/theme/twilight");
         outputEditor.setTheme("ace/theme/twilight");
         outputEditor.setReadOnly(true);
+
         editor.setTheme("ace/theme/monokai");
+        editor.setOptions({
+            enableBasicAutocompletion: true,
+            enableSnippets: true,
+            enableLiveAutocompletion: true  //自动补全代码
+        });
         editor.getSession().setMode("ace/mode/c_cpp");
     });
 
@@ -140,7 +131,8 @@
     })
 
     $("#language").change(function () {
-        var session = ace.edit("editor").getSession();
+        var editor = ace.edit("editor");
+        var session = editor.getSession();
         var lan = $("#language").val();
 
         switch (lan) {
@@ -156,7 +148,7 @@
             case "default":
                 break;
         }
-    })
+    });
 
     function check() {
         $("#fontsize").val("12px");
@@ -174,7 +166,7 @@
 
         $.ajax({
             type: "POST",
-            url: "/IDE/handle",
+            url: "/editor/handle",
             data: {code: code, language: lan, params: params},
             dataType: "text",
             success: function (result) {
@@ -206,8 +198,9 @@
         $("#debugOut").hide();
         $("#debugInto").show();
         $("#run").show();
-    })
-
+    });
 
 </script>
+<script type="text/javascript" src="/scripts/ace/ace.js"></script>
+<script type="text/javascript" src="/scripts/ace/ext-language_tools.js" charset="utf-8"></script>
 </html>

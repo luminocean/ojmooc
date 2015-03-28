@@ -19,11 +19,11 @@ var config = [
         "id":"runBtn",
         "handler":run
     },{
-        "id":"addBreakLineBtn",
-        "handler":addBreakLine
+        "id":"addBreakPointBtn",
+        "handler":addBreakPoint
     },{
-        "id":"removeBreakLineBtn",
-        "handler":removeBreakLine
+        "id":"removeBreakPointBtn",
+        "handler":removeBreakPoint
     },{
         "id":"stepIntoBtn",
         "handler":stepInto
@@ -51,13 +51,12 @@ config.forEach(function(item){
 function launchDebug(){
     var programSuffix = $('#programSuffix').val();
     if(!programSuffix) return error('没有指定程序后缀');
-    var breakLines = $('#breakLine').val().split(',');
-    console.log(breakLines);
+    var breakPoints = $('#breakPoint').val().split(',');
 
     util.getData(programSuffix,function(err,sourceCode,inputData){
         if(err) return error(err);
 
-        dbr.launchDebug(sourceCode,programSuffix,inputData,breakLines,function(err,debugId,finish,breakPoint,stdout,locals){
+        dbr.launchDebug(sourceCode,programSuffix,inputData,breakPoints,function(err,debugId,finish,breakPoint,stdout,locals){
             if(err) return error(err);
 
             displayInfo(debugId,finish,breakPoint,stdout,locals);
@@ -93,26 +92,26 @@ function run(){
     });
 }
 
-function addBreakLine(){
+function addBreakPoint(){
     var debugId = $('#debugId').val();
     if(!debugId) return error(new Error('找不到从服务器获取的debugId，是否正处于调试？'));
 
-    var breakLines = $('#addBreakLine').val().split(',');
+    var breakPoints = $('#addBreakPoint').val().split(',');
 
-    dbr.breakPoint(debugId,breakLines,function(err,breakPointNum){
+    dbr.breakPoint(debugId,breakPoints,function(err,breakPointNum){
         if(err) return error(err);
 
         display('response','BreakPoint num added:'+breakPointNum);
     });
 }
 
-function removeBreakLine(){
+function removeBreakPoint(){
     var debugId = $('#debugId').val();
     if(!debugId) return error(new Error('找不到从服务器获取的debugId，是否正处于调试？'));
 
-    var breakLines = $('#removeBreakLine').val().split(',');
+    var breakPoints = $('#removeBreakPoint').val().split(',');
 
-    dbr.removeBreakPoint(debugId,breakLines,function(err,breakPointNum){
+    dbr.removeBreakPoint(debugId,breakPoints,function(err,breakPointNum){
         if(err) return error(err);
 
         display('response','BreakPoint num removed:'+breakPointNum);

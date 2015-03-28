@@ -2,6 +2,9 @@ var url = require('url');
 
 /**
  * 解析执行请求，获取请求报文中的操作和json对象
+ * 返回的格式为 {"methodName":xxx, "body":yyy}
+ * methodName表示请求中包含的restful的方法名，简单来说就是要调用服务器的哪一个方法，可能为空
+ * body为请求的报文体，是一个json对象
  * @param req http传来的请求对象
  * @param callback
  */
