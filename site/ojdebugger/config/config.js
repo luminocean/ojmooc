@@ -156,7 +156,7 @@ var settings = {
         "port":23333,
         //"port":8081,
         //一个gdb进程无操作等待的最长时间，超时则gdb进程被回收
-        "gdbTimeout":60
+        "gdbTimeout":120
     },
     /**
      * 项目路径相关配置
