@@ -1,5 +1,10 @@
+var url = require('url');
+
 /**
- * 解析执行请求，获取请求报文中的json对象
+ * 解析执行请求，获取请求报文中的操作和json对象
+ * 返回的格式为 {"methodName":xxx, "body":yyy}
+ * methodName表示请求中包含的restful的方法名，简单来说就是要调用服务器的哪一个方法，可能为空
+ * body为请求的报文体，是一个json对象
  * @param req http传来的请求对象
  * @param callback
  */
@@ -9,9 +14,20 @@ exports.parseRequest = function(req, callback){
         req.headers['content-type'] !== 'application/json')
         return;
 
+    var requsetUrl = req.url;
+    var pathName = url.parse(requsetUrl)["pathname"];
+    if(!pathName || pathName.substr(0,1) !== '/'){
+        return callback(new Error('无法解析请求的路径名：'+url));
+    }
+
+    var methodName = pathName.substring(1);
+
     //如果已经解析过了就直接返回
     if(req.body){
-        return callback(null, req.body);
+        return callback(null,{
+            "methodName":methodName,
+            "body":req.body
+        });
     }
 
     var dataBuf = '';
@@ -24,7 +40,10 @@ exports.parseRequest = function(req, callback){
         try{
             var body = JSON.parse(data);
             req.body = body;
-            callback(null, body);
+            callback(null, {
+                "methodName":methodName,
+                "body":body
+            });
         }catch(err){
             req.body = {"parseErr":err};
             callback(err);

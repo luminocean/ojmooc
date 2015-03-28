@@ -46,11 +46,11 @@ function perform(req,res,next){
     //解析请求
     Q.denodeify(requestParser.parseRequest)(req)
         //使用解析得到的参数编译执行
-        .then(function (body) {
+        .then(function (requestData) {
             //从报文体中取出请求参数
-            var srcType = body.srcType;
-            var srcCode = body.srcCode;
-            var inputData = body.inputData;
+            var srcType = requestData.body.srcType;
+            var srcCode = requestData.body.srcCode;
+            var inputData = requestData.body.inputData;
 
             return Q.denodeify(run.run)(srcCode, inputData, srcType);
         })
@@ -83,9 +83,9 @@ function perform(req,res,next){
  * @param next 处理下一个中间件，如果没有的话就处理下一个请求
  */
 function heartBeat(req,res,next){
-    requestParser.parseRequest(req,function(err, body){
+    requestParser.parseRequest(req,function(err, requestData){
         //如果请求是心跳检测，那么返回响应
-        if(body.heartBeat){
+        if(requestData.body && requestData.body.heartBeat){
             reply(res,{
                 "isAlive":"I'm alive"
             });
