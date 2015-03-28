@@ -5,6 +5,8 @@ var dbr = require('../ojclient/app').debugger;
 dbr.setPort(8081);
 //dbr.setPort(23333);
 
+//dbr.setHost('121.42.155.75');
+
 var config = [
     {
         "id":"debugBtn",
@@ -51,7 +53,12 @@ config.forEach(function(item){
 function launchDebug(){
     var programSuffix = $('#programSuffix').val();
     if(!programSuffix) return error('没有指定程序后缀');
-    var breakPoints = $('#breakPoint').val().split(',');
+
+    var inputBreakPoints = $('#breakPoint').val().split(',');
+    var breakPoints = [];
+    inputBreakPoints.forEach(function(breakPoint){
+        if(breakPoint) breakPoints.push(breakPoint);
+    });
 
     util.getData(programSuffix,function(err,sourceCode,inputData){
         if(err) return error(err);
@@ -197,5 +204,5 @@ function display(type,text){
 }
 
 function error(err){
-    display('response',err.msg || err);
+    display('response',err.stack);
 }

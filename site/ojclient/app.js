@@ -69,11 +69,11 @@ runner.setHost = function(host){
  * @param srcCode
  * @param srcType
  * @param inputData
- * @param breakLines
+ * @param breakPoints
  * @param callback callback(err,debugId,exit,breakPoint)
  * exit:是否结束的flag   breakPoint:遇到的断点信息
  */
-dbr.launchDebug = function(srcCode,srcType,inputData,breakLines,callback){
+dbr.launchDebug = function(srcCode,srcType,inputData,breakPoints,callback){
     var debugId = null;
 
     //开启debug会话
@@ -81,7 +81,9 @@ dbr.launchDebug = function(srcCode,srcType,inputData,breakLines,callback){
         //打断点
         .then(function(createdDebugId){
             debugId = createdDebugId;
-            return Q.denodeify(dbr.breakPoint)(debugId,breakLines);
+            console.log(breakPoints);
+            if(breakPoints && breakPoints.length > 0)
+                return Q.denodeify(dbr.breakPoint)(debugId,breakPoints);
         })
         //启动程序
         .then(function(){

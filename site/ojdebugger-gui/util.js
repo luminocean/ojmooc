@@ -5,8 +5,8 @@ var fs = require('fs');
  * callback(err,sourceCode,inputData)
  */
 exports.getData = function(suffix,callback){
-    var sourceFileName = suffix+'_code';
-    var inputFileName = suffix+'_data';
+    var sourceFileName = "code."+suffix;
+    var inputFileName = suffix+'.data';
 
     fs.readFile('./input_data/'+sourceFileName,function(err,sourceCode){
         if(err) callback(err);
