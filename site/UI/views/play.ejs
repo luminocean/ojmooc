@@ -1,5 +1,51 @@
-<%- include header.ejs %>
-<div>
+<% include globalView/header.ejs %>
+<!--..放单独需要的CSS -->
+<% include globalView/mainNavbar.ejs%>
+<div id="container" class="container">
 <!--这里放置 IDE 白板等 -->
+    <div id="subjectName" class="page-header">
+    <p>subjectName</p>
+    </div>
+    <div id="playerwholeDiv" class="">
+        <div id="editerDiv" class="">
+            <div class="showME">
+                editer
+            </div>
+        </div>
+        <div id="whiteboardDiv" class="">
+            <div class="showME">
+                whiteboard
+            </div>
+        </div>
+
+    </div>
+    <div id="controlLine" class="">
+        <div id="backline">
+            <div id="foreline"></div>
+        </div>
+        <div class="btn-toolbar">
+            <div class="btn-group">
+                <button id="record">record</button>
+                <button id="stop">stop</button>
+                <button id="play">play</button>
+            </div>
+            <div class="btn-group">
+                <button id="doubleWinBtn" class="btn">双窗口</button>
+                <button id="singleEditerBtn" class="btn">编辑器</button>
+                <button id="singleWBoardBtn" class="btn">白板</button>
+                <button id="fullscreenBtn" class="btn">全屏</button>
+            </div>
+        </div>
+        <textarea id="editor" rows="10" cols="32"></textarea>
+        <textarea id="whiteboard" rows="10" cols="32"></textarea>
+
+        <span id="clock" style="position: relative;left: 480px">0</span>
+    </div>
+
+
 </div>
-<%- include footer.ejs%>
+
+<% include globalView/footer.ejs%>
+<!-- ..放单独需要的JS -->
+<script src="/javascripts/recorder.js"></script>
+<script src="/javascripts/player.js"></script>
