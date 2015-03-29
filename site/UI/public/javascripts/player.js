@@ -5,37 +5,66 @@
 function doubleWinEvent(){
     $("#editerDiv").css({"width":"70%","display":"block"});
     $("#whiteboardDiv").css({"width":"30%","display":"block"});
+    windowController.state=0;
 }
 
 function singleEditerEvent(){
     $("#editerDiv").css({"width":"100%","display":"block"});
     $("#whiteboardDiv").css({"display":"none"});
+    windowController.state=1;
 }
 
 function singleWBoardEvent(){
     $("#editerDiv").css({"display":"none"});
     $("#whiteboardDiv").css({"width":"100%","display":"block"});
+    windowController.state=2;
 }
 
 
 function WindowController(){
-    this.state=null;
+    this.state=0;
     this.name="WindowController";
 }
 
 WindowController.prototype.setAction = function(action){
     console.log(this.name+action);
-    $("#whiteboard").val(action);
+    this.state=action;
+    switch (action){
+        case 0:
+            doubleWinEvent();
+            break;
+        case 1:
+            singleEditerEvent();
+            break;
+        case 2:
+            singleWBoardEvent();
+            break;
+        default :
+            doubleWinEvent();
+    }
 };
 
-WindowController.prototype.getScene = function(state){
-    return $("#whiteboard").val();
+WindowController.prototype.getScene = function(){
+    console.log("get1xia");
+    return this.state;
 };
 
 WindowController.prototype.setScene = function(state){
-    this.state = state;
-    console.log(state);
-    $("#whiteboard").val(state);
+    console.log("set1xia");
+    this.state=state;
+    switch (state){
+        case 0:
+            doubleWinEvent();
+            break;
+        case 1:
+            singleEditerEvent();
+            break;
+        case 2:
+            singleWBoardEvent();
+            break;
+        default :
+            doubleWinEvent();
+    }
 };
 
 /**
@@ -108,11 +137,17 @@ function start_record(){
         var action = $("#whiteboard").val();
         timeline.saveOneStep(recorder1,action);
     });
+
+    $("#windowConBtnGro").on("click.frame",".btn",function(e){
+        var action=windowController.state;
+        timeline.saveOneStep(recorder2,action);
+    });
 }
 
 function stop_record(){
     console.log("stop record");
     timeline.stop();
+    $("#windowConBtnGro").off("click.frame");
 }
 
 function playback(){
