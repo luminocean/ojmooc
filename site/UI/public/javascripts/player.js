@@ -91,32 +91,8 @@ editor.prototype.setScene = function(state){
 };
 
 
-/**
- * Created by blueking on 2015/3/17.
- */
-var whiteboard = function(){
-    this.state;
-    this.name = "whiteboard";
-};
-
-whiteboard.prototype.setAction = function(action){
-    console.log(this.name+action);
-    $("#whiteboard").val(action);
-};
-
-whiteboard.prototype.getScene = function(){
-    return $("#whiteboard").val();
-};
-
-whiteboard.prototype.setScene = function(state){
-    this.state = state;
-    console.log(state);
-    $("#whiteboard").val(state);
-};
-
 var editor = new editor();
 var recorder0 = new recorder(editor);
-var whiteboard = new whiteboard();
 var recorder1 = new recorder(whiteboard);
 var windowController=new WindowController();
 var recorder2 = new recorder(windowController);

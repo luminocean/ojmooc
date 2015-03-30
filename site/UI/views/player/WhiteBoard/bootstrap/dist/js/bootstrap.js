@@ -16,7 +16,7 @@ if (typeof jQuery === 'undefined') {
 }(jQuery);
 
 /* ========================================================================
- * Bootstrap: transition.js v3.3.1
+ * Bootstrap: transition.whiteboardjs v3.3.1
  * http://getbootstrap.com/javascript/#transitions
  * ========================================================================
  * Copyright 2011-2014 Twitter, Inc.
@@ -76,7 +76,7 @@ if (typeof jQuery === 'undefined') {
 }(jQuery);
 
 /* ========================================================================
- * Bootstrap: alert.js v3.3.1
+ * Bootstrap: alert.whiteboardjs v3.3.1
  * http://getbootstrap.com/javascript/#alerts
  * ========================================================================
  * Copyright 2011-2014 Twitter, Inc.
@@ -171,7 +171,7 @@ if (typeof jQuery === 'undefined') {
 }(jQuery);
 
 /* ========================================================================
- * Bootstrap: button.js v3.3.1
+ * Bootstrap: button.whiteboardjs v3.3.1
  * http://getbootstrap.com/javascript/#buttons
  * ========================================================================
  * Copyright 2011-2014 Twitter, Inc.
@@ -288,7 +288,7 @@ if (typeof jQuery === 'undefined') {
 }(jQuery);
 
 /* ========================================================================
- * Bootstrap: carousel.js v3.3.1
+ * Bootstrap: carousel.whiteboardjs v3.3.1
  * http://getbootstrap.com/javascript/#carousel
  * ========================================================================
  * Copyright 2011-2014 Twitter, Inc.
@@ -529,7 +529,7 @@ if (typeof jQuery === 'undefined') {
 }(jQuery);
 
 /* ========================================================================
- * Bootstrap: collapse.js v3.3.1
+ * Bootstrap: collapse.whiteboardjs v3.3.1
  * http://getbootstrap.com/javascript/#collapse
  * ========================================================================
  * Copyright 2011-2014 Twitter, Inc.
@@ -741,7 +741,7 @@ if (typeof jQuery === 'undefined') {
 }(jQuery);
 
 /* ========================================================================
- * Bootstrap: dropdown.js v3.3.1
+ * Bootstrap: dropdown.whiteboardjs v3.3.1
  * http://getbootstrap.com/javascript/#dropdowns
  * ========================================================================
  * Copyright 2011-2014 Twitter, Inc.
@@ -903,7 +903,7 @@ if (typeof jQuery === 'undefined') {
 }(jQuery);
 
 /* ========================================================================
- * Bootstrap: modal.js v3.3.1
+ * Bootstrap: modal.whiteboardjs v3.3.1
  * http://getbootstrap.com/javascript/#modals
  * ========================================================================
  * Copyright 2011-2014 Twitter, Inc.
@@ -1228,7 +1228,7 @@ if (typeof jQuery === 'undefined') {
 }(jQuery);
 
 /* ========================================================================
- * Bootstrap: tooltip.js v3.3.1
+ * Bootstrap: tooltip.whiteboardjs v3.3.1
  * http://getbootstrap.com/javascript/#tooltip
  * Inspired by the original jQuery.tipsy by Jason Frame
  * ========================================================================
@@ -1707,7 +1707,7 @@ if (typeof jQuery === 'undefined') {
 }(jQuery);
 
 /* ========================================================================
- * Bootstrap: popover.js v3.3.1
+ * Bootstrap: popover.whiteboardjs v3.3.1
  * http://getbootstrap.com/javascript/#popovers
  * ========================================================================
  * Copyright 2011-2014 Twitter, Inc.
@@ -1737,7 +1737,7 @@ if (typeof jQuery === 'undefined') {
   })
 
 
-  // NOTE: POPOVER EXTENDS tooltip.js
+  // NOTE: POPOVER EXTENDS tooltip.whiteboardjs
   // ================================
 
   Popover.prototype = $.extend({}, $.fn.tooltip.Constructor.prototype)
@@ -1754,7 +1754,7 @@ if (typeof jQuery === 'undefined') {
     var content = this.getContent()
 
     $tip.find('.popover-title')[this.options.html ? 'html' : 'text'](title)
-    $tip.find('.popover-content').children().detach().end()[ // we use append for html objects to maintain js events
+    $tip.find('.popover-content').children().detach().end()[ // we use append for html objects to maintain whiteboardjs events
       this.options.html ? (typeof content == 'string' ? 'html' : 'append') : 'text'
     ](content)
 
@@ -1827,7 +1827,7 @@ if (typeof jQuery === 'undefined') {
 }(jQuery);
 
 /* ========================================================================
- * Bootstrap: scrollspy.js v3.3.1
+ * Bootstrap: scrollspy.whiteboardjs v3.3.1
  * http://getbootstrap.com/javascript/#scrollspy
  * ========================================================================
  * Copyright 2011-2014 Twitter, Inc.
@@ -2003,7 +2003,7 @@ if (typeof jQuery === 'undefined') {
 }(jQuery);
 
 /* ========================================================================
- * Bootstrap: tab.js v3.3.1
+ * Bootstrap: tab.whiteboardjs v3.3.1
  * http://getbootstrap.com/javascript/#tabs
  * ========================================================================
  * Copyright 2011-2014 Twitter, Inc.
@@ -2157,7 +2157,7 @@ if (typeof jQuery === 'undefined') {
 }(jQuery);
 
 /* ========================================================================
- * Bootstrap: affix.js v3.3.1
+ * Bootstrap: affix.whiteboardjs v3.3.1
  * http://getbootstrap.com/javascript/#affix
  * ========================================================================
  * Copyright 2011-2014 Twitter, Inc.

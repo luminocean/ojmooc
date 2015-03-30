@@ -1,0 +1,107 @@
+#whiteboard{
+    height: 530px;
+}
+
+#menu{
+    height: 40px;
+    border:solid 1px;
+}
+
+#mainBoard{
+    height: 487px;
+    border: solid 1px;
+}
+
+#graphBoard {
+    height: 448px;
+}
+
+#fileBoard{
+    height: 150px;
+    border: solid 1px;
+}
+
+#penButton{
+    background-image: url("../img/pen.jpg");
+}
+#penMenu{
+    margin-top: 5px;
+    height: 30px;
+    background-image: url("../img/menudown.jpg");
+}
+
+#textMenu{
+    margin-top: 5px;
+    height: 30px;
+    background-image: url("../img/menudown.jpg");
+}
+
+#imageMenu{
+    margin-top: 5px;
+    height: 30px;
+    background-image: url("../img/menudown.jpg");
+}
+
+#eraserButton{
+    background-image: url("../img/eraser.jpg");
+}
+
+#textButton{
+    background-image: url("../img/txt.jpg");
+}
+
+#imageButton{
+    background-image: url("../img/img.jpg");
+}
+
+#undoButton{
+    float: right;
+    background-image: url("../img/undo.jpg");
+}
+
+#redoButton{
+    float: right;
+    background-image: url("../img/redo.jpg");
+}
+
+#clearButton{
+    float: right;
+    background-image: url("../img/clear.jpg");
+}
+
+
+
+.menuButton{
+    margin-top: 5px;
+    margin-left: 5px;
+    width: 30px;
+    height: 30px;
+}
+
+#fileList {
+    height: 120px;
+    overflow: auto;
+    white-space: nowrap;
+}
+
+#fileList li {
+    margin-left: 5px;
+    display: inline-block;
+}
+
+#aboutButton{
+    float: right;
+    width: 13%;
+}
+
+#addButton{
+    float: right;
+    width: 13%;
+}
+
+#add{
+    width: 68%;
+}
+
+
+
