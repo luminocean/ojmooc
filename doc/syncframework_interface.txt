@@ -9,18 +9,19 @@ timeline.addRecorder(recorder);
 
 
 同步框架对外提供的方法：
-	recorder.saveStep = function(action){
+	recorder.saveOneStep = function(recorder,action){
 		//当有事件触发时调用该方法，将执行的操作写入同步框架
 	}
 	
 其他组件需要提供的方法：
 
-	others.setStep(action){
+	others.setAction(action){
 		//需要对传来的action解析并执行
 	}
 	
-	others.getScene(state){
+	others.getScene(){
 		//当同步框架调用该方法时将当前的组件状态传递出来
+		return state;
 	}
 	
 	others.setScene(state){
