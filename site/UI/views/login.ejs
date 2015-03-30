@@ -1,0 +1,31 @@
+<%- include globalView/header.ejs %>
+<!--..这里放单独需要的CSS 注意顺序-->
+<% include globalView/mainNavbar.ejs%>
+
+<div id="container" class="container">
+    <!-- 放置页面内容-->
+    <form class="form-horizontal" method="post" >
+        <fieldset>
+            <legend>用户登入</legend>
+            <div class="control-group" >
+                <label class="control-label" for="username" >用户名 </label>
+                <div class="controls" >
+                    <input type="text" class="input-xlarge" id="username" name="username" >
+                </div>
+            </div>
+            <div class="control-group" >
+                <label class="control-label" for="password" >口令</label>
+                <div class="controls" >
+                    <input type="password" class="input-xlarge" id="password" name="password" >
+                </div>
+            </div>
+            <div class="form-actions" >
+                <button type="submit" class="btn btn-primary" >登入</button>
+            </div>
+        </fieldset>
+    </form>
+</div>
+
+<%- include globalView/footer.ejs%>
+<!-- ..下面放单独需要的JS，注意顺序 -->
+

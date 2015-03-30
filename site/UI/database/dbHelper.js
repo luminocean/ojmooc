@@ -1,8 +1,8 @@
 var mysql = require('mysql');
 var conn = mysql.createConnection({
-    host: 'localhost',
+    host: '121.42.155.75',
     user: 'root',
-    password: 'ojmooc',
+    password: 'vagrant',
     database:'ojmooc',
     port: 3306
 });

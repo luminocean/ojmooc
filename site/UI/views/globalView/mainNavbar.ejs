@@ -10,13 +10,41 @@
             </a>
             <a class="brand" href="/">OJMOOC</a>
             <div class="nav-collapse">
-                <ul class="nav">
+                <ul class="nav pull-left">
                     <li <% if(active=='index'){%> class="active"<% }%>><a href="/">首页</a></li>
+                    <li <% if(active=='classes'){%> class="active"<% }%>><a href="/">课程</a></li>
+                    <li <% if(active=='myClass'){%> class="active"<% }%>><a href="/">我的课程</a></li>
+                    <form class="navbar-search">
+                        <input type="text" class="search-query" placeholder="Search">
+                    </form>
 
-                    <li <% if(active=='login'){%> class="active"<% }%>><a href="/login">登入</a></li>
-                    <li <% if(active=='reg'){%> class="active"<% }%>><a href="/reg">注册</a></li>
                     <li <% if(active=='play'){%> class="active"<% }%>><a href="/play">录制</a></li>
                 </ul>
+                <% if(!user){%>
+                <ul class="nav pull-right">
+                    <li <% if(active=='login'){%> class="active"<% }%>><a href="/login">登入</a></li>
+                    <li <% if(active=='reg'){%> class="active"<% }%>><a href="/reg">注册</a></li>
+                </ul>
+                <% }else{%>
+                <ul class="nav pull-right">
+                    <li><a class=""><i class="icon-envelope icon-white"></i>消息</a></li>
+                    <li>
+                        <a class="dropdown-toggle" data-toggle="dropdown" role="button" href="#">
+                            <i class="icon-user icon-white"></i>
+                            <%= user.username%>
+                            <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#"><i class="icon-pencil"></i> 个人资料</a></li>
+                            <li><a href="#"><i class="icon-trash"></i> Delete</a></li>
+                            <li><a href="#"><i class="icon-ban-circle"></i> Ban</a></li>
+                            <li class="divider"></li>
+                            <li><a href="/logout"><i class="i"></i>登出</a></li>
+                        </ul>
+                    </li>
+                </ul>
+                <% } %>
+
             </div>
         </div>
     </div>
