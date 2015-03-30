@@ -125,7 +125,7 @@ router.get('/logout', function(req, res, next) {
 
 
 router.get('/play', function(req, res, next) {
-  res.render('play',{title:'play',active:'play'});
+  res.render('player/play',{title:'play',active:'play'});
 });
 
 module.exports = router;
