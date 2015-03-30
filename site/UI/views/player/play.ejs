@@ -1,0 +1,28 @@
+<% include ../globalView/header.ejs %>
+<!--..放单独需要的CSS -->
+<% include ../globalView/mainNavbar.ejs%>
+<div id="container" class="container">
+<!--这里放置 IDE 白板等 -->
+    <div id="subjectName" class="page-header">
+    <h3>课程名称</h3>
+    </div>
+    <div id="playerwholeDiv" class="">
+        <div id="editerDiv" class="">
+            <% include editerDiv.ejs%>
+        </div>
+        <div id="whiteboardDiv" class="">
+            <% include whiteboardDiv.ejs%>
+        </div>
+
+    </div>
+    <div id="controlLine" class="">
+        <% include controlLine.ejs%>
+    </div>
+
+
+</div>
+
+<% include ../globalView/footer.ejs%>
+<!-- ..下面放单独需要的JS ，要按照顺序-->
+<script src="/javascripts/recorder.js"></script>
+<script src="/javascripts/player.js"></script>
