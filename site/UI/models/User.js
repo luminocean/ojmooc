@@ -4,13 +4,20 @@ var conn=require('../database/dbHelper');
 var insertSQL = 'insert into t_user(name) values("conan"),("fens.me")';
 var selectSQL = 'select * from t_user limit 10';
 var deleteSQL = 'delete from t_user';
-var updateSQL = 'update t_user set name="conan update"  where name="conan"';/**
+var updateSQL = 'update t_user set name="conan update"  where name="conan"';
+
+var queryUserByName = 'select * from user where user.name=?';
+
+var saveUser= 'insert into user values(?,?,?)';
+
+/**
  * Created by zy on 2015/3/23.
  */
 
 function User(user) {
     this.name = user.name;
     this.password = user.password;
+    this.identity=user.identity;
 };
 
 module.exports = User;
@@ -19,50 +26,38 @@ User.prototype.save = function save(callback) {
     // 存入 mysql
     var user = {
         name: this.name,
-        password: this.password
+        password: this.password,
+        identity:this.identity
     };
-    mongodb.open( function(err, db) {
-        if (err) {
+
+    var saveUser_params=[null,user.name,user.identity];
+
+    conn.query(saveUser,saveUser_params,function(err,rows){
+        if(err){
             return callback(err);
         }
-        // 读取 users 集合
-        db.collection('users', function(err, collection) {
-            if (err) {
-                mongodb.close();
-                return callback(err);
-            }
-            // 为  name 属性添加索引
-            collection.ensureIndex('name', {unique: true});
-            // 写入 user 文档
-            collection.insert(user, {safe: true}, function(err, user) {
-                mongodb.close();
-                callback(err, user);
-            });
-        });
+        console.log("INSERT Return ==> ");
+        console.log(rows);
     });
+
+    callback();
 };
-User.get = function get(username, callback) {
-    mongodb.open(function(err, db) {
-        if (err) {
-            return callback(err);
+User.check = function check(username, callback) {
+
+    conn.query(queryUserByName,username, function (err2, rows) {
+        if (err2) //console.log(err2);
+            return callback(err2);
+
+        console.log("SELECT ==> ");
+        for (var i in rows) {
+            console.log(rows[i]);
         }
-        // 读取 users 集合
-        db.collection('users', function(err, collection) {
-            if (err) {
-                mongodb.close();
-                return callback(err);
-            }
-            // 查找 name 属性为  username 的文档
-            collection.findOne({name: username}, function(err, doc) {
-                mongodb.close();
-                if (doc) {
-                    // 封装文档为  User 对象
-                    var user = new User(doc);
-                    callback(err, user);
-                } else {
-                    callback(err, null);
-                }
-            });
-        });
+
+        if(rows.length==1){
+            return callback("Username already exists.");
+        }
+
+        callback();
+
     });
 };

@@ -1,4 +1,8 @@
-<%- include header.ejs %>
+<% include globalView/header.ejs %>
+<!--..放单独需要的CSS -->
+<% include globalView/mainNavbar.ejs%>
+
+<div id="container" class="container">
 <form class="form-horizontal" method="post" >
     <fieldset>
         <legend>用户注册</legend>
@@ -27,4 +31,7 @@
         </div>
     </fieldset>
 </form>
-<%- include footer.ejs %>
+</div>
+</body>
+<!-- ..放单独需要的JS -->
+<% include globalView/footer.ejs %>

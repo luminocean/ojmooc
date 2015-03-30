@@ -1,5 +1,9 @@
 // server.js
+
+var fs = require('fs');
+var dbr = require('../ojclient/app.js').debugger;
 var runner = require('../ojclient/app.js').runner;
+
 var express = require('express');
 var app = express();
 var url = require('url');
@@ -15,11 +19,11 @@ app.use(express.static(path.join(__dirname, 'public')));
 /**
  * index page
  */
-app.get('/', function(req, res) {
+app.get('/', function (req, res) {
     var drinks = [
-        { name: 'Bloody Mary', drunkness: 3 },
-        { name: 'Martini', drunkness: 5 },
-        { name: 'Scotch', drunkness: 10 }
+        {name: 'Bloody Mary', drunkness: 3},
+        {name: 'Martini', drunkness: 5},
+        {name: 'Scotch', drunkness: 10}
     ];
     var tagline = "Hello,World!";
 
@@ -33,7 +37,7 @@ app.get('/', function(req, res) {
 /**
  * editor page
  */
-app.get('/editor', function (req,res) {
+app.get('/editor', function (req, res) {
     res.render('pages/editor');
 });
 
@@ -41,7 +45,7 @@ app.get('/editor', function (req,res) {
 /**
  * 应对客户端的ajax请求
  */
-app.post('/editor/handle', function (req,res) {
+app.post('/editor/run', function (req, res) {
     runner.setPort(8080);
     runner.setHost('121.42.155.75');
 
@@ -49,11 +53,28 @@ app.post('/editor/handle', function (req,res) {
     var language = req.body.language;
     var params = req.body.params;
 
-    console.log(language+params);
-    runner.run(code,language,params,function(err,result,params,host) {
+    console.log(language + params);
+    runner.run(code, language, params, function (err, result, params, host) {
         if (err) return console.error(err);
         res.send(result);
         res.end();
+    });
+});
+
+
+app.post('/editor/debugBegin', function (req, res) {
+    dbr.setPort(8081);
+    dbr.setHost('121.42.155.75');
+
+    var srcType = 'cpp';
+    var srcCode = fs.readFileSync(path.join(__dirname, '../ojclient/input_data/code.' + srcType), 'utf-8');
+    var inputData = fs.readFileSync(path.join(__dirname, '../ojclient/input_data/' + srcType + '.data'), 'utf-8');
+
+    var currentDebugId = null;
+
+    dbr.launchDebug(srcCode,srcType,inputData,[27], function (err,debugId,exit,breakPoint){
+        if(err) return console.log(err);
+        console.log(debugId);
     });
 });
 

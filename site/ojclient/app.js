@@ -69,11 +69,11 @@ runner.setHost = function(host){
  * @param srcCode
  * @param srcType
  * @param inputData
- * @param breakLines
+ * @param breakPoints
  * @param callback callback(err,debugId,exit,breakPoint)
  * exit:是否结束的flag   breakPoint:遇到的断点信息
  */
-dbr.launchDebug = function(srcCode,srcType,inputData,breakLines,callback){
+dbr.launchDebug = function(srcCode,srcType,inputData,breakPoints,callback){
     var debugId = null;
 
     //开启debug会话
@@ -81,7 +81,8 @@ dbr.launchDebug = function(srcCode,srcType,inputData,breakLines,callback){
         //打断点
         .then(function(createdDebugId){
             debugId = createdDebugId;
-            return Q.denodeify(dbr.breakPoint)(debugId,breakLines);
+            if(breakPoints && breakPoints.length > 0)
+                return Q.denodeify(dbr.breakPoint)(debugId,breakPoints);
         })
         //启动程序
         .then(function(){
@@ -321,9 +322,11 @@ function sendRequest(method,body,cookieId,callback){
         //如果返回的报文表示不成功，返回错误信息
         if(response.statusCode != 200){
             console.error(body);
-            return callback(new Error('编译执行错误'));
+            //return callback(new Error('编译执行错误'));
+            return callback(new Error(body));
         }
 
+        //如果有来自负载均衡的setCookie请求，则回传要设置的cookie信息，做好相应的保存以备下次使用
         var setCookieHeader = response.headers['set-cookie'];
         var setCookie = null;
         if(setCookieHeader && setCookieHeader.length){

@@ -5,128 +5,127 @@ var User=require('../models/User');
 
 var router = express.Router();
 
-var insertSQL = 'insert into t_user(name) values("conan"),("fens.me")';
-var selectSQL = 'select * from t_user limit 10';
-var deleteSQL = 'delete from t_user';
-var updateSQL = 'update t_user set name="conan update"  where name="conan"';
+//function Navbar(name ,className){
+//  this.name=name;
+//  this.className=className;
+//};
+//
+//var headerNavbar=[
+//    new Navbar('首页',''),
+//    new Navbar('登入',''),
+//    new Navbar('登出',''),
+//    new Navbar('录制','')
+//
+//];
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
+
+  res.render('index', { title: '首页',active:'index'});
 });
 
-
-
-//router.get('/users', function(req, res, next) {
-//  res.send("usersss~"+new Date().toString());
-//});
-
-router.post('/post', function(req, res, next) {
-  res.send("hello~"+new Date().toString());
-});
 router.get('/reg', function(req, res, next) {
-  res.render('reg',{title:'register'});
+  res.render('reg',{title:'register',active:'reg'});
 });
-router.get('/login', function(req, res, next) {
+
+router.get('/login',function(req,res,next){
+
+});
+
+router.get('/login:username', function(req, res, next) {
+
+  //(function(){
+  //  res.send("aooo~");
+  //})();
+
+  ////闭包理解
+  //function createFun(){
+  //  var a= new Array();
+  //
+  //  for(var i=0;i<10;i++){
+  //    a[i]=function(){
+  //      return i;
+  //    };
+  //  }
+  //
+  //  return a;
+  //}
+  //
+  //for(var i=0;i<10;i++){
+  //  console.log("v "+i+" "+createFun()[i]());
+  //}
+  //
+  //console.log(createFun());
+  //
+  //res.send(createFun());
+
+  //cookie
   //res.cookie('cookiename','i am a cookie',{ maxAge: 20000,httpOnly:true, path:'/'});
   //res.send(req.user+" "+req.uid+" "+req.cookies.cookiename);
   //res.cookie('cookiename','null',{maxAge:0});
+
+  //session
   req.session.count = req.session.count || 0;
   var n = req.session.count++;
-  res.send('hello, session id:' + req.sessionID + ' count:' + n);
+  res.send('hello, session id:' + req.sessionID + ' count:' + n+"  "+req.params.username);
   console.log(req.session);
   console.log(req.cookies);
+  console.log(req.params);
+  console.log(req.query);
+  console.log(req.body);
+  console.log(req.path);
 });
 
 router.post('/reg', function(req, res, next) {
   //检验用户两次输入的口令是否一致
   if (req.body['password-repeat'] != req.body['password']) {
-    req.flash('error', ' 两次输入的口令不一致');
+    req.session.error='两次输入的口令不一致';
+    console.log(req.session.error);
     return res.redirect('/reg');
   }
-  //生成口令的散列值
-  var md5 = crypto.createHash('md5');
-  var password = md5.update(req.body.password).digest('base64');
+  ////生成口令的散列值
+  //var md5 = crypto.createHash('md5');
+  //var password = md5.update(req.body.password).digest('base64');
+
   var newUser = new User({
     name: req.body.username,
-    password: password
+    password: req.body.password,
+    identity:1
   });
+
   //检查用户名是否已经存在
-  User.get(newUser.name, function(err, user) {
-    if (user)
-      err = 'Username already exists.';
+  User.check(newUser.name, function(err) {
     if (err) {
-      req.flash('error', err);
+      req.session.error=err;
+      console.log(err);
       return res.redirect('/reg');
     }
     //如果不存在则新增用户
     newUser.save( function(err) {
       if (err) {
-        req.flash('error', err);
+        req.session.error=err;
+        console.log("333"+err);
         return res.redirect('/reg');
       }
       req.session.user = newUser;
-      req.flash('success', ' 注册成功');
+      req.session.success='注册成功';
+      console.log(req.session.success);
       res.redirect('/');
     });
   });
 });
+
 router.post('/login', function(req, res, next) {
   res.send("hello~"+new Date().toString());
-});
+})
+
 router.get('/logout', function(req, res, next) {
   res.send("hello~"+new Date().toString());
 });
 
-router.get('/hello', function(req, res, next) {
-  ////delete
-  //conn.query(deleteSQL, function (err0, res0) {
-  //  if (err0) console.log(err0);
-  //  console.log("DELETE Return ==> ");
-  //  console.log(res0);
-  //
-  //  //insert
-  //  conn.query(insertSQL, function (err1, res1) {
-  //    if (err1) console.log(err1);
-  //    console.log("INSERT Return ==> ");
-  //    console.log(res1);
-  //
-  //    //query
-  //    conn.query(selectSQL, function (err2, rows) {
-  //      if (err2) console.log(err2);
-  //
-  //      console.log("SELECT ==> ");
-  //      for (var i in rows) {
-  //        console.log(rows[i]);
-  //      }
-  //
-  //      //update
-  //      conn.query(updateSQL, function (err3, res3) {
-  //        if (err3) console.log(err3);
-  //        console.log("UPDATE Return ==> ");
-  //        console.log(res3);
-  //
-  //        //query
-  //        conn.query(selectSQL, function (err4, rows2) {
-  //          if (err4) console.log(err4);
-  //
-  //          console.log("SELECT ==> ");
-  //          for (var i in rows2) {
-  //            console.log(rows2[i]);
-  //          }
-  //        });
-  //      });
-  //    });
-  //  });
-  //});
 
-  //conn.end();
-  res.send("hello3~"+new Date().toString());
-  next();
-});
-
-router.get('/hello', function(req, res, next) {
-  console.log("hello2");
+router.get('/play', function(req, res, next) {
+  res.render('play',{title:'play',active:'play'});
 });
 
 module.exports = router;

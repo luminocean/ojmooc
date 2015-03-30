@@ -17,44 +17,33 @@
     <div class="row">
         <div class="col-sm-8">
             <div id="optionPanel" class="col-sm-10">
-                <table>
-                    <tr>
-                        <td>
-                            <label>大小</label>
-                            <select id="fontsize" size="1">
-                                <option value="11px">11px</option>
-                                <option value="12px" selected="selected">12px</option>
-                                <option value="13px">13px</option>
-                                <option value="14px">14px</option>
-                            </select>
-                        </td>
-                        <td>
-                            <label>语言</label>
-                            <select id="language" size="1">
-                                <option value="cpp" selected="selected">C/C++</option>
-                                <option value="pas">pascal</option>
-                                <option value="bas">Qbasic</option>
-                            </select>
-                        </td>
-                        <td>
-                            <input type="submit" id="run" value="运行">
-                            <input type="submit" id="debugBegin" value="开始调试">
-                        </td>
-                        <td>
-                            <input type="submit" id="debugInto" value="调试">
-                            <input type="submit" id="debugOut" value="退出调试">
-                        </td>
-                    </tr>
-                </table>
+                <label>大小</label>
+                <select id="fontsize" size="1">
+                    <option value="11px">11px</option>
+                    <option value="12px" selected="selected">12px</option>
+                    <option value="13px">13px</option>
+                    <option value="14px">14px</option>
+                </select>
+                <label>语言</label>
+                <select id="language" size="1">
+                    <option value="cpp">C/C++</option>
+                    <option value="pas" selected="selected">pascal</option>
+                    <option value="bas">Qbasic</option>
+                </select>
+                <input type="submit" id="run" value="运行">
+                <input type="submit" id="debugBegin" value="开始调试">
+                <input type="submit" id="debugInto" value="调试">
+                <input type="submit" id="debugOut" value="退出调试">
             </div>
 
             <div id="leftPanel" class="col-sm-3">
                 <div id="variable" class="panel panel-info col-sm-12 debugInfoPanel">
                     <div class="panel-heading">变量
-                        <button type="button" class="btn btn-default" aria-label="Right Align">
+                        <button type="button" class="btn btn-default" aria-label="Right Align" data-toggle="modal" data-target="#addVariable">
                             <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
                         </button>
                     </div>
+                    <table id="variables" class="table table-bordered"></table>
                 </div>
                 <div id="operate" class="panel panel-info col-sm-12 debugInfoPanel">
                     <div class="panel-heading">操作</div>
@@ -98,109 +87,31 @@
 <footer>
     <% include ../partials/footer %>
 </footer>
-
-</body>
-<script>
-    $(document).ready(function () {
-        $("#leftPanel").hide();
-        $("#rightPanel").hide();
-        $("#debugBegin").hide();
-        $("#debugOut").hide();
-
-        ace.require("ace/ext/language_tools");
-        var inputEditor = ace.edit("inputEditor");
-        var outputEditor = ace.edit("outputEditor");
-        var editor = ace.edit("editor");
-        inputEditor.setTheme("ace/theme/twilight");
-        outputEditor.setTheme("ace/theme/twilight");
-        outputEditor.setReadOnly(true);
-
-        editor.setTheme("ace/theme/monokai");
-        editor.setOptions({
-            enableBasicAutocompletion: true,
-            enableSnippets: true,
-            enableLiveAutocompletion: true  //自动补全代码
-        });
-        editor.getSession().setMode("ace/mode/c_cpp");
-    });
-
-    $("#fontsize").change(function () {
-        var size = $("#fontsize").val();
-        $("#editor").css("font-size", size);
-
-    })
-
-    $("#language").change(function () {
-        var editor = ace.edit("editor");
-        var session = editor.getSession();
-        var lan = $("#language").val();
-
-        switch (lan) {
-            case "cpp":
-                session.setMode("ace/mode/c_cpp");
-                break;
-            case "pas":
-                session.setMode("ace/mode/pascal");
-                break;
-            case "bas":
-                session.setMode("ace/mode/qbasic");
-                break;
-            case "default":
-                break;
-        }
-    });
-
-    function check() {
-        $("#fontsize").val("12px");
-        $("#language").val("cpp");
-    }
-
-    $("#run").click(function () {
-        var editor = ace.edit("editor");
-        var inputEditor = ace.edit("inputEditor");
-        var outputEditor = ace.edit("outputEditor");
-
-        var code = editor.getValue();
-        var lan = $("#language").val();
-        var params = inputEditor.getValue().trim();
-
-        $.ajax({
-            type: "POST",
-            url: "/editor/handle",
-            data: {code: code, language: lan, params: params},
-            dataType: "text",
-            success: function (result) {
-                outputEditor.setValue(result);
-            },
-            error: function () {
-                outputEditor.setValue("Error:can not connect to the server!");
-            }
-        });
-    });
-
-    $("#debugInto").click(function () {
-        $("#midPanel").removeClass("col-sm-10").addClass("col-sm-6");
-        $("#leftPanel").show();
-        $("#rightPanel").show();
-
-        $("#debugBegin").show();
-        $("#debugOut").show();
-        $("#debugInto").hide();
-        $("#run").hide();
-    });
-
-    $("#debugOut").click(function () {
-        $("#midPanel").removeClass("col-sm-6").addClass("col-sm-10");
-        $("#leftPanel").hide();
-        $("#rightPanel").hide();
-
-        $("#debugBegin").hide();
-        $("#debugOut").hide();
-        $("#debugInto").show();
-        $("#run").show();
-    });
-
-</script>
+<div class="modal fade" id="addVariable" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">添加变量</h4>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="recipient-name" class="control-label">变量名：</label>
+                        <input type="text" class="form-control" id="variable-name">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button id="addVariableBtn" type="button" class="btn btn-primary">添加</button>
+                <button id="closeModalBtn" type="button" class="btn btn-default">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
 <script type="text/javascript" src="/scripts/ace/ace.js"></script>
-<script type="text/javascript" src="/scripts/ace/ext-language_tools.js" charset="utf-8"></script>
+<script type="text/javascript" src="/scripts/ace/ext-language_tools.js"></script>
+<script type="text/javascript" src="/scripts/editorScript.js"></script>
+<script type="text/javascript" src="/scripts/bootstrap.min.js"></script>
+</body>
 </html>

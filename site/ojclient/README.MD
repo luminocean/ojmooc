@@ -10,6 +10,10 @@
 //取出其中的runner成员，该成员即访问ojrunner的客户端对象
 var runner = require('./app.js').runner;
 
+//设置runner服务的ip地址和端口
+runner.setHost('192.168.1.1');
+runner.setPort(8080);
+
 runner.run(srcCode,srcType,inputData,function(err,result,params,host) {
     if (err) return console.error(err);
 
@@ -43,8 +47,12 @@ runner.run(srcCode,srcType,inputData,function(err,result,params,host) {
 //取出其中的debugger成员，该成员即访问ojdebuger的客户端对象
 var dbr = require('./app.js').debugger;
 
+//设置debug服务的ip地址和端口
+dbr.setHost('192.168.1.1');
+dbr.setPort(8081);
+
 //这里示范一个打断点的操作
-dbr.breakPoint(debugId,breakLines,function(err,breakPointNum) {
+dbr.breakPoint(debugId,breakPoints,function(err,breakPointNum) {
     if (err) return console.error(err);
 
     console.log(breakPointNum+' break points prepared');
@@ -71,16 +79,28 @@ dbr.breakPoint(debugId,breakLines,function(err,breakPointNum) {
 #### 2. breakPoint
 在当前debug会话中打一个断点
 签名：
-> dbr.breakPoint(debugId, breakLines, callback)
+> dbr.breakPoint(debugId, breakPoints, callback)
 
 说明：
 > * debugId {string} debug凭证
-> * breakLines {number[]} 要打的断点的行数
+> * breakPoints {number[]} 要打的断点的行数数组
 > * callback {function} 编译执行成功后的回调函数，入参分别为
 >   * err {object} 错误对象
 >   * breakPointNum {number} 成功打下断点的个数
 
-#### 3. printVal
+#### 3. removeBreakPoint
+在当前debug会话中移除一个断点
+签名：
+> dbr.removeBreakPoint(debugId, breakPoints, callback)
+
+说明：
+> * debugId {string} debug凭证
+> * breakPoints {number[]} 要移除的断点的行数数组
+> * callback {function} 编译执行成功后的回调函数，入参分别为
+>   * err {object} 错误对象
+>   * breakPointNum {number} 成功移除的断点个数
+
+#### 4. printVal
 查看一个变量的值
 签名：
 > dbr.breakPoint(debugId, varName, callback)
@@ -92,7 +112,7 @@ dbr.breakPoint(debugId,breakLines,function(err,breakPointNum) {
 >   * err {object} 错误对象
 >   * value {string|number} 查询到的变量值
 
-#### 4.locals
+#### 5.locals
 查看局部变量列表
 签名：
 > dbr.breakPoint(debugId, callback)
@@ -103,7 +123,7 @@ dbr.breakPoint(debugId,breakLines,function(err,breakPointNum) {
 >   * err {object} 错误对象
 >   * locals {object} 所有局部变量的键值对
 
-#### 5.run | stepInto | stepOver | continue
+#### 6.run | stepInto | stepOver | continue
 开始debug | 单步进入 | 单步越过 | 继续
 这几个动作的请求（除了具体的动作字符串）和返回是一样的，因此写在一起，以下均以 **stepInto** 为例，可替换成其他动作。
 签名：
@@ -118,7 +138,7 @@ dbr.breakPoint(debugId,breakLines,function(err,breakPointNum) {
 >   * stdout {string} 标准输出的值
 >   * locals {object} 局部变量键值对
 
-#### 6.exit
+#### 7.exit
 退出debugger会话
 签名：
 > dbr.exit(debugId, callback)
@@ -128,6 +148,28 @@ dbr.breakPoint(debugId,breakLines,function(err,breakPointNum) {
 > * callback {function} 编译执行成功后的回调函数，入参分别为
 >   * err {object} 错误对象
 >   * debugId {string} 结束的debug会话的凭证，等于之前传入的debugId
+
+#### 8.launchDebug
+便利方法，一次性执行debug,breakPoint和run方法。简化调用的步骤
+签名：
+> dbr.debug(srcCode, srcType, inputData, breakPoints, callback)
+
+说明：
+> * srcCode {string} 要进行编译的源码
+> * srcType {string} 源码类型，目前可选的有四个值
+>   * 'c'	c代码，使用clang编译
+>   * 'cpp'	c\+\+代码，使用clang++编译
+>   * 'pas'	pascal代码，使用freepascal编译
+>   * 'bas'	QBasic代码，使用freebasic的QB模式编译
+> * inputData {string} 编译后程序需要的输入数据
+> * breakPoints {number[]} 要打的断点的行数数组
+> * callback {function} 编译执行成功后的回调函数，入参分别为
+>   * err {object} 错误对象
+>   * finish {boolean} 被调试的程序是否结束
+>   * breakPoint {object} 断点信息
+>   * stdout {string} 标准输出的值
+>   * locals {object} 局部变量键值对
+
 
 ## 通用API
 有些api并不是特定用来访问ojrunner或者Ojdebugger的，这些API主要用于设定host或者端口参数。

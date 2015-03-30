@@ -1,37 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html>
-<head>
-  <title><%= title %> - Microblog</title>
-  <link rel='stylesheet' href='/stylesheets/bootstrap.css' />
-  <style type="text/css">
-    body {
-      padding-top: 60px;
-      padding-bottom: 40px;
-    }
-  </style>
-  <link href="stylesheets/bootstrap-responsive.css" rel="stylesheet">
-</head>
-<body>
-<div class="navbar navbar-fixed-top">
-  <div class="navbar-inner">
-    <div class="container">
-      <a class="btn btn-navbar" data-toggle=" collapse" data-target=".nav-collapse">
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </a>
-      <a class="brand" href="/">OJMOOC</a>
-      <div class="nav-collapse">
-        <ul class="nav">
-          <li class="active"><a href="/">首页</a></li>
-          <li><a href="/login">登入</a></li>
-          <li><a href="/reg">注册</a></li>
-        </ul>
-      </div>
-    </div>
-  </div>
-</div>
+<% include globalView/header.ejs%>
+<!--..放单独需要的CSS -->
+<% include globalView/mainNavbar.ejs%>
+
 <div id="container" class="container">
   <div class="hero-unit" >
     <h1>欢迎~</h1>
@@ -56,11 +26,9 @@
     </div>
   </div>
   <hr />
-  <footer>
-    <p><a href="" target="_blank">z.y</a> 2015</p>
-  </footer>
+
 </div>
 </body>
-<script src="/javascripts/jquery.js"></script>
-<script src="/javascripts/bootstrap.js"></script>
-</html>
+<!-- ..放单独需要的JS -->
+<% include globalView/footer.ejs %>
+
