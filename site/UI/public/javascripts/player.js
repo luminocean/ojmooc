@@ -75,9 +75,6 @@ interact('#editerDiv')
                 timeline.saveOneStep(recorder2,action);
             }
         }
-
-
-
         //transform用于这边缩小了，那边再移动相应距离，实现拖动
         //target.style.transform = ('translate('
         //+ offset.x + 'px,'
@@ -101,7 +98,7 @@ WindowController.prototype.setAction = function(action){
                 singleEditerClick();
                 break;
             case 2:
-                singleEditerClick();
+                singleWBoardClick();
                 break;
             default :
                 doubleWinClick();
@@ -122,7 +119,7 @@ WindowController.prototype.getScene = function(){
         case 2:
             return new WinControlEvent("",2);
         default :
-            break;
+            return null;
     }
 };
 
