@@ -36,10 +36,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="player.js" pinned="false" current-in-tab="false">
+      <file leaf-file-name="player.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/public/javascripts/player.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="125" max-vertical-offset="5635">
+            <state vertical-scroll-proportion="7.232945" vertical-offset="0" max-vertical-offset="5635">
               <caret line="189" column="30" selection-start-line="189" selection-start-column="30" selection-end-line="189" selection-end-column="30" />
               <folding />
             </state>
@@ -56,11 +56,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="play.ejs" pinned="false" current-in-tab="true">
+      <file leaf-file-name="play.ejs" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/views/player/play.ejs">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.1185567" vertical-offset="575" max-vertical-offset="1173">
-              <caret line="28" column="0" selection-start-line="28" selection-start-column="4" selection-end-line="41" selection-end-column="63" />
+            <state vertical-scroll-proportion="-18.6875" vertical-offset="69" max-vertical-offset="1173">
+              <caret line="29" column="0" selection-start-line="29" selection-start-column="0" selection-end-line="42" selection-end-column="59" />
               <folding />
             </state>
           </provider>
@@ -833,14 +833,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/public/javascripts/player.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="125" max-vertical-offset="5635">
-          <caret line="189" column="30" selection-start-line="189" selection-start-column="30" selection-end-line="189" selection-end-column="30" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/views/player/editerDiv.ejs">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-1.4375" vertical-offset="0" max-vertical-offset="184">
@@ -851,8 +843,16 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/views/player/play.ejs">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.1185567" vertical-offset="575" max-vertical-offset="1173">
-          <caret line="28" column="0" selection-start-line="28" selection-start-column="4" selection-end-line="41" selection-end-column="63" />
+        <state vertical-scroll-proportion="-18.6875" vertical-offset="69" max-vertical-offset="1173">
+          <caret line="29" column="0" selection-start-line="29" selection-start-column="0" selection-end-line="42" selection-end-column="59" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/javascripts/player.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="7.232945" vertical-offset="0" max-vertical-offset="5635">
+          <caret line="189" column="30" selection-start-line="189" selection-start-column="30" selection-end-line="189" selection-end-column="30" />
           <folding />
         </state>
       </provider>
