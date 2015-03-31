@@ -45,7 +45,8 @@ function addLine(id,x,y){
             lineWidth : whiteboard.penSize,
             color:whiteboard.penColor
         },
-        draggable:false
+        draggable:false,
+        hoverable:false
     });
     zr.addShape(line);
     whiteboard.currentLine = line;
@@ -71,6 +72,8 @@ $("#graphBoard").bind("mousemove",function(e){
     if((whiteboard.onDraw == true)&&(whiteboard.currentState == states.pen)){
         var xLoc = e.pageX - $("#graphBoard").offset().left;
         var yLoc = e.pageY - $("#graphBoard").offset().top;
+
+        console.log(xLoc + " " + yLoc);
 
         if(whiteboard.currentLine == null){
             addLine(generateID(),xLoc,yLoc);

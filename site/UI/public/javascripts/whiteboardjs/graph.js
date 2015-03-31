@@ -453,20 +453,22 @@ function editOperation(params){
     if((currentTime - dbcstart) < 300){
         var shape = params.target;
         var event = require("zrender/tool/event");
-        var yLoc = (event.getY(params.event)+graphBoard.offsetTop);
-        var xLoc = (event.getX(params.event)+graphBoard.offsetLeft);
+        var xLoc =params.event.clientX;
+        var yLoc =params.event.clientY;
 
         var editVal = $.layer({
             type: 1,
             title: false,
             offset:[yLoc.toString()+"px",xLoc.toString()+"px"],
-            area: ["220px","20px"],
+            area: ["150px","20px"],
             border: [0], //去掉默认边框
             shade: [0], //去掉遮罩
+            fix:false,
             closeBtn: [0, true],
             page: {
-                html: '<div style="width:220px; height:20px;">' +
-                '<label>do</label><input id="operation" class="textField" type="text"><br>' +
+                html: '<div style="width:150px; height:20px;">' +
+                '<label>do</label>' +
+                '<input style="width:150px;" id="operation" class="textField" type="text"><br>' +
                 '</div>'
             }
         });
@@ -524,21 +526,22 @@ function editDoWhile(params){
     if((currentTime - dbcstart) < 300){
         var shape = params.target;
         var event = require("zrender/tool/event");
-        var yLoc = (event.getY(params.event)+graphBoard.offsetTop);
-        var xLoc = (event.getX(params.event)+graphBoard.offsetLeft);
+        var xLoc =params.event.clientX;
+        var yLoc =params.event.clientY;
 
         var editVal = $.layer({
             type: 1,
             title: false,
             offset:[yLoc.toString()+"px",xLoc.toString()+"px"],
-            area: ["220px","60px"],
+            area: ["150px","60px"],
             border: [0], //去掉默认边框
             shade: [0], //去掉遮罩
+            fix:false,
             closeBtn: [0, true],
             page: {
-                html: '<div style="width:220px; height:50px;">' +
-                '<label>do</label><input id="do" class="textField" type="text"><br>' +
-                '<label>while</label><input id="while" class="textField" type="text"></div>'
+                html: '<div style="width:150px; height:50px;">' +
+                '<label>do</label><input style="width:150px;" id="do" class="textField" type="text"><br>' +
+                '<label>while</label><input style="width:150px;" id="while" class="textField" type="text"></div>'
             }
         });
         $("#do").val(params.target.style.val[0]);
@@ -597,21 +600,22 @@ function editWhile(params){
     if((currentTime - dbcstart) < 300){
         var shape = params.target;
         var event = require("zrender/tool/event");
-        var yLoc = (event.getY(params.event)+graphBoard.offsetTop);
-        var xLoc = (event.getX(params.event)+graphBoard.offsetLeft);
+        var xLoc =params.event.clientX;
+        var yLoc =params.event.clientY;
 
         var editVal = $.layer({
             type: 1,
             title: false,
             offset:[yLoc.toString()+"px",xLoc.toString()+"px"],
-            area: ["220px","60px"],
+            area: ["150px","60px"],
             border: [0], //去掉默认边框
             shade: [0], //去掉遮罩
+            fix:false,
             closeBtn: [0, true],
             page: {
-                html: '<div style="width:220px; height:50px;">' +
-                '<label>while</label><input id="while" class="textField" type="text"><br>' +
-                '<label>do</label><input id="do" class="textField" type="text"></div>'
+                html: '<div style="width:150px; height:50px;">' +
+                '<label>while</label><input style="width:150px;" id="while" class="textField" type="text"><br>' +
+                '<label>do</label><input style="width:150px;" id="do" class="textField" type="text"></div>'
             }
         });
         $("#while").val(params.target.style.val[0]);
@@ -671,22 +675,23 @@ function editIf(params){
     if((currentTime - dbcstart) < 300){
         var shape = params.target;
         var event = require("zrender/tool/event");
-        var yLoc = (event.getY(params.event)+graphBoard.offsetTop);
-        var xLoc = (event.getX(params.event)+graphBoard.offsetLeft);
+        var xLoc =params.event.clientX;
+        var yLoc =params.event.clientY;
 
         var editVal = $.layer({
             type: 1,
             title: false,
             offset:[yLoc.toString()+"px",xLoc.toString()+"px"],
-            area: ["220px","60px"],
+            area: ["150px","60px"],
             border: [0], //去掉默认边框
             shade: [0], //去掉遮罩
+            fix:false,
             closeBtn: [0, true],
             page: {
-                html: '<div style="width:220px; height:50px;">' +
-                '<label>if</label><input id="if" class="textField" type="text"><br>' +
-                '<label>do</label><input id="do" class="textField" type="text"><br>' +
-                '<label>else</label><input id="else" class="textField" type="text"></div>'
+                html: '<div style="width:150px; height:50px;">' +
+                '<label>if</label><input style="width:150px;" id="if" class="textField" type="text"><br>' +
+                '<label>do</label><input style="width:150px;" id="do" class="textField" type="text"><br>' +
+                '<label>else</label><input style="width:150px;" id="else" class="textField" type="text"></div>'
             }
         });
         $("#if").val(shape.style.val[0]);
@@ -831,8 +836,6 @@ function addCircle(id,txt,r,x,y){
     circle.bind("dragend",Dragged);
     circle.bind("mousedown",getLocation);
     circle.bind("mousedown",dbClicked);
-    circle.bind("dragstart",startDrag);
-    circle.bind("mouseup",endDrag);
     circle.drift = drift;
     zr.addShape(circle);
     zr.render();
@@ -841,14 +844,6 @@ function addCircle(id,txt,r,x,y){
     addOpes(new Operation(id,"addShape"));
 
     actionPerformed(new Action(id,"addCircle",[txt,r,x,y]));
-}
-
-function startDrag(){
-    graphOnDrag = true;
-}
-
-function endDrag(){
-    graphOnDrag = false;
 }
 
 
@@ -1032,19 +1027,20 @@ function dbClick(params){
     if((currentTime - dbcstart) < 300){
         var shape = params.target;
         var event = require("zrender/tool/event");
-        var yLoc = (event.getY(params.event)+graphBoard.offsetTop);
-        var xLoc = (event.getX(params.event)+graphBoard.offsetLeft);
+        var xLoc =params.event.clientX;
+        var yLoc =params.event.clientY;
 
         var editVal = $.layer({
             type: 1,
             title: false,
             offset:[yLoc.toString()+"px",xLoc.toString()+"px"],
-            area: ["170px","20px"],
+            area: ["180px","20px"],
             border: [0], //去掉默认边框
             shade: [0], //去掉遮罩
+            fix:false,
             closeBtn: [0, true],
             page: {
-                html: '<div style="width:180px; height:20px;"><input id="textField" type="text"></div>'
+                html: '<div style="width:180px; height:20px;"><input style="width:180px;" id="textField" type="text"></div>'
             }
         });
 

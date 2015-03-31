@@ -60,7 +60,7 @@ $("#graphBoard").bind("click",function(e){
 
         switch(whiteboard.currentState){
             case states.text:         //文本模式，点击界面添加文本
-                createText(e.pageX, e.pageY,xLoc,yLoc);
+                createText(e.clientX, e.clientY,xLoc,yLoc);
                 break;
             //case states.pen:
             //    addLine(xLoc,yLoc);
@@ -76,8 +76,8 @@ $("#penButton").bind("click",function(e){
 
 //显示画笔菜单，修改画笔属性，颜色，粗细
 $("#penMenu").bind("click",function(e){
-    var xLoc = $("#penButton").offset().left;
-    var yLoc = $("#penButton").offset().top + $("#penButton").outerHeight(true);
+    var xLoc = e.clientX - $("#penButton").outerWidth(true);
+    var yLoc = e.clientY;
 
     var penStyle = $.layer({
         type: 2,
@@ -88,7 +88,7 @@ $("#penMenu").bind("click",function(e){
         shadeClose:true,
         border:[0],
         offset:[yLoc.toString()+"px",xLoc.toString()+"px"],
-        area: ["400px","200px"],
+        area: ["410px","200px"],
         iframe: {src : "/whiteboardmenu/penStyle.html"}
     });
 })
@@ -101,8 +101,8 @@ $("#textButton").bind("click",function(e){
 
 //文本按钮点击监听，显示修改文本样式
 $("#textMenu").bind("click",function(e){
-    var xLoc = $("#textButton").offset().left;
-    var yLoc = $("#textButton").offset().top + $("#textButton").outerHeight(true);
+    var xLoc = e.clientX - ($("#textMenu").outerWidth(true)) - 80;
+    var yLoc = e.clientY;
 
     var textStyle = $.layer({
         type: 2,
@@ -113,7 +113,7 @@ $("#textMenu").bind("click",function(e){
         fix:false,
         border:[0],
         offset:[yLoc.toString()+"px",xLoc.toString()+"px"],
-        area: ["400px","200px"],
+        area: ["410px","200px"],
         iframe: {src : "/whiteboardmenu/textStyle.html"}
     });
 });
@@ -125,8 +125,8 @@ $("#imageButton").bind("mousedown",function(e){
 
 //显示图形菜单，多种图形
 $("#imageMenu").bind("mousedown",function(e){
-    var xLoc = $("#imageButton").offset().left;
-    var yLoc = $("#imageButton").offset().top + $("#imageButton").outerHeight(true);
+    var xLoc = e.clientX - $("#imageMenu").outerWidth(true);
+    var yLoc = e.clientY;
 
     var graphs = $.layer({
         type: 2,

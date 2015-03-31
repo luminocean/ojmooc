@@ -28,12 +28,12 @@ function createText(xLoc,yLoc,x,y){
         type: 1,
         title: false,
         offset:[yLoc.toString()+"px",xLoc.toString()+"px"],
-        area: ["170px","20px"],
+        area: ["150px","20px"],
         border: [0], //去掉默认边框
         shade: [0], //去掉遮罩
         closeBtn: [0, true],
         page: {
-            html: '<div style="width:180px; height:20px;"><input id="textField" type="text"></div>'
+            html: '<div style="width:150px; height:20px;"><input style="width:150px;" id="textField" type="text"></div>'
         }
     });
     var textField = $("#textField");
@@ -61,10 +61,7 @@ function addText(id,txt,x,y){
         },
         draggable:true
     });
-
     text.bind("dragend",Dragged);
-
-
     text.bind("mousedown",dbClicked);
     text.bind("mousedown",getLocation);
     text.drift = drift;
@@ -90,19 +87,20 @@ function dbClicked(params){
     var currentTime = new Date().getTime();                                                         //判断是否双击
     if((currentTime - dbClickStartTime) < 300){
         var event = require("zrender/tool/event");
-        var yLoc = (event.getY(params.event)+graphBoard.offsetTop);
-        var xLoc = (event.getX(params.event)+graphBoard.offsetLeft);
+        var xLoc =params.event.clientX;
+        var yLoc =params.event.clientY;
 
         var editText = $.layer({
             type: 1,
             title: false,
             offset:[yLoc.toString()+"px",xLoc.toString()+"px"],
-            area: ["170px","20px"],
+            area: ["150px","20px"],
             border: [0], //去掉默认边框
             shade: [0], //去掉遮罩
+            fix:false,
             closeBtn: [0, true],
             page: {
-                html: '<div style="width:180px; height:20px;"><input id="textField" type="text"></div>'
+                html: '<div style="width:150px; height:20px;"><input style="width:150px;" id="textField" type="text"></div>'
             }
         });
 
