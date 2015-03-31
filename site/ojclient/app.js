@@ -270,11 +270,16 @@ methodNames.forEach(function(methodName){
                 return callback(null,true,null,stdout,locals);
             }
 
+            //超出调试范围
+            var outOfRange = result.endSteppingRange || result.noFileOrDirectory;
+            if(outOfRange){
+                return callback(null,true);
+            }
+
             //debug执行错误
-            var debugError =  result.endSteppingRange
-            || result.notRunning || result.noFileOrDirectory;
+            var debugError = result.notRunning || result.noFileOrDirectory;
             if(debugError){
-                return callback(new Error('调试已结束或超出调试范围'));
+                return callback(new Error('调试内部错误'));
             }
 
             //如果都不是就直接返回错误
