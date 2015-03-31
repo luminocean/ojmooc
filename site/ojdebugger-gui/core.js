@@ -5,7 +5,7 @@ var dbr = require('../ojclient/app').debugger;
 dbr.setPort(8081);
 //dbr.setPort(23333);
 
-//dbr.setHost('121.42.155.75');
+dbr.setHost('121.42.155.75');
 
 var config = [
     {

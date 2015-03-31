@@ -1,0 +1,31 @@
+#editor {
+    height: 400px;
+    font-size: 12px;
+}
+#optionPanel{
+    width:600px;
+    height:30px;
+    font-family: sans-serif;
+}
+#inputEditor{
+    border: groove;
+    height:150px;
+}
+
+#outputEditor{
+    border: groove;
+    height:150px;
+}
+
+.debugInfoPanel{
+    padding-left: 0;
+    padding-right: 0;
+    height: 240px;
+}
+
+.ace_gutter-cell.ace_breakpoint{
+    border-radius: 20px 0px 0px 20px;
+    box-shadow: 0px 0px 1px 1px red inset;
+}
+
+

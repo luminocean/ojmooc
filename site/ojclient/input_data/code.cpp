@@ -25,6 +25,6 @@ int main ()
 	acc = getNum();
 
 	cout<<"read:"<<input.a<<","<<input.b<<","<<input.c<<endl;
-
+    cout<<"hello"<<endl;
 	return 0 ;
 }

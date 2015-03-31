@@ -1,27 +1,39 @@
 /**
  * Created by savio on 2015/3/21.
  */
-$(document).ready(function () {
 
+var debugId;
+var stdout = "";
+var breakpoints = [];
+
+var editor = ace.edit("editor");
+var inputEditor = ace.edit("inputEditor");
+var outputEditor = ace.edit("outputEditor");
+
+$(document).ready(function () {
     $("#leftPanel").hide();
     $("#rightPanel").hide();
     $("#debugBegin").hide();
     $("#debugOut").hide();
 
+    //消除console的警告
+    editor.$blockScrolling = Infinity;
+    inputEditor.$blockScrolling = Infinity;
+    outputEditor.$blockScrolling = Infinity;
+
     ace.require("ace/ext/language_tools");
-    var inputEditor = ace.edit("inputEditor");
-    var outputEditor = ace.edit("outputEditor");
-    var editor = ace.edit("editor");
+
     inputEditor.setTheme("ace/theme/twilight");
     outputEditor.setTheme("ace/theme/twilight");
+    editor.setTheme("ace/theme/twilight");
     outputEditor.setReadOnly(true);
-
-    editor.setTheme("ace/theme/monokai");
     editor.getSession().setMode("ace/mode/c_cpp");
+
+    //设置代码自动补全
     editor.setOptions({
         enableBasicAutocompletion: true,
         enableSnippets: true,
-        enableLiveAutocompletion: true  //自动补全代码
+        enableLiveAutocompletion: true
     });
 });
 
@@ -29,10 +41,9 @@ $("#fontsize").change(function () {
     var size = $("#fontsize").val();
     $("#editor").css("font-size", size);
 
-})
+});
 
 $("#language").change(function () {
-    var editor = ace.edit("editor");
     var session = editor.getSession();
     var lan = $("#language").val();
 
@@ -56,11 +67,8 @@ function check() {
     $("#language").val("cpp");
 }
 
+//运行模块
 $("#run").click(function () {
-    var editor = ace.edit("editor");
-    var inputEditor = ace.edit("inputEditor");
-    var outputEditor = ace.edit("outputEditor");
-
     var code = editor.getValue();
     var lan = $("#language").val();
     var params = inputEditor.getValue().trim();
@@ -79,6 +87,7 @@ $("#run").click(function () {
     });
 });
 
+//debug模块
 $("#debugInto").click(function () {
     $("#midPanel").removeClass("col-sm-10").addClass("col-sm-6");
     $("#leftPanel").show();
@@ -87,21 +96,6 @@ $("#debugInto").click(function () {
     $("#debugOut").show();
     $("#debugInto").hide();
     $("#run").hide();
-
-    editor.on("guttermousedown", function(e){
-        var target = e.domEvent.target;
-        if (target.className.indexOf("ace_gutter-cell") == -1)
-            return;
-        if (!editor.isFocused())
-            return;
-        if (e.clientX > 25 + target.getBoundingClientRect().left)
-            return;
-
-        var row = e.getDocumentPosition().row;
-        e.editor.session.setBreakpoint(row);
-        e.stop();
-    });
-
 });
 
 $("#debugOut").click(function () {
@@ -115,21 +109,101 @@ $("#debugOut").click(function () {
 });
 
 $("#debugBegin").click(function(){
-    var editor = ace.edit("editor");
-    var inputEditor = ace.edit("inputEditor");
-    var outputEditor = ace.edit("outputEditor");
+
+    //清空stdout，locals
+    stdout = "";
+    $("#localsTb").empty();
 
     var code = editor.getValue();
     var lan = $("#language").val();
     var params = inputEditor.getValue().trim();
+    var bplines = [];
+
+    breakpoints = editor.getSession().$breakpoints;
+
+    for(var bp in breakpoints ){
+        bplines.push(bp);
+    }
 
     $.ajax({
         type: "POST",
         url: "/editor/debugBegin",
-        data: {code: code, language: lan, params: params},
-        dataType: "text",
-        success: function (result) {
-            outputEditor.setValue(result);
+        data: {code: code, language: lan, params: params,bps: bplines},
+        dataType: "json",
+        success: function (msg) {
+            debugId = msg.debugId;
+            stdout +=msg.stdout;
+            console.log(msg.locals);
+            printLocals(msg.locals);
+            outputEditor.setValue(stdout);
+        },
+        error: function () {
+            outputEditor.setValue("Error:can not connect to the server!");
+        }
+    });
+});
+
+$("#stepInto").click(function(){
+
+    $.ajax({
+        type: "POST",
+        url: "/editor/stepInto",
+        data: {debugId: debugId},
+        dataType: "json",
+        success: function (msg) {
+            stdout += msg.stdout;
+            console.log(stdout);
+            outputEditor.setValue(stdout);
+        },
+        error: function () {
+            outputEditor.setValue("Error:can not connect to the server!");
+        }
+    });
+});
+
+$("#stepOver").click(function(){
+    $.ajax({
+        type: "POST",
+        url: "/editor/stepOver",
+        data: {debugId: debugId},
+        dataType: "json",
+        success: function (msg) {
+            stdout += msg.stdout;
+            outputEditor.setValue(stdout);
+        },
+        error: function () {
+            outputEditor.setValue("Error:can not connect to the server!");
+        }
+    });
+});
+
+$("#continue").click(function(){
+    $.ajax({
+        type: "POST",
+        url: "/editor/continue",
+        data: {debugId: debugId},
+        dataType: "json",
+        success: function (msg) {
+            stdout += msg.stdout;
+            console.log(msg.locals);
+            printLocals(msg.locals);
+            outputEditor.setValue(stdout);
+        },
+        error: function () {
+            outputEditor.setValue("Error:can not connect to the server!");
+        }
+    });
+});
+
+$("#exit").click(function(){
+    $.ajax({
+        type: "POST",
+        url: "/editor/exit",
+        data: {debugId: debugId},
+        dataType: "json",
+        success: function (msg) {
+            stdout += msg.stdout;
+            outputEditor.setValue(stdout);
         },
         error: function () {
             outputEditor.setValue("Error:can not connect to the server!");
@@ -140,9 +214,17 @@ $("#debugBegin").click(function(){
 $("#addVariableBtn").click(function(){
     var variableName = $("#variable-name").val();
     $("#addVariable").modal("hide");
-    $("#variables").append("<tr><td>"+variableName+"</td><td>"+"undefined"+"</td></tr>");
+    $("#variablesTb").append("<tr><td>"+variableName+"</td><td>"+"undefined"+"</td></tr>");
 });
 
 $("#closeModalBtn").click(function(){
    $("#addVariable").modal("hide");
 });
+
+function printLocals(locals){
+    for (var key in locals) {
+        console.log(key);
+        console.log(locals[key]);
+        $("#localsTb").append("<tr><td>"+key+"</td><td>"+locals[key]+"</td></tr>");
+    }
+}
