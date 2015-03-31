@@ -133,13 +133,13 @@ dbr.debug = function(srcCode,srcType,inputData,callback){
 /**
  * 添加断点
  * @param debugId
- * @param breakLines 断点行数数组
+ * @param breakPoints 断点行数数组
  * @param callback callback(err,breakPointNum)
  */
-dbr.breakPoint = function(debugId,breakLines,callback){
+dbr.breakPoint = function(debugId,breakPoints,callback){
     sendRequest.call(dbr,"breakPoint",{
             "debugId":debugId,
-            "breakLines":breakLines
+            "breakPoints":breakPoints
         },debugId,function(err,result){
             if(err) return callback(err);
 
@@ -153,13 +153,13 @@ dbr.breakPoint = function(debugId,breakLines,callback){
 /**
  * 移除断点
  * @param debugId
- * @param breakLines 要移除断点的行数的数组
+ * @param breakPoints 要移除断点的行数的数组
  * @param callback callback(err,breakPointNum)
  */
-dbr.removeBreakPoint = function(debugId,breakLines,callback){
+dbr.removeBreakPoint = function(debugId,breakPoints,callback){
     sendRequest.call(dbr,"removeBreakPoint",{
             "debugId":debugId,
-            "breakLines":breakLines
+            "breakPoints":breakPoints
         },debugId,function(err,result){
             if(err) return callback(err);
 

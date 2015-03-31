@@ -165,6 +165,7 @@ dbr.breakPoint(debugId,breakPoints,function(err,breakPointNum) {
 > * breakPoints {number[]} 要打的断点的行数数组
 > * callback {function} 编译执行成功后的回调函数，入参分别为
 >   * err {object} 错误对象
+>   * debugId {string} debug会话的凭证，之后所有的debug操作都需要这个凭证
 >   * finish {boolean} 被调试的程序是否结束
 >   * breakPoint {object} 断点信息
 >   * stdout {string} 标准输出的值
