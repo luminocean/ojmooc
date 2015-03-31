@@ -1,70 +1,164 @@
 /**
  * Created by zy on 2015/3/29.
  */
-
-function doubleWinEvent(){
-    $("#editerDiv").css({"width":"70%","display":"block"});
-    $("#whiteboardDiv").css({"width":"30%","display":"block"});
-    windowController.state=0;
-}
-
-function singleEditerEvent(){
-    $("#editerDiv").css({"width":"100%","display":"block"});
-    $("#whiteboardDiv").css({"display":"none"});
-    windowController.state=1;
-}
-
-function singleWBoardEvent(){
-    $("#editerDiv").css({"display":"none"});
-    $("#whiteboardDiv").css({"width":"100%","display":"block"});
-    windowController.state=2;
-}
-
+    //窗口运行中 按照像素 固定位置拖动，保存则保存运动比例
+var initialPlayerWidth=document.getElementById("playerwholeDiv").clientWidth;
+var initialFrameWidth=initialPlayerWidth*0.99;
+var initialEditorWidth=initialPlayerWidth*0.59;
+var initialWBoardWidth=initialPlayerWidth*0.4;
+var minEditerWidth=initialPlayerWidth*0.2;
+var maxEditerWidth=initialPlayerWidth*0.8;
 
 function WindowController(){
-    this.state=0;
+    this.state=0;//0:双窗口 1:编辑器 2:白板
     this.name="WindowController";
+    this.editorWidth=initialEditorWidth;
+    this.whiteBoardWidth=initialWBoardWidth;
+    this.totalWidth=initialPlayerWidth;
+    this.isRecord=false;
+    this.isDoubleWin=true;
 }
 
+//用于同步框架的传输类型
+function WinControlEvent(type,state,editeWidth,wboardWidth){
+    this.type=type;//btnEvent or dragEvent
+    this.state=state;
+    this.editorWidth=editeWidth;
+    this.whiteBoardWidth=wboardWidth;
+}
+
+
+function doubleWinClick(){
+    windowController.state=0;
+    windowController.isDoubleWin=true;
+    $("#editerDiv").show().animate({"width":windowController.editorWidth});
+    $("#whiteboardDiv").show().animate({"width":windowController.whiteBoardWidth});
+}
+
+function singleEditerClick(){
+    windowController.state=1;
+    windowController.isDoubleWin=false;
+    $("#whiteboardDiv").animate({"width":"0%"}).hide();
+    $("#editerDiv").show().animate({"width":"99%"});
+}
+
+function singleWBoardClick(){
+    windowController.state=2;
+    windowController.isDoubleWin=false;
+    $("#editerDiv").animate({"width":"0%"}).hide();
+    $("#whiteboardDiv").show().animate({"width":"99%"});
+}
+
+var editorDragOffset = { x: 0, y: 0 };//记录被拖动了多少距离
+
+interact('#editerDiv')
+    .resizable({
+        edges: { left: false, right: true, bottom: false, top: false }
+    })
+    .on('resizemove', function (event) {
+        var target = event.target;
+
+        // update the element's style
+        if(windowController.isDoubleWin){
+            var widthChange=event.rect.width/initialPlayerWidth;
+
+            if(event.rect.width>minEditerWidth&&event.rect.width<maxEditerWidth){
+                target.style.width  = event.rect.width + 'px';
+
+                // translate when resizing from top or left edges
+                editorDragOffset.x += event.deltaRect.right;
+                $("#whiteboardDiv").width(initialFrameWidth-event.rect.width);
+            }
+
+            if(windowController.isRecord){
+                var action=new WinControlEvent("dragEvent",0,event.rect.width,$("#whiteboardDiv").width());
+                timeline.saveOneStep(recorder2,action);
+            }
+        }
+
+
+
+        //transform用于这边缩小了，那边再移动相应距离，实现拖动
+        //target.style.transform = ('translate('
+        //+ offset.x + 'px,'
+        //+ offset.y + 'px)');
+        //target.style.transform = ('translateX('
+        //+ offset.x + 'px');
+
+        //target.textContent = event.rect.width + '×' + event.rect.height;
+    });
+
+
 WindowController.prototype.setAction = function(action){
-    console.log(this.name+action);
-    this.state=action;
-    switch (action){
-        case 0:
-            doubleWinEvent();
-            break;
-        case 1:
-            singleEditerEvent();
-            break;
-        case 2:
-            singleWBoardEvent();
-            break;
-        default :
-            doubleWinEvent();
+    console.log(this.name+action.type);
+    if(action.type=='btnEvent'){
+        this.state=action.state;
+        switch (action.state){
+            case 0:
+                doubleWinClick();
+                break;
+            case 1:
+                singleEditerClick();
+                break;
+            case 2:
+                singleEditerClick();
+                break;
+            default :
+                doubleWinClick();
+        }
+    }else if(action.type=='dragEvent'){
+        //this.state=action.state;
+        $("#editerDiv").width(action.editorWidth);
+        $("#whiteboardDiv").width(action.whiteBoardWidth);
     }
 };
 
 WindowController.prototype.getScene = function(){
-    console.log("get1xia");
-    return this.state;
+    switch (this.state){
+        case 0:
+            return new WinControlEvent("",0,$("#editerDiv").width(), $("#whiteboardDiv").width());
+        case 1:
+            return new WinControlEvent("",1);
+        case 2:
+            return new WinControlEvent("",2);
+        default :
+            break;
+    }
 };
 
 WindowController.prototype.setScene = function(state){
-    console.log("set1xia");
-    this.state=state;
-    switch (state){
+    switch (state.state){
         case 0:
-            doubleWinEvent();
+            this.setEAWwidth(state.editorWidth,state.whiteBoardWidth);
             break;
         case 1:
-            singleEditerEvent();
+            singleEditerClick();
             break;
         case 2:
-            singleWBoardEvent();
+            singleWBoardClick();
             break;
         default :
-            doubleWinEvent();
+            doubleWinClick();
+            break;
     }
+};
+
+WindowController.prototype.setEAWwidth = function(editerWidth,wboardWidth){
+    $("#editerDiv").width(editerWidth);
+    $("#whiteboardDiv").width(wboardWidth);
+};
+
+WindowController.prototype.startRecord = function(){
+    this.isRecord=true;
+    $("#windowConBtnGro").on("click.frame",".btn",function(e){
+        var action=new WinControlEvent("btnEvent",windowController.state);
+        timeline.saveOneStep(recorder2,action);
+    });
+};
+
+WindowController.prototype.stopRecord = function(){
+    this.isRecord=false;
+    $("#windowConBtnGro").off("click.frame");
 };
 
 /**
@@ -114,16 +208,14 @@ function start_record(){
         timeline.saveOneStep(recorder1,action);
     });
 
-    $("#windowConBtnGro").on("click.frame",".btn",function(e){
-        var action=windowController.state;
-        timeline.saveOneStep(recorder2,action);
-    });
+    windowController.startRecord();
+
 }
 
 function stop_record(){
     console.log("stop record");
     timeline.stop();
-    $("#windowConBtnGro").off("click.frame");
+    windowController.stopRecord();
 }
 
 function playback(){
@@ -135,10 +227,14 @@ function playback(){
     timeline.play(0,totalTime);
 }
 
+//窗口放置好后，将player窗口的比例布局，变为像素固定布局
+$("#editerDiv").css({"width":windowController.editorWidth});
+$("#whiteboardDiv").css({"width":windowController.whiteBoardWidth});
+
 //之后切换窗口这里使用动画 及添加按钮active状态
-$("#doubleWinBtn").on("click",doubleWinEvent);
-$("#singleEditerBtn").on("click",singleEditerEvent);
-$("#singleWBoardBtn").on("click",singleWBoardEvent);
+$("#doubleWinBtn").on("click",doubleWinClick);
+$("#singleEditerBtn").on("click",singleEditerClick);
+$("#singleWBoardBtn").on("click",singleWBoardClick);
 
 
 $("#record").click(start_record);
