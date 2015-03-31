@@ -6,18 +6,23 @@
     <script src="../js/jquery-1.7.2.js"></script>
     <script src="recorder.js"></script>
     <script src="test_record.js"></script>
+    <script src="../js/RecordRTC.js"></script>
     <link rel="stylesheet" href="../css/timeline.css" type="text/css" />
 </head>
 <body>
     <textarea id="editor" rows="10" cols="32"></textarea>
     <textarea id="whiteboard" rows="10" cols="32"></textarea>
-    <button id="record">record</button>
-    <button id="stop">stop</button>
-    <button id="play">play</button>
+    <div>
+    <audio id="audio" controls style="width: 500px"></audio>
+    <button id="record" style="height: 30px;width: 70px;background-color: #87ceff">录制</button>
+    <button id="stop" disabled style="height: 30px;width: 70px;background-color: #87ceff">停止</button>
+    <button id="play" style="height: 30px;width: 70px;background-color: #87ceff">播放</button>
+    </div>
     <div id="backline">
         <div id = 'foreline'></div>
     </div>
     <span id = "clock" style="position: relative;left: 480px">0</span>
+    <script type="text/javascript" src="./audio_recorder.js"></script>
     <script>
         $("#record").click(start_record);
         $("#stop").click(stop_record);
