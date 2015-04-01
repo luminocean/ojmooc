@@ -10,10 +10,16 @@
 #mainBoard{
     height: 487px;
     border: solid 1px;
+    overflow-x: scroll;
+}
+
+#quickAddMenu{
+    width: 1150px;
 }
 
 #graphBoard {
-    height: 448px;
+    width: 1150px;
+    height: 430px;
 }
 
 #fileBoard{

@@ -31,6 +31,7 @@ function createText(xLoc,yLoc,x,y){
         area: ["150px","20px"],
         border: [0], //去掉默认边框
         shade: [0], //去掉遮罩
+        fix:false,
         closeBtn: [0, true],
         page: {
             html: '<div style="width:150px; height:20px;"><input style="width:150px;" id="textField" type="text"></div>'
@@ -64,6 +65,7 @@ function addText(id,txt,x,y){
     text.bind("dragend",Dragged);
     text.bind("mousedown",dbClicked);
     text.bind("mousedown",getLocation);
+    text.bind("keydown",delGraph);
     text.drift = drift;
     zr.addShape(text);
     zr.render();

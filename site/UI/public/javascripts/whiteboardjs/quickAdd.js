@@ -4,8 +4,8 @@
 var type = ["line","text","circle","square","rectangle","triangle","array","stack","queue","if","while","dowhile","do"];
 //弹出说明
 $("#aboutButton").bind("click",function(event){
-    var xLoc = $("#aboutButton").offset().left - 455;
-    var yLoc = $("#aboutButton").offset().top + $("#aboutButton").outerHeight(true);
+    var xLoc = event.clientX - 455;
+    var yLoc = event.clientY + $("#aboutButton").outerHeight(true);
 
     var about = $.layer({
         type: 1,
@@ -75,7 +75,6 @@ function quickAdd(string){
                 quickAddLine(generateID(),pointList);
             }
             break;
-
         case type[1]:                                       //text
             if(arr.length == 1){
                 addText(generateID(),"text",10,10);
@@ -313,7 +312,7 @@ function quickAdd(string){
             }
             break;
         default:
-            alert("错误输入！");
+            addText(generateID(),string,10,10);
             break;
     }
 }

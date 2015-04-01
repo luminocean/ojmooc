@@ -32,13 +32,17 @@ function recordAudio() {
                 type: 'audio'
             });
             recorder.startRecording();
+            start_record();
         }, function() {
         });
     else {
         audio.src = URL.createObjectURL(audioStream);
         audio.muted = true;
         audio.play();
-        if (recorder) recorder.startRecording();
+        if (recorder) {
+            recorder.startRecording();
+            start_record();
+        }
     }
 
     window.isAudio = true;
