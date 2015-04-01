@@ -233,7 +233,5 @@ $("#doubleWinBtn").on("click",doubleWinClick);
 $("#singleEditerBtn").on("click",singleEditerClick);
 $("#singleWBoardBtn").on("click",singleWBoardClick);
 
-
-$("#record").click(start_record);
 $("#stop").click(stop_record);
 $("#play").click(playback);
