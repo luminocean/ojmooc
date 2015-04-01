@@ -44,16 +44,16 @@ timeline.prototype.play = function(pastTime,totalTime){
     that.setCurrentTime(pastTime);
     that.totalTime = totalTime;
 
-    //页面时间线根据总时间滚动
-    //var i = 0;
-    var i = Math.round(pastTime/totalTime*1000);  //根据已经过去的时间线和总时间线的比例调整进度条
-    timer = setInterval(function(){
-        $("#foreline").css("width", i/10 + "%");
-        i++;
-        if (i >= 1000) {
-            clearInterval(timer);
-        }
-    }, totalTime);
+    ////页面时间线根据总时间滚动
+    ////var i = 0;
+    //var i = Math.round(pastTime/totalTime*1000);  //根据已经过去的时间线和总时间线的比例调整进度条
+    //timer = setInterval(function(){
+    //    $("#foreline").css("width", i/10 + "%");
+    //    i++;
+    //    if (i >= 1000) {
+    //        clearInterval(timer);
+    //    }
+    //}, totalTime);
 
     //每过100ms轮询向各recorder发送播放请求，若recorder检测到时间与记录时间相符则向相应组件发送执行动作请求
     playInterval = setInterval(function(){
@@ -68,53 +68,53 @@ timeline.prototype.play = function(pastTime,totalTime){
         }
     },100);
 
-    //每过1S将时间线上显示的时间减1
-    var clockTotalTime = Math.round(totalTime-pastTime);
-    $("#clock").html(clockTotalTime);
-    timelineInterval = setInterval(function(){
-        var j = $("#clock").html();
-        j--;
-        $("#clock").html(j);
-        if(j<=0){
-            clearInterval(timelineInterval);
-        }
-    },1000);
-
-    //var audioControl = document.getElementById("audio");
-    //audioControl.addEventListener("timeupdate",function(){
-    //    var audioControl = document.getElementById("audio");
-    //    var actualPastTime = Math.round(audioControl.currentTime);
-    //    var usedPastTime = actualPastTime-actualPastTime%5;
-    //    var timelineWidth = $("#backline").width();
-    //    clearInterval(playInterval);
-    //    clearInterval(timelineInterval);
-    //    clearInterval(timer);
-    //    $("#foreline").css("width",timelineWidth*usedPastTime/totalTime + "px");    //根据时间比例设置进度条宽度
-    //    var recorderCount = that.recorders.length;
-    //    for(var i=0;i<recorderCount;i++){
-    //        that.recorders[i].playScene(usedPastTime);
+    ////每过1S将时间线上显示的时间减1
+    //var clockTotalTime = Math.round(totalTime-pastTime);
+    //$("#clock").html(clockTotalTime);
+    //timelineInterval = setInterval(function(){
+    //    var j = $("#clock").html();
+    //    j--;
+    //    $("#clock").html(j);
+    //    if(j<=0){
+    //        clearInterval(timelineInterval);
     //    }
-    //    that.play(usedPastTime,totalTime);    //重新设置进度条的位置，重置开始时间，总时间，从当前位置开始播放
-    //},true);
-    //总时间不应该变
-    $("#backline").click(function(e){
+    //},1000);
+
+    var audioControl = document.getElementById("audio");
+    audioControl.addEventListener("timeupdate",function(){
         var audioControl = document.getElementById("audio");
-        var width = e.pageX - $("#backline").offset().left;
+        var actualPastTime = Math.round(audioControl.currentTime);
+        var usedPastTime = actualPastTime-actualPastTime%5;
         var timelineWidth = $("#backline").width();
-        var actulPastTime = Math.round(width/timelineWidth*totalTime);  //从实际时间最近的上一个场景处开始播放
-        var usedPastTime = actulPastTime-actulPastTime%5;   //使用的时间，实际时间最近的上一个场景的时间
         clearInterval(playInterval);
-        clearInterval(timelineInterval);
-        clearInterval(timer);
-        audioControl.currentTime = usedPastTime;        //改变音频播放进度
+        //clearInterval(timelineInterval);
+        //clearInterval(timer);
         $("#foreline").css("width",timelineWidth*usedPastTime/totalTime + "px");    //根据时间比例设置进度条宽度
         var recorderCount = that.recorders.length;
         for(var i=0;i<recorderCount;i++){
             that.recorders[i].playScene(usedPastTime);
         }
         that.play(usedPastTime,totalTime);    //重新设置进度条的位置，重置开始时间，总时间，从当前位置开始播放
-
-    });
+    },true);
+    //总时间不应该变
+    //$("#backline").click(function(e){
+    //    var audioControl = document.getElementById("audio");
+    //    var width = e.pageX - $("#backline").offset().left;
+    //    var timelineWidth = $("#backline").width();
+    //    var actulPastTime = Math.round(width/timelineWidth*totalTime);  //从实际时间最近的上一个场景处开始播放
+    //    var usedPastTime = actulPastTime-actulPastTime%5;   //使用的时间，实际时间最近的上一个场景的时间
+    //    clearInterval(playInterval);
+    //    clearInterval(timelineInterval);
+    //    clearInterval(timer);
+    //    audioControl.currentTime = usedPastTime;        //改变音频播放进度
+    //    $("#foreline").css("width",timelineWidth*usedPastTime/totalTime + "px");    //根据时间比例设置进度条宽度
+    //    var recorderCount = that.recorders.length;
+    //    for(var i=0;i<recorderCount;i++){
+    //        that.recorders[i].playScene(usedPastTime);
+    //    }
+    //    that.play(usedPastTime,totalTime);    //重新设置进度条的位置，重置开始时间，总时间，从当前位置开始播放
+    //
+    //});
 
 };
 
