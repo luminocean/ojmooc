@@ -38,6 +38,11 @@ User.prototype.save = function save(callback) {
     callback();
 };
 
+
+/*
+根据username，检查是否有相应的用户
+return :是否有
+ */
 User.check = function check(username, callback) {
 
     conn.query(queryUserByName,username, function (err2, rows) {
@@ -58,6 +63,9 @@ User.check = function check(username, callback) {
     });
 };
 
+/*
+return 根据username得到 相应的user
+ */
 User.get = function get(username, callback) {
 
     conn.query(queryUserByName,username, function (err2, rows) {

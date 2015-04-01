@@ -1,28 +1,23 @@
 var express = require('express');
 var crypto=require('crypto');
 var conn=require('../database/dbHelper');
+
 var User=require('../models/User');
+var Subject=require('../models/Subject');
 
 var router = express.Router();
 
-//function Navbar(name ,className){
-//  this.name=name;
-//  this.className=className;
-//};
-//
-//var headerNavbar=[
-//    new Navbar('首页',''),
-//    new Navbar('登入',''),
-//    new Navbar('登出',''),
-//    new Navbar('录制','')
-//
-//];
+
 
 //session ：user ,error ,success
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: '首页',active:'index'});
+  res.render('index', {
+    title: '首页',
+    active:'index',
+    mostPopSubjects:Subject.getMostPopSubjects(3)
+  });
 });
 
 router.get('/reg', function(req, res, next) {
