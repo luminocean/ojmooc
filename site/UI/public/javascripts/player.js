@@ -200,11 +200,6 @@ function start_record(){
         timeline.saveOneStep(recorder0,action);
     });
 
-    $("#whiteboard").change(function(){
-        var action = $("#whiteboard").val();
-        timeline.saveOneStep(recorder1,action);
-    });
-
     windowController.startRecord();
 
 }
@@ -218,7 +213,6 @@ function stop_record(){
 function playback(){
     console.log("start to play");
     $("#editor").val('');
-    $("#whiteboard").val('');
     //totalTime从存储的地方取出总时间
     var totalTime = timeline.getTotalTime();
     timeline.play(0,totalTime);
