@@ -11,15 +11,15 @@ function getTextColor(){
 }
 function setTextFont(font){
     whiteboard.textFont = font;
-    actionPerformed(new Action(0,"setTextFont",font));     //添加改变字体动作
+    actionPerformed(new Action(0,"setTextFont",[font]));     //添加改变字体动作
 }
 function setTextSize(size){
     whiteboard.textSize = size;
-    actionPerformed(new Action(0,"setTextSize",size));     //添加改变字体大小动作
+    actionPerformed(new Action(0,"setTextSize",[size]));     //添加改变字体大小动作
 }
 function setTextColor(color){
     whiteboard.textColor = color;
-    actionPerformed(new Action(0,"setTextColor",color));     //添加改变文本颜色动作
+    actionPerformed(new Action(0,"setTextColor",[color]));     //添加改变文本颜色动作
 }
 
 //文本模式下点击白板，显示添加文本的文本框
@@ -65,7 +65,6 @@ function addText(id,txt,x,y){
     text.bind("dragend",Dragged);
     text.bind("mousedown",dbClicked);
     text.bind("mousedown",getLocation);
-    text.bind("keydown",delGraph);
     text.drift = drift;
     zr.addShape(text);
     zr.render();
@@ -118,7 +117,7 @@ function dbClicked(params){
 
                 addOpes(new Operation(textShape.id,"editText",[textShape.style.text],[preVal]));
 
-                actionPerformed(new Action(textShape.id,"editText",textShape.style.text));            //修改文本操作
+                actionPerformed(new Action(textShape.id,"editText",[textShape.style.text]));            //修改文本操作
             }
         });
     }

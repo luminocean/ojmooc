@@ -483,7 +483,7 @@ function editOperation(params){
                 zr.render();
 
                 var id = shape.id;
-                var val = [shape.style.val[0],shape.style.val[1],shape.style.val[2]];
+                var val = [shape.style.val[0]];
                 addOpes(new Operation(id,"editGraph",val,preVal));
 
                 actionPerformed(new Action(id,"editGraph",val));              //修改do图形
@@ -958,7 +958,7 @@ function addImage(id,img,x,y){
             image: img,
             x: x,
             y: y,
-            preLocation:[50,50]
+            preLocation:[x,y]
         },
         draggable:true,
         ignore:false
@@ -982,40 +982,6 @@ function drift(dx,dy){
     this.style.y += dy;
 }
 
-function delGraph(params){
-    alert(1);
-    var e = params.event;
-    if(e.keyCode == 46){                             //backspace事件
-        e.preventDefault();
-        e.stopPropagation();
-            $.layer({
-                shade: [0],
-                area: ['auto','auto'],
-                dialog: {
-                    msg: "确定要删除该图形吗？",
-                    btns: 2,
-                    type: 4,
-                    btn: ["取消","确定"],
-                    yes: function(index){                          //按钮1，取消监听
-                        if(xLoc <= 1){
-                            shape.style.x = 10;
-                        }
-                        zr.render();
-                        layer.close(index);
-                    },
-                    no: function(){                                //按钮2，确定监听
-                        shape.ignore = true;
-                        zr.render();
-
-                        addOpes(new Operation(shape.id,"shapeVisible",[true],[false]));
-
-                        actionPerformed(new Action(shape.id,"delShape",false));                                 //删除图形操作
-                    }
-                }
-            });
-    }
-}
-
 //图形拖动结束监听
 function Dragged(params){
     var event = require("zrender/tool/event");
@@ -1026,33 +992,33 @@ function Dragged(params){
 
     actionPerformed(new Action(shape.id,"drag",[shape.style.x,shape.style.y]));                                     //图形拖动操作
 
-    //if((xLoc <= 1)||(xLoc >= 498)||(yLoc <= 1)||(yLoc >= 430)){
-    //    $.layer({
-    //        shade: [0],
-    //        area: ['auto','auto'],
-    //        dialog: {
-    //            msg: "确定要删除该图形吗？",
-    //            btns: 2,
-    //            type: 4,
-    //            btn: ["取消","确定"],
-    //            yes: function(index){                          //按钮1，取消监听
-    //                if(xLoc <= 1){
-    //                    shape.style.x = 10;
-    //                }
-    //                zr.render();
-    //                layer.close(index);
-    //            },
-    //            no: function(){                                //按钮2，确定监听
-    //                shape.ignore = true;
-    //                zr.render();
-    //
-    //                addOpes(new Operation(shape.id,"shapeVisible",[true],[false]));
-    //
-    //                actionPerformed(new Action(shape.id,"delShape",false));                                 //删除图形操作
-    //            }
-    //        }
-    //    });
-    //}
+    if((xLoc <= 1)||(xLoc >= 1145)||(yLoc <= 1)||(yLoc >= 425)){
+        $.layer({
+            shade: [0],
+            area: ['auto','auto'],
+            dialog: {
+                msg: "确定要删除该图形吗？",
+                btns: 2,
+                type: 4,
+                btn: ["取消","确定"],
+                yes: function(index){                          //按钮1，取消监听
+                    if(xLoc <= 1){
+                        shape.style.x = 10;
+                    }
+                    zr.render();
+                    layer.close(index);
+                },
+                no: function(){                                //按钮2，确定监听
+                    shape.ignore = true;
+                    zr.render();
+
+                    addOpes(new Operation(shape.id,"shapeVisible",[true],[false]));
+
+                    actionPerformed(new Action(shape.id,"delShape",false));                                 //删除图形操作
+                }
+            }
+        });
+    }
 }
 
 
@@ -1141,7 +1107,7 @@ function resizeCircle(params){
 
     addOpes(new Operation(params.target.id,"resizeCircle",val,preVal));
 
-    actionPerformed(new Action(params.target.id,"resizeCircle",val));
+    actionPerformed(new Action(params.target.id,"resizeCircle",[val]));
 }
 //数组，栈，队列
 function resizeArray(params){
@@ -1164,7 +1130,7 @@ function resizeArray(params){
 
     addOpes(new Operation(params.target.id,"resizeArray",val,preVal));
 
-    actionPerformed(new Action(params.target.id,"resizeArray",val));
+    actionPerformed(new Action(params.target.id,"resizeArray",[val]));
 }
 //if，while，dowhile
 function resizeIf(params){
@@ -1187,7 +1153,7 @@ function resizeIf(params){
 
     addOpes(new Operation(params.target.id,"resizeIf",val,preVal));
 
-    actionPerformed(new Action(params.target.id,"resizeIf",val));
+    actionPerformed(new Action(params.target.id,"resizeIf",[val]));
 }
 //长方形,图片
 function resizeRectangle(params){
@@ -1214,7 +1180,7 @@ function resizeRectangle(params){
 
     addOpes(new Operation(params.target.id,"resizeRectangle",val,preVal));
 
-    actionPerformed(new Action(params.target.id,"resizeRectangle",val));
+    actionPerformed(new Action(params.target.id,"resizeRectangle",[val]));
 }
 //正方形
 function resizeSquare(params){
@@ -1241,5 +1207,5 @@ function resizeSquare(params){
 
     addOpes(new Operation(params.target.id,"resizeRectangle",val,preVal));
 
-    actionPerformed(new Action(params.target.id,"resizeRectangle",val));
+    actionPerformed(new Action(params.target.id,"resizeRectangle",[val]));
 }

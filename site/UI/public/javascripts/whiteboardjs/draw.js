@@ -3,14 +3,14 @@ function getPenColor(){
 }
 function setPenColor(color){
     whiteboard.penColor = color;
-    actionPerformed(new Action(0,"setPenColor",color));     //添加改变画笔颜色动作
+    actionPerformed(new Action(0,"setPenColor",[color]));     //添加改变画笔颜色动作
 }
 function getPenSize(){
     return whiteboard.penSize;
 }
 function setPenSize(size){
     whiteboard.penSize = size;
-    actionPerformed(new Action(0,"setPenSize",size));       //添加改变画笔粗细动作
+    actionPerformed(new Action(0,"setPenSize",[size]));       //添加改变画笔粗细动作
 }
 
 //使用脚本，快速添加线段

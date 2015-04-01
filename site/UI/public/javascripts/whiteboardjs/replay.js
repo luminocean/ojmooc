@@ -21,7 +21,7 @@ WhiteBoard.prototype.setAction = function(action){
 WhiteBoard.prototype.setScene = function(scene){
     clear();
     whiteboard.objs = scene.objs;
-    whiteboard.penColor = scene.pencolor;;
+    whiteboard.penColor = scene.pencolor;
     whiteboard.penSize = scene.pensize;
     whiteboard.textColor = scene.textcolor;
     whiteboard.textFont = scene.textfont;
@@ -34,11 +34,11 @@ WhiteBoard.prototype.setScene = function(scene){
 }
 
 function replay_setPenColor(action){
-    setPenColor(action.val);
+    setPenColor(action.val[0]);
 }
 
 function replay_setPenSize(action){
-    setPenSize(action.val);
+    setPenSize(action.val[0]);
 }
 
 function replay_quickAddLine(action){
@@ -54,15 +54,15 @@ function replay_addLinePoint(action){
 }
 
 function replay_setTextFont(action){
-    setTextFont(action.val);
+    setTextFont(action.val[0]);
 }
 
 function replay_setTextSize(action){
-    setTextSize(action.val);
+    setTextSize(action.val[0]);
 }
 
 function replay_setTextColor(action){
-    setTextColor(action.val);
+    setTextColor(action.val[0]);
 }
 
 function replay_addText(action){
@@ -70,7 +70,7 @@ function replay_addText(action){
 }
 
 function replay_editText(action){
-    changeText(action.id,action.val);
+    changeText(action.id,action.val[0]);
 }
 
 function replay_drag(action){
@@ -134,23 +134,23 @@ function replay_addImage(action){
 }
 
 function replay_resizeCircleAndTriangle(action){
-    resizeCircleAndTriangle(action.id,action.val);
+    resizeCircleAndTriangle(action.id,action.val[0]);
 }
 
 function replay_resizeDataStructure(action){
-    resizeDataStructure(action.id,action.val);
+    resizeDataStructure(action.id,action.val[0]);
 }
 
 function replay_resizeGraph(action){
-    resizeGraph(action.id,action.val);
+    resizeGraph(action.id,action.val[0]);
 }
 
 function replay_resizeRecAndImg(action){
-    resizeRecAndImg(action.id,action.val);
+    resizeRecAndImg(action.id,action.val[0]);
 }
 
 function replay_shapeInvisible(action){
-    shapeInvisible(action.id,action.val);
+    shapeInvisible(action.id,action.val[0]);
 }
 
 var replay_operationList = ["setPenColor","setPenSize","quickAddLine","addLine","addLinePoint","setTextFont","setTextSize","setTextColor","addText","editText","drag","addOperation","addDoWhile","addWhile","addIf","editGraph","addArray","addQueue","editDataStructure","addCircle","addSquare","addRectangle","addTriangle","addImage","resizeCircle","resizeArray","resizeIf","resizeRectangle","shapeInvisible"];

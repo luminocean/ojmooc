@@ -119,7 +119,6 @@ $("#textMenu").bind("click",function(e){
 
 //切换到图形模式
 $("#imageButton").bind("mousedown",function(e){
-    console.log(1);
     changeToGraphMode();
 });
 
