@@ -35,6 +35,9 @@ var config = [
     },{
         "id":"continueBtn",
         "handler":ctn
+    },{
+        "id":"finishFunctionBtn",
+        "handler":finishFunction
     }
 ];
 
@@ -79,12 +82,13 @@ function printVal(){
         return;
     }
 
-    dbr.printVal(debugId,varName,function(err,value){
+    dbr.printVal(debugId,[varName],function(err,vars){
         if(err) {
             return display('varVal',err.message);
         }
 
-        display('varVal',value);
+        console.log(vars);
+        display('varVal',vars[varName]);
     });
 }
 
@@ -155,6 +159,17 @@ function ctn(){
         if(err) return error(err);
 
         displayInfo(debugId,finish,breakPoint,stdout,locals);
+    });
+}
+
+function finishFunction(){
+    var debugId = $('#debugId').val();
+    if(!debugId) return error(new Error('找不到从服务器获取的debugId，是否正处于调试？'));
+
+    dbr.finishFunction(debugId,function(err,lineNum){
+        if(err) return error(err);
+
+        display('response','Return from function at:'+lineNum);
     });
 }
 

@@ -8,7 +8,7 @@
 var parseConfig = {
     //parser提供的parse方法
     "parseStopPoint":{
-        //解析某一行获取有用的信息,在最后返回的结果中可能会有以该属性为key的一个对象（并非一定有）
+        //解析某一行获取有用的信息,在解析返回的结果中可能会有以该属性为key的一个对象（并非一定有）
         //该对象自身的属性即attrNames里指定的那些
         "breakPoint":{
             //解析用正则
@@ -28,7 +28,7 @@ var parseConfig = {
             "finish":true
         },
         "noFileOrDirectory":{
-            "reg": /(No such file or directory)/,
+            "reg": /(libc_start_main)/,
             "attrNames":["msg"],
             "finish":true
         }
@@ -81,6 +81,12 @@ var parseConfig = {
             "manual":true
         }
     },
+    "parseFinishFunction":{
+        "finished":{
+            "reg":/function-finished.*line="(\d+)"/,
+            "attrNames":["lineNum"]
+        }
+    },
     //作用就是殿后，防止一个gdb的info输出没有方法去截获
     "parseInfo":{
         "running":{
@@ -88,12 +94,12 @@ var parseConfig = {
             "attrNames":["msg"],
             //是否仅是信息输出，是的话不会作为结果返回，类似于log的作用，不是核心业务
             "info":true
-        },
+        }/*,
         "stopped":{
             "reg":/\*(stopped)/,
             "attrNames":["msg"],
             "info":true
-        }
+        }*/
     }
 };
 
@@ -113,6 +119,9 @@ var methods = {
         //该方法需要的解析方法的名称，对应parseConfig里面配置的方法
         //配置了这个属性表示返回结果将由parser生成
         "parseNames":['parsePrintVal','parseInfo']
+    },
+    "finishFunction":{
+        "parseNames":['parseFinishFunction','parseInfo']
     },
     "locals":{
         "parseNames":['parseLocals','parseInfo']

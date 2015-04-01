@@ -222,12 +222,13 @@ dbr.breakPoint = function(debugId,breakLines,callback){
     //要返回的result的对象
     var result = {};
 
+    //parse函数的名称
+    var parseNames = methods['breakPoint'].parseNames;
+
     gdb.stdout.removeAllListeners('batch').on('batch',function(batch){
         console.log(debugId+" BP resolve");
         received++;
 
-        //parse函数的名称
-        var parseNames = methods['breakPoint'].parseNames;
         doParses(batch,parseNames,function(err,result){
             if(err) callback(err);
 
@@ -273,13 +274,13 @@ dbr.removeBreakPoint = function(debugId,breakLines,callback){
     //要返回的result的对象
     var result = {};
 
+    //parse函数的名称
+    var parseNames = methods['breakPoint'].parseNames;
+
     gdb.stdout.removeAllListeners('batch').on('batch',function(batch){
         console.log(debugId+" REMOVE BP resolve");
-
         received++;
 
-        //parse函数的名称
-        var parseNames = methods['breakPoint'].parseNames;
         doParses(batch,parseNames,function(err,result){
             if(err) callback(err);
 
@@ -308,25 +309,53 @@ dbr.removeBreakPoint = function(debugId,breakLines,callback){
 /**
  * 查值操作
  * @param debugId
- * @param varName
+ * @param varNames
  * @param callback
  */
-dbr.printVal = function(debugId,varName,callback){
+dbr.printVal = function(debugId,varNames,callback){
     var gdb = gdbContainer.fetch(debugId);
     if(!gdb)
         return callback(new Error('找不到debugId '+debugId+' 对应的进程'));
+
+    var received = 0;
+    //要返回的result的对象
+    var result = {};
+    result.vars = {};
+
+    //parse函数的名称
+    var parseNames = methods['printVal'].parseNames;
 
     gdb.stdout.removeAllListeners('batch').on('batch',function(batch){
         console.log(debugId+' PRINT resolve');
         //console.log('read complete-----------------\n'+batch);
         //console.log('-------------------------------\n');
 
-        //parse函数的名称
-        var parseNames = methods['printVal'].parseNames;
-        processBatch(batch,debugId,parseNames,false,false,callback);
+        //当前正在查询的变量名
+        var varName = varNames[received];
+        received++;
+
+        doParses(batch,parseNames,function(err,parseResult){
+            if(err) callback(err);
+
+            //设置查询到的值
+            if(parseResult.var !== undefined)
+                result.vars[varName] = parseResult.var.value;
+            else if( parseResult.noSymbol )
+                result.vars[varName] = undefined;
+        });
+
+        if(received === varNames.length){
+            callback(null,result);
+        }
     });
 
-    gdb.stdin.write('p '+varName+'\n');
+    if(!varNames || varNames.length==0) {
+        callback(null, result);
+    }else{
+        varNames.forEach(function(varName){
+            gdb.stdin.write('p '+varName+'\n');
+        });
+    }
 };
 
 /**
@@ -354,6 +383,24 @@ dbr.locals = function(debugId,callback){
     });
 
     gdb.stdin.write('info locals \n');
+};
+
+dbr.finishFunction = function(debugId,callback){
+    var gdb = gdbContainer.fetch(debugId);
+    if(!gdb)
+        return callback(new Error('找不到debugId '+debugId+' 对应的进程'));
+
+    var methodConfig = methods['finishFunction'];
+
+    gdb.stdout.removeAllListeners('batch').on('batch',function(batch){
+        console.log(debugId+' FINISH_FUNC resolve');
+
+        //parse函数的名称
+        var parseNames = methodConfig.parseNames;
+        processBatch(batch,debugId,parseNames,false,false,callback);
+    });
+
+    gdb.stdin.write('finish \n');
 };
 
 /**

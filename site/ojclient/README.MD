@@ -103,7 +103,7 @@ dbr.breakPoint(debugId,breakPoints,function(err,breakPointNum) {
 #### 4. printVal
 查看一个变量的值
 签名：
-> dbr.breakPoint(debugId, varName, callback)
+> dbr.printVal(debugId, varName, callback)
 
 说明：
 > * debugId {string} debug凭证
@@ -115,7 +115,7 @@ dbr.breakPoint(debugId,breakPoints,function(err,breakPointNum) {
 #### 5.locals
 查看局部变量列表
 签名：
-> dbr.breakPoint(debugId, callback)
+> dbr.locals(debugId, callback)
 
 说明：
 > * debugId {string} debug凭证
@@ -187,18 +187,3 @@ client = require('./app.js').runner;
 client.setHost(host);
 client.setPort(port);
 ```
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
