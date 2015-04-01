@@ -57,6 +57,9 @@ Q.denodeify(dbr.launchDebug)(srcCode, srcType, inputData, [25,28])
         console.log('continue ---> '+JSON.stringify(results));
         return Q.denodeify(dbr.exit)(currentDebugId);
     })
+    .then(function(results){
+        console.log('exit ---> '+JSON.stringify(results));
+    })
     .catch(function (err) {
         console.error(err);
     })
