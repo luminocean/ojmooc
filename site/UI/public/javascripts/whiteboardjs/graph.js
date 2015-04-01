@@ -966,6 +966,7 @@ function addImage(id,img,x,y){
     image.bind("mousewheel",resizeRectangle);
     image.bind("dragend",Dragged);
     image.bind("mousedown",getLocation);
+    image.bind("keydown",delGraph);
     image.drift = drift;
     zr.addShape(image);
     zr.render();
@@ -981,6 +982,40 @@ function drift(dx,dy){
     this.style.y += dy;
 }
 
+function delGraph(params){
+    alert(1);
+    var e = params.event;
+    if(e.keyCode == 46){                             //backspace事件
+        e.preventDefault();
+        e.stopPropagation();
+            $.layer({
+                shade: [0],
+                area: ['auto','auto'],
+                dialog: {
+                    msg: "确定要删除该图形吗？",
+                    btns: 2,
+                    type: 4,
+                    btn: ["取消","确定"],
+                    yes: function(index){                          //按钮1，取消监听
+                        if(xLoc <= 1){
+                            shape.style.x = 10;
+                        }
+                        zr.render();
+                        layer.close(index);
+                    },
+                    no: function(){                                //按钮2，确定监听
+                        shape.ignore = true;
+                        zr.render();
+
+                        addOpes(new Operation(shape.id,"shapeVisible",[true],[false]));
+
+                        actionPerformed(new Action(shape.id,"delShape",false));                                 //删除图形操作
+                    }
+                }
+            });
+    }
+}
+
 //图形拖动结束监听
 function Dragged(params){
     var event = require("zrender/tool/event");
@@ -991,33 +1026,33 @@ function Dragged(params){
 
     actionPerformed(new Action(shape.id,"drag",[shape.style.x,shape.style.y]));                                     //图形拖动操作
 
-    if((xLoc <= 1)||(xLoc >= 498)||(yLoc <= 1)||(yLoc >= 430)){
-        $.layer({
-            shade: [0],
-            area: ['auto','auto'],
-            dialog: {
-                msg: "确定要删除该图形吗？",
-                btns: 2,
-                type: 4,
-                btn: ["取消","确定"],
-                yes: function(index){                          //按钮1，取消监听
-                    if(xLoc <= 1){
-                        shape.style.x = 10;
-                    }
-                    zr.render();
-                    layer.close(index);
-                },
-                no: function(){                                //按钮2，确定监听
-                    shape.ignore = true;
-                    zr.render();
-
-                    addOpes(new Operation(shape.id,"shapeVisible",[true],[false]));
-
-                    actionPerformed(new Action(shape.id,"delShape",false));                                 //删除图形操作
-                }
-            }
-        });
-    }
+    //if((xLoc <= 1)||(xLoc >= 498)||(yLoc <= 1)||(yLoc >= 430)){
+    //    $.layer({
+    //        shade: [0],
+    //        area: ['auto','auto'],
+    //        dialog: {
+    //            msg: "确定要删除该图形吗？",
+    //            btns: 2,
+    //            type: 4,
+    //            btn: ["取消","确定"],
+    //            yes: function(index){                          //按钮1，取消监听
+    //                if(xLoc <= 1){
+    //                    shape.style.x = 10;
+    //                }
+    //                zr.render();
+    //                layer.close(index);
+    //            },
+    //            no: function(){                                //按钮2，确定监听
+    //                shape.ignore = true;
+    //                zr.render();
+    //
+    //                addOpes(new Operation(shape.id,"shapeVisible",[true],[false]));
+    //
+    //                actionPerformed(new Action(shape.id,"delShape",false));                                 //删除图形操作
+    //            }
+    //        }
+    //    });
+    //}
 }
 
 
