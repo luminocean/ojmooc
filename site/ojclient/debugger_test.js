@@ -33,10 +33,10 @@ Q.denodeify(dbr.launchDebug)(srcCode, srcType, inputData, [27])
     })
     .then(function(debugId){
         currentDebugId = debugId;
-        return Q.denodeify(dbr.printVal)(debugId,"acc");
+        return Q.denodeify(dbr.printVal)(debugId,["acc"]);
     })
     .then(function(value){
-        console.log("value:"+value);
+        console.log("value:"+value["acc"]);
         return currentDebugId;
     })
     .then(function(debugId){

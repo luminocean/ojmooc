@@ -8,7 +8,7 @@
 var parseConfig = {
     //parser提供的parse方法
     "parseStopPoint":{
-        //解析某一行获取有用的信息,在最后返回的结果中可能会有以该属性为key的一个对象（并非一定有）
+        //解析某一行获取有用的信息,在解析返回的结果中可能会有以该属性为key的一个对象（并非一定有）
         //该对象自身的属性即attrNames里指定的那些
         "breakPoint":{
             //解析用正则

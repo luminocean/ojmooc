@@ -186,24 +186,20 @@ dbr.finishFunction = function(debugId,callback){
 /**
  * 打印变量的值
  * @param debugId
- * @param varName
+ * @param varNames
  * @param callback callback(err,value)
  */
-dbr.printVal = function(debugId,varName,callback){
+dbr.printVal = function(debugId,varNames,callback){
     sendRequest.call(dbr,"printVal",{
             "debugId":debugId,
-            "varName":varName
+            "varNames":varNames
         },debugId,function(err,result){
             if(err) return callback(err);
 
-            if(result.noSymbol){
-                return callback(new Error('变量'+varName+'不存在'));
-            }
-
-            if(!result.var || !result.var.value)
+            if(!result.vars)
                 return callback(new Error('异常返回值'+JSON.stringify(result)));
 
-            callback(null,result.var.value);
+            callback(null,result.vars);
         });
 };
 

@@ -82,12 +82,13 @@ function printVal(){
         return;
     }
 
-    dbr.printVal(debugId,varName,function(err,value){
+    dbr.printVal(debugId,[varName],function(err,vars){
         if(err) {
             return display('varVal',err.message);
         }
 
-        display('varVal',value);
+        console.log(vars);
+        display('varVal',vars[varName]);
     });
 }
 
