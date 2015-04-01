@@ -4,12 +4,10 @@
 
 #menu{
     height: 40px;
-    border:solid 1px;
 }
 
 #mainBoard{
     height: 487px;
-    border: solid 1px;
     overflow-x: scroll;
 }
 
@@ -24,7 +22,6 @@
 
 #fileBoard{
     height: 150px;
-    border: solid 1px;
 }
 
 #penButton{
@@ -58,6 +55,20 @@
 
 #imageButton{
     background-image: url("../img/img.jpg");
+}
+
+
+#uploadFileButton{
+    margin-top: 5px;
+    width: 30px;
+    height: 30px;
+    left: 115px;
+    opacity: 0;
+    position: absolute;
+}
+
+.file input{
+    width: 30px;
 }
 
 #undoButton{
