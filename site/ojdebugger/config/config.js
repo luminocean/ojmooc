@@ -28,7 +28,7 @@ var parseConfig = {
             "finish":true
         },
         "noFileOrDirectory":{
-            "reg": /(No such file or directory)/,
+            "reg": /(libc_start_main)/,
             "attrNames":["msg"],
             "finish":true
         }
@@ -81,6 +81,12 @@ var parseConfig = {
             "manual":true
         }
     },
+    "parseFinishFunction":{
+        "finished":{
+            "reg":/function-finished.*line="(\d+)"/,
+            "attrNames":["lineNum"]
+        }
+    },
     //作用就是殿后，防止一个gdb的info输出没有方法去截获
     "parseInfo":{
         "running":{
@@ -88,12 +94,12 @@ var parseConfig = {
             "attrNames":["msg"],
             //是否仅是信息输出，是的话不会作为结果返回，类似于log的作用，不是核心业务
             "info":true
-        },
+        }/*,
         "stopped":{
             "reg":/\*(stopped)/,
             "attrNames":["msg"],
             "info":true
-        }
+        }*/
     }
 };
 

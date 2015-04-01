@@ -356,6 +356,24 @@ dbr.locals = function(debugId,callback){
     gdb.stdin.write('info locals \n');
 };
 
+dbr.finishFunction = function(debugId,callback){
+    var gdb = gdbContainer.fetch(debugId);
+    if(!gdb)
+        return callback(new Error('找不到debugId '+debugId+' 对应的进程'));
+
+    var methodConfig = methods['finishFunction'];
+
+    gdb.stdout.removeAllListeners('batch').on('batch',function(batch){
+        console.log(debugId+' FINISH_FUNC resolve');
+
+        //parse函数的名称
+        var parseNames = methodConfig.parseNames;
+        processBatch(batch,debugId,parseNames,false,false,callback);
+    });
+
+    gdb.stdin.write('finish \n');
+};
+
 /**
  * 启动运行操作
  * @param debugId
