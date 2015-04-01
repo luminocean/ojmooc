@@ -64,6 +64,7 @@ runner.setHost = function(host){
     this.host = host;
 };
 
+
 /**
  * 一个便利方法，组合了ebug+breakPoint+run操作
  * @param srcCode
@@ -120,13 +121,14 @@ dbr.debug = function(srcCode,srcType,inputData,callback){
         "inputData":inputData
     },null,function(err,result,setCookie){
         if(err) return callback(err);
-        if(!result.debugId)
-            return callback(new Error('异常返回值'+JSON.stringify(result)));
 
-        //保存debugId与cookie文本的映射
-        cookieMap[result.debugId] = setCookie;
+        if(result.debugId !== undefined){
+            //保存debugId与cookie文本的映射
+            cookieMap[result.debugId] = setCookie;
+            return callback(null,result.debugId);
+        }
 
-        callback(null,result.debugId);
+        callback(new Error('异常返回值'+JSON.stringify(result)));
     });
 };
 
@@ -143,10 +145,10 @@ dbr.breakPoint = function(debugId,breakPoints,callback){
         },debugId,function(err,result){
             if(err) return callback(err);
 
-            if(result.breakPointNum === undefined)
-                return callback(new Error('异常返回值'+JSON.stringify(result)));
+            if(result.breakPointNum !== undefined)
+                return callback(null,result.breakPointNum);
 
-            callback(null,result.breakPointNum);
+            callback(new Error('异常返回值'+JSON.stringify(result)));
         });
 };
 
@@ -163,47 +165,52 @@ dbr.removeBreakPoint = function(debugId,breakPoints,callback){
         },debugId,function(err,result){
             if(err) return callback(err);
 
-            if(result.breakPointNum === undefined)
-                return callback(new Error('异常返回值'+JSON.stringify(result)));
+            if(result.breakPointNum !== undefined)
+                return callback(null,result.breakPointNum);
 
-            callback(null,result.breakPointNum);
+            callback(new Error('异常返回值'+JSON.stringify(result)));
         });
 };
 
+/**
+ * 退出函数
+ * @param debugId
+ * @param callback
+ */
 dbr.finishFunction = function(debugId,callback){
     sendRequest.call(dbr,"finishFunction",{
         "debugId":debugId
     },debugId,function(err,result){
         if(err) return callback(err);
 
-        if(result.finished === undefined || result.finished.lineNum == undefined)
-            return callback(new Error('异常返回值'+JSON.stringify(result)));
+        if(result.notMeaningFul){
+            return callback(new Error('当前位置退出函数操作没有意义'));
+        }
 
-        callback(null,result.finished.lineNum);
+        if(result.finished !== undefined)
+            return callback(null,result.finished.lineNum);
+
+        callback(new Error('异常返回值'+JSON.stringify(result)));
     });
 };
 
 /**
  * 打印变量的值
  * @param debugId
- * @param varName
+ * @param varNames
  * @param callback callback(err,value)
  */
-dbr.printVal = function(debugId,varName,callback){
+dbr.printVal = function(debugId,varNames,callback){
     sendRequest.call(dbr,"printVal",{
             "debugId":debugId,
-            "varName":varName
+            "varNames":varNames
         },debugId,function(err,result){
             if(err) return callback(err);
 
-            if(result.noSymbol){
-                return callback(new Error('变量'+varName+'不存在'));
-            }
+            if(result.vars !== undefined)
+                return callback(null,result.vars);
 
-            if(!result.var || !result.var.value)
-                return callback(new Error('异常返回值'+JSON.stringify(result)));
-
-            callback(null,result.var.value);
+            callback(new Error('异常返回值'+JSON.stringify(result)));
         });
 };
 
@@ -217,11 +224,12 @@ dbr.locals = function(debugId,callback){
             "debugId":debugId
         },debugId,function(err,result){
             if(err) return callback(err);
-            if(!result.locals){
-                return callback(new Error('异常返回值'+JSON.stringify(result)));
+
+            if(result.locals !== undefined){
+                return callback(null,result.locals);
             }
 
-            callback(null,result.locals);
+            callback(new Error('异常返回值'+JSON.stringify(result)));
         });
 };
 
@@ -236,7 +244,11 @@ dbr.exit = function(debugId,callback){
     },debugId,function(err,result){
         if(err) return callback(err);
 
-        callback(null,result.debugId);
+        if(result.debugId !== undefined){
+            return callback(null,result.debugId);
+        }
+
+        callback(new Error('异常返回值'+JSON.stringify(result)));
     });
 };
 

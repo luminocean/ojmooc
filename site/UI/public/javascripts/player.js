@@ -3,7 +3,7 @@
  */
     //窗口运行中 按照像素 固定位置拖动，保存则保存运动比例
 var initialPlayerWidth=document.getElementById("playerwholeDiv").clientWidth;
-var initialFrameWidth=initialPlayerWidth*0.99;
+var initialFrameWidth=initialPlayerWidth*0.99;//两个窗口总大小
 var initialEditorWidth=initialPlayerWidth*0.59;
 var initialWBoardWidth=initialPlayerWidth*0.4;
 var minEditerWidth=initialPlayerWidth*0.2;
@@ -39,14 +39,14 @@ function singleEditerClick(){
     windowController.state=1;
     windowController.isDoubleWin=false;
     $("#whiteboardDiv").animate({"width":"0%"}).hide();
-    $("#editerDiv").show().animate({"width":"99%"});
+    $("#editerDiv").show().animate({"width":"100%"});
 }
 
 function singleWBoardClick(){
     windowController.state=2;
     windowController.isDoubleWin=false;
     $("#editerDiv").animate({"width":"0%"}).hide();
-    $("#whiteboardDiv").show().animate({"width":"99%"});
+    $("#whiteboardDiv").show().animate({"width":"100%"});
 }
 
 var editorDragOffset = { x: 0, y: 0 };//记录被拖动了多少距离
@@ -72,6 +72,40 @@ interact('#editerDiv')
 
             if(windowController.isRecord){
                 var action=new WinControlEvent("dragEvent",0,event.rect.width,$("#whiteboardDiv").width());
+                timeline.saveOneStep(recorder2,action);
+            }
+        }
+        //transform用于这边缩小了，那边再移动相应距离，实现拖动
+        //target.style.transform = ('translate('
+        //+ offset.x + 'px,'
+        //+ offset.y + 'px)');
+        //target.style.transform = ('translateX('
+        //+ offset.x + 'px');
+
+        //target.textContent = event.rect.width + '×' + event.rect.height;
+    });
+
+interact('#whiteboardDiv')
+    .resizable({
+        edges: { left: true, right: false, bottom: false, top: false }
+    })
+    .on('resizemove', function (event) {
+        var target = event.target;
+
+        // update the element's style
+        if(windowController.isDoubleWin){
+            var widthChange=event.rect.width/initialPlayerWidth;
+
+            if(event.rect.width>minEditerWidth&&event.rect.width<maxEditerWidth){
+                target.style.width  = event.rect.width + 'px';
+
+                // translate when resizing from top or left edges
+                editorDragOffset.x += event.deltaRect.right;
+                $("#editerDiv").width(initialFrameWidth-event.rect.width);
+            }
+
+            if(windowController.isRecord){
+                var action=new WinControlEvent("dragEvent",0,$("#editerDiv").width(),event.rect.width);
                 timeline.saveOneStep(recorder2,action);
             }
         }
@@ -208,11 +242,6 @@ function start_record(){
         var action = $("#editor").val();
         timeline.saveOneStep(recorder0,action);
     });
-
-    //$("#whiteboard").change(function(){
-    //    var action = $("#whiteboard").val();
-    //    timeline.saveOneStep(recorder1,action);
-    //});
 
     windowController.startRecord();
 

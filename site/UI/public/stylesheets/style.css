@@ -38,14 +38,12 @@
     position: relative;
     float: left;
     display: block;
-    margin-right: 2px;
-    border-style: solid;
-    border-width: 1px;
 }
 
 .showME{
     width:100%;
     height: 530px;
+    background-color: #004444;
 }
 
 #whiteboardDiv{
@@ -54,8 +52,6 @@
     position: relative;
     float: right;
     display:block;
-    border-style: solid;
-    border-width: 1px;
 }
 
 #doubleWinBtn{
