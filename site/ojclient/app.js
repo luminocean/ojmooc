@@ -172,6 +172,11 @@ dbr.removeBreakPoint = function(debugId,breakPoints,callback){
         });
 };
 
+/**
+ * 退出函数
+ * @param debugId
+ * @param callback
+ */
 dbr.finishFunction = function(debugId,callback){
     sendRequest.call(dbr,"finishFunction",{
         "debugId":debugId
