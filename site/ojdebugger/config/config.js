@@ -120,6 +120,9 @@ var methods = {
         //配置了这个属性表示返回结果将由parser生成
         "parseNames":['parsePrintVal','parseInfo']
     },
+    "finishFunction":{
+        "parseNames":['parseFinishFunction','parseInfo']
+    },
     "locals":{
         "parseNames":['parseLocals','parseInfo']
     },
