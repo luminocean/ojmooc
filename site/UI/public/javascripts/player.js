@@ -174,6 +174,8 @@ editor.prototype.getScene = function(){
     return $("#editor").val();
 };
 
+
+
 //当调用该函数时，editor和白板应该将当前状态展现到相应组件
 editor.prototype.setScene = function(state){
     this.state = state;
@@ -192,7 +194,14 @@ timeline.addRecorder(recorder0);
 timeline.addRecorder(recorder1);
 timeline.addRecorder(recorder2);
 
+//发送白板action
+function sendAction(action){
+    console.log(1);
+    timeline.saveOneStep(recorder1,action);
+}
+
 function start_record(){
+    onRecord = true;                            //设置白板状态，可以录制
     console.log("start record");
     timeline.record();
     $("#editor").change(function(){
@@ -205,14 +214,17 @@ function start_record(){
 }
 
 function stop_record(){
+    onRecord = false;                       //设置白板状态，不可录制
     console.log("stop record");
     timeline.stop();
     windowController.stopRecord();
 }
 
 function playback(){
+    clear();                                        //清空白板
     console.log("start to play");
     $("#editor").val('');
+    //$("#whiteboard").val('');
     //totalTime从存储的地方取出总时间
     var totalTime = timeline.getTotalTime();
     timeline.play(0,totalTime);
