@@ -73,8 +73,6 @@ $("#graphBoard").bind("mousemove",function(e){
         var xLoc = e.pageX - $("#graphBoard").offset().left;
         var yLoc = e.pageY - $("#graphBoard").offset().top;
 
-        console.log(xLoc + " " + yLoc);
-
         if(whiteboard.currentLine == null){
             addLine(generateID(),xLoc,yLoc);
         }
