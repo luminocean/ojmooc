@@ -34,6 +34,8 @@
  * @param payload a function to call with (require, exports, module) params
  */
 
+var debugStatus = false;
+var debugId = "";
 (function() {
 
 var ACE_NAMESPACE = "";
@@ -2843,23 +2845,66 @@ var MouseEvent = exports.MouseEvent = function(domEvent, editor) {
 
         return this.$inSelection;
     };
+    this.setBreakpointToServer = function(debugId,lineNum){
+        $.ajax({
+            type: "POST",
+            url: "/editor/setBreakpointToServer",
+            data: {debugId: debugId,lineNum:lineNum},
+            success: function (msg) {
+            },
+            error: function () {
+            }
+        });
+    }
+    this.clearBreakpointToServer = function(debugId,lineNum){
+        $.ajax({
+            type: "POST",
+            url: "/editor/clearBreakpointToServer",
+            data: {debugId: debugId,lineNum:lineNum},
+            success: function (msg) {
+            },
+            error: function () {
+            }
+        });
+    }
+
     this.getButton = function() {
-		if (this.$inSelection == null)
-			var pos = this.getDocumentPosition();
+        console.log(this.getDebugStatus);
+        if(!this.getDebugStatus){
+            if (this.$inSelection == null)
+                var pos = this.getDocumentPosition();
+
             var target = this.domEvent.target;
-		    if (typeof pos != "undefined"){
-				if (this.x < 20+target.getBoundingClientRect().left)
-				{
-					if (this.editor.session.$breakpoints[pos.row] == "ace_breakpoint")
-					{
-						this.editor.session.clearBreakpoint(pos.row);
-					}
-					else
-					{
-						this.editor.session.setBreakpoint(pos.row);
-					}
-				}			
-			}
+            if (typeof pos != "undefined") {
+                if (this.x < 20 + target.getBoundingClientRect().left) {
+                    if (this.editor.session.$breakpoints[pos.row] == "ace_breakpoint") {
+                        this.editor.session.clearBreakpoint(pos.row);
+                    }
+                    else {
+                        this.editor.session.setBreakpoint(pos.row);
+                    }
+                }
+            }
+        }else {
+            if (this.$inSelection == null)
+                var pos = this.getDocumentPosition();
+            console.log(this.getDebugId);
+            var target = this.domEvent.target;
+            if (typeof pos != "undefined") {
+                if (this.x < 20 + target.getBoundingClientRect().left) {
+                    if (this.editor.session.$breakpoints[pos.row] == "ace_breakpoint") {
+                        this.editor.session.clearBreakpoint(pos.row);
+                        console.log(pos.row);
+                        this.clearBreakpointToServer(this.getDebugId,pos.row);
+                    }
+                    else {
+                        this.editor.session.setBreakpoint(pos.row);
+                        console.log(pos.row);
+                        this.setBreakpointToServer(this.getDebugId,pos.row);
+                    }
+                }
+            }
+        }
         return event.getButton(this.domEvent);
     };
     this.getShiftKey = function() {
@@ -11380,6 +11425,19 @@ var Editor = function(renderer, session) {
     this.getSession = function() {
         return this.session;
     };
+
+    this.setDebugStatus = function(status){
+        this.debugStatus = status;
+    }
+    this.getDebugStatus = function(){
+        return this.debugStatus;
+    }
+    this.setDebugId = function(id){
+        this.debugId = id;
+    }
+    this.getDebugId = function(){
+        return this.debugId;
+    }
     this.setValue = function(val, cursorPos) {
         this.session.doc.setValue(val);
 

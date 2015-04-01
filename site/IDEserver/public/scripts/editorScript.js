@@ -5,6 +5,7 @@
 var debugId;
 var stdout = "";
 var breakpoints = [];
+var variables = {};
 
 var editor = ace.edit("editor");
 var inputEditor = ace.edit("inputEditor");
@@ -113,6 +114,10 @@ $("#debugBegin").click(function(){
     //清空stdout，locals
     stdout = "";
     $("#localsTb").empty();
+    $("#variableTb").empty();
+
+    //设置debugstatus
+    editor.setDebugStatus(true);
 
     var code = editor.getValue();
     var lan = $("#language").val();
@@ -133,8 +138,8 @@ $("#debugBegin").click(function(){
         success: function (msg) {
             debugId = msg.debugId;
             stdout +=msg.stdout;
-            console.log(msg.locals);
             printLocals(msg.locals);
+            editor.setDebugId(debugId);
             outputEditor.setValue(stdout);
         },
         error: function () {
@@ -178,6 +183,7 @@ $("#stepOver").click(function(){
 });
 
 $("#continue").click(function(){
+    console.log(variables);
     $.ajax({
         type: "POST",
         url: "/editor/continue",
@@ -185,7 +191,8 @@ $("#continue").click(function(){
         dataType: "json",
         success: function (msg) {
             stdout += msg.stdout;
-            console.log(msg.locals);
+            //console.log(msg.locals);
+            printVariables(variables);
             printLocals(msg.locals);
             outputEditor.setValue(stdout);
         },
@@ -215,6 +222,7 @@ $("#addVariableBtn").click(function(){
     var variableName = $("#variable-name").val();
     $("#addVariable").modal("hide");
     $("#variablesTb").append("<tr><td>"+variableName+"</td><td>"+"undefined"+"</td></tr>");
+    $(variables).attr(variableName,"undefined");
 });
 
 $("#closeModalBtn").click(function(){
@@ -223,8 +231,29 @@ $("#closeModalBtn").click(function(){
 
 function printLocals(locals){
     for (var key in locals) {
-        console.log(key);
-        console.log(locals[key]);
+        //console.log(key);
+        //console.log(locals[key]);
         $("#localsTb").append("<tr><td>"+key+"</td><td>"+locals[key]+"</td></tr>");
     }
+}
+
+function printVariables(variables){
+    $("#variableTb").empty();
+    $.ajax({
+        type: "POST",
+        url: "/editor/printVariables",
+        data: {debugId: debugId,variables:variables},
+        success: function (msg) {
+            for(var key in msg){
+                console.log(key);
+                console.log(msg[key]);
+                $("#variablesTb").append("<tr><td>"+key+"</td><td>"+msg[key]+"</td></tr>");
+            }
+        },
+        error: function () {
+            outputEditor.setValue("Error:can not connect to the server!");
+        }
+    });
+
+
 }
