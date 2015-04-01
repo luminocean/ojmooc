@@ -4,7 +4,7 @@
 
 /**
  * constants
-  */
+ */
 var STATE_TIME_INTERVAL = 5;    //场景之间的时间间隔
 var timer;
 var playInterval;
@@ -80,9 +80,9 @@ timeline.prototype.play = function(pastTime,totalTime){
         }
     },1000);
 
-
     //总时间不应该变
     $("#backline").click(function(e){
+        var audioControl = document.getElementById("audio");
         var width = e.pageX - $("#backline").offset().left;
         var timelineWidth = $("#backline").width();
         var actulPastTime = Math.round(width/timelineWidth*totalTime);  //从实际时间最近的上一个场景处开始播放
@@ -90,7 +90,8 @@ timeline.prototype.play = function(pastTime,totalTime){
         clearInterval(playInterval);
         clearInterval(timelineInterval);
         clearInterval(timer);
-        $("#foreline").css("width",timelineWidth*usedPastTime/totalTime + "px");    //根据时间比例设置进度条宽度
+        audioControl.currentTime = usedPastTime;        //改变音频播放进度
+        $("#foreline").css("width",100*usedPastTime/totalTime + "%");    //根据时间比例设置进度条宽度
         var recorderCount = that.recorders.length;
         for(var i=0;i<recorderCount;i++){
             that.recorders[i].playScene(usedPastTime);
@@ -149,13 +150,6 @@ timeline.prototype.getTotalTime = function(){
     return this.totalTime;
 };
 
-timeline.prototype.saveToJSON = function(){
-
-};
-
-timeline.prototype.loadFramJSON = function(){
-
-};
 //获取日期对应的秒数
 function getTimeSeconds(date){
     return date.getTime()/1000;
@@ -185,26 +179,6 @@ recorder.prototype.play = function(currentTime){
 recorder.prototype.saveStep = function(savetime,action){
     this.step_records.push({time:savetime,action:action});
 };
-
-
-//获取指定时间的操作
-recorder.prototype.getStep = function(time){
-    var that = this;
-    var stepCounts = that.step_records.length;
-    for(var i=0;i<stepCounts;i++){
-        var step = that.step_records[i];
-        if(step.time == time){
-            return step.action;
-        }
-    }
-}
-//时间线控制实例回放一步，播放时
-recorder.prototype.loadStep = function(){
-    var that = this;
-    var begin = that.timeline.getCurrentTime();
-    var currentStep = that.getStep(begin);
-    return currentStep;
-}
 
 //存储某个场景状态
 recorder.prototype.saveScene = function(currentTime){
