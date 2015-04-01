@@ -176,10 +176,14 @@ dbr.finishFunction = function(debugId,callback){
     },debugId,function(err,result){
         if(err) return callback(err);
 
-        if(result.finished === undefined || result.finished.lineNum == undefined)
-            return callback(new Error('异常返回值'+JSON.stringify(result)));
+        if(result.notMeaningFul){
+            return callback(new Error('当前位置退出函数操作没有意义'));
+        }
 
-        callback(null,result.finished.lineNum);
+        if(result.finished !== undefined && result.finished.lineNum !== undefined)
+            return callback(null,result.finished.lineNum);
+
+        return callback(new Error('异常返回值'+JSON.stringify(result)));
     });
 };
 
@@ -196,10 +200,10 @@ dbr.printVal = function(debugId,varNames,callback){
         },debugId,function(err,result){
             if(err) return callback(err);
 
-            if(!result.vars)
-                return callback(new Error('异常返回值'+JSON.stringify(result)));
+            if(result.vars)
+                return callback(null,result.vars);
 
-            callback(null,result.vars);
+            return callback(new Error('异常返回值'+JSON.stringify(result)));
         });
 };
 
