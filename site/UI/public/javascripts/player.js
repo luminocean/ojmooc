@@ -255,11 +255,11 @@ function stop_record(){
 }
 
 var isFirstClick = true;
+var playedTime = 0;
 function playback(){
     //totalTime从存储的地方取出总时间
     var totalTime = timeline.getTotalTime();
     var playBtnVal = playAudio.text();
-    var playedTime = 0;
     if(isFirstClick == true){
         clear();                                        //清空白板
         console.log("start to play,totaltime" + totalTime);

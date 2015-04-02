@@ -69,6 +69,6 @@ stopRecordingAudio.on("click",stopRecordAudio);
 audio.addEventListener("ended",function(){
     playAudio.text('播放');
     isFirstClick = true;
-    $("#play").click(playback);
+    playedTime = 0;
 });
 
