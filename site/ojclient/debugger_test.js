@@ -26,23 +26,42 @@ var inputData = fs.readFileSync(path.join(__dirname,'./input_data/'+srcType+'.da
 
 var currentDebugId = null;
 
-Q.denodeify(dbr.launchDebug)(srcCode, srcType, inputData, [27])
+//执行launchDebug
+Q.denodeify(dbr.launchDebug)(srcCode, srcType, inputData, [25,28])
     .then(function (results) {
-        console.log(JSON.stringify(results));
-        return results[0];
+        console.log('launchDebug ---> '+JSON.stringify(results));
+        currentDebugId = results[0];
+        //进入函数
+        return Q.denodeify(dbr.stepInto)(currentDebugId);
     })
-    .then(function(debugId){
-        currentDebugId = debugId;
-        return Q.denodeify(dbr.printVal)(debugId,["acc"]);
+    .then(function(results){
+        console.log('step into ---> '+JSON.stringify(results));
+        //退出函数
+        return Q.denodeify(dbr.finishFunction)(currentDebugId);
+    })
+    .then(function(lineNum){
+        console.log('退出函数的行号 ---> '+lineNum);
+        return Q.denodeify(dbr.stepOver)(currentDebugId);
+    })
+    .then(function(results){
+        console.log('step over ---> '+JSON.stringify(results));
+        //查看值
+        return Q.denodeify(dbr.printVal)(currentDebugId,["acc"]);
     })
     .then(function(value){
-        console.log("value:"+value["acc"]);
-        return currentDebugId;
+        console.log('acc的值 ---> '+value["acc"]);
+        //继续到下一个断点
+        return Q.denodeify(dbr.continue)(currentDebugId);
     })
-    .then(function(debugId){
-        return Q.denodeify(dbr.exit)(debugId);
+    .then(function(results){
+        console.log('continue ---> '+JSON.stringify(results));
+        return Q.denodeify(dbr.exit)(currentDebugId);
+    })
+    .then(function(results){
+        console.log('exit ---> '+JSON.stringify(results));
     })
     .catch(function (err) {
         console.error(err);
     })
     .done();
+

@@ -87,30 +87,52 @@ app.post('/editor/debugBegin', function (req, res) {
             "stdout": stdout,
             "locals": locals
         };
-        console.log("launch"+stdout);
+        //console.log("launch" + stdout);
         res.send(debugInfo);
     });
 });
 
-app.post('/editor/stepInto', function (req, res){
+app.post('/editor/printVariables', function (req, res) {
     var debugId = req.body.debugId;
-    dbr.stepInto(debugId,function(err,finish,breakPoint,stdout,locals){
-        if (err) return console.log(err.stack);
+    var variables = req.body.variables;
+
+    console.log("0"+variables);
+    for (var key in variables) {
+        dbr.printVal(debugId, key, function (err, value) {
+            if (err)console.log(err);
+            variables[key] = value;
+            console.log("1"+key+variables[key]);
+        });
+    }
+    console.log("2"+variables);
+    res.send(variables);
+});
+
+app.post('/editor/setBreakpointToServer',function(req,res){
+    var debugId = req.body.debugId;
+    var lineNum = req.body.lineNum;
+
+    console.log(lineNum);
+});
+
+app.post('/editor/stepInto', function (req, res) {
+    var debugId = req.body.debugId;
+    dbr.stepInto(debugId, function (err, finish, breakPoint, stdout, locals) {
+        if (err) return console.log(err);
         var stepInto = {
             "finish": finish,
             "breakPoint": breakPoint,
             "stdout": stdout,
             "locals": locals
         };
-        console.log("stepInto"+stdout);
+        console.log("stepInto" + stdout);
         res.send(stepInto);
-
     });
 });
 
-app.post('/editor/stepOver', function (req, res){
+app.post('/editor/stepOver', function (req, res) {
     var debugId = req.body.debugId;
-    dbr.stepOver(debugId,function(err,finish,breakPoint,stdout,locals){
+    dbr.stepOver(debugId, function (err, finish, breakPoint, stdout, locals) {
         if (err) return console.log(err);
         var stepOver = {
             "finish": finish,
@@ -125,9 +147,9 @@ app.post('/editor/stepOver', function (req, res){
 
 });
 
-app.post('/editor/continue', function (req, res){
+app.post('/editor/continue', function (req, res) {
     var debugId = req.body.debugId;
-    dbr.continue(debugId,function(err,finish,breakPoint,stdout,locals){
+    dbr.continue(debugId, function (err, finish, breakPoint, stdout, locals) {
         if (err)return console.log(err);
         var moveOn = {
             "finish": finish,
@@ -141,10 +163,10 @@ app.post('/editor/continue', function (req, res){
 
 });
 
-app.post('/editor/exit', function (req, res){
+app.post('/editor/exit', function (req, res) {
     var debugId = req.body.debugId;
-    dbr.exit(debugId,function(err,debugId){
-        if(err)return console.log(err);
+    dbr.exit(debugId, function (err, debugId) {
+        if (err)return console.log(err);
     });
 });
 

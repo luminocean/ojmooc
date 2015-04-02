@@ -1,6 +1,22 @@
 # 部署指南
 本文档用于说明各个服务器环境或项目该如何搭建
 
+------
+
+### OJMOOC服务器
+##### 1.如何启动服务器
+首先确认一下条件是否已经满足：
+> * 已使用git获取ojmooc最新的代码
+> * mysql服务已经启动
+> * 80端口没有被占用
+
+进入`ojmooc/site/UI`目录下执行`nohup sudo nodejs app.js &`即可启动服务器
+> **sudo** 是为了让nodejs服务器可以监听80端口，因为1024以下的端口监听需要root权限
+> **nohup** 让nodejs进程忽略hup信号，防止断开ssh连接时nodejs进程接收到hup信号而关闭。同时会在当前目录下生成一个nohup.out的日志文件记录nodejs服务器的所有输出内容，方便调试可能的错误
+> **&** 是让开启的进程在后台运行，从而可以执行其他的命令
+
+------
+
 ### Online Judge后台
 ##### 1.（重要的放前面）如何启动环境
 执行`ojmooc/site/ojrunner/script/setup/run_all.sh`即可

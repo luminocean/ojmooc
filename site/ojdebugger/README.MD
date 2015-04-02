@@ -14,6 +14,7 @@
 > * 单步进入 (stepInto)
 > * 单步越过 (stepOver)
 > * 继续 (continue)
+> * 退出函数(finishFunction)
 > * 结束debug (exit)
 
 ## API 说明
@@ -67,7 +68,7 @@ http://localhost:23333/methodName
 ```
 
 ### 2. breakPoint
-在当前debug会话中打一个断点
+在当前debug会话中打断点
 
 请求路径：`http://[ipaddress]:[port]/breakPoint`
 请求报文体:
@@ -85,7 +86,7 @@ http://localhost:23333/methodName
 ```
 
 ### 3. removeBreakPoint
-在当前debug会话中移除一个断点
+在当前debug会话中移除断点
 
 请求路径：`http://[ipaddress]:[port]/removeBreakPoint`
 
@@ -93,7 +94,7 @@ http://localhost:23333/methodName
 请求报文体:
 {
     "debugId":debugId,  //从之前的debug操作响应中取得的debug凭证
-    "breakPoints":breakPoints //要移除的断点的行数，是一个数组，即可以一次打多个断点
+    "breakPoints":breakPoints //要移除的断点的行数，是一个数组，即可以移除多个断点
 }
 ```
 响应:
@@ -113,25 +114,17 @@ http://localhost:23333/methodName
 ```javascript
 {
     "debugId":debugId,
-    "varName":varName //要查看的变量名
+    "varNames":varNames //要查看的变量名的数组
 }
 ```
-响应（正常返回）:
+响应:
 ```javascript
 
 {
-    "var":{
-        "id":id, //gdb内部标识变量的代号，业务中不用管它
-        "value":value   //要查询的变量的值
-    }
-}
-```
-
-响应（变量不存在）:
-```javascript
-{
-    "noSymbol":{
-        "msg":msg //错误消息，判断的时候只需要看响应有没有noSymbol属性即可
+    "vars":{
+    	"key1":value1, //结果为键值对
+        "key2":value2,
+        "key3":undefined //如果要查询的变量没有找到值则返回undefined
     }
 }
 ```
@@ -243,7 +236,36 @@ http://localhost:23333/methodName
 }
 ```
 
-### 7. exit
+### 7.finishFunction
+退出当前的函数
+
+请求路径：`http://[ipaddress]:[port]/finishFunction`
+请求报文体:
+```javascript
+{
+	"debugId":debugId
+}
+```
+响应（正常返回）:
+```javascript
+{
+    "finished":{
+    	"lineNum":lineNum	//退出函数后回到的行号
+    }
+}
+```
+
+响应（退出函数无意义，当不在函数里面等情况时返回此结果）:
+```javascript
+{
+    "notMeaningFul":{
+    	"msg":msg
+    }
+}
+```
+
+
+### 8. exit
 退出debugger会话
 
 请求路径：`http://[ipaddress]:[port]/exit`

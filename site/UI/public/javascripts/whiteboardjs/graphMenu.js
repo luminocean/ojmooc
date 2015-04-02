@@ -39,6 +39,7 @@ $("#dowhile").bind("click",function(){
 
 
 $(".graphButton").bind("click",function(){
+    parent.changeToGraphMode();
     parent.layer.close(index);
 });
 

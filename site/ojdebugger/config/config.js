@@ -22,11 +22,6 @@ var parseConfig = {
             //表示运行是否结束的flag
             "finish":true
         },
-        "notRunning":{
-            "reg": /&"(The program is not being run)/,
-            "attrNames":["msg"],
-            "finish":true
-        },
         "noFileOrDirectory":{
             "reg": /(libc_start_main)/,
             "attrNames":["msg"],
@@ -85,6 +80,17 @@ var parseConfig = {
         "finished":{
             "reg":/function-finished.*line="(\d+)"/,
             "attrNames":["lineNum"]
+        },
+        "notMeaningFul":{
+            "reg":/(not meaningful in the outermost frame)/,
+            "attrNames":["msg"]
+        }
+    },
+    "parseCommon":{
+        "notRunning":{
+            "reg": /&"(The program is not being run)/,
+            "attrNames":["msg"],
+            "finish":true
         }
     },
     //作用就是殿后，防止一个gdb的info输出没有方法去截获
@@ -94,15 +100,11 @@ var parseConfig = {
             "attrNames":["msg"],
             //是否仅是信息输出，是的话不会作为结果返回，类似于log的作用，不是核心业务
             "info":true
-        }/*,
-        "stopped":{
-            "reg":/\*(stopped)/,
-            "attrNames":["msg"],
-            "info":true
-        }*/
+        }
     }
 };
 
+var commonParseNames = ['parseCommon','parseInfo'];
 /**
  * debugger对外提供的方法的配置，最重要
  */
@@ -110,44 +112,44 @@ var methods = {
     "debug":{},
     "exit":{},
     "breakPoint":{
-        "parseNames":['parseBreakPoint','parseInfo']
+        "parseNames":['parseBreakPoint'].concat(commonParseNames)
     },
     "removeBreakPoint":{
-        "parseNames":['parseBreakPoint','parseInfo']
+        "parseNames":['parseBreakPoint'].concat(commonParseNames)
     },
     "printVal":{
         //该方法需要的解析方法的名称，对应parseConfig里面配置的方法
         //配置了这个属性表示返回结果将由parser生成
-        "parseNames":['parsePrintVal','parseInfo']
+        "parseNames":['parsePrintVal'].concat(commonParseNames)
     },
     "finishFunction":{
-        "parseNames":['parseFinishFunction','parseInfo']
+        "parseNames":['parseFinishFunction'].concat(commonParseNames)
     },
     "locals":{
-        "parseNames":['parseLocals','parseInfo']
+        "parseNames":['parseLocals'].concat(commonParseNames)
     },
     "run":{
-        "parseNames":['parseStopPoint','parseExit','parseInfo'],
+        "parseNames":['parseStopPoint','parseExit'].concat(commonParseNames),
         //是否在返回值上带有标准输出
         "stdout":true,
         //是否在返回值上带上局部变量列表
         "locals":true
     },
     "continue":{
-        "parseNames":['parseStopPoint','parseExit','parseInfo'],
+        "parseNames":['parseStopPoint','parseExit'].concat(commonParseNames),
         //提供了command表示该方法的debugger实现将自动生成
         "command":"c",
         "stdout":true,
         "locals":true
     },
     "stepInto":{
-        "parseNames":['parseStopPoint','parseExit','parseInfo'],
+        "parseNames":['parseStopPoint','parseExit'].concat(commonParseNames),
         "command":"step",
         "stdout":true,
         "locals":true
     },
     "stepOver":{
-        "parseNames":['parseStopPoint','parseExit','parseInfo'],
+        "parseNames":['parseStopPoint','parseExit'].concat(commonParseNames),
         "command":"next",
         "stdout":true,
         "locals":true
