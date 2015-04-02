@@ -16,6 +16,7 @@ var timeline = function(){
     this.currentTime = 0;
     this.totalTime = 0;
     this.recorders = [];
+    this.isPause = false;
     /**
      * 每隔一定时间获取各组件当前场景的timeInterval
      * @type {null}
@@ -82,6 +83,7 @@ timeline.prototype.play = function(pastTime,totalTime){
 
     //总时间不应该变
     $("#backline").click(function(e){
+        console.log("time changed");
         var audioControl = document.getElementById("audio");
         var width = e.pageX - $("#backline").offset().left;
         var timelineWidth = $("#backline").width();
@@ -110,6 +112,15 @@ timeline.prototype.stop = function(){
 
     //存储总的播放时间
 };
+
+timeline.prototype.pause = function(){
+    var that = this;
+    clearInterval(playInterval);
+    clearInterval(timelineInterval);
+    clearInterval(timer);
+    that.setCurrentTime(that.getCurrentTime());
+    console.log("pause at" + that.currentTime);
+}
 
 //控制整个录制流程
 timeline.prototype.record = function(){
