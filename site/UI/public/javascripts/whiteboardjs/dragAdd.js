@@ -29,12 +29,13 @@ $("#graphBoard")[0].addEventListener("drop",function(event){
         var reader = new FileReader();                                  //读取图片并显示
         reader.onload = (function(thefile){
             return function(e){
-
                 var image = new Image();
                 image.src = e.target.result;
                 addImage(generateID(),image,xLoc,yLoc);
 
-                console.log(e.target.result);
+                uploadFile(thefile);
+
+                //actionPerformed(new Action(id,"addImage",[imgId,x,y]));
             };
         })(file);
         reader.readAsDataURL(file);
@@ -44,3 +45,21 @@ $("#graphBoard")[0].addEventListener("drop",function(event){
     }
 });
 
+function uploadFile(file){
+    console.log(file);
+
+    var fd = new FormData();
+    fd.append("fileToUpload", file);
+
+    var xhr = new XMLHttpRequest();
+    var url = "http://127.0.0.1:1337/";
+    xhr.onreadystatechange = function(){
+        if(xhr.readyState == 4 && xhr.status == 200){
+            var b = xhr.responseText;
+
+            //actionPerformed(new Action(id,"addImage",[imgId,x,y]));
+        }
+    };
+    xhr.open("POST",url,true);
+    xhr.send(fd);
+}

@@ -966,7 +966,6 @@ function addImage(id,img,x,y){
     image.bind("mousewheel",resizeRectangle);
     image.bind("dragend",Dragged);
     image.bind("mousedown",getLocation);
-    image.bind("keydown",delGraph);
     image.drift = drift;
     zr.addShape(image);
     zr.render();

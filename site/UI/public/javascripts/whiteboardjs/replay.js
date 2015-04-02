@@ -130,6 +130,8 @@ function replay_addTriangle(action){
 }
 
 function replay_addImage(action){
+    
+
     addImage(action.id,action.val[0],action.val[1],action.val[2]);
 }
 
