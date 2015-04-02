@@ -63,23 +63,12 @@ function stopRecordAudio() {
         });
 };
 
-function play(){
-    //audio.src = url;
-    var playBtnVal = playAudio.text();
-    if(playBtnVal == '播放'){
-        audio.play();
-        playAudio.text('暂停');
-    }
-    else{
-        audio.pause();
-        playAudio.text('播放');
-    }
-}
-
 startRecordAudio.on("click",recordAudio);
 stopRecordingAudio.on("click",stopRecordAudio);
-playAudio.on("click",play);
+//playAudio.on("click",play);
 audio.addEventListener("ended",function(){
     playAudio.text('播放');
+    isFirstClick = true;
+    $("#play").click(playback);
 });
 

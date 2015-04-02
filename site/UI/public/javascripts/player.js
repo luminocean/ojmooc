@@ -256,17 +256,34 @@ function stop_record(){
 
 var isFirstClick = true;
 function playback(){
-    if(isFirstClick == false){
-        return;
-    }
-    clear();                                        //清空白板
-    console.log("start to play");
-    $("#editor").val('');
-    //$("#whiteboard").val('');
     //totalTime从存储的地方取出总时间
     var totalTime = timeline.getTotalTime();
-    timeline.play(0,totalTime);
-    isFirstClick = false;
+    var playBtnVal = playAudio.text();
+    var playedTime = 0;
+    if(isFirstClick == true){
+        clear();                                        //清空白板
+        console.log("start to play,totaltime" + totalTime);
+        $("#editor").val('');                           //清空编辑器
+        $("#foreline").css("width",0.1 + "%");          //清空timeline
+        audio.play();
+        playAudio.text('暂停');
+        timeline.play(0,totalTime);
+        isFirstClick = false;
+    }
+    else if(playBtnVal == '播放' && isFirstClick == false){
+        audio.play();
+        timeline.play(playedTime,totalTime);
+        playAudio.text('暂停');
+    }
+    else if(playBtnVal == '暂停' && isFirstClick == false){
+        audio.pause();
+        timeline.pause();
+        playedTime = timeline.getCurrentTime();
+        playAudio.text('播放');
+    }
+    else{
+        return;
+    }
 }
 
 //窗口放置好后，将player窗口的比例布局，变为像素固定布局

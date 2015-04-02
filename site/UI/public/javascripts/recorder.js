@@ -81,23 +81,9 @@ timeline.prototype.play = function(pastTime,totalTime){
         }
     },1000);
 
-
-    var playBtnVal = $("#play").text();
-    if(playBtnVal == '暂停' && that.isPause == false){
-        clearInterval(playInterval);
-        clearInterval(timelineInterval);
-        clearInterval(timer);
-        that.setCurrentTime(that.getCurrentTime());
-        that.isPause = true;
-    }
-    else if(playBtnVal == '播放' && that.isPause == true){
-        that.isPause = false;
-        that.play(that.currentTime,totalTime);
-
-    }
-
     //总时间不应该变
     $("#backline").click(function(e){
+        console.log("time changed");
         var audioControl = document.getElementById("audio");
         var width = e.pageX - $("#backline").offset().left;
         var timelineWidth = $("#backline").width();
@@ -126,6 +112,15 @@ timeline.prototype.stop = function(){
 
     //存储总的播放时间
 };
+
+timeline.prototype.pause = function(){
+    var that = this;
+    clearInterval(playInterval);
+    clearInterval(timelineInterval);
+    clearInterval(timer);
+    that.setCurrentTime(that.getCurrentTime());
+    console.log("pause at" + that.currentTime);
+}
 
 //控制整个录制流程
 timeline.prototype.record = function(){
