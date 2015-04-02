@@ -220,7 +220,11 @@ function stop_record(){
     windowController.stopRecord();
 }
 
+var isFirstClick = true;
 function playback(){
+    if(isFirstClick == false){
+        return;
+    }
     clear();                                        //清空白板
     console.log("start to play");
     $("#editor").val('');
@@ -228,6 +232,7 @@ function playback(){
     //totalTime从存储的地方取出总时间
     var totalTime = timeline.getTotalTime();
     timeline.play(0,totalTime);
+    isFirstClick = false;
 }
 
 //窗口放置好后，将player窗口的比例布局，变为像素固定布局
@@ -240,4 +245,4 @@ $("#singleEditerBtn").on("click",singleEditerClick);
 $("#singleWBoardBtn").on("click",singleWBoardClick);
 
 $("#stop").click(stop_record);
-$("#play").click(playback);
+$("#play").click(playback);     //如何第一次点击才调用，后面的不再调用

@@ -16,6 +16,7 @@ var timeline = function(){
     this.currentTime = 0;
     this.totalTime = 0;
     this.recorders = [];
+    this.isPause = false;
     /**
      * 每隔一定时间获取各组件当前场景的timeInterval
      * @type {null}
@@ -79,6 +80,21 @@ timeline.prototype.play = function(pastTime,totalTime){
             clearInterval(timelineInterval);
         }
     },1000);
+
+
+    var playBtnVal = $("#play").text();
+    if(playBtnVal == '暂停' && that.isPause == false){
+        clearInterval(playInterval);
+        clearInterval(timelineInterval);
+        clearInterval(timer);
+        that.setCurrentTime(that.getCurrentTime());
+        that.isPause = true;
+    }
+    else if(playBtnVal == '播放' && that.isPause == true){
+        that.isPause = false;
+        that.play(that.currentTime,totalTime);
+
+    }
 
     //总时间不应该变
     $("#backline").click(function(e){
