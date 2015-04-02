@@ -72,45 +72,45 @@ dbr.breakPoint(debugId,breakPoints,function(err,breakPointNum) {
 >   * 'pas'	pascal代码，使用freepascal编译
 >   * 'bas'	QBasic代码，使用freebasic的QB模式编译
 > * inputData {string} 编译后程序需要的输入数据
-> * callback {function} 编译执行成功后的回调函数，入参分别为
+> * callback {function} 回调函数，入参分别为
 >   * err {object} 错误对象
 >   * debugId {string} debug会话的凭证，之后所有的debug操作都需要这个凭证
 
 #### 2. breakPoint
-在当前debug会话中打一个断点
+在当前debug会话中打断点
 签名：
 > dbr.breakPoint(debugId, breakPoints, callback)
 
 说明：
 > * debugId {string} debug凭证
 > * breakPoints {number[]} 要打的断点的行数数组
-> * callback {function} 编译执行成功后的回调函数，入参分别为
+> * callback {function} 回调函数，入参分别为
 >   * err {object} 错误对象
 >   * breakPointNum {number} 成功打下断点的个数
 
 #### 3. removeBreakPoint
-在当前debug会话中移除一个断点
+在当前debug会话中移除断点
 签名：
 > dbr.removeBreakPoint(debugId, breakPoints, callback)
 
 说明：
 > * debugId {string} debug凭证
 > * breakPoints {number[]} 要移除的断点的行数数组
-> * callback {function} 编译执行成功后的回调函数，入参分别为
+> * callback {function} 回调函数，入参分别为
 >   * err {object} 错误对象
 >   * breakPointNum {number} 成功移除的断点个数
 
 #### 4. printVal
 查看一个变量的值
 签名：
-> dbr.printVal(debugId, varName, callback)
+> dbr.printVal(debugId, varNames, callback)
 
 说明：
 > * debugId {string} debug凭证
-> * varName {string} 要查看的变量名称
-> * callback {function} 编译执行成功后的回调函数，入参分别为
+> * varNames {string[]} 要查看变量名称的数组
+> * callback {function} 回调函数，入参分别为
 >   * err {object} 错误对象
->   * value {string|number} 查询到的变量值
+>   * vars {object} 查询到的变量与变量值的键值对，如果有变量没有找到值则对应的值为undefined
 
 #### 5.locals
 查看局部变量列表
@@ -119,7 +119,7 @@ dbr.breakPoint(debugId,breakPoints,function(err,breakPointNum) {
 
 说明：
 > * debugId {string} debug凭证
-> * callback {function} 编译执行成功后的回调函数，入参分别为
+> * callback {function} 回调函数，入参分别为
 >   * err {object} 错误对象
 >   * locals {object} 所有局部变量的键值对
 
@@ -131,25 +131,36 @@ dbr.breakPoint(debugId,breakPoints,function(err,breakPointNum) {
 
 说明：
 > * debugId {string} debug凭证
-> * callback {function} 编译执行成功后的回调函数，入参分别为
+> * callback {function} 回调函数，入参分别为
 >   * err {object} 错误对象
 >   * finish {boolean} 被调试的程序是否结束
 >   * breakPoint {object} 断点信息
 >   * stdout {string} 标准输出的值
 >   * locals {object} 局部变量键值对
 
-#### 7.exit
+#### 7.finishFunction
+退出一个函数
+签名:
+> dbr.finishFunction(debugId,callback)
+
+说明：
+> * debugId {string} debug凭证
+> * callback {function} 回调函数，入参分别为
+>   * err {object} 错误对象
+>   * lineNum {number} 退出函数后回到的行号
+
+#### 8.exit
 退出debugger会话
 签名：
 > dbr.exit(debugId, callback)
 
 说明：
 > * debugId {string} debug凭证
-> * callback {function} 编译执行成功后的回调函数，入参分别为
+> * callback {function} 回调函数，入参分别为
 >   * err {object} 错误对象
 >   * debugId {string} 结束的debug会话的凭证，等于之前传入的debugId
 
-#### 8.launchDebug
+#### 9.launchDebug
 便利方法，一次性执行debug,breakPoint和run方法。简化调用的步骤
 签名：
 > dbr.debug(srcCode, srcType, inputData, breakPoints, callback)
@@ -163,7 +174,7 @@ dbr.breakPoint(debugId,breakPoints,function(err,breakPointNum) {
 >   * 'bas'	QBasic代码，使用freebasic的QB模式编译
 > * inputData {string} 编译后程序需要的输入数据
 > * breakPoints {number[]} 要打的断点的行数数组
-> * callback {function} 编译执行成功后的回调函数，入参分别为
+> * callback {function} 回调函数，入参分别为
 >   * err {object} 错误对象
 >   * debugId {string} debug会话的凭证，之后所有的debug操作都需要这个凭证
 >   * finish {boolean} 被调试的程序是否结束
