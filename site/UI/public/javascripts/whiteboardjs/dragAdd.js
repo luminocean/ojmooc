@@ -31,7 +31,6 @@ $("#graphBoard")[0].addEventListener("drop",function(event){
             return function(e){
                 var image = new Image();
                 image.src = e.target.result;
-                console.log(image);
                 var id = generateID();
                 addImage(id,image,xLoc,yLoc);
 
@@ -43,8 +42,6 @@ $("#graphBoard")[0].addEventListener("drop",function(event){
 });
 
 function uploadFile(file,id,x,y){
-    console.log(file);
-
     var fd = new FormData();
     fd.append("fileToUpload", file);
 
@@ -57,6 +54,5 @@ function uploadFile(file,id,x,y){
         }
     };
     xhr.open("POST",url,true);
-    //xhr.overrideMimeType("application/octet-stream");
     xhr.send(fd);
 }

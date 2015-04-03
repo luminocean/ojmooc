@@ -9,6 +9,7 @@ $("#submit").bind("click",function(){
             var imgdata = xhr.response;
             var img = new Image();
             img.src = 'data:image/jpg;base64,' + imgdata;
+            document.getElementById("aa").setAttribute('src','data:image/jpg;base64,' + imgdata);
             console.log(img);
         }
     }
