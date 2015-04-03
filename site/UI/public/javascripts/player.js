@@ -45,8 +45,9 @@ function singleEditerClick(){
 function singleWBoardClick(){
     windowController.state=2;
     windowController.isDoubleWin=false;
-    $("#editerDiv").animate({"width":"0%"}).hide();
     $("#whiteboardDiv").show().animate({"width":"100%"});
+    $("#editerDiv").animate({"width":"0%"}).hide();
+
 }
 
 var editorDragOffset = { x: 0, y: 0 };//记录被拖动了多少距离

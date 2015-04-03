@@ -9,6 +9,12 @@ var bodyParser = require('body-parser');
 var index = require('./routes/index');
 var users = require('./routes/users');
 
+//test用
+var User=require('./models/User');
+
+//test用
+
+
 var app=express();
 
 // view engine setup
@@ -32,11 +38,19 @@ app.use(express.static(path.join(__dirname, 'public')));
 //app.locals({
 //
 //});
+var newUser = new User({
+  uUserName: 1234,
+  uPassWord: 123,
+  uIdentity:0
+});
 
 app.use(function (req, res, next) {
   res.locals.error = req.session.error;
   res.locals.success = req.session.success;
   res.locals.user = req.session.user;
+  //test
+  res.locals.user=newUser;
+  //
   next();
 });
 

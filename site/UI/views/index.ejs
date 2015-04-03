@@ -3,34 +3,117 @@
 <% include globalView/mainNavbar.ejs%>
 
 <div id="container" class="container">
-  <div class="hero-unit" >
+
+
+  <% if(!user){ %>
+  <div class="jumbotron" >
     <h1>欢迎~</h1>
     <p>哦哈呦~ </p>
     <p>
       <a class="btn btn-primary btn-large" href="/login" >登录</a>
-      <a class="btn btn-large" href="/reg" >立即注册</a>
+      <a class="btn btn-default btn-large" href="/reg" >立即注册</a>
     </p>
   </div>
-  <div class="row-fluid">
-    <ul class="thumbnails">
-      <% var len=mostPopSubjects.length;
-      for(var i=0;i<len;i++){
-      %>
-      <li class="span4">
-        <div class="thumbnail">
-          <img src=<%= mostPopSubjects[i].sPicture %><% console.log(i+mostPopSubjects[i].sPicture)%>class="" />
-          <div class="caption">
-            <h3><%= mostPopSubjects[i].sName%></h3>
-            <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
-            <p><a href="#" class="btn btn-primary">Action</a> <a href="#" class="btn">Action</a></p>
+  <% } else if(user.uIdentity==0){ %>
+  <div class="indexRecoDiv">
+    <div class="indexModuleNameDiv">
+      <span><h3 class="indexModuleName">我的课程</h3></span>
+      <span class="pull-right"><a href="#">查看更多</a></span>
+    </div>
+    <div class="row">
+    <%
+      var len=mostRecSubjects.length;
+      for(var i=0;i<4;i++){
+    %>
+      <div class="col-md-6">
+        <div class="well myClassWell clearfix">
+          <div>
+             <img src="<%= studyingClasses[i].subjectPicture %>" class=" img-responsive img-rounded myClassImg"/>
+            <div class="myClassInfoDiv">
+                <ul class="list-group">
+                  <li class="list-group-item list-group-item-info">
+                    <a href="" class="recName"><%= studyingClasses[i].subjectName%></a>
+                  </li>
+                  <li class="list-group-item list-group-item-info">
+                    <a href="" class="recName text-center"><%= studyingClasses[i].teacherName%></a>
+                  </li>
+                  <li class="list-group-item list-group-item-info">
+                    上次学习：<%= studyingClasses[i].lastStudy%>
+                  </li>
+                </ul>
+              <!--</div>-->
+               <span class="button-wrap">
+                 <a href="#" class="button button-pill button-raised button-primary">Start</a>
+               </span>
+            </div>
+
+            </div>
+        </div>
+      </div>
+    <% }%>
+    </div>
+  </div>
+  <% }%>
+
+  <hr />
+
+
+  <div class=" indexRecoDiv">
+    <div class="indexModuleNameDiv">
+      <span><h3 class="indexModuleName">推荐课程</h3></span>
+      <span class="pull-right"><a href="#">查看更多</a></span>
+    </div>
+    <div class="row">
+        <% var len=mostRecSubjects.length;
+        for(var i=0;i<len;i++){
+        %>
+        <div class="col-sm-6 col-md-3">
+          <div class="thumbnail">
+            <img src="<%= mostRecSubjects[i].sPicture %>" class="" />
+            <div class="caption">
+              <a href="" class="recName text-center"><%= mostRecSubjects[i].sName%></a>
+              <span class="recInfo">
+                <span><%= mostRecSubjects[i].sFollowerNum%></span>
+                <span class="glyphicon glyphicon-star"></span>
+              </span>
+              <!--<p><a href="#" class="btn btn-primary">Action</a> <a href="#" class="btn">Action</a></p>-->
+            </div>
           </div>
         </div>
-      </li>
-      <% }%>
-
-    </ul>
+        <% }%>
+    </div>
   </div>
   <hr />
+
+  <div class=" indexRecoDiv">
+    <div class="indexModuleNameDiv">
+      <span><h3 class="indexModuleName">推荐老师</h3></span>
+      <span class="pull-right"><a href="#">查看更多</a></span>
+    </div>
+    <div class="row">
+      <% var len=mostRecTeachers.length;
+      for(var i=0;i<len;i++){
+      %>
+      <div class="col-sm-6 col-md-3">
+        <div class="thumbnail">
+          <img src="<%= mostRecTeachers[i].uPicture %>" class="" />
+          <div class="caption">
+            <a href="" class="recName text-center"><%= mostRecTeachers[i].uUserName%></a>
+              <span class="recInfo">
+                <span><%= mostRecTeachers[i].uFollowerNum%></span>
+                <span class="glyphicon glyphicon-star"></span>
+              </span>
+            <!--<p><a href="#" class="btn btn-primary">Action</a> <a href="#" class="btn">Action</a></p>-->
+          </div>
+        </div>
+      </div>
+      <% }%>
+    </div>
+  </div>
+  <hr />
+
+
+  <!--计划没有放-->
 
 </div>
 </body>

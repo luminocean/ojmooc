@@ -88,7 +88,7 @@
     </control>
     <control controlID="20" controlTypeID="com.balsamiq.mockups::ButtonBar" x="226" y="289" w="709" h="23" measuredW="163" measuredH="27" zOrder="19" locked="false" isInGroup="-1">
       <controlProperties>
-        <selectedIndex>2</selectedIndex>
+        <selectedIndex>1</selectedIndex>
         <text>%u5173%u6CE8%2C%u5728%u5B66%2C%u5DF2%u5B8C%u6210</text>
       </controlProperties>
     </control>

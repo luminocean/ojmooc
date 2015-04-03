@@ -16,7 +16,9 @@ router.get('/', function(req, res, next) {
   res.render('index', {
     title: '首页',
     active:'index',
-    mostPopSubjects:Subject.getMostPopSubjects(3)
+    mostRecSubjects:Subject.getMostRecSubjects(4),
+    mostRecTeachers:User.getMostRecTeachers(4),
+    studyingClasses:User.getMyStudyingClasses(4)
   });
 });
 
@@ -99,13 +101,13 @@ router.post('/reg', function(req, res, next) {
   //var password = md5.update(req.body.password).digest('base64');
 
   var newUser = new User({
-    username: req.body.username,
-    password: req.body.password,
-    identity:1
+    uUserName: req.body.username,
+    uPassWord: req.body.password,
+    uIdentity:0
   });
 
   //检查用户名是否已经存在
-  User.check(newUser.username, function(err) {
+  User.check(newUser.uUserName, function(err) {
     if (err) {
       req.session.error=err;
       console.log("check1err: "+err);
@@ -136,7 +138,7 @@ router.post('/login', function(req, res, next) {
       req.session.error='用户不存在';
       return res.redirect('/login');
     }
-    if (user.password != req.body.password) {
+    if (user.uPassWord != req.body.password) {
       req.session.error='密码错误';
       return res.redirect('/login');
     }

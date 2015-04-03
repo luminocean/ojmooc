@@ -1,51 +1,62 @@
 </head>
 <body>
-<div class="navbar navbar-fixed-top navbar-inverse">
-    <div class="navbar-inner">
-        <div class="container">
-            <a class="btn btn-navbar" data-toggle=" collapse" data-target=".nav-collapse">
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </a>
-            <a class="brand" href="/">OJMOOC</a>
-            <div class="nav-collapse">
-                <ul class="nav pull-left">
-                    <li <% if(active=='index'){%> class="active"<% }%>><a href="/">首页</a></li>
-                    <li <% if(active=='classes'){%> class="active"<% }%>><a href="/">课程</a></li>
-                    <li <% if(active=='myClass'){%> class="active"<% }%>><a href="/">我的课程</a></li>
-                    <form class="navbar-search">
-                        <input type="text" class="search-query" placeholder="Search">
-                    </form>
 
-                    <li <% if(active=='play'){%> class="active"<% }%>><a href="/play">录制</a></li>
-                </ul>
-                <% if(!user){%>
-                <ul class="nav pull-right">
-                    <li <% if(active=='login'){%> class="active"<% }%>><a href="/login">登入</a></li>
-                    <li <% if(active=='reg'){%> class="active"<% }%>><a href="/reg">注册</a></li>
-                </ul>
-                <% }else{%>
-                <ul class="nav pull-right">
-                    <li><a class=""><i class="icon-envelope icon-white"></i>消息</a></li>
-                    <li>
-                        <a class="dropdown-toggle" data-toggle="dropdown" role="button" href="#">
-                            <i class="icon-user icon-white"></i>
-                            <%= user.username%>
-                            <span class="caret"></span>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a href="#"><i class="icon-pencil"></i> 个人资料</a></li>
-                            <li><a href="#"><i class="icon-trash"></i> Delete</a></li>
-                            <li><a href="#"><i class="icon-ban-circle"></i> Ban</a></li>
-                            <li class="divider"></li>
-                            <li><a href="/logout"><i class="i"></i>登出</a></li>
-                        </ul>
-                    </li>
-                </ul>
-                <% } %>
 
-            </div>
+<nav class="navbar navbar-default navbar-fixed-top navbar-inverse">
+    <div class="container">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">OJMOOC</a>
         </div>
-    </div>
-</div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-left">
+                <li <% if(active=='index'){%> class="active"<% }%>><a href="/">首页</a></li>
+                <li <% if(active=='classes'){%> class="active"<% }%>><a href="/classes">课程</a></li>
+                <li <% if(active=='myClass'){%> class="active"<% }%>><a href="/myclass">我的课程</a></li>
+                <form class="navbar-form navbar-left" role="search">
+                <span class="input-group">
+                    <input type="text" class="form-control col-md-2" placeholder="Search for...">
+                    <span class="input-group-btn">
+                        <button class="btn btn-default" type="button">Go!</button>
+                    </span>
+                </span><!-- /input-group -->
+                </form>
+                <li <% if(active=='play'){%> class="active"<% }%>><a href="/play">录制</a></li>
+            </ul>
+
+            <% if(!user){%>
+            <ul class="nav navbar-nav navbar-right">
+                <li <% if(active=='login'){%> class="active"<% }%>><a href="/login">登入</a></li>
+                <li <% if(active=='reg'){%> class="active"<% }%>><a href="/reg">注册</a></li>
+            </ul>
+            <% }else{%>
+
+            <ul class="nav navbar-nav navbar-right">
+                <li><a class=""><span class="glyphicon glyphicon-envelope" aria-hidden="true"></span>消息</a></li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                        <span class="glyphicon glyphicon-user"></span>
+                        <%= user.uUserName%>
+                        <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a href="#"><span class="glyphicon glyphicon-pencil"></span> 个人资料</a></li>
+                        <li><a href="#"><span class="glyphicon glyphicon-trash"></span> Delete</a></li>
+                        <li class="divider"></li>
+                        <li><a href="/logout"><span class="glyphicon glyphicon-log-out"></span>登出</a></li>
+                    </ul>
+                </li>
+            </ul>
+            <% } %>
+
+        </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+</nav>
