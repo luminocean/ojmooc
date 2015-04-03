@@ -71,11 +71,11 @@ timeline.prototype.play = function(pastTime,totalTime){
 
     //每过1S将时间线上显示的时间减1
     var clockTotalTime = Math.round(totalTime-pastTime);
-    $("#clock").html(clockTotalTime);
+    $("#clock").html(secondsToClockTime(clockTotalTime));
     timelineInterval = setInterval(function(){
-        var j = $("#clock").html();
+        var j = clockTimeToSeconds($("#clock").html());
         j--;
-        $("#clock").html(j);
+        $("#clock").html(secondsToClockTime(j));
         if(j<=0){
             clearInterval(timelineInterval);
         }
@@ -128,6 +128,12 @@ timeline.prototype.record = function(){
     that.startTime = getTimeSeconds(new Date());
 
     //每隔5S记录当前各组件场景
+    var recorderCount = that.recorders.length;
+    var currentTime = that.getCurrentTime();
+    console.log(currentTime);
+    for(var i=0;i<recorderCount;i++){
+        that.recorders[i].saveScene(currentTime);
+    }
     that.timeInterval = setInterval(function(){
         var recorderCount = that.recorders.length;
         var currentTime = that.getCurrentTime();
@@ -139,9 +145,9 @@ timeline.prototype.record = function(){
 
     //时间线上显示已经录制的时间
     that.recordTimeInterval = setInterval(function(){
-        var i = $("#clock").html();                         //获取当前已经录制的时间，秒
+        var i = clockTimeToSeconds($("#clock").html());                         //获取当前已经录制的时间，秒
         i++;                                             //增加1000毫秒
-        $("#clock").html(i);                            //设置当前已经录制时间
+        $("#clock").html(secondsToClockTime(i));                            //设置当前已经录制时间
     },1000);
 
 };
@@ -193,8 +199,10 @@ recorder.prototype.saveStep = function(savetime,action){
 
 //存储某个场景状态
 recorder.prototype.saveScene = function(currentTime){
-    var state = this.instance.getScene();
-    this.scene_records.push({time:currentTime,state:state});
+    var that = this;
+    var state = that.instance.getScene();
+    console.log(state);
+    that.scene_records.push({time:currentTime,state:state});
 }
 
 //获取指定时间的场景状态
@@ -208,4 +216,28 @@ recorder.prototype.playScene = function(currentTime){
             that.instance.setScene(currentState);
         }
     }
+}
+
+function secondsToClockTime(seconds){
+    var hour = Math.floor(seconds/3600);
+    var minute = Math.floor((seconds%3600)/60);
+    var second = seconds%60;
+    if(hour < 10){
+        hour = "0" + hour;
+    }
+    if(minute < 10){
+        minute = "0" + minute;
+    }
+    if(second < 10){
+        second = "0" + second;
+    }
+    var clockTime = hour + ":" + minute + ":" + second;
+    return clockTime;
+}
+
+function clockTimeToSeconds(clockTime){
+    var seconds = parseInt(clockTime.charAt(0)) * 36000 + parseInt(clockTime.charAt(1)) * 3600
+        + parseInt(clockTime.charAt(3)) * 600 + parseInt(clockTime.charAt(4)) * 60
+        + parseInt(clockTime.charAt(6)) * 10 + parseInt(clockTime.charAt(7));
+    return seconds;
 }

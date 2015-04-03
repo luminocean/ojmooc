@@ -1,18 +1,15 @@
 <!-- zhangliming timeline.css  start -->
 #backline {
     width: 100%;
-    background-color: #444444;
     height: 8px;
-    border:solid 1px #000000;
     position: relative;
-    top: 10px;
+    top: 100px;
 }
 #foreline {
     width: 0.1%;
     background-color: #fa6900;
     height: 8px;
-    position: relative;
-    top: 10px;
+    border-radius: 5px;
 }
 <!-- zhangliming timeline.css  end -->
 
