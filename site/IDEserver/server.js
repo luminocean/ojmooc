@@ -75,9 +75,6 @@ app.post('/editor/debugBegin', function (req, res) {
     for (var i = 0; i < bps.length; i++) {
         bplines.push(parseInt(bps[i]) + 1);
     }
-    //console.log(srcType);
-    //console.log(inputData);
-    //console.log(bplines);
     dbr.launchDebug(srcCode, srcType, inputData, bplines, function (err, debugId, finish, breakPoint, stdout, locals) {
         if (err) return console.log(err);
         var debugInfo = {
@@ -87,7 +84,6 @@ app.post('/editor/debugBegin', function (req, res) {
             "stdout": stdout,
             "locals": locals
         };
-        //console.log("launch" + stdout);
         res.send(debugInfo);
     });
 });
@@ -96,24 +92,37 @@ app.post('/editor/printVariables', function (req, res) {
     var debugId = req.body.debugId;
     var variables = req.body.variables;
 
-    console.log("0"+variables);
-    for (var key in variables) {
-        dbr.printVal(debugId, key, function (err, value) {
-            if (err)console.log(err);
-            variables[key] = value;
-            console.log("1"+key+variables[key]);
-        });
-    }
-    console.log("2"+variables);
-    res.send(variables);
+    dbr.printVal(debugId, variables,function(err,values){
+        res.send(values);
+    });
+
 });
 
 app.post('/editor/setBreakpointToServer',function(req,res){
     var debugId = req.body.debugId;
     var lineNum = req.body.lineNum;
+    var breakPoints = [];
+    breakPoints.push(lineNum);
 
-    console.log(lineNum);
+    dbr.breakPoint(debugId, breakPoints, function(err,breakPointNum){
+        if(err)console.log(err);
+        res.send(breakPointNum);
+    });
 });
+
+app.post('/editor/clearBreakpointToServer"',function(req,res){
+    var debugId = req.body.debugId;
+    var lineNum = req.body.lineNum;
+    var breakPoints = [];
+    breakPoints.push(lineNum);
+
+    dbr.breakPoint(debugId, breakPoints, function(err,breakPointNum){
+        if(err)console.log(err);
+        res.send(breakPointNum);
+    });
+});
+
+
 
 app.post('/editor/stepInto', function (req, res) {
     var debugId = req.body.debugId;

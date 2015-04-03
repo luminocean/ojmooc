@@ -10,8 +10,17 @@ var variables = [];
 var editor = ace.edit("editor");
 var inputEditor = ace.edit("inputEditor");
 var outputEditor = ace.edit("outputEditor");
+var editorWidth = document.getElementById("editerDiv").clientWidth;
 
 $(document).ready(function () {
+
+    $("#inputEditor").css({"width":editorWidth*0.48});
+    $("#outputEditor").css({"width":editorWidth*0.48});
+    $("#leftPanel").css({"width":editorWidth*0.24});
+    $("#rightPanel").css({"width":editorWidth*0.24});
+    $("#editor").css({"width":editorWidth*0.96});
+    $("#midPanel").css({"width":editorWidth*0.97});
+
     $("#leftPanel").hide();
     $("#rightPanel").hide();
     $("#debugBegin").hide();
@@ -37,6 +46,7 @@ $(document).ready(function () {
         enableLiveAutocompletion: true
     });
 });
+
 
 $("#fontsize").change(function () {
     var size = $("#fontsize").val();
@@ -90,7 +100,11 @@ $("#run").click(function () {
 
 //debug模块
 $("#debugInto").click(function () {
-    $("#midPanel").removeClass("col-sm-10").addClass("col-sm-6");
+    $("#editor").css({"width":editorWidth*0.48});
+    $("#inputEditor").css({"width":editorWidth*0.24});
+    $("#outputEditor").css({"width":editorWidth*0.24});
+
+    $("#midPanel").css({"width":editorWidth*0.49});
     $("#leftPanel").show();
     $("#rightPanel").show();
     $("#debugBegin").show();
@@ -100,7 +114,11 @@ $("#debugInto").click(function () {
 });
 
 $("#debugOut").click(function () {
-    $("#midPanel").removeClass("col-sm-6").addClass("col-sm-10");
+    $("#editor").css({"width":editorWidth*0.96});
+    $("#inputEditor").css({"width":editorWidth*0.48});
+    $("#outputEditor").css({"width":editorWidth*0.48});
+
+    $("#midPanel").css({"width":editorWidth*0.97});
     $("#leftPanel").hide();
     $("#rightPanel").hide();
     $("#debugBegin").hide();
