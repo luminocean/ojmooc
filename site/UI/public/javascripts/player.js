@@ -269,4 +269,5 @@ $("#singleEditerBtn").on("click",singleEditerClick);
 $("#singleWBoardBtn").on("click",singleWBoardClick);
 
 $("#stop").click(stop_record);
+
 $("#play").click(playback);     //如何第一次点击才调用，后面的不再调用
