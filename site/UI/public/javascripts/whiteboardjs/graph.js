@@ -973,7 +973,7 @@ function addImage(id,img,x,y){
     addObjs(image);
     addOpes(new Operation(id,"addShape"));
 
-    actionPerformed(new Action(id,"addImage",[img,x,y]));
+    //actionPerformed(new Action(id,"addImage",[img,x,y]));
 }
 
 function drift(dx,dy){
