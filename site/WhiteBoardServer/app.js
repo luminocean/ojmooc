@@ -38,7 +38,6 @@ var uploadServer = http.createServer(function(req,res){
                     else{
                         res.writeHead(200, { 'Content-Type': 'image/jpeg','Connection': 'close','Access-Control-Allow-Origin':'http://localhost' });
                         res.write(data);
-                        console.log(data);
                         res.end();
                     }
                 });

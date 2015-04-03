@@ -1,17 +1,3 @@
-$("#replay").bind("click",function(e){
-    clear();
-    var i = 0;
-    var rep = setInterval(function(){
-        if(i < actions.length){
-            replayAction(actions[i]);
-            i++;
-        }
-        else{
-            clearInterval(rep);
-        }
-    },100);
-});
-
 //回放操作
 WhiteBoard.prototype.setAction = function(action){
     replayAction(action);
