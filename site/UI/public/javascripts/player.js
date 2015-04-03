@@ -228,18 +228,11 @@ function stop_record(){
 }
 
 var isFirstClick = true;
-<<<<<<< HEAD
-=======
 var playedTime = 0;
->>>>>>> 7654b8d72c0ec10daa45b5b4c47141565f347eb8
 function playback(){
     //totalTime从存储的地方取出总时间
     var totalTime = timeline.getTotalTime();
     var playBtnVal = playAudio.text();
-<<<<<<< HEAD
-    var playedTime = 0;
-=======
->>>>>>> 7654b8d72c0ec10daa45b5b4c47141565f347eb8
     if(isFirstClick == true){
         clear();                                        //清空白板
         console.log("start to play,totaltime" + totalTime);
@@ -276,8 +269,5 @@ $("#singleEditerBtn").on("click",singleEditerClick);
 $("#singleWBoardBtn").on("click",singleWBoardClick);
 
 $("#stop").click(stop_record);
-<<<<<<< HEAD
 $("#play").click(playback);     //如何第一次点击才调用，后面的不再调用
-=======
-$("#play").click(playback);     //如何第一次点击才调用，后面的不再调用
->>>>>>> 7654b8d72c0ec10daa45b5b4c47141565f347eb8
+

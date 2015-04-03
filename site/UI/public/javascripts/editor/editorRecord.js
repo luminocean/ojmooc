@@ -77,7 +77,20 @@ outputEditor.on("change", function () {
     }
 });
 
+function editorChange(action){
+    editor.setValue(action.value);
+}
 
+function inputEditorChange(action){
+    inputEditor.setValue(action.value);
+}
+
+function outputEditorChange(action){
+    outputEditor.setValue(action.value);
+}
+
+var actions = ["editorChange","inputEditorChange","outputEditorChange"];
+var actions_func = [editorChange,inputEditorChange,outputEditorChange];
 
 
 var editorRecord = new editorRecord();
