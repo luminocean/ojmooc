@@ -24,7 +24,6 @@ var WhiteBoard = function(){
 }
 
 var whiteboard = new WhiteBoard();
-console.log(whiteboard);
 var dbClickTimer = null;
 var timer = 0;
 var globalID = 0;
