@@ -8,8 +8,8 @@ $("#submit").bind("click",function(){
         if(xhr.readyState == 4 && xhr.status == 200){
             var imgdata = xhr.response;
             var img = new Image();
-
-            console.log(imgdata);
+            img.src = 'data:image/jpg;base64,' + imgdata;
+            console.log(img);
         }
     }
     xhr.send("1427989721914pic.jpg");
