@@ -50,7 +50,7 @@ var debugId = "";
 
 
     var define = function (module, deps, payload) {
-        console.log(payload);
+        //console.log(payload);
         if (typeof module !== "string") {
             if (define.original)
                 define.original.apply(this, arguments);

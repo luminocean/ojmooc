@@ -1,99 +1,57 @@
-<div class="showME">
-    <div class="col-sm-12">
-            <div id="optionPanel" class="col-sm-10">
-                <label>大小</label>
-                <select id="fontsize" size="1">
-                    <option value="11px">11px</option>
-                    <option value="12px" selected="selected">12px</option>
-                    <option value="13px">13px</option>
-                    <option value="14px">14px</option>
-                </select>
-                <label>语言</label>
-                <select id="language" size="1">
-                    <option value="cpp">C/C++</option>
-                    <option value="pas" selected="selected">pascal</option>
-                    <option value="bas">Qbasic</option>
-                </select>
-                <input type="submit" id="run" value="运行">
-                <input type="submit" id="debugBegin" value="开始调试">
-                <input type="submit" id="debugInto" value="调试">
-                <input type="submit" id="debugOut" value="退出调试">
-            </div>
-
-            <div id="editorPanel" class="col-sm-10">
-                <div id="leftPanel" class="col-sm-3">
-                    <div id="variable" class="panel panel-info col-sm-12 debugInfoPanel">
-                        <div class="panel-heading">变量
-                            <button type="button" class="btn btn-default" aria-label="Right Align" data-toggle="modal"
-                                    data-target="#addVariable">
-                                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-                            </button>
-                        </div>
-                        <table id="variables" class="table table-bordered"></table>
-                    </div>
-                    <div id="operate" class="panel panel-info col-sm-12 debugInfoPanel">
-                        <div class="panel-heading">操作</div>
-                        <button type="button" class="btn btn-primary btn-lg btn-block">进入</button>
-                        <button type="button" class="btn btn-primary btn-lg btn-block">单步</button>
-                        <button type="button" class="btn btn-primary btn-lg btn-block">退出函数</button>
-                        <button type="button" class="btn btn-primary btn-lg btn-block">继续</button>
-                    </div>
-                </div>
-
-                <div id="midPanel" class="col-sm-10">
-                    <div id="editor" class="col-sm-12"></div>
-                    <div id="inputEditor" class="col-sm-6"></div>
-                    <div id="outputEditor" class="col-sm-6"></div>
-                </div>
-
-                <div id="rightPanel" class="col-sm-3">
-                    <div id="breakpoint" class="panel panel-info col-sm-12 debugInfoPanel">
-                        <div class="panel-heading">断点</div>
-                        <table class="table">
-                            <tr>
-                                <td>a</td>
-                                <td>10</td>
-                            </tr>
-                        </table>
-                    </div>
-                    <div id="stack" class="panel panel-info col-sm-12 debugInfoPanel">
-                        <div class="panel-heading">堆栈</div>
-                        <table class="table">
-                            <tr>
-                                <td>a</td>
-                                <td>10</td>
-                            </tr>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
+<div id="optionPanel">
+    <span class="label label-default">大小</span>
+    <select id="fontsize" size="1">
+        <option value="11px">11px</option>
+        <option value="12px" selected="selected">12px</option>
+        <option value="13px">13px</option>
+        <option value="14px">14px</option>
+    </select>
+    <span class="label label-default">语言</span>
+    <select id="language" size="1">
+        <option value="cpp" selected="selected">C/C++</option>
+        <option value="pas">pascal</option>
+        <option value="bas">Qbasic</option>
+    </select>
+    <input type="submit" id="run" value="运行">
+    <input type="submit" id="debugBegin" value="开始调试">
+    <input type="submit" id="debugInto" value="调试">
+    <input type="submit" id="debugOut" value="退出调试">
 </div>
 
-<div class="modal fade" id="addVariable" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                            aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myModalLabel">添加变量</h4>
+<div id="editorPanel">
+    <div id="leftPanel" style="float: left;">
+        <div id="variable" class="panel panel-info col-sm-12 debugInfoPanel" style="overflow: scroll">
+            <div class="panel-heading">变量
+                <button type="button" class="btn btn-default" aria-label="Right Align" data-toggle="modal"
+                        data-target="#addVariable">
+                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                </button>
             </div>
-            <div class="modal-body">
-                <form>
-                    <div class="form-group">
-                        <label for="recipient-name" class="control-label">变量名：</label>
-                        <input type="text" class="form-control" id="variable-name">
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button id="addVariableBtn" type="button" class="btn btn-primary">添加</button>
-                <button id="closeModalBtn" type="button" class="btn btn-default">关闭</button>
-            </div>
+            <table id="variablesTb" class="table table-bordered"></table>
+        </div>
+        <div id="operate" class="panel panel-info col-sm-12 debugInfoPanel">
+            <div class="panel-heading">操作</div>
+            <button type="button" class="btn btn-primary btn-lg btn-block" id="stepInto">单步进入</button>
+            <button type="button" class="btn btn-primary btn-lg btn-block" id="stepOver">单步越过</button>
+            <button type="button" class="btn btn-primary btn-lg btn-block" id="continue">继续</button>
+            <button type="button" class="btn btn-primary btn-lg btn-block" id="exit">退出</button>
+        </div>
+    </div>
+
+    <div id="midPanel" style="float: left">
+        <div id="editor"></div>
+        <div id="inputEditor" style="float: left;"></div>
+        <div id="outputEditor" style="float: left;"></div>
+    </div>
+
+    <div id="rightPanel" style="float: left;">
+        <div id="breakpoint" class="panel panel-info  debugInfoPanel" style="overflow: scroll;">
+            <div class="panel-heading">断点</div>
+            <table id="breakpointsTb" class="table table-bordered"></table>
+        </div>
+        <div id="stack" class="panel panel-info  debugInfoPanel" style="overflow: scroll;">
+            <div class="panel-heading">堆栈</div>
+            <table id="localsTb" class="table table-bordered"></table>
         </div>
     </div>
 </div>
-<!--<script type="text/javascript" src="/scripts/ace/ace.js"></script>-->
-<!--<script type="text/javascript" src="/scripts/ace/ext-language_tools.js"></script>-->
-<!--<script type="text/javascript" src="/scripts/editorScript.js"></script>-->
-<!--<script type="text/javascript" src="/scripts/bootstrap.min.js"></script>-->

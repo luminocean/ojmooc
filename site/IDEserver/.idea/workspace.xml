@@ -27,8 +27,40 @@
       <file leaf-file-name="editor.ejs" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/views/pages/editor.ejs">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="1909" max-vertical-offset="2320">
-              <caret line="61" column="66" selection-start-line="61" selection-start-column="66" selection-end-line="61" selection-end-column="66" />
+            <state vertical-scroll-proportion="-11.034483" vertical-offset="1060" max-vertical-offset="2320">
+              <caret line="69" column="40" selection-start-line="69" selection-start-column="40" selection-end-line="69" selection-end-column="40" />
+              <folding>
+                <element signature="n#style#0;n#div#1;n#div#2;n#div#1;n#div#0;n#div#0;n#main#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ace.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/public/scripts/ace/ace.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0" vertical-offset="58194" max-vertical-offset="368660">
+              <caret line="2918" column="48" selection-start-line="2918" selection-start-column="48" selection-end-line="2918" selection-end-column="48" />
+              <folding>
+                <element signature="n#!!doc" expanded="true" />
+                <element signature="e#428731#429467#0" expanded="false" />
+                <element signature="e#429576#430192#0" expanded="false" />
+                <element signature="e#430236#431822#0" expanded="false" />
+                <element signature="e#431940#433275#0" expanded="false" />
+                <element signature="e#433342#433980#0" expanded="false" />
+                <element signature="e#434028#434096#0" expanded="false" />
+                <element signature="e#434143#439570#0" expanded="false" />
+                <element signature="e#439610#439654#0" expanded="false" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="server.js" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/server.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.72727275" vertical-offset="1400" max-vertical-offset="3760">
+              <caret line="86" column="28" selection-start-line="86" selection-start-column="28" selection-end-line="86" selection-end-column="28" />
               <folding />
             </state>
           </provider>
@@ -37,52 +69,11 @@
       <file leaf-file-name="editorScript.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/public/scripts/editorScript.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="1487" max-vertical-offset="3220">
-              <caret line="141" column="39" selection-start-line="141" selection-start-column="39" selection-end-line="141" selection-end-column="39" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="3287" max-vertical-offset="4900">
+              <caret line="140" column="39" selection-start-line="140" selection-start-column="39" selection-end-line="140" selection-end-column="39" />
               <folding>
-                <element signature="e#1000#1082#0" expanded="false" />
-                <element signature="e#1120#1527#0" expanded="false" />
-                <element signature="n#!!block;n#check#0" expanded="false" />
-                <element signature="e#1651#2134#0" expanded="false" />
-                <element signature="e#2182#2414#0" expanded="false" />
-                <element signature="e#2451#2683#0" expanded="false" />
-                <element signature="e#3694#4103#0" expanded="false" />
-                <element signature="e#4138#4513#0" expanded="false" />
-                <element signature="e#5097#5468#0" expanded="false" />
-                <element signature="e#5780#5819#0" expanded="false" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="server.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/server.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="1960" max-vertical-offset="3580">
-              <caret line="113" column="0" selection-start-line="113" selection-start-column="0" selection-end-line="113" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ace.js" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/public/scripts/ace/ace.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.94750655" vertical-offset="57059" max-vertical-offset="362020">
-              <caret line="2899" column="26" selection-start-line="2899" selection-start-column="26" selection-end-line="2899" selection-end-column="26" />
-              <folding>
-                <element signature="e#386010#386658#0" expanded="false" />
-                <element signature="e#386754#387298#0" expanded="false" />
-                <element signature="e#387337#388803#0" expanded="false" />
-                <element signature="e#388912#390147#0" expanded="false" />
-                <element signature="e#390209#390790#0" expanded="false" />
-                <element signature="e#390833#390893#0" expanded="false" />
-                <element signature="e#390935#396118#0" expanded="false" />
-                <element signature="e#396153#396189#0" expanded="false" />
-                <element signature="e#396834#396881#0" expanded="false" />
-                <element signature="e#396918#396956#0" expanded="false" />
-                <element signature="e#396992#397038#0" expanded="false" />
-                <element signature="e#397080#397130#0" expanded="false" />
+                <element signature="e#4667#4707#0" expanded="false" />
+                <element signature="n#!!block;n#printBreakpoints#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -107,14 +98,16 @@
         <option value="$PROJECT_DIR$/public/scripts/editorRecorder.js" />
         <option value="F:/QQ_File/179495657/FileRecv/ace.js" />
         <option value="$PROJECT_DIR$/views/pages/index.ejs" />
-        <option value="$PROJECT_DIR$/../ojclient/debugger_test.js" />
         <option value="E:/github/Acebug/chrome/content/ace++/startup.js" />
         <option value="$PROJECT_DIR$/../ojdebugger-gui/core.js" />
         <option value="$PROJECT_DIR$/public/stylesheets/editorStyle.css" />
+        <option value="$PROJECT_DIR$/../UI/views/player/editerDiv.ejs" />
+        <option value="$PROJECT_DIR$/../UI/views/player/play.ejs" />
+        <option value="$PROJECT_DIR$/public/scripts/ace/ace.js" />
+        <option value="$PROJECT_DIR$/../ojclient/debugger_test.js" />
         <option value="$PROJECT_DIR$/views/pages/editor.ejs" />
         <option value="$PROJECT_DIR$/public/scripts/editorScript.js" />
         <option value="$PROJECT_DIR$/server.js" />
-        <option value="$PROJECT_DIR$/public/scripts/ace/ace.js" />
       </list>
     </option>
   </component>
@@ -150,7 +143,6 @@
       <sortByType />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -254,31 +246,10 @@
               <option name="myItemId" value="public" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="scripts" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="ace" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="IDEserver" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="IDEserver" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="public" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
           </PATH>
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -287,7 +258,7 @@
     <property name="FullScreen" value="false" />
     <property name="recentsLimit" value="5" />
     <property name="list.type.of.created.stylesheet" value="CSS" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../UI" />
     <property name="options.lastSelected" value="reference.settingsdialog.IDE.editor.colors.Console Font" />
     <property name="options.splitter.main.proportions" value="0.3" />
     <property name="options.splitter.details.proportions" value="0.2" />
@@ -427,37 +398,11 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="6" />
+      <option name="time" value="7" />
     </breakpoint-manager>
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/server.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="825" max-vertical-offset="1740">
-          <caret line="61" column="3" selection-start-line="61" selection-start-column="3" selection-end-line="61" selection-end-column="3" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/scripts/editorScript.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="1575" max-vertical-offset="3300">
-          <caret line="123" column="21" selection-start-line="123" selection-start-column="21" selection-end-line="123" selection-end-column="21" />
-          <folding>
-            <element signature="e#1000#1082#0" expanded="false" />
-            <element signature="e#1120#1527#0" expanded="false" />
-            <element signature="n#!!block;n#check#0" expanded="false" />
-            <element signature="e#1651#2134#0" expanded="false" />
-            <element signature="e#2182#2414#0" expanded="false" />
-            <element signature="e#2451#2683#0" expanded="false" />
-            <element signature="e#3694#4103#0" expanded="false" />
-            <element signature="e#4138#4513#0" expanded="false" />
-            <element signature="e#5097#5468#0" expanded="false" />
-            <element signature="e#5780#5819#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://E:/temp/ace.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="365520">
@@ -469,7 +414,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="1760" max-vertical-offset="2520">
           <caret line="88" column="0" selection-start-line="88" selection-start-column="0" selection-end-line="88" selection-end-column="0" />
-          <folding />
+          <folding>
+            <element signature="n#style#0;n#div#1;n#div#2;n#div#1;n#div#0;n#div#0;n#main#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -739,13 +686,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../ojclient/debugger_test.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.48672566" vertical-offset="300" max-vertical-offset="1080">
-          <caret line="26" column="26" selection-start-line="26" selection-start-column="26" selection-end-line="26" selection-end-column="26" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/../ojclient/app.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="6349" max-vertical-offset="6920">
@@ -774,59 +714,74 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/views/pages/editor.ejs">
+    <entry file="file://$PROJECT_DIR$/../UI/views/player/editerDiv.ejs">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="1909" max-vertical-offset="2320">
-          <caret line="61" column="66" selection-start-line="61" selection-start-column="66" selection-end-line="61" selection-end-column="66" />
+        <state vertical-scroll-proportion="-1.5517242" vertical-offset="755" max-vertical-offset="1320">
+          <caret line="40" column="22" selection-start-line="40" selection-start-column="22" selection-end-line="40" selection-end-column="22" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../UI/views/player/play.ejs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.89619374" vertical-offset="582" max-vertical-offset="1240">
+          <caret line="55" column="82" selection-start-line="55" selection-start-column="82" selection-end-line="55" selection-end-column="82" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../ojclient/debugger_test.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.22075056" vertical-offset="0" max-vertical-offset="1460">
+          <caret line="5" column="27" selection-start-line="5" selection-start-column="27" selection-end-line="5" selection-end-column="27" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/public/scripts/editorScript.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="1487" max-vertical-offset="3220">
-          <caret line="141" column="39" selection-start-line="141" selection-start-column="39" selection-end-line="141" selection-end-column="39" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="3287" max-vertical-offset="4900">
+          <caret line="140" column="39" selection-start-line="140" selection-start-column="39" selection-end-line="140" selection-end-column="39" />
           <folding>
-            <element signature="e#1000#1082#0" expanded="false" />
-            <element signature="e#1120#1527#0" expanded="false" />
-            <element signature="n#!!block;n#check#0" expanded="false" />
-            <element signature="e#1651#2134#0" expanded="false" />
-            <element signature="e#2182#2414#0" expanded="false" />
-            <element signature="e#2451#2683#0" expanded="false" />
-            <element signature="e#3694#4103#0" expanded="false" />
-            <element signature="e#4138#4513#0" expanded="false" />
-            <element signature="e#5097#5468#0" expanded="false" />
-            <element signature="e#5780#5819#0" expanded="false" />
+            <element signature="e#4667#4707#0" expanded="false" />
+            <element signature="n#!!block;n#printBreakpoints#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/views/pages/editor.ejs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-11.034483" vertical-offset="1060" max-vertical-offset="2320">
+          <caret line="69" column="40" selection-start-line="69" selection-start-column="40" selection-end-line="69" selection-end-column="40" />
+          <folding>
+            <element signature="n#style#0;n#div#1;n#div#2;n#div#1;n#div#0;n#div#0;n#main#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/scripts/ace/ace.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="58194" max-vertical-offset="368660">
+          <caret line="2918" column="48" selection-start-line="2918" selection-start-column="48" selection-end-line="2918" selection-end-column="48" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+            <element signature="e#428731#429467#0" expanded="false" />
+            <element signature="e#429576#430192#0" expanded="false" />
+            <element signature="e#430236#431822#0" expanded="false" />
+            <element signature="e#431940#433275#0" expanded="false" />
+            <element signature="e#433342#433980#0" expanded="false" />
+            <element signature="e#434028#434096#0" expanded="false" />
+            <element signature="e#434143#439570#0" expanded="false" />
+            <element signature="e#439610#439654#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/server.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="1960" max-vertical-offset="3580">
-          <caret line="113" column="0" selection-start-line="113" selection-start-column="0" selection-end-line="113" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.72727275" vertical-offset="1400" max-vertical-offset="3760">
+          <caret line="86" column="28" selection-start-line="86" selection-start-column="28" selection-end-line="86" selection-end-column="28" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/scripts/ace/ace.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.94750655" vertical-offset="57059" max-vertical-offset="362020">
-          <caret line="2899" column="26" selection-start-line="2899" selection-start-column="26" selection-end-line="2899" selection-end-column="26" />
-          <folding>
-            <element signature="e#386010#386658#0" expanded="false" />
-            <element signature="e#386754#387298#0" expanded="false" />
-            <element signature="e#387337#388803#0" expanded="false" />
-            <element signature="e#388912#390147#0" expanded="false" />
-            <element signature="e#390209#390790#0" expanded="false" />
-            <element signature="e#390833#390893#0" expanded="false" />
-            <element signature="e#390935#396118#0" expanded="false" />
-            <element signature="e#396153#396189#0" expanded="false" />
-            <element signature="e#396834#396881#0" expanded="false" />
-            <element signature="e#396918#396956#0" expanded="false" />
-            <element signature="e#396992#397038#0" expanded="false" />
-            <element signature="e#397080#397130#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>

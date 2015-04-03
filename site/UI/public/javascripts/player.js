@@ -1,7 +1,7 @@
 /**
  * Created by zy on 2015/3/29.
  */
-    //窗口运行中 按照像素 固定位置拖动，保存则保存运动比例
+//窗口运行中 按照像素 固定位置拖动，保存则保存运动比例
 var initialPlayerWidth=document.getElementById("playerwholeDiv").clientWidth;
 var initialFrameWidth=initialPlayerWidth*0.99;//两个窗口总大小
 var initialEditorWidth=initialPlayerWidth*0.59;
@@ -192,34 +192,8 @@ WindowController.prototype.stopRecord = function(){
     $("#windowConBtnGro").off("click.frame");
 };
 
-/**
- * Created by blueking on 2015/3/17.
- */
-var editor = function(){
-    this.state=null;
-    this.name = "editor";
-};
 
-editor.prototype.setAction = function(action){
-    console.log(this.name+action);
-    $("#editor").val(action);
-};
-editor.prototype.getScene = function(){
-    return $("#editor").val();
-};
-
-
-
-//当调用该函数时，editor和白板应该将当前状态展现到相应组件
-editor.prototype.setScene = function(state){
-    this.state = state;
-    console.log(state);
-    $("#editor").val(state);
-};
-
-
-var editor = new editor();
-var recorder0 = new recorder(editor);
+var recorder0 = new recorder(editorRecord);
 var recorder1 = new recorder(whiteboard);
 var windowController=new WindowController();
 var recorder2 = new recorder(windowController);
@@ -227,6 +201,10 @@ var timeline = new timeline();
 timeline.addRecorder(recorder0);
 timeline.addRecorder(recorder1);
 timeline.addRecorder(recorder2);
+
+function sendEditorAction(action){
+    timeline.saveOneStep(recorder0,action);
+}
 
 //发送白板action
 function sendAction(action){
@@ -238,11 +216,6 @@ function start_record(){
     onRecord = true;                            //设置白板状态，可以录制
     console.log("start record");
     timeline.record();
-    $("#editor").change(function(){
-        var action = $("#editor").val();
-        timeline.saveOneStep(recorder0,action);
-    });
-
     windowController.startRecord();
 
 }
@@ -254,14 +227,36 @@ function stop_record(){
     windowController.stopRecord();
 }
 
+var isFirstClick = true;
 function playback(){
-    clear();                                        //清空白板
-    console.log("start to play");
-    $("#editor").val('');
-    //$("#whiteboard").val('');
     //totalTime从存储的地方取出总时间
     var totalTime = timeline.getTotalTime();
-    timeline.play(0,totalTime);
+    var playBtnVal = playAudio.text();
+    var playedTime = 0;
+    if(isFirstClick == true){
+        clear();                                        //清空白板
+        console.log("start to play,totaltime" + totalTime);
+        $("#editor").val('');                           //清空编辑器
+        $("#foreline").css("width",0.1 + "%");          //清空timeline
+        audio.play();
+        playAudio.text('暂停');
+        timeline.play(0,totalTime);
+        isFirstClick = false;
+    }
+    else if(playBtnVal == '播放' && isFirstClick == false){
+        audio.play();
+        timeline.play(playedTime,totalTime);
+        playAudio.text('暂停');
+    }
+    else if(playBtnVal == '暂停' && isFirstClick == false){
+        audio.pause();
+        timeline.pause();
+        playedTime = timeline.getCurrentTime();
+        playAudio.text('播放');
+    }
+    else{
+        return;
+    }
 }
 
 //窗口放置好后，将player窗口的比例布局，变为像素固定布局
@@ -274,4 +269,4 @@ $("#singleEditerBtn").on("click",singleEditerClick);
 $("#singleWBoardBtn").on("click",singleWBoardClick);
 
 $("#stop").click(stop_record);
-$("#play").click(playback);
+$("#play").click(playback);     //如何第一次点击才调用，后面的不再调用

@@ -1,6 +1,8 @@
 <% include ../globalView/header.ejs %>
 <!--..放单独需要的CSS -->
 <link rel="stylesheet" type="text/css" href="/stylesheets/whiteboard.css">
+<link rel="stylesheet" type="text/css" href="/stylesheets/editorStyle.css">
+
 <% include ../globalView/mainNavbar.ejs%>
 <div id="container" class="container">
 <!--这里放置 IDE 白板等 -->
@@ -43,6 +45,11 @@
 <script src="/javascripts/whiteboardjs/dragAdd.js"></script>
 <script src="/javascripts/whiteboardjs/record.js"></script>
 <script src="/javascripts/whiteboardjs/replay.js"></script>
+
+<script type="text/javascript" src="/javascripts/editor/ace/ace.js"></script>
+<script type="text/javascript" src="/javascripts/editor/ace/ext-language_tools.js"></script>
+<script type="text/javascript" src="/javascripts/editor/editorScript.js"></script>
+<script type="text/javascript" src="/javascripts/editor/editorRecord.js"></script>
 
 <script src="/javascripts/RecordRTC.js"></script>
 <script src="/javascripts/recorder.js"></script>
