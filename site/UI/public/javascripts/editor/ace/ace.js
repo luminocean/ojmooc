@@ -2897,6 +2897,9 @@ define("ace/mouse/mouse_event", ["require", "exports", "module", "ace/lib/event"
         }
 
         this.getButton = function () {
+            var actionSet = new setBreakpointChange();
+            var actionClear = new clearBreakpointChange();
+
             if (!this.editor.getDebugStatus()) {
                 if (this.$inSelection == null)
                     var pos = this.getDocumentPosition();
@@ -2906,9 +2909,13 @@ define("ace/mouse/mouse_event", ["require", "exports", "module", "ace/lib/event"
                     if (this.x < 20 + target.getBoundingClientRect().left) {
                         if (this.editor.session.$breakpoints[pos.row] == "ace_breakpoint") {
                             this.editor.session.clearBreakpoint(pos.row);
+                            actionClear.value = pos.row;
+                            sendActionOverEditor(actionClear);
                         }
                         else {
                             this.editor.session.setBreakpoint(pos.row);
+                            actionSet.value = pos.row;
+                            sendActionOverEditor(actionSet);
                         }
                     }
                 }
@@ -2920,10 +2927,16 @@ define("ace/mouse/mouse_event", ["require", "exports", "module", "ace/lib/event"
                     if (this.x < 20 + target.getBoundingClientRect().left) {
                         if (this.editor.session.$breakpoints[pos.row] == "ace_breakpoint") {
                             this.editor.session.clearBreakpoint(pos.row);
+
+                            actionClear.value = pos.row;
+                            sendActionOverEditor(actionClear);
                             this.clearBreakpointToServer(this.editor.getDebugId(), pos.row);
                         }
                         else {
                             this.editor.session.setBreakpoint(pos.row);
+
+                            actionSet.value = pos.row;
+                            sendActionOverEditor(actionSet);
                             this.setBreakpointToServer(this.editor.getDebugId(), pos.row);
                         }
                     }

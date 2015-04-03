@@ -45,11 +45,14 @@ $(document).ready(function () {
         enableSnippets: true,
         enableLiveAutocompletion: true
     });
+
 });
 
 
 $("#fontsize").change(function () {
     var size = $("#fontsize").val();
+    var action = new fontChange(size);
+    sendActionOverEditor(action);
     $("#editor").css("font-size", size);
 
 });
@@ -57,6 +60,9 @@ $("#fontsize").change(function () {
 $("#language").change(function () {
     var session = editor.getSession();
     var lan = $("#language").val();
+
+    var action = new languageChange(lan);
+    sendActionOverEditor(action);
 
     switch (lan) {
         case "cpp":
@@ -90,20 +96,30 @@ $("#run").click(function () {
         data: {code: code, language: lan, params: params},
         dataType: "text",
         success: function (result) {
-            outputEditor.setValue(result);
+            outputEditor.setValue(result,-1);
         },
         error: function () {
-            outputEditor.setValue("Error:can not connect to the server!");
+            outputEditor.setValue("Error:can not connect to the server!",-1);
         }
     });
 });
-
 //debug模块
 $("#debugInto").click(function () {
+    var action = new debugIntoChange();
+    sendActionOverEditor(action);
+    runToDebug();
+});
+
+$("#debugOut").click(function () {
+    var action = new debugOutChange();
+    sendActionOverEditor(action);
+    debugToRun();
+});
+
+function runToDebug(){
     $("#editor").css({"width":editorWidth*0.48});
     $("#inputEditor").css({"width":editorWidth*0.24});
     $("#outputEditor").css({"width":editorWidth*0.24});
-
     $("#midPanel").css({"width":editorWidth*0.49});
     $("#leftPanel").show();
     $("#rightPanel").show();
@@ -111,13 +127,12 @@ $("#debugInto").click(function () {
     $("#debugOut").show();
     $("#debugInto").hide();
     $("#run").hide();
-});
+}
 
-$("#debugOut").click(function () {
+function debugToRun(){
     $("#editor").css({"width":editorWidth*0.96});
     $("#inputEditor").css({"width":editorWidth*0.48});
     $("#outputEditor").css({"width":editorWidth*0.48});
-
     $("#midPanel").css({"width":editorWidth*0.97});
     $("#leftPanel").hide();
     $("#rightPanel").hide();
@@ -125,9 +140,11 @@ $("#debugOut").click(function () {
     $("#debugOut").hide();
     $("#debugInto").show();
     $("#run").show();
-});
+}
+
 
 $("#debugBegin").click(function () {
+
 
     //清空stdout，locals
     stdout = "";
@@ -135,7 +152,6 @@ $("#debugBegin").click(function () {
     $("#variableTb").empty();
     $("#breakpointsTb").empty();
 
-    highlightLine(27);
     //设置debugstatus
     editor.setDebugStatus(true);
 
@@ -157,10 +173,10 @@ $("#debugBegin").click(function () {
             stdout += msg.stdout;
             printLocals(msg.locals);
             editor.setDebugId(debugId);
-            outputEditor.setValue(stdout);
+            outputEditor.setValue(stdout,-1);
         },
         error: function () {
-            outputEditor.setValue("Error:can not connect to the server!");
+            outputEditor.setValue("Error:can not connect to the server!",-1);
         }
     });
 });
@@ -185,10 +201,10 @@ $("#exit").click(function () {
         dataType: "json",
         success: function (msg) {
             stdout += msg.stdout;
-            outputEditor.setValue(stdout);
+            outputEditor.setValue(stdout,-1);
         },
         error: function () {
-            outputEditor.setValue("Error:can not connect to the server!");
+            outputEditor.setValue("Error:can not connect to the server!",-1);
         }
     });
 });
@@ -223,7 +239,7 @@ function printVariables(variables) {
             }
         },
         error: function () {
-            outputEditor.setValue("Error:can not connect to the server!");
+            outputEditor.setValue("Error:can not connect to the server!",-1);
         }
     });
 
@@ -249,16 +265,10 @@ function step(url, debugId) {
             stdout += msg.stdout;
             printVariables(variables);
             printLocals(msg.locals);
-            outputEditor.setValue(stdout);
+            outputEditor.setValue(stdout,-1);
         },
         error: function () {
-            outputEditor.setValue("Error:can not connect to the server!");
+            outputEditor.setValue("Error:can not connect to the server!",-1);
         }
     });
-}
-
-function highlightLine(lineNum){
-    var Range = ace.require("ace/range");
-    var range = new Range(lineNum, 0, lineNum, 255);
-    editor.getSession().addMarker(range,"ace_active_line","background");
 }
