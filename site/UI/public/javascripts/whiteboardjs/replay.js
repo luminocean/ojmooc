@@ -1,17 +1,3 @@
-$("#replay").bind("click",function(e){
-    clear();
-    var i = 0;
-    var rep = setInterval(function(){
-        if(i < actions.length){
-            replayAction(actions[i]);
-            i++;
-        }
-        else{
-            clearInterval(rep);
-        }
-    },100);
-});
-
 //回放操作
 WhiteBoard.prototype.setAction = function(action){
     replayAction(action);
@@ -130,7 +116,21 @@ function replay_addTriangle(action){
 }
 
 function replay_addImage(action){
-    addImage(action.id,action.val[0],action.val[1],action.val[2]);
+    var imgid = action.val[0];
+    var img = new Image();
+
+    var xhr = new XMLHttpRequest();
+    var url = "http://127.0.0.1:1337/download";
+    xhr.open("POST",url,true);
+    xhr.onreadystatechange = function(){
+        if(xhr.readyState == 4 && xhr.status == 200){
+            var imgdata = xhr.response;
+            var suffix = imgid.split(".")[1];
+            img.src = 'data:image/'+suffix +';base64,' + imgdata;
+            addImage(action.id,img,action.val[1],action.val[2]);
+        }
+    }
+    xhr.send(imgid);
 }
 
 function replay_resizeCircleAndTriangle(action){
@@ -163,7 +163,6 @@ function replayAction(action){
 }
 //鼠标拖动画线
 function addLinePoint(id,val){
-    console.log(val);
     whiteboard.currentLine.style.pointList.push(val);
     zr.render();
 }

@@ -29,18 +29,30 @@ $("#graphBoard")[0].addEventListener("drop",function(event){
         var reader = new FileReader();                                  //读取图片并显示
         reader.onload = (function(thefile){
             return function(e){
-
                 var image = new Image();
                 image.src = e.target.result;
-                addImage(generateID(),image,xLoc,yLoc);
+                var id = generateID();
+                addImage(id,image,xLoc,yLoc);
 
-                console.log(e.target.result);
+                uploadFile(thefile,id,xLoc,yLoc);
             };
         })(file);
         reader.readAsDataURL(file);
-
-
-
     }
 });
 
+function uploadFile(file,id,x,y){
+    var fd = new FormData();
+    fd.append("fileToUpload", file);
+
+    var xhr = new XMLHttpRequest();
+    var url = "http://127.0.0.1:1337/upload";
+    xhr.onreadystatechange = function(){
+        if(xhr.readyState == 4 && xhr.status == 200){
+            var imgid = xhr.responseText;
+            actionPerformed(new Action(id,"addImage",[imgid,x,y]));             //添加图片操作
+        }
+    };
+    xhr.open("POST",url,true);
+    xhr.send(fd);
+}
