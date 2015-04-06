@@ -13,13 +13,29 @@ var router = express.Router();
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', {
+  var indexObject= {
     title: '首页',
     active:'index',
     mostRecSubjects:Subject.getMostRecSubjects(4),
     mostRecTeachers:User.getMostRecTeachers(4),
-    studyingClasses:User.getMyStudyingClasses(4)
-  });
+    studyingClasses:[]
+  };
+  if(res.locals.user){
+    //这里res.locals.user 不为user对象,不能调用对象方法?????
+    //传递过程中为undifined的属性都去掉了?????
+    if(res.locals.user instanceof User){
+      console.log("it;s true");
+    }else{
+      console.log("it;s false");
+      console.log(typeof(res.locals.user));
+    }
+    var temp=new User(res.locals.user);
+    console.log(temp);
+    console.log(temp instanceof User);
+    indexObject.studyingClasses=temp.getMyStudyingClasses(4);
+  }
+
+  res.render('index',indexObject);
 });
 
 router.get('/reg', function(req, res, next) {
@@ -35,7 +51,13 @@ router.get('/login',function(req,res,next){
 });
 
 router.get('/classes', function(req, res, next) {
-  res.render('classes', { title: '课程',active:'classes'});
+  var classesObject={
+    title: '课程',
+    active:'classes',
+    allSubjectsShowObject:Subject.getAllSubjectShow(),
+    allTeachers:User.getAllTeacher()
+  };
+  res.render('classes',classesObject);
 });
 
 router.get('/myClass', function(req, res, next) {
@@ -142,8 +164,10 @@ router.post('/login', function(req, res, next) {
       req.session.error='密码错误';
       return res.redirect('/login');
     }
+    console.log("mmmmmm");
+    console.log(user instanceof User);
     req.session.user = user;
-    req.session.success='登录成功';
+    req.session.success='登入成功';
     res.redirect('/');
   });
 });

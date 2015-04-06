@@ -1,0 +1,229 @@
+<%- include globalView/header.ejs %>
+<!--..这里放单独需要的CSS 注意顺序-->
+
+
+<% include globalView/mainNavbar.ejs%>
+
+<div id="container" class="container">
+    <!-- 放置页面内容-->
+    <div role="tabpanel">
+
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs" role="tablist">
+            <li role="presentation" class="col-md-2 active"><a href="#allSubject" aria-controls="allSubject" role="tab" data-toggle="tab">全部课程</a></li>
+            <li role="presentation" class="col-md-2 "><a href="#allTeacher" aria-controls="allTeacher" role="tab" data-toggle="tab">全部老师</a></li>
+        </ul>
+
+        <!-- Tab panes -->
+        <!--全部老师/全部课程 总的导航-->
+        <div class="tab-content">
+            <!--全部课程-->
+            <div role="tabpanel" class="tab-pane fade in active" id="allSubject">
+                <!--课程中按课程类别的导航-->
+                <div role="tabpanel" id="allClassesDiv">
+
+                    <!-- 1 level Nav tabs -->
+                    <!--<div>-->
+                    <ul id="allClass1levelMenu" class="well nav nav-pills nav-stacked pull-left" role="tablist">
+                        <li role="presentation" class="active">
+                            <a id="allclassA" href="#allclass" aria-controls="allclass" role="tab" data-toggle="tab">
+                                全部课程
+                            </a>
+                        </li>
+                        <li class="mulLevelOf1" role="presentation">
+                            <a  href="#programBasic" aria-controls="programBasic" role="tab" data-toggle="tab">
+                                程序设计基础
+                                <span class="glyphicon glyphicon-chevron-right pull-right" aria-hidden="true">
+                                </span>
+                            </a>
+                        </li>
+                        <li class="mulLevelOf1" role="presentation">
+                            <a  href="#dataStructure" aria-controls="datastructure" role="tab" data-toggle="tab">
+                                数据结构
+                                <span class="glyphicon glyphicon-chevron-right pull-right" aria-hidden="true">
+                                </span>
+                            </a>
+                        </li>
+                        <li class="mulLevelOf1" role="presentation">
+                            <a  href="#algorithm" aria-controls="algorithm" role="tab" data-toggle="tab">
+                                算法分类
+                                <span class="glyphicon glyphicon-chevron-right pull-right" aria-hidden="true">
+                                </span>
+                            </a>
+                        </li>
+                    </ul>
+                    <!--</div>-->
+
+
+                    <!--2 level Nav Tabs-->
+                    <div id="allClass2levelMenu" class="col-md-2 tab-content pull-left">
+                        <div role="tabpanel" class="tab-pane fade" id="programBasic">
+                            <ul class="well nav nav-pills nav-stacked allClassesMenu" role="tablist">
+                                <li role="presentation">
+                                    <a class="backTab" role="tab">
+                                    <span class="glyphicon glyphicon-chevron-left pull-left" aria-hidden="true">
+                                    </span>
+                                        BACK
+                                    </a>
+                                </li>
+                                <% var len=allSubjectsShowObject.programBasic.basicProNodeList.length;
+                                  var tempList=allSubjectsShowObject.programBasic.basicProNodeList;
+                                    for(var i=0;i<len;i++){
+                                %>
+                                <li role="presentation"><a  href="#<%=tempList[i].smallType%>" aria-controls="<%=tempList[i].smallType%>" role="tab" data-toggle="tab"><%= tempList[i].typeName%></a></li>
+                                <% }%>
+                                <% i=-1;len=-1;templist=null; %>
+                            </ul>
+                        </div>
+                        <div role="tabpanel" class="tab-pane fade" id="dataStructure">
+                            <ul class="well nav nav-pills nav-stacked allClassesMenu" role="tablist">
+                                <li role="presentation">
+                                    <a class="backTab" role="tab">
+                                    <span class="glyphicon glyphicon-chevron-left pull-left" aria-hidden="true">
+                                    </span>
+                                        BACK
+                                    </a>
+                                </li>
+                                <% var len=allSubjectsShowObject.dataStructure.dataStrNodeList.length;
+                                var tempList=allSubjectsShowObject.dataStructure.dataStrNodeList;
+                                for(var i=0;i<len;i++){
+                                %>
+                                <li role="presentation"><a  href="#<%=tempList[i].smallType%>" aria-controls="<%=tempList[i].smallType%>" role="tab" data-toggle="tab"><%= tempList[i].typeName%></a></li>
+                                <% }%>
+                                <% i=-1;len=-1;templist=null; %>
+                            </ul>
+                        </div>
+                        <div role="tabpanel" class="tab-pane fade" id="algorithm">
+                            <ul class="well nav nav-pills nav-stacked allClassesMenu" role="tablist">
+                                <li role="presentation">
+                                    <a class="backTab" role="tab">
+                                    <span class="glyphicon glyphicon-chevron-left pull-left" aria-hidden="true">
+                                    </span>
+                                        BACK
+                                    </a>
+                                </li>
+                                <% var len=allSubjectsShowObject.algorithm.algorithmNodeList.length;
+                                var tempList=allSubjectsShowObject.algorithm.algorithmNodeList;
+                                for(var i=0;i<len;i++){
+                                %>
+                                <li role="presentation"><a  href="#<%=tempList[i].smallType%>" aria-controls="<%=tempList[i].smallType%>" role="tab" data-toggle="tab"><%= tempList[i].typeName%></a></li>
+                                <% }%>
+                                <% i=-1;len=-1;templist=null; %>
+                            </ul>
+                        </div>
+                    </div>
+
+
+
+                    <!-- Tab panes classContents-->
+                    <div id="allClassesContent" class="tab-content  pull-right">
+
+                        <!--<div class="divider-vertical pull-left "></div>-->
+
+                        <% var tempsytuList=allSubjectsShowObject.tySuList;
+                            for(typeName in allSubjectsShowObject.tySuList){
+
+                        %>
+
+                        <div role="tabpanel" class="tab-pane fade in <% if(typeName=="allclass"){%> active <% }%>" id="<%= typeName%>">
+                            <div class="row">
+                                <% var len=tempsytuList[typeName].length;
+                                    var templist=tempsytuList[typeName];
+                                for(var i=0;i<len;i++){
+                                %>
+                                <div class="col-sm-6 col-md-4">
+                                    <div class="thumbnail">
+                                        <img src="<%= templist[i].sPicture %>" class="" />
+                                        <div class="caption">
+                                            <a href="" class="text-center"><%= templist[i].sName%></a>
+                                            <span class="recInfo pull-right">
+                                                <span><%= templist[i].sFollowerNum%></span>
+                                                <span class="glyphicon glyphicon-star"></span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <% }%>
+                            </div>
+                        </div>
+                        <%} %>
+                        <% tempsytuList=null;templist=null;len=-1;%>
+
+                    </div>
+                </div>
+            </div>
+            <!--全部老师-->
+            <div role="tabpanel" class="tab-pane fade" id="allTeacher">
+                <div id="allTeacherDiv">
+                    <div class="row">
+                        <% var len=allTeachers.length;
+                        for(var i=0;i<len;i++){
+                        %>
+                        <div class="col-sm-6 col-md-3">
+                            <div class="thumbnail">
+                                <img src="<%= allTeachers[i].uPicture %>" class="" />
+                                <div class="caption">
+                                    <a href="" class=" text-center"><%= allTeachers[i].uUserName%></a>
+                                <span class="pull-right">
+                                    <span><%= allTeachers[i].uFollowerNum%></span>
+                                    <span class="glyphicon glyphicon-star"></span>
+                                </span>
+                                    <!--<p><a href="#" class="btn btn-primary">Action</a> <a href="#" class="btn">Action</a></p>-->
+                                </div>
+                            </div>
+                        </div>
+                        <% }%>
+                        <%len=-1;i=-1;%>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+
+
+</div>
+
+<%- include globalView/footer.ejs%>
+<!-- ..下面放单独需要的JS，注意顺序 -->
+<script type="text/javascript">
+
+    var colmd8="66.66666667%";
+    var colmd10="83.33333333%";
+
+    $('.backTab').on("click",function(){
+        $('#allClass2levelMenu').hide();
+        $('#allClassesContent').animate({"width":colmd10});
+    });
+
+    //点开有二级菜单的，就把显示内容缩小
+    $('#allClass1levelMenu .mulLevelOf1 a[data-toggle="tab"]').on('show.bs.tab', function () {
+//        $('#allClassesContent').animate({"width":colmd8});
+        $('#allClassesContent').width(colmd8);
+    });
+    //点击1级菜单时，二级菜单已经更换再显示二级菜单块
+    $('#allClass1levelMenu .mulLevelOf1 a[data-toggle="tab"]').on('shown.bs.tab', function () {
+        $('#allClass2levelMenu').show();
+    });
+
+    //二级菜单选择完毕。复原大小
+    $('#allClass2levelMenu a[data-toggle="tab"]').on('show.bs.tab',function(){
+        $('#allClass2levelMenu').hide();
+        $('#allClassesContent').animate({"width":colmd10});
+    });
+
+    $('#allclassA').on('show.bs.tab',function(){
+        $('#allClass2levelMenu').hide();
+        $('#allClassesContent').animate({"width":colmd10});
+    });
+
+    $('a[data-toggle="tab"]').on('shown.bs.tab',function(){
+        $('#allClassesDiv li').removeClass('active');
+    });
+</script>
+
+</body>
+</html>
+

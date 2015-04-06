@@ -39,8 +39,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 //
 //});
 var newUser = new User({
-  uUserName: 1234,
-  uPassWord: 123,
+  uUserName: "1234",
+  uPassWord: "123",
   uIdentity:0
 });
 

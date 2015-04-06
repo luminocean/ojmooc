@@ -37,7 +37,6 @@ var tempUser=new User({
     uPicture:"img/test.png"
 });
 
-module.exports = User;
 
 User.prototype.save = function save(callback) {
     // 存入 mysql
@@ -50,9 +49,11 @@ User.prototype.save = function save(callback) {
         }
         console.log("INSERT Return ==> ");
         console.log(rows);
+
+        callback();
     });
 
-    callback();
+    console.log("uuuuu");
 };
 
 
@@ -96,15 +97,21 @@ User.get = function get(uUserName, callback) {
 
         if(rows.length==1){
             //后面row中取值的话，需要用数据库的表示
-            var user = new User({
-                uUserName: rows[0].username,
-                uPassWord: rows[0].password,
-                uIdentity: rows[0].identity
+            var getuser = new User({
+                uUserName:rows[0].username,
+                uPassWord:rows[0].password,
+                uIdentity:rows[0].identity
             });
             console.log("aa"+rows[0].username);
             console.log("aa"+rows[0].password);
 
-            return callback("",user);
+            if(getuser instanceof User){
+                console.log("getuser it;s true");
+            }else{
+                console.log("getuser it;s false");
+            }
+
+            return callback("",getuser);
         }
 
     });
@@ -124,10 +131,11 @@ User.getMostRecTeachers = function getMostRecTeachers(getNum, callback) {
     return userList;
 };
 
+//学生选课信息 的返回对象
 function StuChooseSub(stuChooseSub){
     this.uID=stuChooseSub.uID;
     this.sID=stuChooseSub.sID;
-    this.state=stuChooseSub.state;
+    this.status=stuChooseSub.status; //还没有开始，还是已经开始resume
 };
 
 
@@ -136,13 +144,15 @@ function StuChooseSub(stuChooseSub){
 
  若num为0，返回所有的选择的课程
  */
-User.getMyStudyingClasses = function getMyStudyingClasses(getNum, callback) {
+User.prototype.getMyStudyingClasses = function getMyStudyingClasses(getNum, callback) {
+    //根据userID，找到他正在上的课程
+    console.log("this is in getMyStudyingClasses");
     var returnThing={
         subjectName:"subjectName",
         teacherName:"teacherName",
-        subjectPicture:"img/test.png"
-        state:true,
-        lastStudy:"llllllastStudy",
+        subjectPicture:"img/test.png",
+        status:true,
+        lastStudy:"llllllastStudyafaf af",
         lastStudyTime:"afa"
     };
     var chooseSubList=[
@@ -153,3 +163,22 @@ User.getMyStudyingClasses = function getMyStudyingClasses(getNum, callback) {
 
     return chooseSubList;
 };
+
+/*
+ return 返回所有老师的list，数据库检索Identity为1的
+  要写成callback形式
+ */
+User.getAllTeacher = function getAllTeacher(callback) {
+    var userList=[
+        new User(tempUser),
+        new User(tempUser),
+        new User(tempUser),
+        new User(tempUser),
+        new User(tempUser),
+        new User(tempUser)
+    ];
+
+    return userList;
+};
+
+module.exports = User;
