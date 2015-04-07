@@ -1,4 +1,4 @@
-<div id="optionPanel">
+<div id="optionPanel" class="col-sm-12">
     <span class="label label-default">大小</span>
     <select id="fontsize" size="1">
         <option value="11px">11px</option>
@@ -18,8 +18,8 @@
     <input type="submit" id="debugOut" value="退出调试">
 </div>
 
-<div id="editorPanel">
-    <div id="leftPanel" style="float: left;">
+<div id="editorPanel" class="col-sm-12">
+    <div id="leftPanel" style="float: left;" class="col-sm-3">
         <div id="variable" class="panel panel-info col-sm-12 debugInfoPanel" style="overflow: scroll">
             <div class="panel-heading">变量
                 <button type="button" class="btn btn-default" aria-label="Right Align" data-toggle="modal"
@@ -38,13 +38,13 @@
         </div>
     </div>
 
-    <div id="midPanel" style="float: left">
-        <div id="editor"></div>
-        <div id="inputEditor" style="float: left;"></div>
-        <div id="outputEditor" style="float: left;"></div>
+    <div id="midPanel" style="float: left" class="col-sm-12">
+        <div id="editor" class="col-sm-12"></div>
+        <div id="inputEditor" style="float: left;" class="col-sm-6"></div>
+        <div id="outputEditor" style="float: left;" class="col-sm-6"></div>
     </div>
 
-    <div id="rightPanel" style="float: left;">
+    <div id="rightPanel" style="float: left;" class="col-sm-3">
         <div id="breakpoint" class="panel panel-info  debugInfoPanel" style="overflow: scroll;">
             <div class="panel-heading">断点</div>
             <table id="breakpointsTb" class="table table-bordered"></table>
@@ -52,6 +52,30 @@
         <div id="stack" class="panel panel-info  debugInfoPanel" style="overflow: scroll;">
             <div class="panel-heading">堆栈</div>
             <table id="localsTb" class="table table-bordered"></table>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="addVariable" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">添加变量</h4>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="recipient-name" class="control-label">变量名：</label>
+                        <input type="text" class="form-control" id="variable-name">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button id="addVariableBtn" type="button" class="btn btn-primary">添加</button>
+                <button id="closeModalBtn" type="button" class="btn btn-default">关闭</button>
+            </div>
         </div>
     </div>
 </div>

@@ -14,12 +14,12 @@ var editorWidth = document.getElementById("editerDiv").clientWidth;
 
 $(document).ready(function () {
 
-    $("#inputEditor").css({"width":editorWidth*0.48});
-    $("#outputEditor").css({"width":editorWidth*0.48});
-    $("#leftPanel").css({"width":editorWidth*0.24});
-    $("#rightPanel").css({"width":editorWidth*0.24});
-    $("#editor").css({"width":editorWidth*0.96});
-    $("#midPanel").css({"width":editorWidth*0.97});
+    //$("#inputEditor").css({"width":editorWidth*0.48});
+    //$("#outputEditor").css({"width":editorWidth*0.48});
+    //$("#leftPanel").css({"width":editorWidth*0.24});
+    //$("#rightPanel").css({"width":editorWidth*0.24});
+    //$("#editor").css({"width":editorWidth*0.96});
+    //$("#midPanel").css({"width":editorWidth*0.97});
 
     $("#leftPanel").hide();
     $("#rightPanel").hide();
@@ -117,10 +117,11 @@ $("#debugOut").click(function () {
 });
 
 function runToDebug(){
-    $("#editor").css({"width":editorWidth*0.48});
-    $("#inputEditor").css({"width":editorWidth*0.24});
-    $("#outputEditor").css({"width":editorWidth*0.24});
-    $("#midPanel").css({"width":editorWidth*0.49});
+    //$("#editor").css({"width":editorWidth*0.48});
+    //$("#inputEditor").css({"width":editorWidth*0.24});
+    //$("#outputEditor").css({"width":editorWidth*0.24});
+    //$("#midPanel").css({"width":editorWidth*0.49});
+    $("#midPanel").removeClass("col-sm-12").addClass("col-sm-6");
     $("#leftPanel").show();
     $("#rightPanel").show();
     $("#debugBegin").show();
@@ -130,10 +131,11 @@ function runToDebug(){
 }
 
 function debugToRun(){
-    $("#editor").css({"width":editorWidth*0.96});
-    $("#inputEditor").css({"width":editorWidth*0.48});
-    $("#outputEditor").css({"width":editorWidth*0.48});
-    $("#midPanel").css({"width":editorWidth*0.97});
+    //$("#editor").css({"width":editorWidth*0.96});
+    //$("#inputEditor").css({"width":editorWidth*0.48});
+    //$("#outputEditor").css({"width":editorWidth*0.48});
+    //$("#midPanel").css({"width":editorWidth*0.97});
+    $("#midPanel").removeClass("col-sm-6").addClass("col-sm-12");
     $("#leftPanel").hide();
     $("#rightPanel").hide();
     $("#debugBegin").hide();
@@ -248,7 +250,7 @@ function printVariables(variables) {
 
 function printBreakpoints(breakpoints){
     for (var key in breakpoints) {
-        $("#breakpointsTb").append("<tr><td>" + key + "</td><td>" + breakpoints[key] + "</td></tr>");
+        $("#breakpointsTb").append("<tr><td>" + key + "</td><td>"+"breakpoint"+ "</td></tr>");
     }
 }
 
