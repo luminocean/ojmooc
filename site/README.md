@@ -30,9 +30,17 @@
 环境启动后，本机的8080和8081端口将会分别提供编译执行服务（ojrunner提供）以及debug服务（ojdebugger提供）。然后可以通过操作ojclient来发出请求了，具体参见ojclient的文档
 
 ##### 2.如何安装环境
+首先准备全新的ubuntu14.04环境。有三个方案：
+> 1. 阿里云等云平台直接新建云服务器。如果是按时付费的话价格很便宜，适合快速简单的测试使用
+> 2. 使用vagrant，可以在本地快速部署linux虚拟机，推荐
+> 参考http://blog.smdcn.net/article/1308.html
+> 3. 在virtualbox或vmware虚拟机中手动安装
+
 在全新的ubuntu14.04系统下，依次执行以下操作：
-> * （建议）切换到非root用户下。如果没有非root用户（比如在阿里云中新建的服务器），则新建用户 `useradd vagrant -m -s /bin/bash`，用`passwd vagrant`设置初始密码，将vagrant加入/etc/sudoers从而使其可以使用sudo
+> * 首先切换到非root用户
+> 如果没有非root用户（比如在阿里云中新建的服务器，一开始只有root），则新建用户 `useradd vagrant -m -s /bin/bash`，用`passwd vagrant`设置初始密码，将vagrant加入/etc/sudoers从而使其可以使用sudo
 > * 执行`sudo apt-get install git`安装git
 > * 从git仓库中clone下ojmooc项目到当前用户的home目录下(~)
 > * sudo执行`ojmooc/site/ojrunner/script/setup/setup.sh`
 > * 执行`sudo gpasswd -a $USER docker && sudo su $USER`，从而让该普通用户具有直接操作docker的权限
+> 安装完毕后即可启动环境（参考“如何启动环境”）
