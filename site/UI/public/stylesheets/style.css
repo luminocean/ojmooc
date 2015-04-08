@@ -10,6 +10,8 @@
     background-color: #fa6900;
     height: 8px;
     border-radius: 5px;
+    position: relative;
+    left: 1px;
 }
 <!-- zhangliming timeline.css  end -->
 
