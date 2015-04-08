@@ -8,6 +8,7 @@ var bodyParser = require('body-parser');
 
 var index = require('./routes/index');
 var users = require('./routes/users');
+var editorCompile = require('./routes/editorCompile');
 
 //test用
 var User=require('./models/User');
@@ -56,6 +57,7 @@ app.use(function (req, res, next) {
 
 app.use('/', index);
 app.use('/users', users);
+app.use('/play/editor',editorCompile);
 //app.get('/hello',routes);
 //app.get('/hello',users);
 

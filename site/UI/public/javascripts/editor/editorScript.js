@@ -92,7 +92,7 @@ $("#run").click(function () {
 
     $.ajax({
         type: "POST",
-        url: "/editor/run",
+        url: "/play/editor/run",
         data: {code: code, language: lan, params: params},
         dataType: "text",
         success: function (result) {
