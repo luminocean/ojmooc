@@ -7,10 +7,11 @@ var stdout = "";
 var breakpoints = [];
 var variables = [];
 
+
 var editor = ace.edit("editor");
 var inputEditor = ace.edit("inputEditor");
 var outputEditor = ace.edit("outputEditor");
-var editorWidth = document.getElementById("editerDiv").clientWidth;
+//var editorWidth = document.getElementById("editerDiv").clientWidth;
 
 $(document).ready(function () {
 
@@ -20,6 +21,7 @@ $(document).ready(function () {
     //$("#rightPanel").css({"width":editorWidth*0.24});
     //$("#editor").css({"width":editorWidth*0.96});
     //$("#midPanel").css({"width":editorWidth*0.97});
+
 
     $("#leftPanel").hide();
     $("#rightPanel").hide();
@@ -48,6 +50,19 @@ $(document).ready(function () {
 
 });
 
+//$("#high").click(function () {
+//    var Range = ace.require("ace/range").Range;
+//    var range = new Range(3,0,3,144);
+//    console.log(range);
+//    var marker = editor.session.addMarker(range, "warning", "fullLine");
+//    content = editor.session.getTextRange(selectionRange);
+//});
+
+editor.getSession().selection.on("changeSelection", function () {
+    var range = editor.getSelectionRange();
+    var action = new selectionChange(range);
+    sendActionOverEditor(action);
+});
 
 $("#fontsize").change(function () {
     var size = $("#fontsize").val();
@@ -96,10 +111,10 @@ $("#run").click(function () {
         data: {code: code, language: lan, params: params},
         dataType: "text",
         success: function (result) {
-            outputEditor.setValue(result,-1);
+            outputEditor.setValue(result, -1);
         },
         error: function () {
-            outputEditor.setValue("Error:can not connect to the server!",-1);
+            outputEditor.setValue("Error:can not connect to the server!", -1);
         }
     });
 });
@@ -116,7 +131,7 @@ $("#debugOut").click(function () {
     debugToRun();
 });
 
-function runToDebug(){
+function runToDebug() {
     //$("#editor").css({"width":editorWidth*0.48});
     //$("#inputEditor").css({"width":editorWidth*0.24});
     //$("#outputEditor").css({"width":editorWidth*0.24});
@@ -130,7 +145,7 @@ function runToDebug(){
     $("#run").hide();
 }
 
-function debugToRun(){
+function debugToRun() {
     //$("#editor").css({"width":editorWidth*0.96});
     //$("#inputEditor").css({"width":editorWidth*0.48});
     //$("#outputEditor").css({"width":editorWidth*0.48});
@@ -167,7 +182,7 @@ $("#debugBegin").click(function () {
     }
     $.ajax({
         type: "POST",
-        url: "/editor/debugBegin",
+        url: "/play/editor/debugBegin",
         data: {code: code, language: lan, params: params, bps: bplines},
         dataType: "json",
         success: function (msg) {
@@ -175,38 +190,38 @@ $("#debugBegin").click(function () {
             stdout += msg.stdout;
             printLocals(msg.locals);
             editor.setDebugId(debugId);
-            outputEditor.setValue(stdout,-1);
+            outputEditor.setValue(stdout, -1);
         },
         error: function () {
-            outputEditor.setValue("Error:can not connect to the server!",-1);
+            outputEditor.setValue("Error:can not connect to the server!", -1);
         }
     });
 });
 
 $("#stepInto").click(function () {
-    step("/editor/stepInto", debugId);
+    step("/play/editor/stepInto", debugId);
 });
 
 $("#stepOver").click(function () {
-    step("/editor/stepOver", debugId);
+    step("/play/editor/stepOver", debugId);
 });
 
 $("#continue").click(function () {
-    step("/editor/continue", debugId);
+    step("/play/editor/continue", debugId);
 });
 
 $("#exit").click(function () {
     $.ajax({
         type: "POST",
-        url: "/editor/exit",
+        url: "/play/editor/exit",
         data: {debugId: debugId},
         dataType: "json",
         success: function (msg) {
             stdout += msg.stdout;
-            outputEditor.setValue(stdout,-1);
+            outputEditor.setValue(stdout, -1);
         },
         error: function () {
-            outputEditor.setValue("Error:can not connect to the server!",-1);
+            outputEditor.setValue("Error:can not connect to the server!", -1);
         }
     });
 });
@@ -232,7 +247,7 @@ function printVariables(variables) {
     $("#variableTb").empty();
     $.ajax({
         type: "POST",
-        url: "/editor/printVariables",
+        url: "/play/editor/printVariables",
         data: {debugId: debugId, variables: variables},
         success: function (msg) {
             console.log(msg);
@@ -241,16 +256,16 @@ function printVariables(variables) {
             }
         },
         error: function () {
-            outputEditor.setValue("Error:can not connect to the server!",-1);
+            outputEditor.setValue("Error:can not connect to the server!", -1);
         }
     });
 
 
 }
 
-function printBreakpoints(breakpoints){
+function printBreakpoints(breakpoints) {
     for (var key in breakpoints) {
-        $("#breakpointsTb").append("<tr><td>" + key + "</td><td>"+"breakpoint"+ "</td></tr>");
+        $("#breakpointsTb").append("<tr><td>" + key + "</td><td>" + "breakpoint" + "</td></tr>");
     }
 }
 
@@ -267,10 +282,10 @@ function step(url, debugId) {
             stdout += msg.stdout;
             printVariables(variables);
             printLocals(msg.locals);
-            outputEditor.setValue(stdout,-1);
+            outputEditor.setValue(stdout, -1);
         },
         error: function () {
-            outputEditor.setValue("Error:can not connect to the server!",-1);
+            outputEditor.setValue("Error:can not connect to the server!", -1);
         }
     });
 }

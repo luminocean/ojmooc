@@ -77,17 +77,22 @@ var clearBreakpointChange = function(content){
 }
 
 var variablesChange = function(content){
-    this.name = "variablesChanges";
+    this.name = "variablesChange";
     this.value = content;
 }
 
 var breakpointsChange = function(content){
-    this.name = "breakpointChange";
+    this.name = "breakpointsChange";
     this.value = content;
 }
 
 var localsChange = function(content){
-    this.name = "locals";
+    this.name = "localsChange";
+    this.value = content;
+}
+
+var selectionChange = function(content){
+    this.name = "selectionChange";
     this.value = content;
 }
 //设置事件的监听
@@ -154,6 +159,11 @@ function languageChange_op(action){
     }
 }
 
+function selectionChange_op(action){
+    editor.getSession().selection.setSelectionRange(action.value,true);
+}
+
+
 function debugIntoChange_op(action){
     runToDebug();
 }
@@ -181,8 +191,8 @@ function breakpointsChange_op(action){
 function localsChange_op(action){
     printLocals(action.value);
 }
-var runActions = ["editorChange","inputEditorChange","outputEditorChange","fontChange","languageChange"];
-var runActions_func = [editorChange_op,inputEditorChange_op,outputEditorChange_op,fontChange_op,languageChange_op];
+var runActions = ["editorChange","inputEditorChange","outputEditorChange","fontChange","languageChange","selectionChange"];
+var runActions_func = [editorChange_op,inputEditorChange_op,outputEditorChange_op,fontChange_op,languageChange_op,selectionChange_op];
 
 var debugActions = ["debugIntoChange","debugOutChange","setBreakpointChange","clearBreakpointChange","variablesChange","breakpointsChange","localsChange"];
 var debugActions_func = [debugIntoChange_op,debugOutChange_op,setBreakpointChange_op,clearBreakpointChange_op,variablesChange_op,breakpointsChange_op,localsChange_op];
