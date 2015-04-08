@@ -12,6 +12,7 @@ function Subject(subject){
     this.sPicture=subject.sPicture;
     this.sFollowerNum=subject.sFollowerNum;
     this.sType=subject.sType;
+    this.sStructure=subject.sStructure;//存储课程章节总体信息json
 };
 
 var tempsubject=new Subject({
@@ -21,7 +22,8 @@ var tempsubject=new Subject({
     sDescrip:"asfa sf af ",
     sPicture:"img/test.png",
     sFollowerNum:250,
-    sType:"presentProgram"
+    sType:"presentProgram",
+    sStructure:""
 });
 
 /*
@@ -155,6 +157,23 @@ Subject.initialTypeSubjectList= function () {
 
     AllSubjectShowObject.isIntial=true;
 };
+
+/*
+ 老师使用
+ return 根据uID ,返回老师教的所有课程list
+
+ */
+Subject.getSubsOfTeacher =function getSubsOfTeacher(uID,callback){
+    //数据库查询subject表，找到所有我的课程
+    var subPopList=[
+        new Subject(tempsubject),
+        new Subject(tempsubject),
+        new Subject(tempsubject),
+        new Subject(tempsubject)
+    ];
+    return subPopList;
+};
+
 
 
 module.exports=Subject;

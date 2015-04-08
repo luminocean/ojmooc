@@ -12,3 +12,76 @@
 </body>
 </html>
 
+<script type="text/javascript">
+
+    $('#jstreeOfRecord').jstree({
+        "core" : {
+            "themes" : {
+                "variant" : "large"
+            },
+            //之后这里data可以改成用ajax请求，不过貌似没有必要
+            'data' : [
+                { "id" : "ajson1", "parent" : "#", "text" : "Simple root node" },
+                { "id" : "ajson2", "parent" : "#", "text" : "Root node 2" },
+                { "id" : "ajson3", "parent" : "ajson2", "text" : "Child 1" },
+                { "id" : "ajson4", "parent" : "ajson2", "text" : "Child 2" },
+            ]
+        },
+        "checkbox" : {
+            "keep_selected_style" : false
+        },
+        "plugins" : [ "wholerow", "checkbox" ]
+    });
+    $('#jstreeOfRecord').on("changed.jstree", function (e, data) {
+        console.log(data.selected);
+    });
+    $('button').on('click', function () {
+        $('#jstreeOfRecord').jstree(true).select_node('child_node_1');
+        $('#jstreeOfRecord').jstree('select_node', 'child_node_1');
+        $.jstree.reference('#jstreeOfRecord').select_node('child_node_1');
+    });
+
+    $.each( { name: "John", lang: "JS" }, function(i, n){
+        alert( "Name: " + i + ", Value: " + n +"index:<%= title%>");
+    });
+
+    $('#jstree_demo').jstree({
+        "core" : {
+            "animation" : 0,
+            "check_callback" : true,
+            "themes" : { "stripes" : true },
+            'data' : {
+                'url' : function (node) {
+                    return node.id === '#' ?
+                            'ajax_demo_roots.json' : 'ajax_demo_children.json';
+                },
+                'data' : function (node) {
+                    return { 'id' : node.id };
+                }
+            }
+        },
+        "types" : {
+            "#" : {
+                "max_children" : 1,
+                "max_depth" : 4,
+                "valid_children" : ["root"]
+            },
+            "root" : {
+                "icon" : "./assets/images/tree_icon.png",
+                "valid_children" : ["default"]
+            },
+            "default" : {
+                "valid_children" : ["default","file"]
+            },
+            "file" : {
+                "icon" : "glyphicon glyphicon-file",
+                "valid_children" : []
+            }
+        },
+        "plugins" : [
+            "contextmenu", "dnd", "search",
+            "state", "types", "wholerow"
+        ]
+    });
+</script>
+

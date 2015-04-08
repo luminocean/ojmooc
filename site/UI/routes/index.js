@@ -60,8 +60,41 @@ router.get('/classes', function(req, res, next) {
   res.render('classes',classesObject);
 });
 
+function changeFileArray(arr){
+  var ret="[";
+  for(var i=0;i<arr.length;i++){
+    ret=ret+"{";
+    for(var pro in arr[i]){
+      ret=ret+"\""+pro+"\":\""+arr[i][pro]+"\",";
+    }
+    ret+=","
+  }
+  ret=ret.replace(/,,/g,"},");
+  ret+="]";
+  return ret;
+};
+
 router.get('/myClass', function(req, res, next) {
-  res.render('myClass', { title: '我的课程',active:'myClass'});
+  var sss=[
+    { "id" : "ajson1", "parent" : "#", "text" : "Simple root node" },
+    { "id" : "ajson2", "parent" : "#", "text" : "Root node 2" },
+    { "id" : "ajson3", "parent" : "ajson2", "text" : "Child 1" },
+    { "id" : "ajson4", "parent" : "ajson2", "text" : "Child 2" },
+  ];
+
+
+  if(res.locals.user.uIdentity===1){
+    var myClassObjectOfT={
+      title: '我的课程',
+      active:'myClass',
+      subOfMineList:Subject.getSubsOfTeacher(res.locals.user.uID),//老师课程展示
+      ss:sss,
+      allInfoOfTeacher:res.locals.user.getallInfoOfTeacher()//个人信息，视频，习题库展示
+    };
+    res.render('myClassOfTeacher',myClassObjectOfT);
+  }else{
+    res.render('myClassOfStudent', { title: '我的课程',active:'myClass'});
+  }
 });
 
 

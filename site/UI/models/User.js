@@ -21,20 +21,31 @@ function User(user) {
     this.uIdentity=user.uIdentity;// 0为学生，没有follower，
                                   // 1为老师
     this.uDescrip=user.uDescrip;
-    this.uFollowerNum=user.uFollowerNum;
+    this.uSchool=user.uSchool;
     this.Lastmid=user.Lastmid;
     this.uPicture=user.uPicture;
+    this.uFollowerNum=user.uFollowerNum;//老师才有，关注者
+    this.uRecordInfo=user.uRecordInfo;//老师才有，视频库信息json
+    this.uPracticeInfo=user.uPracticeInfo;//老师才有，习题库信息json
 };
 
 var tempUser=new User({
     uID:11,
     uUserName:"fff",
     uPassWord:"fff",
-    uIdentity:0,
+    uIdentity:1,
     uDescrip:"vvvvvvvvvvvvvvvvvvvvv",
-    uFollowerNum:500,
+    uSchool:"nanjing university",
     Lastmid:56,
-    uPicture:"img/test.png"
+    uPicture:"img/test.png",
+    uFollowerNum:500,
+    uRecordInfo:[
+        { "id" : "ajson1", "parent" : "#", "text" : "Simple root node" },
+        { "id" : "ajson2", "parent" : "#", "text" : "Root node 2" },
+        { "id" : "ajson3", "parent" : "ajson2", "text" : "Child 1" },
+        { "id" : "ajson4", "parent" : "ajson2", "text" : "Child 2" },
+    ],
+    uPracticeInfo:""
 });
 
 
@@ -82,7 +93,7 @@ User.check = function check(uUserName, callback) {
 };
 
 /*
-return 根据username得到 相应的user
+return 根据username得到 返回相应的user
  */
 User.get = function get(uUserName, callback) {
 
@@ -117,21 +128,8 @@ User.get = function get(uUserName, callback) {
     });
 };
 
-/*
- return 根据要求的num得到 返回首页最热门的几门推荐老师
- */
-User.getMostRecTeachers = function getMostRecTeachers(getNum, callback) {
-    var userList=[
-        new User(tempUser),
-        new User(tempUser),
-        new User(tempUser),
-        new User(tempUser)
-    ];
 
-    return userList;
-};
-
-//学生选课信息 的返回对象
+//学生选课信息 的返回对象，还未使用
 function StuChooseSub(stuChooseSub){
     this.uID=stuChooseSub.uID;
     this.sID=stuChooseSub.sID;
@@ -140,6 +138,7 @@ function StuChooseSub(stuChooseSub){
 
 
 /*
+ 学生使用
  return 根据要求的num ,返回我最近选择的指定数量课程
 
  若num为0，返回所有的选择的课程
@@ -162,6 +161,57 @@ User.prototype.getMyStudyingClasses = function getMyStudyingClasses(getNum, call
     ];
 
     return chooseSubList;
+};
+
+/*
+ 学生使用
+ 用于学生的我的课程显示
+ return 我自己的所有信息的User对象
+ */
+User.prototype.getallInfoOfStudent =function getallInfoOfStudent(callback){
+    //查询找到我的所有信息
+    //和登录时查找到的对象一样，也可以那时就存储
+    return null;
+};
+
+
+/*
+ 老师使用
+ 用于老师的我的课程显示
+ return 我自己的所有信息的User对象
+ */
+User.prototype.getallInfoOfTeacher =function getallInfoOfTeacher(callback){
+    //查询找到我的所有信息
+    //和登录时查找到的对象一样，也可以那时就存储
+    return tempUser;
+};
+
+/*
+ 老师使用
+ 查询找到我的视频库信息
+ return 视频库JSON
+ */
+User.prototype.getRecordListJson =function getRecordListJson(callback){
+    //查询找到我的视频库信息
+    //和登录时查找到的对象一样，也可以那时就存储
+    //根据自身ID查找数据库
+    return JSON.stringify(tempUser.uRecordInfo);
+};
+
+
+
+/*
+ return 根据要求的num得到 返回首页最热门的几门推荐老师
+ */
+User.getMostRecTeachers = function getMostRecTeachers(getNum, callback) {
+    var userList=[
+        new User(tempUser),
+        new User(tempUser),
+        new User(tempUser),
+        new User(tempUser)
+    ];
+
+    return userList;
 };
 
 /*

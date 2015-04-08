@@ -9,6 +9,7 @@ var bodyParser = require('body-parser');
 var index = require('./routes/index');
 var users = require('./routes/users');
 var editorCompile = require('./routes/editorCompile');
+var ajaxRequest=require('./routes/ajaxRequest');
 
 //test用
 var User=require('./models/User');
@@ -40,9 +41,22 @@ app.use(express.static(path.join(__dirname, 'public')));
 //
 //});
 var newUser = new User({
-  uUserName: "1234",
-  uPassWord: "123",
-  uIdentity:0
+  uID:11,
+  uUserName:"fff",
+  uPassWord:"fff",
+  uIdentity:1,
+  uDescrip:"vvvvvvvvvvvvvvvvvvvvv",
+  uSchool:"nanjing university",
+  Lastmid:56,
+  uPicture:"img/test.png",
+  uFollowerNum:500,
+  uRecordInfo:[
+    { "id" : "ajson1", "parent" : "#", "text" : "Simple root node" },
+    { "id" : "ajson2", "parent" : "#", "text" : "Root node 2" },
+    { "id" : "ajson3", "parent" : "ajson2", "text" : "Child 1" },
+    { "id" : "ajson4", "parent" : "ajson2", "text" : "Child 2" },
+  ],
+  uPracticeInfo:""
 });
 
 app.use(function (req, res, next) {
@@ -55,6 +69,7 @@ app.use(function (req, res, next) {
   next();
 });
 
+app.use('/ajaxRequest',ajaxRequest);
 app.use('/', index);
 app.use('/users', users);
 app.use('/play/editor',editorCompile);

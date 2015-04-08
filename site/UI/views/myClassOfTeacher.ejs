@@ -1,0 +1,185 @@
+<%- include globalView/header.ejs %>
+<!--..这里放单独需要的CSS 注意顺序-->
+<link rel="stylesheet" href="dist/themes/default/style.css" />
+
+<% include globalView/mainNavbar.ejs%>
+
+<div id="container" class="container">
+    <!-- 放置页面内容-->
+    <div id="mySubjectControlDiv" class="col-md-9">
+        <div role="tabpanel">
+
+            <!-- Nav tabs -->
+            <ul class="nav nav-tabs " role="tablist">
+                <li role="presentation" class="col-md-2 active"><a href="#subjectCon" aria-controls="subjectCon" role="tab" data-toggle="tab">所有课程</a></li>
+                <li role="presentation" class="col-md-2"><a href="#recordCon" aria-controls="recordCon" role="tab" data-toggle="tab">视频库</a></li>
+                <li role="presentation" class="col-md-2"><a href="#practiceCon" aria-controls="practiceCon" role="tab" data-toggle="tab">习题库</a></li>
+                <li role="presentation" class="col-md-2"><a href="#faqCon" aria-controls="faqCon" role="tab" data-toggle="tab">FAQ</a></li>
+            </ul>
+
+            <!-- Tab panes -->
+            <div class="tab-content">
+                <div role="tabpanel" class="tab-pane active " id="subjectCon">
+                    <div id="contralBtnList" class="clearfix">
+                        <div class="col-md-8 col-sm-8 col-xs-8 pull-left">
+                            <button type="button" class="button button-3d button-small button-inverse" onclick=""><span class="glyphicon glyphicon-film"></span> 录制视频</button>
+                            <div class="divider-vertical displayInline"></div>
+                            <button type="button" class="button button-3d button-small button-inverse" onclick="record_create();"><span class="glyphicon glyphicon-asterisk"></span>新建文件夹</button>
+                            <button type="button" class="button button-3d button-small button-inverse" onclick="record_rename();"><span class="glyphicon glyphicon-pencil"></span> 重命名</button>
+                            <button type="button" class="button button-3d button-small button-inverse" onclick="record_delete();"><span class="glyphicon glyphicon-remove"></span> 删除</button>
+                        </div>
+                        <div class="pull-right">
+                            <input type="text" value="" id="record_q" class="seachTreeBox pull-right" placeholder="Search">
+                        </div>
+                    </div>
+                    <div class="divider-horizontal"></div>
+                    <div id="jstreeOfRecord">
+
+                    </div>
+                </div>
+                <div role="tabpanel" class="tab-pane" id="recordCon">...</div>
+                <div role="tabpanel" class="tab-pane" id="practiceCon">...</div>
+                <div role="tabpanel" class="tab-pane" id="faqCon">...</div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div id="mySubjectInfoDiv" class="col-md-3">
+        <!--<div id="infoDivider" class="divider-vertical pull-left displayInline"></div>-->
+        <div id="infoDiv" class=" well col-md-12 pull-right displayInline">
+            <div id="infoDivPositionAdjest">
+                <img src="img/test.png" class="img-responsive img-circle infoDivImg"/>
+                <div class="">
+                    <ul class="list-group">
+                        <li class="list-group-item list-group-item-info">
+                            姓名：
+                        </li>
+                        <li class="list-group-item list-group-item-info">
+                            学校：
+                        </li>
+                        <li class="list-group-item list-group-item-info">
+                            职位：<!--标注是老师还是学生-->
+                        </li>
+                    </ul>
+                    <p>个人描述：</p>
+
+                    <div class="divider-horizontal"></div>
+
+                    <a href="" class="button button-glow button-rounded button-raised button-primary infoDivButton">新添课程</a>
+                    <a href="" class="button button-glow button-rounded button-raised button-primary infoDivButton">录制课程</a>
+                    <a href="" class="button button-glow button-rounded button-raised button-primary infoDivButton">上传视频</a>
+                    <a href="" class="button button-glow button-rounded button-raised button-primary infoDivButton">发布通知</a>
+
+                    <p> <!--填补一段高度--></p>
+                    <div class="divider-horizontal"></div>
+                    <p>关注人数：</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<%- include globalView/footer.ejs%>
+<!-- ..下面放单独需要的JS，注意顺序 -->
+<script src="dist/jstree.js"></script>
+<script>
+
+    function changeFileArray(arr){
+        var ret="[";
+        for(var i=0;i<arr.length;i++){
+            ret=ret+"{";
+            for(var pro in arr[i]){
+                ret=ret+"\""+pro+"\":\""+arr[i][pro]+"\",";
+            }
+            ret+=","
+        }
+        ret=ret.replace(/,,/g,"},");
+        ret+="]";
+        return ret;
+    };
+    function record_create() {
+        var ref = $('#jstreeOfRecord').jstree(true),
+                sel = ref.get_selected();
+        var newnode=null;
+        if(!sel.length) {
+            newnode=ref.create_node("#",{"type":"root"});
+            ref.edit(newnode);
+//            return false;
+        }
+        sel = sel[0];
+        newNode = ref.create_node(sel, {"type":"file"});
+        if(newNode) {
+            ref.edit(newNode);
+            console.log(newNode);
+        }
+    };
+    function record_rename() {
+        var ref = $('#jstreeOfRecord').jstree(true),
+                sel = ref.get_selected();
+        if(!sel.length) { return false; }
+        sel = sel[0];
+        ref.edit(sel);
+        console.log(sel);
+    };
+    function record_delete() {
+        var ref = $('#jstreeOfRecord').jstree(true),
+                sel = ref.get_selected();
+        if(!sel.length) { return false; }
+        ref.delete_node(sel);
+        console.log(sel);
+    };
+    $(function () {
+        var to = false;
+        $('#record_q').keyup(function () {
+            if(to) { clearTimeout(to); }
+            to = setTimeout(function () {
+                var v = $('#record_q').val();
+                $('#jstreeOfRecord').jstree(true).search(v);
+            }, 250);
+        });
+
+
+        $('#jstreeOfRecord')
+                .jstree({
+                    "core" : {
+                        "multiple":false,
+                        "animation" : 0,
+                        "check_callback" : true,
+                        "themes" : {
+                            //"stripes" : true ,
+                            "dots":false,
+                            "variant" : "large"
+                        },
+//                        'data' : [
+//                                { "id" : "ajson1", "parent" : "#", "text" : "Simple root node" },
+//                                { "id" : "ajson2", "parent" : "#", "text" : "Root node 2" },
+//                                { "id" : "ajson3", "parent" : "ajson2", "text" : "Child 1" },
+//                                { "id" : "ajson4", "parent" : "ajson2", "text" : "Child 2" },
+//                        ]
+                        'data' : {
+                            'url' : '/ajaxRequest/getRecordList',
+                            "dataType" : "json",//!important
+                            'data' : function (node) {
+                                return { 'id' : node.id };
+                            }
+                        }
+                    },
+                    "types" : {
+                        "#" : { "max_children" : 1, "valid_children" : ["root","file"]},
+                        "root" : { "icon" : "glyphicon glyphicon-folder-open", "valid_children" : ["default","file"] },
+                        "default" : { "icon" : "glyphicon glyphicon-folder-open","valid_children" : ["default","file"] },
+                        "file" : { "icon" : "glyphicon glyphicon-file", "valid_children" : [] }
+                       // "file" : { "icon" : "glyphicon glyphicon-file", "valid_children" : [] }
+
+                    },
+                    "plugins" : [ "contextmenu", "dnd", "search", "state", "unique","types", "wholerow" ]
+                });
+    });
+</script>
+
+</body>
+</html>
+

@@ -28,26 +28,25 @@
       <div class="col-md-6">
         <div class="well myClassWell clearfix">
           <div>
-             <img src="<%= studyingClasses[i].subjectPicture %>" class=" img-responsive img-rounded myClassImg"/>
+            <img src="<%= studyingClasses[i].subjectPicture %>" class=" img-responsive img-rounded myClassImg"/>
             <div class="myClassInfoDiv">
-                <ul class="list-group">
-                  <li class="list-group-item list-group-item-info">
-                    <a href="" class="recName"><%= studyingClasses[i].subjectName%></a>
-                  </li>
-                  <li class="list-group-item list-group-item-info">
-                    <a href="" class="recName text-center"><%= studyingClasses[i].teacherName%></a>
-                  </li>
-                  <li class="list-group-item list-group-item-info">
-                    上次学习：<%= studyingClasses[i].lastStudy%>
-                  </li>
-                </ul>
+              <ul class="list-group">
+                <li class="list-group-item list-group-item-info">
+                  <a href="" class="recName"><%= studyingClasses[i].subjectName%></a>
+                </li>
+                <li class="list-group-item list-group-item-info">
+                  <a href="" class="recName text-center"><%= studyingClasses[i].teacherName%></a>
+                </li>
+                <li class="list-group-item list-group-item-info">
+                  上次学习：<%= studyingClasses[i].lastStudy%>
+                </li>
+              </ul>
               <!--</div>-->
                <span class="button-wrap">
                  <a href="#" class="button button-pill button-raised button-primary">Start</a>
                </span>
             </div>
-
-            </div>
+          </div>
         </div>
       </div>
     <% }%>
