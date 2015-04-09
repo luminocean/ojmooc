@@ -2876,7 +2876,7 @@ define("ace/mouse/mouse_event", ["require", "exports", "module", "ace/lib/event"
         this.setBreakpointToServer = function (debugId, lineNum) {
             $.ajax({
                 type: "POST",
-                url: "/editor/setBreakpointToServer",
+                url: "/play/editor/setBreakpointToServer",
                 data: {debugId: debugId, lineNum: lineNum},
                 success: function (msg) {
                 },
@@ -2887,7 +2887,7 @@ define("ace/mouse/mouse_event", ["require", "exports", "module", "ace/lib/event"
         this.clearBreakpointToServer = function (debugId, lineNum) {
             $.ajax({
                 type: "POST",
-                url: "/editor/clearBreakpointToServer",
+                url: "/play/editor/clearBreakpointToServer",
                 data: {debugId: debugId, lineNum: lineNum},
                 success: function (msg) {
                 },

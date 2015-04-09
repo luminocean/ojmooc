@@ -1,26 +1,37 @@
 <div id="optionPanel" class="col-sm-12">
-    <span class="label label-default">大小</span>
-    <select id="fontsize" size="1">
-        <option value="11px">11px</option>
-        <option value="12px" selected="selected">12px</option>
-        <option value="13px">13px</option>
-        <option value="14px">14px</option>
-    </select>
-    <span class="label label-default">语言</span>
-    <select id="language" size="1">
-        <option value="cpp" selected="selected">C/C++</option>
-        <option value="pas">pascal</option>
-        <option value="bas">Qbasic</option>
-    </select>
-    <input type="submit" id="run" value="运行">
-    <input type="submit" id="debugBegin" value="开始调试">
-    <input type="submit" id="debugInto" value="调试">
-    <input type="submit" id="debugOut" value="退出调试">
+    <div style="float: left;">
+        <span class="label label-default">大小</span>
+        <select id="fontsize" size="1">
+            <option value="11px">11px</option>
+            <option value="12px" selected="selected">12px</option>
+            <option value="13px">13px</option>
+            <option value="14px">14px</option>
+        </select>
+        <span class="label label-default">语言</span>
+        <select id="language" size="1">
+            <option value="cpp" selected="selected">C/C++</option>
+            <option value="pas">pascal</option>
+            <option value="bas">Qbasic</option>
+        </select>
+        <button type="button" class="btn btn-primary btn-sm" id="run">运行</button>
+        <button type="button" class="btn btn-primary btn-sm" id="debugInto">调试</button>
+    </div>
+    
+    <div id="debugOptionPanel" style="float: left;">
+        <button type="button" class="btn btn-primary btn-sm" id="debugBegin">开始调试</button>
+        <button type="button" class="btn btn-primary btn-sm" id="debugOut">退出调试</button>
+        <button type="button" class="btn btn-default btn-sm" id="stepInto">单步进入</button>
+        <button type="button" class="btn btn-default btn-sm" id="stepOver">单步跳过</button>
+        <button type="button" class="btn btn-default btn-sm" id="continue">继续</button>
+        <button type="button" class="btn btn-default btn-sm" id="exit">退出</button>
+    </div>
+
+    <!--<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>-->
 </div>
 
 <div id="editorPanel" class="col-sm-12">
-    <div id="leftPanel" style="float: left;" class="col-sm-3">
-        <div id="variable" class="panel panel-info col-sm-12 debugInfoPanel" style="overflow: scroll">
+    <div id="leftPanel" style="float: left;" class="col-sm-4">
+        <div id="variable" class="panel panel-info debugInfoPanel" style="overflow: scroll">
             <div class="panel-heading">变量
                 <button type="button" class="btn btn-default" aria-label="Right Align" data-toggle="modal"
                         data-target="#addVariable">
@@ -29,12 +40,9 @@
             </div>
             <table id="variablesTb" class="table table-bordered"></table>
         </div>
-        <div id="operate" class="panel panel-info col-sm-12 debugInfoPanel">
-            <div class="panel-heading">操作</div>
-            <button type="button" class="btn btn-primary btn-lg btn-block" id="stepInto">单步进入</button>
-            <button type="button" class="btn btn-primary btn-lg btn-block" id="stepOver">单步越过</button>
-            <button type="button" class="btn btn-primary btn-lg btn-block" id="continue">继续</button>
-            <button type="button" class="btn btn-primary btn-lg btn-block" id="exit">退出</button>
+        <div id="stack" class="panel panel-info  debugInfoPanel" style="overflow: scroll;">
+            <div class="panel-heading">堆栈</div>
+            <table id="localsTb" class="table table-bordered"></table>
         </div>
     </div>
 
@@ -44,16 +52,6 @@
         <div id="outputEditor" style="float: left;" class="col-sm-6"></div>
     </div>
 
-    <div id="rightPanel" style="float: left;" class="col-sm-3">
-        <div id="breakpoint" class="panel panel-info  debugInfoPanel" style="overflow: scroll;">
-            <div class="panel-heading">断点</div>
-            <table id="breakpointsTb" class="table table-bordered"></table>
-        </div>
-        <div id="stack" class="panel panel-info  debugInfoPanel" style="overflow: scroll;">
-            <div class="panel-heading">堆栈</div>
-            <table id="localsTb" class="table table-bordered"></table>
-        </div>
-    </div>
 </div>
 
 <div class="modal fade" id="addVariable" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">

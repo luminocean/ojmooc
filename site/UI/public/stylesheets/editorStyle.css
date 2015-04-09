@@ -20,11 +20,13 @@
 }
 
 .warning{
-    background: #ffffff;
+    background: #58ffeb;
     position: absolute;
     width: 100% !important;
     left: 0 !important;
 }
 
-
+.delBtn{
+    background: #ff0000;
+}
 

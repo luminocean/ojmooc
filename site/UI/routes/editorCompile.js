@@ -57,6 +57,7 @@ router.post('/debugBegin', function (req, res) {
             "stdout": stdout,
             "locals": locals
         };
+
         res.send(debugInfo);
     });
 });
