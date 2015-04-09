@@ -11,17 +11,12 @@ var variables = [];
 var editor = ace.edit("editor");
 var inputEditor = ace.edit("inputEditor");
 var outputEditor = ace.edit("outputEditor");
-//var editorWidth = document.getElementById("editerDiv").clientWidth;
+
+var Range = ace.require("ace/range").Range;
+var range = new Range(0, 0, 0, 0);
+var marker = editor.session.addMarker(range, "warning", "fullLine");
 
 $(document).ready(function () {
-
-    //$("#inputEditor").css({"width":editorWidth*0.48});
-    //$("#outputEditor").css({"width":editorWidth*0.48});
-    //$("#leftPanel").css({"width":editorWidth*0.24});
-    //$("#rightPanel").css({"width":editorWidth*0.24});
-    //$("#editor").css({"width":editorWidth*0.96});
-    //$("#midPanel").css({"width":editorWidth*0.97});
-
 
     $("#leftPanel").hide();
     $("#rightPanel").hide();
@@ -50,13 +45,11 @@ $(document).ready(function () {
 
 });
 
-//$("#high").click(function () {
 //    var Range = ace.require("ace/range").Range;
 //    var range = new Range(3,0,3,144);
 //    console.log(range);
 //    var marker = editor.session.addMarker(range, "warning", "fullLine");
 //    content = editor.session.getTextRange(selectionRange);
-//});
 
 editor.getSession().selection.on("changeSelection", function () {
     var range = editor.getSelectionRange();
@@ -105,13 +98,18 @@ $("#run").click(function () {
     var lan = $("#language").val();
     var params = inputEditor.getValue().trim();
 
+    //清空显示界面
+    stdout = "";
+    outputEditor.setValue("",-1);
     $.ajax({
         type: "POST",
         url: "/play/editor/run",
         data: {code: code, language: lan, params: params},
-        dataType: "text",
-        success: function (result) {
-            outputEditor.setValue(result, -1);
+        dataType: "json",
+        success: function (msg) {
+            stdout += msg.result;
+            stdout += msg.message;
+            outputEditor.setValue(stdout, -1);
         },
         error: function () {
             outputEditor.setValue("Error:can not connect to the server!", -1);
@@ -132,10 +130,6 @@ $("#debugOut").click(function () {
 });
 
 function runToDebug() {
-    //$("#editor").css({"width":editorWidth*0.48});
-    //$("#inputEditor").css({"width":editorWidth*0.24});
-    //$("#outputEditor").css({"width":editorWidth*0.24});
-    //$("#midPanel").css({"width":editorWidth*0.49});
     $("#midPanel").removeClass("col-sm-12").addClass("col-sm-6");
     $("#leftPanel").show();
     $("#rightPanel").show();
@@ -146,10 +140,6 @@ function runToDebug() {
 }
 
 function debugToRun() {
-    //$("#editor").css({"width":editorWidth*0.96});
-    //$("#inputEditor").css({"width":editorWidth*0.48});
-    //$("#outputEditor").css({"width":editorWidth*0.48});
-    //$("#midPanel").css({"width":editorWidth*0.97});
     $("#midPanel").removeClass("col-sm-6").addClass("col-sm-12");
     $("#leftPanel").hide();
     $("#rightPanel").hide();
@@ -162,13 +152,6 @@ function debugToRun() {
 
 $("#debugBegin").click(function () {
 
-
-    //清空stdout，locals
-    stdout = "";
-    $("#localsTb").empty();
-    $("#variableTb").empty();
-    $("#breakpointsTb").empty();
-
     //设置debugstatus
     editor.setDebugStatus(true);
 
@@ -177,26 +160,39 @@ $("#debugBegin").click(function () {
     var params = inputEditor.getValue().trim();
     var bplines = [];
     breakpoints = editor.getSession().$breakpoints;
+
+    //清楚界面数据
+    stdout = "";
+    $("#variablesTb").empty();
+    $("#breakpointsTb").empty();
+    $("#localsTb").empty();
+
     for (var bp in breakpoints) {
         bplines.push(bp);
     }
+
     $.ajax({
         type: "POST",
         url: "/play/editor/debugBegin",
-        data: {code: code, language: lan, params: params, bps: bplines},
+        data: {code: code, language: lan, params: params, 'bps[]': bplines},
         dataType: "json",
         success: function (msg) {
             debugId = msg.debugId;
             stdout += msg.stdout;
-            printLocals(msg.locals);
             editor.setDebugId(debugId);
+
             outputEditor.setValue(stdout, -1);
+            printLocals(msg.locals);
+            printVariables(variables);
+            printBreakpoints(breakpoints);
+            highlightLine(marker,msg.breakPoint.lineNum);
         },
         error: function () {
             outputEditor.setValue("Error:can not connect to the server!", -1);
         }
     });
-});
+})
+;
 
 $("#stepInto").click(function () {
     step("/play/editor/stepInto", debugId);
@@ -264,15 +260,15 @@ function printVariables(variables) {
 }
 
 function printBreakpoints(breakpoints) {
+    $("#breakpointsTb").empty();
     for (var key in breakpoints) {
-        $("#breakpointsTb").append("<tr><td>" + key + "</td><td>" + "breakpoint" + "</td></tr>");
+        $("#breakpointsTb").append("<tr><td>" + (parseInt(key) + 1) + "</td><td>" + "breakpoint" + "</td></tr>");
     }
 }
 
 function step(url, debugId) {
-    $("#variablesTb").empty();
     breakpoints = editor.getSession().$breakpoints;
-    printBreakpoints(breakpoints);
+
     $.ajax({
         type: "POST",
         url: url,
@@ -280,12 +276,22 @@ function step(url, debugId) {
         dataType: "json",
         success: function (msg) {
             stdout += msg.stdout;
+            outputEditor.setValue(stdout, -1);
+            printBreakpoints(breakpoints);
             printVariables(variables);
             printLocals(msg.locals);
-            outputEditor.setValue(stdout, -1);
+            highlightLine(marker,msg.breakPoint.lineNum);
         },
         error: function () {
             outputEditor.setValue("Error:can not connect to the server!", -1);
         }
     });
+}
+
+function highlightLine(markerLast, lineNum) {
+    var actualLine = lineNum - 1;
+    editor.getSession().removeMarker(markerLast);
+    var Range = ace.require("ace/range").Range;
+    var range = new Range(actualLine, 0, actualLine, 144);
+    marker = editor.session.addMarker(range, "warning", "fullLine");
 }

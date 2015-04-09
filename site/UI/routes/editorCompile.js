@@ -6,12 +6,10 @@ var router = express.Router();
 var dbr = require('../../ojclient/app.js').debugger;
 var runner = require('../../ojclient/app.js').runner;
 
-var express = require('express');
-var url = require('url');
-var path = require('path');
 var IP = "121.42.155.75";
 var runPort = "8080";
 var debugPort = "8081";
+var message = "";
 
 runner.setPort(runPort);
 runner.setHost(IP);
@@ -26,24 +24,30 @@ router.post('/run', function (req, res) {
     var code = req.body.code;
     var language = req.body.language;
     var params = req.body.params;
-    //console.log(language + params);
-    runner.run(code, language, params, function (err, result, params, host) {
+    message = "程序运行结束！";
+    runner.run(code, language, params, function (err, result) {
         if (err) return console.error(err);
-        res.send(result);
+        var runInfo = {
+            "result":result,
+            "message":message
+        };
+        res.send(runInfo);
         res.end();
     });
 });
 
 
 router.post('/debugBegin', function (req, res) {
+
     var srcCode = req.body.code;
     var srcType = req.body.language;
     var inputData = req.body.params;
-    var bps = req.body.bps;
+    var bps = req.body["bps[]"];
     var bplines = [];
     for (var i = 0; i < bps.length; i++) {
         bplines.push(parseInt(bps[i]) + 1);
     }
+
     dbr.launchDebug(srcCode, srcType, inputData, bplines, function (err, debugId, finish, breakPoint, stdout, locals) {
         if (err) return console.log(err);
         var debugInfo = {
@@ -102,7 +106,6 @@ router.post('/stepInto', function (req, res) {
             "stdout": stdout,
             "locals": locals
         };
-        console.log("stepInto" + stdout);
         res.send(stepInto);
     });
 });
@@ -117,7 +120,6 @@ router.post('/stepOver', function (req, res) {
             "stdout": stdout,
             "locals": locals
         };
-        console.log(finish);
         res.send(stepOver);
 
     });
@@ -134,7 +136,6 @@ router.post('/continue', function (req, res) {
             "stdout": stdout,
             "locals": locals
         };
-        console.log(stdout);
         res.send(moveOn);
     });
 
