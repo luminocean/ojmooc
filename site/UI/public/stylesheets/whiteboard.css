@@ -1,5 +1,6 @@
 #whiteboard{
     height: 530px;
+    border: solid 1px;
 }
 
 #menu{
@@ -7,17 +8,17 @@
 }
 
 #mainBoard{
-    height: 487px;
+    height: 460px;
     overflow-x: hidden;
 }
 
 #quickAddMenu{
-    width: 1150px;
+
 }
 
 #graphBoard {
     width: 1150px;
-    height: 430px;
+    height: 460px;
 }
 
 #fileBoard{

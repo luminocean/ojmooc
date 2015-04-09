@@ -7,6 +7,7 @@ var states = {
 
 var WhiteBoard = function(){
     this.currentState = states.free;                     //白板当前的状态
+    this.name = "whiteboard";
 
     this.objs = new Array();                //记录白板中的所有对象
     this.opes = new Array();                //记录能够撤销的操作
@@ -84,7 +85,7 @@ $("#penMenu").bind("click",function(e){
         title: false,
         closeBtn:false,
         fix:false,
-        shadeClose:true,
+        shadeClose:false,
         border:[0],
         offset:[yLoc.toString()+"px",xLoc.toString()+"px"],
         area: ["410px","200px"],
@@ -133,7 +134,7 @@ $("#imageMenu").bind("mousedown",function(e){
         title: false,
         closeBtn:false,
         fix:false,
-        shadeClose:true,
+        shadeClose:false,
         border:[0],
         offset:[yLoc.toString()+"px",xLoc.toString()+"px"],
         area: ["220px","150px"],

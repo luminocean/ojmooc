@@ -991,7 +991,7 @@ function Dragged(params){
 
     actionPerformed(new Action(shape.id,"drag",[shape.style.x,shape.style.y]));                                     //图形拖动操作
 
-    if((xLoc <= 1)||(xLoc >= 1145)||(yLoc <= 1)||(yLoc >= 425)){
+    if((xLoc >= 1145)){
         $.layer({
             shade: [0],
             area: ['auto','auto'],
