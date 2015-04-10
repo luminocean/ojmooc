@@ -42,12 +42,17 @@ router.get('/reg', function(req, res, next) {
   res.render('reg',{title:'register',active:'reg'});
 });
 
-router.get('/play', function(req, res, next) {
-  res.render('player/play',{title:'play',active:'play'});
-});
-
 router.get('/login',function(req,res,next){
   res.render('login',{title:'login',active:'login'});
+});
+
+
+router.get('/record', function(req, res, next) {
+  res.render('player/record',{title:'record',active:'record'});
+})
+
+router.get('/uploadPractice', function(req, res, next) {
+  res.render('uploadPractice',{title:'上传习题',active:''});
 });
 
 router.get('/classes', function(req, res, next) {
@@ -60,40 +65,25 @@ router.get('/classes', function(req, res, next) {
   res.render('classes',classesObject);
 });
 
-function changeFileArray(arr){
-  var ret="[";
-  for(var i=0;i<arr.length;i++){
-    ret=ret+"{";
-    for(var pro in arr[i]){
-      ret=ret+"\""+pro+"\":\""+arr[i][pro]+"\",";
-    }
-    ret+=","
-  }
-  ret=ret.replace(/,,/g,"},");
-  ret+="]";
-  return ret;
-};
 
 router.get('/myClass', function(req, res, next) {
-  var sss=[
-    { "id" : "ajson1", "parent" : "#", "text" : "Simple root node" },
-    { "id" : "ajson2", "parent" : "#", "text" : "Root node 2" },
-    { "id" : "ajson3", "parent" : "ajson2", "text" : "Child 1" },
-    { "id" : "ajson4", "parent" : "ajson2", "text" : "Child 2" },
-  ];
-
 
   if(res.locals.user.uIdentity===1){
     var myClassObjectOfT={
       title: '我的课程',
       active:'myClass',
       subOfMineList:Subject.getSubsOfTeacher(res.locals.user.uID),//老师课程展示
-      ss:sss,
       allInfoOfTeacher:res.locals.user.getallInfoOfTeacher()//个人信息，视频，习题库展示
     };
     res.render('myClassOfTeacher',myClassObjectOfT);
   }else{
-    res.render('myClassOfStudent', { title: '我的课程',active:'myClass'});
+    var myClassObjectOfS={
+      title: '我的课程',
+      active:'myClass',
+      subOfMineList:res.locals.user.getallMySubjectInfo(),
+      allInfoOfTeacher:res.locals.user.getallInfoOfStudent()//个人信息，视频，习题库展示
+    };
+    res.render('myClassOfStudent', myClassObjectOfS);
   }
 });
 

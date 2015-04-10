@@ -1,0 +1,60 @@
+<% include ../globalView/header.ejs %>
+<!--..放单独需要的CSS -->
+<link rel="stylesheet" type="text/css" href="/stylesheets/whiteboard.css">
+<link rel="stylesheet" type="text/css" href="/stylesheets/editorStyle.css">
+
+<% include ../globalView/mainNavbar.ejs%>
+<div id="container" class="container">
+    <!--这里放置 IDE 白板等 -->
+    <div id="subjectName" class="page-header">
+        <h3>课程名称</h3>
+    </div>
+    <div id="playerwholeDiv" class="">
+        <div id="editerDiv" class="">
+            <% include editerDiv.ejs%>
+        </div>
+
+        <div id="whiteboardDiv" class="">
+            <% include whiteboardDiv.ejs%>
+        </div>
+
+    </div>
+    <div id="controlLineDiv" style="position: relative;top: 20px">
+        <% include controlLineDiv.ejs%>
+    </div>
+
+
+</div>
+
+<% include ../globalView/footer.ejs%>
+<!--..下面放单独需要的JS ，要按照顺序-->
+<script src="/javascripts/interact-1.2.4.js"></script>
+<script src="/javascripts/recorder.js"></script>
+
+<script src="/javascripts/layer/layer/layer.min.js"></script>
+<script src="/javascripts/zrender/doc/asset/js/esl/esl.js"></script>
+<script src="/javascripts/zrender/doc/asset/js/codemirror.js"></script>
+<script src="/javascripts/zrender/doc/asset/js/javascript.js"></script>
+
+<script src="/javascripts/whiteboardjs/whiteboard.js"></script>
+<script src="/javascripts/whiteboardjs/graphboard.js"></script>
+<script src="/javascripts/whiteboardjs/draw.js"></script>
+<script src="/javascripts/whiteboardjs/text.js"></script>
+<script src="/javascripts/whiteboardjs/graph.js"></script>
+<script src="/javascripts/whiteboardjs/quickAdd.js"></script>
+<script src="/javascripts/whiteboardjs/dragAdd.js"></script>
+<script src="/javascripts/whiteboardjs/record.js"></script>
+<script src="/javascripts/whiteboardjs/replay.js"></script>
+
+<script type="text/javascript" src="/javascripts/editor/ace/ace.js"></script>
+<script type="text/javascript" src="/javascripts/editor/ace/ext-language_tools.js"></script>
+<script type="text/javascript" src="/javascripts/editor/editorScript.js"></script>
+<script type="text/javascript" src="/javascripts/editor/editorRecord.js"></script>
+
+<script src="/javascripts/RecordRTC.js"></script>
+<script src="/javascripts/recorder.js"></script>
+<script src="/javascripts/player.js"></script>
+<script src="/javascripts/audio_recorder.js"></script>
+
+</body>
+</html>

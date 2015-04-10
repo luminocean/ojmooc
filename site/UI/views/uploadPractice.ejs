@@ -1,0 +1,87 @@
+<% include globalView/header.ejs %>
+<!--..放单独需要的CSS -->
+<% include globalView/mainNavbar.ejs%>
+
+<div id="container" class="container">
+    <form class="form-horizontal">
+        <legend>上传习题</legend>
+        <div class="form-group">
+            <label class="col-sm-2 col-md-3 control-label" for="pname" >题目名称 </label>
+            <div class="col-sm-10 col-md-7" >
+                <input type="text" class="form-control" id="pname" name="pname" placeholder="Practice Name" >
+            </div>
+        </div>
+        <div class="form-group" >
+            <label class="col-sm-2 col-md-3 control-label" for="pdescrip" >题目描述 </label>
+            <div class="col-sm-10 col-md-7" >
+                <textarea class="form-control" rows="5" id="pdescrip" name="pdescrip" placeholder="Practice Description" ></textarea>
+            </div>
+        </div>
+        <div class="form-group" >
+            <label class="col-sm-2 col-md-3 control-label" for="pinputformat" >输入格式 </label>
+            <div class="col-sm-10 col-md-7" >
+                <textarea class="form-control" rows="5" id="pinputformat" name="pinputformat" placeholder="Practice InputFormat" ></textarea>
+            </div>
+        </div>
+        <div class="form-group" >
+            <label class="col-sm-2 col-md-3 control-label" for="poutputformat" >输出格式 </label>
+            <div class="col-sm-10 col-md-7" >
+                <textarea class="form-control" rows="5" id="poutputformat" name="poutputformat" placeholder="Practice OutputFormat" ></textarea>
+            </div>
+        </div>
+        <div id="practiceFormatList">
+            <div class="practiceFormat">
+                <div class="form-group" >
+                    <label class="col-sm-2 col-md-3 control-label" for="" id="pformat0">样例1</label>
+                </div>
+                <div class="form-group" >
+                    <label class="col-sm-2 col-md-3 control-label" for="pinputformat0" >输入样例</label>
+                    <div class="col-sm-10 col-md-7" >
+                        <textarea class="form-control" rows="5" id="pinputformat0" name="pinputformat0" placeholder="Practice InputFormat" ></textarea>
+                    </div>
+                </div>
+
+                <div class="form-group" >
+                    <label class="col-sm-2 col-md-3 control-label" for="poutputformat0" >输出样例</label>
+                    <div class="col-sm-10 col-md-7" >
+                        <textarea class="form-control" rows="5" id="poutputformat0" name="poutputformat0" placeholder="Practice OutputFormat" ></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group" >
+            <label class="col-sm-2 col-md-3 control-label" for="" ></label>
+            <div class="col-md-3">
+                <button class="btn btn-primary" id="addFormat" >添加样例</button>
+            </div>
+        </div>
+        <div class="form-group" >
+            <label class="col-sm-2 col-md-3 control-label" for="" ></label>
+            <div class="col-md-7">
+                <button type="submit" class="btn btn-primary pull-right" formmethod="post">上传</button>
+            </div>
+        </div>
+        </fieldset>
+    </form>
+
+</div>
+</div>
+</body>
+
+<% include globalView/footer.ejs %>
+<!-- ..放单独需要的JS -->
+<script type="text/javascript">
+    $('#addFormat').on('click',function(e) {
+        e.preventDefault();
+        console.log("aa");
+        var len=$('.practiceFormat').length;
+        var wholediv=$('<div>',{'class':'practiceFormat'});
+        var firstgroup=$('<div>',{'class':'form-group'}).append($('<label>').addClass('col-sm-2 col-md-3 control-label').attr('id','pformat'+len).text('1234'));
+        wholediv.append(firstgroup);
+        $('#practiceFormatList').append(wholediv);
+    });
+</script>
+
+
+</body>
+</html>

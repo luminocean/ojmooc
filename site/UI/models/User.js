@@ -40,12 +40,17 @@ var tempUser=new User({
     uPicture:"img/test.png",
     uFollowerNum:500,
     uRecordInfo:[
-        { "id" : "ajson1", "parent" : "#", "text" : "Simple root node" },
-        { "id" : "ajson2", "parent" : "#", "text" : "Root node 2" },
-        { "id" : "ajson3", "parent" : "ajson2", "text" : "Child 1" },
-        { "id" : "ajson4", "parent" : "ajson2", "text" : "Child 2" },
+        { "id" : "ajson1", "parent" : "#", "text" : "Simple root node","type":"record","a_attr":{"href":"/play"}},
+        { "id" : "ajson2", "parent" : "#", "text" : "Root node 2" ,"type":"default","state":{"disabled":"true"}},
+        { "id" : "ajson3", "parent" : "ajson2", "text" : "Child 2" ,"type":"default"},
+        { "id" : "ajson4", "parent" : "ajson2", "text" : "Child 1","type":"record" },
     ],
-    uPracticeInfo:""
+    uPracticeInfo:[
+        { "id" : "ajson11", "parent" : "#", "text" : "Simple root node11","type":"practice"},
+        { "id" : "ajson22", "parent" : "#", "text" : "Root node 22" ,"type":"default"},
+        { "id" : "ajson33", "parent" : "ajson22", "text" : "Child 22" ,"type":"default"},
+        { "id" : "ajson44", "parent" : "ajson22", "text" : "Child 11","type":"practice"},
+    ]
 });
 
 
@@ -133,7 +138,23 @@ User.get = function get(uUserName, callback) {
 function StuChooseSub(stuChooseSub){
     this.uID=stuChooseSub.uID;
     this.sID=stuChooseSub.sID;
-    this.status=stuChooseSub.status; //还没有开始，还是已经开始resume
+    this.lastStudy=stuChooseSub.lastStudy;
+    this.lastStudyTime=stuChooseSub.lastStudyTime;
+    this.status=stuChooseSub.status; //0：还没有开始，1：已经开始resume，2：已完成
+    this.isFocus=stuChooseSub.isFocus;//0：没有关注，1：已关注
+};
+
+var returnThing={
+    uID:123,
+    sID:223,
+    lastStudy:"llllllastStudyafaf af",
+    lastStudyTime:"afa",
+    status:1,
+    //上边找一个表就好，下面三个得分别去各自表
+    sName:"subjectName",
+    sPicture:"img/test.png",
+    sFollowerNum:345,
+    teacherName:"teacherName"
 };
 
 
@@ -145,15 +166,7 @@ function StuChooseSub(stuChooseSub){
  */
 User.prototype.getMyStudyingClasses = function getMyStudyingClasses(getNum, callback) {
     //根据userID，找到他正在上的课程
-    console.log("this is in getMyStudyingClasses");
-    var returnThing={
-        subjectName:"subjectName",
-        teacherName:"teacherName",
-        subjectPicture:"img/test.png",
-        status:true,
-        lastStudy:"llllllastStudyafaf af",
-        lastStudyTime:"afa"
-    };
+
     var chooseSubList=[
         returnThing,
         returnThing,
@@ -165,19 +178,52 @@ User.prototype.getMyStudyingClasses = function getMyStudyingClasses(getNum, call
 
 /*
  学生使用
+ 学生我的课程页面所有关于课程信息的展示 关注 已学 已完成
+
+ 若num为0，返回所有的选择的课程
+ */
+User.prototype.getallMySubjectInfo = function getallMySubjectInfo(callback) {
+    //根据userID，遍历StuChooseSub表一次，填充返回的object
+
+    var allMySubjectInfoObject={
+        classFocus:[
+            returnThing,
+            returnThing,
+            returnThing
+        ],
+        classStudying:[
+            returnThing,
+            returnThing,
+            returnThing,
+            returnThing,
+            returnThing,
+            returnThing
+        ],
+        classFinish:[
+            returnThing,
+            returnThing,
+            returnThing
+        ]
+    };
+
+    return allMySubjectInfoObject;
+};
+
+/*
+ 学生使用
  用于学生的我的课程显示
  return 我自己的所有信息的User对象
  */
 User.prototype.getallInfoOfStudent =function getallInfoOfStudent(callback){
     //查询找到我的所有信息
     //和登录时查找到的对象一样，也可以那时就存储
-    return null;
+    return tempUser;
 };
 
 
 /*
  老师使用
- 用于老师的我的课程显示
+ 返回我的基本信息用于老师的我的课程显示
  return 我自己的所有信息的User对象
  */
 User.prototype.getallInfoOfTeacher =function getallInfoOfTeacher(callback){
@@ -185,6 +231,99 @@ User.prototype.getallInfoOfTeacher =function getallInfoOfTeacher(callback){
     //和登录时查找到的对象一样，也可以那时就存储
     return tempUser;
 };
+
+/*
+ 老师使用
+ 处理更新我的视频库信息
+ return 我自己的所有信息的User对象
+ */
+User.prototype.handleRecordUpdate =function handleRecordUpdate(query,res,callback){
+    //操作当前user的recordList对象
+    switch (query.operation){
+        case 'delete_node':
+            console.log("delete");
+            for(var i=0;i<tempUser.uRecordInfo.length;i++){//这里tempuser之后换成res.locals.user
+                if(tempUser.uRecordInfo[i].id==query.id){
+                    tempUser.uRecordInfo.splice(i,1);
+                    res.send('true');
+                }
+            }
+            break;
+        case 'create_node':
+            console.log("create");
+            res.send('true');
+            break;
+        case 'rename_node':
+            console.log("rename");
+            res.send('true');
+            break;
+        case 'copy_node':
+            console.log("copy");
+            res.send();
+            break;
+        case 'move_node':
+            console.log("move");
+            res.send();
+            break;
+        default :
+            concole.log("error operation!");
+            res.send();
+    }
+    //console.log(tempUser.uRecordInfo);
+};
+
+/*
+ 老师使用
+ 处理更新我的视频库信息
+ return 我自己的所有信息的User对象
+ */
+User.prototype.handlePracticeUpdate =function handlePracticeUpdate(query,res,callback){
+    //操作当前user的recordList对象
+    switch (query.operation){
+        case 'delete_node':
+            console.log("delete");
+            for(var i=0;i<tempUser.uRecordInfo.length;i++){//这里tempuser之后换成res.locals.user
+                if(tempUser.uRecordInfo[i].id==query.id){
+                    tempUser.uRecordInfo.splice(i,1);
+                    res.send('true');
+                }
+            }
+            break;
+        case 'create_node':
+            console.log("create");
+            res.send('true');
+            break;
+        case 'rename_node':
+            console.log("rename");
+            res.send('true');
+            break;
+        case 'copy_node':
+            console.log("copy");
+            res.send();
+            break;
+        case 'move_node':
+            console.log("move");
+            res.send();
+            break;
+        default :
+            concole.log("error operation!");
+            res.send();
+    }
+    //console.log(tempUser.uRecordInfo);
+};
+
+/*
+ 老师使用
+ 老师我的课程页面关闭，把视频库，习题库信息写入数据库
+ */
+User.prototype.myClassClose =function getRecordListJson(callback){
+    //查询找到我的视频库信息
+    //和登录时查找到的对象一样，也可以那时就存储
+    //根据自身ID查找数据库
+    return true;
+};
+
+
 
 /*
  老师使用
@@ -196,6 +335,18 @@ User.prototype.getRecordListJson =function getRecordListJson(callback){
     //和登录时查找到的对象一样，也可以那时就存储
     //根据自身ID查找数据库
     return JSON.stringify(tempUser.uRecordInfo);
+};
+
+/*
+ 老师使用
+ 查询找到我的视频库信息
+ return 视频库JSON
+ */
+User.prototype.getPracticeListJson =function getPracticeListJson(callback){
+    //查询找到我的视频库信息
+    //和登录时查找到的对象一样，也可以那时就存储
+    //根据自身ID查找数据库
+    return JSON.stringify(tempUser.uPracticeInfo);
 };
 
 

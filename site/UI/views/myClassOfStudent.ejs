@@ -1,0 +1,136 @@
+<%- include globalView/header.ejs %>
+<!--..这里放单独需要的CSS 注意顺序-->
+<link rel="stylesheet" href="dist/themes/default/style.css" />
+
+<% include globalView/mainNavbar.ejs%>
+
+<div id="container" class="container">
+    <!-- 放置页面内容-->
+    <div id="mySubjectControlDiv" class="col-md-9">
+        <div role="tabpanel">
+
+            <!-- Nav tabs -->
+            <ul class="nav nav-tabs " role="tablist">
+                <li role="presentation" class="col-md-2 active"><a href="#classFocus" aria-controls="classFocus" role="tab" data-toggle="tab">关注课程</a></li>
+                <li role="presentation" class="col-md-2"><a href="#classStudying" aria-controls="classStudying" role="tab" data-toggle="tab">在学课程</a></li>
+                <li role="presentation" class="col-md-2"><a href="#classFinish" aria-controls="classFinish" role="tab" data-toggle="tab">已完成</a></li>
+                <li role="presentation" class="col-md-2"><a href="#faqCon" aria-controls="faqCon" role="tab" data-toggle="tab">FAQ</a></li>
+            </ul>
+
+            <!-- Tab panes -->
+            <div class="tab-content">
+                <div role="tabpanel" class="tab-pane fade in active " id="classFocus">
+                    <div class="allMyClassesShow">
+                        <div class="row">
+                            <% var len=subOfMineList.classFocus.length;
+                            for(var i=0;i<len;i++){
+                            %>
+                            <div class="col-sm-6 col-md-4">
+                                <div class="thumbnail">
+                                    <img src="<%= subOfMineList.classFocus[i].sPicture %>" class="" />
+                                    <div class="caption">
+                                        <a href="" class=" text-center"><%= subOfMineList.classFocus[i].sName%></a>
+                                        <span class="pull-right">
+                                            <span><%= subOfMineList.classFocus[i].sFollowerNum%></span>
+                                            <span class="glyphicon glyphicon-star"></span>
+                                        </span>
+                                        <!--<p><a href="#" class="btn btn-primary">Action</a> <a href="#" class="btn">Action</a></p>-->
+                                    </div>
+                                </div>
+                            </div>
+                            <% }%>
+                            <%len=-1;i=-1;%>
+                        </div>
+                    </div>
+                </div>
+                <div role="tabpanel" class="tab-pane fade" id="classStudying">
+                    <div class="allMyClassesShow">
+                        <div class="row">
+                            <% var len=subOfMineList.classStudying.length;
+                            for(var i=0;i<len;i++){
+                            %>
+                            <div class="col-sm-6 col-md-4">
+                                <div class="thumbnail">
+                                    <img src="<%= subOfMineList.classStudying[i].sPicture %>" class="" />
+                                    <div class="caption">
+                                        <a href="" class=" text-center"><%= subOfMineList.classStudying[i].sName%></a>
+                                        <span class="pull-right">
+                                            <span><%= subOfMineList.classStudying[i].sFollowerNum%></span>
+                                            <span class="glyphicon glyphicon-star"></span>
+                                        </span>
+                                        <!--<p><a href="#" class="btn btn-primary">Action</a> <a href="#" class="btn">Action</a></p>-->
+                                    </div>
+                                </div>
+                            </div>
+                            <% }%>
+                            <%len=-1;i=-1;%>
+                        </div>
+                    </div>
+                </div>
+                <div role="tabpanel" class="tab-pane fade" id="classFinish">
+                    <div class="allMyClassesShow">
+                        <div class="row">
+                            <% var len=subOfMineList.classFinish.length;
+                            for(var i=0;i<len;i++){
+                            %>
+                            <div class="col-sm-6 col-md-4">
+                                <div class="thumbnail">
+                                    <img src="<%= subOfMineList.classFinish[i].sPicture %>" class="" />
+                                    <div class="caption">
+                                        <a href="" class=" text-center"><%= subOfMineList.classFinish[i].sName%></a>
+                                        <span class="pull-right">
+                                            <span><%= subOfMineList.classFinish[i].sFollowerNum%></span>
+                                            <span class="glyphicon glyphicon-star"></span>
+                                        </span>
+                                        <!--<p><a href="#" class="btn btn-primary">Action</a> <a href="#" class="btn">Action</a></p>-->
+                                    </div>
+                                </div>
+                            </div>
+                            <% }%>
+                            <%len=-1;i=-1;%>
+                        </div>
+                    </div>
+                </div>
+                <div role="tabpanel" class="tab-pane fade" id="faqCon">...</div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div id="mySubjectInfoDiv" class="col-md-3">
+        <!--<div id="infoDivider" class="divider-vertical pull-left displayInline"></div>-->
+        <div id="infoDiv" class=" well col-md-12 pull-right displayInline">
+            <div id="infoDivPositionAdjest">
+                <img src="img/test.png" class="img-responsive img-circle infoDivImg"/>
+                <div class="">
+                    <ul class="list-group">
+                        <li class="list-group-item list-group-item-info">
+                            姓名：
+                        </li>
+                        <li class="list-group-item list-group-item-info">
+                            学校：
+                        </li>
+                        <li class="list-group-item list-group-item-info">
+                            职位：<!--标注是老师还是学生-->
+                        </li>
+                    </ul>
+                    <p>个人描述：</p>
+
+                    <div class="divider-horizontal"></div>
+                    <p> <!--填补一段高度--></p>
+                    <p>关注了：</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<%- include globalView/footer.ejs%>
+<!-- ..下面放单独需要的JS，注意顺序 -->
+
+
+</body>
+</html>
+

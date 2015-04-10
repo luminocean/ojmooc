@@ -57,7 +57,7 @@
       <groupChildrenDescriptors>
         <control controlID="0" controlTypeID="com.balsamiq.mockups::Label" x="47" y="6" w="-1" h="-1" measuredW="52" measuredH="21" zOrder="0" locked="false" isInGroup="26">
           <controlProperties>
-            <text>%u5143%u7D20%u540D%u79F0</text>
+            <text>%u8BFE%u7A0B%u540D%u79F0</text>
           </controlProperties>
         </control>
         <control controlID="1" controlTypeID="com.balsamiq.mockups::Icon" x="0" y="0" w="-1" h="-1" measuredW="32" measuredH="32" zOrder="1" locked="false" isInGroup="26">

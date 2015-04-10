@@ -135,6 +135,10 @@
     margin-top: 20px;
 }
 
+.allMyClassesShow{
+    margin-top: 20px;
+}
+
 #allClassesContent{
     width: 83.33333333%;
 }
@@ -197,7 +201,7 @@
     margin-top: -30px;
 }
 
-#contralBtnList{
+.contralBtnList{
     padding-top: 10px;
     padding-bottom: 10px;
 }
@@ -210,6 +214,14 @@
     border-radius:4px;
     border:1px solid silver;
     font-size:1.1em;
+}
+
+#practiceFormatList{
+
+}
+
+#practiceFormatList .practiceFormat{
+
 }
 
 

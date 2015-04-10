@@ -19,10 +19,34 @@
 
             <!-- Tab panes -->
             <div class="tab-content">
-                <div role="tabpanel" class="tab-pane active " id="subjectCon">
-                    <div id="contralBtnList" class="clearfix">
+                <div role="tabpanel" class="tab-pane fade in active " id="subjectCon">
+                    <div class="allMyClassesShow">
+                        <div class="row">
+                            <% var len=subOfMineList.length;
+                            for(var i=0;i<len;i++){
+                            %>
+                            <div class="col-sm-6 col-md-4">
+                                <div class="thumbnail">
+                                    <img src="<%= subOfMineList[i].sPicture %>" class="" />
+                                    <div class="caption">
+                                        <a href="" class=" text-center"><%= subOfMineList[i].sName%></a>
+                                        <span class="pull-right">
+                                            <span><%= subOfMineList[i].sFollowerNum%></span>
+                                            <span class="glyphicon glyphicon-star"></span>
+                                        </span>
+                                        <!--<p><a href="#" class="btn btn-primary">Action</a> <a href="#" class="btn">Action</a></p>-->
+                                    </div>
+                                </div>
+                            </div>
+                            <% }%>
+                            <%len=-1;i=-1;%>
+                        </div>
+                    </div>
+                </div>
+                <div role="tabpanel" class="tab-pane fade" id="recordCon">
+                    <div class="contralBtnList clearfix">
                         <div class="col-md-8 col-sm-8 col-xs-8 pull-left">
-                            <button type="button" class="button button-3d button-small button-inverse" onclick=""><span class="glyphicon glyphicon-film"></span> 录制视频</button>
+                            <button type="button" class="button button-3d button-small button-inverse" onclick=""><span class="glyphicon glyphicon-facetime-video"></span> 录制视频</button>
                             <div class="divider-vertical displayInline"></div>
                             <button type="button" class="button button-3d button-small button-inverse" onclick="record_create();"><span class="glyphicon glyphicon-asterisk"></span>新建文件夹</button>
                             <button type="button" class="button button-3d button-small button-inverse" onclick="record_rename();"><span class="glyphicon glyphicon-pencil"></span> 重命名</button>
@@ -37,9 +61,25 @@
 
                     </div>
                 </div>
-                <div role="tabpanel" class="tab-pane" id="recordCon">...</div>
-                <div role="tabpanel" class="tab-pane" id="practiceCon">...</div>
-                <div role="tabpanel" class="tab-pane" id="faqCon">...</div>
+                <div role="tabpanel" class="tab-pane fade" id="practiceCon">
+                    <div class="contralBtnList clearfix">
+                        <div class="col-md-8 col-sm-8 col-xs-8 pull-left">
+                            <button type="button" class="button button-3d button-small button-inverse" onclick=""><span class="glyphicon glyphicon-file"></span> 上传习题</button>
+                            <div class="divider-vertical displayInline"></div>
+                            <button type="button" class="button button-3d button-small button-inverse" onclick="practice_create();"><span class="glyphicon glyphicon-asterisk"></span>新建文件夹</button>
+                            <button type="button" class="button button-3d button-small button-inverse" onclick="practice_rename();"><span class="glyphicon glyphicon-pencil"></span> 重命名</button>
+                            <button type="button" class="button button-3d button-small button-inverse" onclick="practice_delete();"><span class="glyphicon glyphicon-remove"></span> 删除</button>
+                        </div>
+                        <div class="pull-right">
+                            <input type="text" value="" id="practice_q" class="seachTreeBox pull-right" placeholder="Search">
+                        </div>
+                    </div>
+                    <div class="divider-horizontal"></div>
+                    <div id="jstreeOfPractice">
+
+                    </div>
+                </div>
+                <div role="tabpanel" class="tab-pane fade" id="faqCon">...</div>
             </div>
 
         </div>
@@ -68,8 +108,8 @@
                     <div class="divider-horizontal"></div>
 
                     <a href="" class="button button-glow button-rounded button-raised button-primary infoDivButton">新添课程</a>
-                    <a href="" class="button button-glow button-rounded button-raised button-primary infoDivButton">录制课程</a>
-                    <a href="" class="button button-glow button-rounded button-raised button-primary infoDivButton">上传视频</a>
+                    <a href="/record" class="button button-glow button-rounded button-raised button-primary infoDivButton">录制课程</a>
+                    <a href="/uploadPractice" class="button button-glow button-rounded button-raised button-primary infoDivButton">上传习题</a>
                     <a href="" class="button button-glow button-rounded button-raised button-primary infoDivButton">发布通知</a>
 
                     <p> <!--填补一段高度--></p>
@@ -86,51 +126,6 @@
 <!-- ..下面放单独需要的JS，注意顺序 -->
 <script src="dist/jstree.js"></script>
 <script>
-
-    function changeFileArray(arr){
-        var ret="[";
-        for(var i=0;i<arr.length;i++){
-            ret=ret+"{";
-            for(var pro in arr[i]){
-                ret=ret+"\""+pro+"\":\""+arr[i][pro]+"\",";
-            }
-            ret+=","
-        }
-        ret=ret.replace(/,,/g,"},");
-        ret+="]";
-        return ret;
-    };
-    function record_create() {
-        var ref = $('#jstreeOfRecord').jstree(true),
-                sel = ref.get_selected();
-        var newnode=null;
-        if(!sel.length) {
-            newnode=ref.create_node("#",{"type":"root"});
-            ref.edit(newnode);
-//            return false;
-        }
-        sel = sel[0];
-        newNode = ref.create_node(sel, {"type":"file"});
-        if(newNode) {
-            ref.edit(newNode);
-            console.log(newNode);
-        }
-    };
-    function record_rename() {
-        var ref = $('#jstreeOfRecord').jstree(true),
-                sel = ref.get_selected();
-        if(!sel.length) { return false; }
-        sel = sel[0];
-        ref.edit(sel);
-        console.log(sel);
-    };
-    function record_delete() {
-        var ref = $('#jstreeOfRecord').jstree(true),
-                sel = ref.get_selected();
-        if(!sel.length) { return false; }
-        ref.delete_node(sel);
-        console.log(sel);
-    };
     $(function () {
         var to = false;
         $('#record_q').keyup(function () {
@@ -167,15 +162,436 @@
                             }
                         }
                     },
+                    'sort' : function(a, b) {
+                        return this.get_type(a) === this.get_type(b) ? (this.get_text(a) > this.get_text(b) ? 1 : -1) : (this.get_type(a) >= this.get_type(b) ? 1 : -1);
+                    },
+                    'contextmenu' : {
+                        'items' : function(node) {
+                            var tmp = $.jstree.defaults.contextmenu.items();
+                            tmp.create.label = "新建文件夹";
+                            tmp.create.icon="glyphicon glyphicon-asterisk";
+                            tmp.rename.label="重命名";
+                            tmp.rename.icon="glyphicon glyphicon-pencil";
+                            tmp.remove.label="删除";
+                            tmp.remove.icon="glyphicon glyphicon-remove";
+                            tmp.ccp.label="编辑";
+                            tmp.ccp.icon="glyphicon glyphicon-edit";
+                            tmp.ccp.submenu.copy.label="复制";
+                            tmp.ccp.submenu.copy.icon="glyphicon glyphicon-copy";
+                            tmp.ccp.submenu.cut.label="剪切";
+                            tmp.ccp.submenu.cut.icon="glyphicon glyphicon-scissors";
+                            tmp.ccp.submenu.paste.label="粘贴";
+                            tmp.ccp.submenu.paste.icon="glyphicon glyphicon-paste";
+                            if(this.get_type(node) === "record") {
+                                tmp.create._disabled=true;
+                                tmp.ccp.submenu.paste._disabled=true;
+                                delete tmp.create;
+                            }
+                            return tmp;
+                        }
+                    },
                     "types" : {
-                        "#" : { "max_children" : 1, "valid_children" : ["root","file"]},
-                        "root" : { "icon" : "glyphicon glyphicon-folder-open", "valid_children" : ["default","file"] },
-                        "default" : { "icon" : "glyphicon glyphicon-folder-open","valid_children" : ["default","file"] },
-                        "file" : { "icon" : "glyphicon glyphicon-file", "valid_children" : [] }
-                       // "file" : { "icon" : "glyphicon glyphicon-file", "valid_children" : [] }
+                        "#" : { "max_children" : 1, "valid_children" : ["default","record"]},
+                        "default" : { "icon" : "glyphicon glyphicon-folder-open","valid_children" : ["default","record"] },
+                        "record" : { "icon" : "glyphicon glyphicon-film", "valid_children" : [] }
 
                     },
-                    "plugins" : [ "contextmenu", "dnd", "search", "state", "unique","types", "wholerow" ]
+                    "plugins" : [ "contextmenu", "dnd", "search", "state","types", "wholerow" ]
+                })
+                .on('delete_node.jstree', function (e, data) {
+                    $.get('/ajaxRequest/recordList?operation=delete_node', { 'id' : data.node.id },
+                            function(data){
+                                console.log("delete success");
+                            })
+                            .fail(function () {
+                                console.log("error~~~");
+                                data.instance.refresh();
+                            });
+                })
+                .on('create_node.jstree', function (e, data) {
+                    $.get('/ajaxRequest/recordList?operation=create_node', { 'id' : data.node.parent, 'position' : data.position, 'text' : data.node.text ,'type':data.node.type})
+                            .done(function (d) {
+                                data.instance.set_id(data.node, d.id);
+                            })
+                            .fail(function () {
+                                console.log("error~~~");
+                                data.instance.refresh();
+                            });
+                })
+                .on('rename_node.jstree', function (e, data) {
+                    $.get('/ajaxRequest/recordList?operation=rename_node', { 'id' : data.node.id, 'text' : data.text })
+                            .fail(function () {
+                                console.log("error~~~");
+                                data.instance.refresh();
+                            });
+                })
+                .on('move_node.jstree', function (e, data) {
+                    $.get('/ajaxRequest/recordList?operation=move_node', { 'id' : data.node.id, 'parent' : data.parent, 'position' : data.position })
+                            .fail(function () {
+                                data.instance.refresh();
+                            });
+                })
+                .on('copy_node.jstree', function (e, data) {
+                    $.get('/ajaxRequest/recordList?operation=copy_node', { 'id' : data.original.id, 'parent' : data.parent, 'position' : data.position })
+                            .fail(function () {
+                                data.instance.refresh();
+                            });
+                })
+//                .on('cut.jstree', function (e, data) {
+//                    $.get('/ajaxRequest/recordList?operation=cut_node', { 'id' : data.node.id, 'parent' : data.parent, 'position' : data.position })
+//                            .fail(function () {
+//                                data.instance.refresh();
+//                            });
+//                })
+//                .on('paste.jstree', function (e, data) {
+//                    $.get('/ajaxRequest/recordList?operation=paste_node', { 'id' : data.node.id, 'parent' : data.parent, 'position' : data.position })
+//                            .fail(function () {
+//                                data.instance.refresh();
+//                            });
+//                })
+        ;
+    });
+
+    function changeFileArray(arr){
+        var ret="[";
+        for(var i=0;i<arr.length;i++){
+            ret=ret+"{";
+            for(var pro in arr[i]){
+                ret=ret+"\""+pro+"\":\""+arr[i][pro]+"\",";
+            }
+            ret+=","
+        }
+        ret=ret.replace(/,,/g,"},");
+        ret+="]";
+        return ret;
+    };
+    function record_create() {
+        var ref = $('#jstreeOfRecord').jstree(true),
+                sel = ref.get_selected();
+        var newnode=null;
+        if(!sel.length) {
+            newnode=ref.create_node("#",{"type":"default"});
+            if(newnode){
+                ref.edit(newnode);
+            }
+//            return false;
+        }
+        sel = sel[0];
+        if(ref.get_type(sel) === "record"){
+            newnode=ref.create_node(ref.get_parent(sel),{"type":"default"});
+            if(newnode){
+                ref.edit(newnode);
+            }
+        }
+        newNode = ref.create_node(sel, {"type":"default"});
+        if(newNode) {
+            ref.edit(newNode);
+            console.log(newNode);
+        }
+    };
+    function record_rename() {
+        var ref = $('#jstreeOfRecord').jstree(true),
+                sel = ref.get_selected();
+        if(!sel.length) { return false; }
+        sel = sel[0];
+        ref.edit(sel);
+    };
+    function record_delete() {
+        var ref = $('#jstreeOfRecord').jstree(true),
+                sel = ref.get_selected();
+        if(!sel.length) { return false; }
+        ref.delete_node(sel);
+    };
+
+    $(function () {
+        var to = false;
+        $('#practice_q').keyup(function () {
+            if(to) { clearTimeout(to); }
+            to = setTimeout(function () {
+                var v = $('#practice_q').val();
+                $('#jstreeOfPractice').jstree(true).search(v);
+            }, 250);
+        });
+
+
+        $('#jstreeOfPractice')
+                .jstree({
+                    "core" : {
+                        "multiple":false,
+                        "animation" : 0,
+                        "check_callback" : true,
+                        "themes" : {
+                            //"stripes" : true ,
+                            "dots":false,
+                            "variant" : "large"
+                        },
+//                        'data' : [
+//                                { "id" : "ajson1", "parent" : "#", "text" : "Simple root node" },
+//                                { "id" : "ajson2", "parent" : "#", "text" : "Root node 2" },
+//                                { "id" : "ajson3", "parent" : "ajson2", "text" : "Child 1" },
+//                                { "id" : "ajson4", "parent" : "ajson2", "text" : "Child 2" },
+//                        ]
+                        'data' : {
+                            'url' : '/ajaxRequest/getPracticeList',
+                            "dataType" : "json",//!important
+                            'data' : function (node) {
+                                return { 'id' : node.id };
+                            }
+                        }
+                    },
+                    'sort' : function(a, b) {
+                        return this.get_type(a) === this.get_type(b) ? (this.get_text(a) > this.get_text(b) ? 1 : -1) : (this.get_type(a) >= this.get_type(b) ? 1 : -1);
+                    },
+                    'contextmenu' : {
+                        'items' : function(node) {
+                            var tmp = $.jstree.defaults.contextmenu.items();
+                            tmp.create.label = "新建文件夹";
+                            tmp.create.icon="glyphicon glyphicon-asterisk";
+                            tmp.rename.label="重命名";
+                            tmp.rename.icon="glyphicon glyphicon-pencil";
+                            tmp.remove.label="删除";
+                            tmp.remove.icon="glyphicon glyphicon-remove";
+                            tmp.ccp.label="编辑";
+                            tmp.ccp.icon="glyphicon glyphicon-edit";
+                            tmp.ccp.submenu.copy.label="复制";
+                            tmp.ccp.submenu.copy.icon="glyphicon glyphicon-copy";
+                            tmp.ccp.submenu.cut.label="剪切";
+                            tmp.ccp.submenu.cut.icon="glyphicon glyphicon-scissors";
+                            tmp.ccp.submenu.paste.label="粘贴";
+                            tmp.ccp.submenu.paste.icon="glyphicon glyphicon-paste";
+                            if(this.get_type(node) === "practice") {
+                                tmp.create._disabled=true;
+                                tmp.ccp.submenu.paste._disabled=true;
+                                delete tmp.create;
+                            }
+                            return tmp;
+                        }
+                    },
+                    "types" : {
+                        "#" : { "max_children" : 1, "valid_children" : ["default","practice"]},
+                        "default" : { "icon" : "glyphicon glyphicon-folder-open","valid_children" : ["default","practice"] },
+                        "practice" : { "icon" : "glyphicon glyphicon-file", "valid_children" : [] }
+
+                    },
+                    "plugins" : [ "contextmenu", "dnd", "search", "state","types", "wholerow" ]
+                })
+                .on('delete_node.jstree', function (e, data) {
+                    $.get('/ajaxRequest/practiceList?operation=delete_node', { 'id' : data.node.id },
+                            function(data){
+                                console.log("delete success");
+                            })
+                            .fail(function () {
+                                console.log("error~~~");
+                                data.instance.refresh();
+                            });
+                })
+                .on('create_node.jstree', function (e, data) {
+                    $.get('/ajaxRequest/practiceList?operation=create_node', { 'id' : data.node.parent, 'position' : data.position, 'text' : data.node.text ,'type':data.node.type})
+                            .done(function (d) {
+                                data.instance.set_id(data.node, d.id);
+                            })
+                            .fail(function () {
+                                console.log("error~~~");
+                                data.instance.refresh();
+                            });
+                })
+                .on('rename_node.jstree', function (e, data) {
+                    $.get('/ajaxRequest/practiceList?operation=rename_node', { 'id' : data.node.id, 'text' : data.text })
+                            .fail(function () {
+                                console.log("error~~~");
+                                data.instance.refresh();
+                            });
+                })
+                .on('move_node.jstree', function (e, data) {
+                    $.get('/ajaxRequest/practiceList?operation=move_node', { 'id' : data.node.id, 'parent' : data.parent, 'position' : data.position })
+                            .fail(function () {
+                                data.instance.refresh();
+                            });
+                })
+                .on('copy_node.jstree', function (e, data) {
+                    $.get('/ajaxRequest/practiceList?operation=copy_node', { 'id' : data.original.id, 'parent' : data.parent, 'position' : data.position })
+                            .fail(function () {
+                                data.instance.refresh();
+                            });
+                })
+//                .on('cut.jstree', function (e, data) {
+//                    $.get('/ajaxRequest/recordList?operation=cut_node', { 'id' : data.node.id, 'parent' : data.parent, 'position' : data.position })
+//                            .fail(function () {
+//                                data.instance.refresh();
+//                            });
+//                })
+//                .on('paste.jstree', function (e, data) {
+//                    $.get('/ajaxRequest/recordList?operation=paste_node', { 'id' : data.node.id, 'parent' : data.parent, 'position' : data.position })
+//                            .fail(function () {
+//                                data.instance.refresh();
+//                            });
+//                })
+        ;
+    });
+
+    function practice_create() {
+        var ref = $('#jstreeOfPractice').jstree(true),
+                sel = ref.get_selected();
+        var newnode=null;
+        if(!sel.length) {
+            newnode=ref.create_node("#",{"type":"default"});
+            if(newnode){
+                ref.edit(newnode);
+            }
+//            return false;
+        }
+        sel = sel[0];
+        if(ref.get_type(sel) === "practice"){
+            newnode=ref.create_node(ref.get_parent(sel),{"type":"default"});
+            if(newnode){
+                ref.edit(newnode);
+            }
+        }
+        newNode = ref.create_node(sel, {"type":"default"});
+        if(newNode) {
+            ref.edit(newNode);
+            console.log(newNode);
+        }
+    };
+    function practice_rename() {
+        var ref = $('#jstreeOfPractice').jstree(true),
+                sel = ref.get_selected();
+        if(!sel.length) { return false; }
+        sel = sel[0];
+        ref.edit(sel);
+    };
+    function practice_delete() {
+        var ref = $('#jstreeOfPractice').jstree(true),
+                sel = ref.get_selected();
+        if(!sel.length) { return false; }
+        ref.delete_node(sel);
+    };
+
+    window.onbeforeunload=function(){
+        $.get('/ajaxRequest/myClassesOfteacherclose',{"id":1234},function(){
+            //让服务器把视频库，习题库更改写入数据库
+        });
+    }
+
+
+
+</script>
+
+<script>
+    $(function () {
+        $('#tree')
+                .jstree({
+                    'core' : {
+                        'data' : {
+                            'url' : '?operation=get_node',
+                            'data' : function (node) {
+                                return { 'id' : node.id };
+                            }
+                        },
+                        'check_callback' : function(o, n, p, i, m) {
+                            if(m && m.dnd && m.pos !== 'i') { return false; }
+                            if(o === "move_node" || o === "copy_node") {
+                                if(this.get_node(n).parent === this.get_node(p).id) { return false; }
+                            }
+                            return true;
+                        },
+                        'themes' : {
+                            'responsive' : false,
+                            'variant' : 'small',
+                            'stripes' : true
+                        }
+                    },
+                    'sort' : function(a, b) {
+                        return this.get_type(a) === this.get_type(b) ? (this.get_text(a) > this.get_text(b) ? 1 : -1) : (this.get_type(a) >= this.get_type(b) ? 1 : -1);
+                    },
+                    'contextmenu' : {
+                        'items' : function(node) {
+                            var tmp = $.jstree.defaults.contextmenu.items();
+                            delete tmp.create.action;
+                            tmp.create.label = "New";
+                            tmp.create.submenu = {
+                                "create_folder" : {
+                                    "separator_after"	: true,
+                                    "label"				: "Folder",
+                                    "action"			: function (data) {
+                                        var inst = $.jstree.reference(data.reference),
+                                                obj = inst.get_node(data.reference);
+                                        inst.create_node(obj, { type : "default" }, "last", function (new_node) {
+                                            setTimeout(function () { inst.edit(new_node); },0);
+                                        });
+                                    }
+                                },
+                                "create_file" : {
+                                    "label"				: "File",
+                                    "action"			: function (data) {
+                                        var inst = $.jstree.reference(data.reference),
+                                                obj = inst.get_node(data.reference);
+                                        inst.create_node(obj, { type : "file" }, "last", function (new_node) {
+                                            setTimeout(function () { inst.edit(new_node); },0);
+                                        });
+                                    }
+                                }
+                            };
+                            if(this.get_type(node) === "file") {
+                                delete tmp.create;
+                            }
+                            return tmp;
+                        }
+                    },
+                    'types' : {
+                        'default' : { 'icon' : 'folder' },
+                        'file' : { 'valid_children' : [], 'icon' : 'file' }
+                    },
+                    'unique' : {
+                        'duplicate' : function (name, counter) {
+                            return name + ' ' + counter;
+                        }
+                    },
+                    'plugins' : ['state','dnd','sort','types','contextmenu','unique']
+                })
+                .on('delete_node.jstree', function (e, data) {
+                    $.get('?operation=delete_node', { 'id' : data.node.id })
+                            .fail(function () {
+                                data.instance.refresh();
+                            });
+                })
+                .on('create_node.jstree', function (e, data) {
+                    $.get('?operation=create_node', { 'type' : data.node.type, 'id' : data.node.parent, 'text' : data.node.text })
+                            .done(function (d) {
+                                data.instance.set_id(data.node, d.id);
+                            })
+                            .fail(function () {
+                                data.instance.refresh();
+                            });
+                })
+                .on('rename_node.jstree', function (e, data) {
+                    $.get('?operation=rename_node', { 'id' : data.node.id, 'text' : data.text })
+                            .done(function (d) {
+                                data.instance.set_id(data.node, d.id);
+                            })
+                            .fail(function () {
+                                data.instance.refresh();
+                            });
+                })
+                .on('move_node.jstree', function (e, data) {
+                    $.get('?operation=move_node', { 'id' : data.node.id, 'parent' : data.parent })
+                            .done(function (d) {
+                                //data.instance.load_node(data.parent);
+                                data.instance.refresh();
+                            })
+                            .fail(function () {
+                                data.instance.refresh();
+                            });
+                })
+                .on('copy_node.jstree', function (e, data) {
+                    $.get('?operation=copy_node', { 'id' : data.original.id, 'parent' : data.parent })
+                            .done(function (d) {
+                                //data.instance.load_node(data.parent);
+                                data.instance.refresh();
+                            })
+                            .fail(function () {
+                                data.instance.refresh();
+                            });
                 });
     });
 </script>

@@ -49,14 +49,7 @@ var newUser = new User({
   uSchool:"nanjing university",
   Lastmid:56,
   uPicture:"img/test.png",
-  uFollowerNum:500,
-  uRecordInfo:[
-    { "id" : "ajson1", "parent" : "#", "text" : "Simple root node" },
-    { "id" : "ajson2", "parent" : "#", "text" : "Root node 2" },
-    { "id" : "ajson3", "parent" : "ajson2", "text" : "Child 1" },
-    { "id" : "ajson4", "parent" : "ajson2", "text" : "Child 2" },
-  ],
-  uPracticeInfo:""
+  uFollowerNum:500
 });
 
 app.use(function (req, res, next) {
