@@ -18,8 +18,8 @@ var marker;
 
 $(document).ready(function () {
 
-    $("#leftPanel").hide();
-    $("#debugOptionPanel").hide();
+    //$("#leftPanel").hide();
+    //$("#debugOptionPanel").hide();
 
     //消除console的警告
     editor.$blockScrolling = Infinity;
@@ -162,12 +162,14 @@ $("#debugBegin").click(function () {
     //清空界面数据
     stdout = "";
     $("#variablesTb").empty();
-    $("#breakpointsTb").empty();
     $("#localsTb").empty();
+
 
     for (var bp in breakpoints) {
         bplines.push(bp);
     }
+    console.log(JSON.stringify(bplines));
+    console.log(JSON.stringify(variables));
 
     $.ajax({
         type: "POST",
@@ -221,17 +223,20 @@ $("#exit").click(function () {
 
 $("#addVariableBtn").click(function () {
     var variableName = $("#variable-name").val();
-    $("#addVariable").modal("hide");
-    $("#variablesTb").append("<tr><td>" + variableName + "</td>" +
+    var variableInfo = $("<tr><td class='variName'>" + variableName + "</td>" +
     "<td>" + "undefined" + "</td>" +
-    "<td><span class='glyphicon glyphicon-remove'></span><td></tr>");
+    "<td><span class='glyphicon glyphicon-remove'></span></td></tr>");
+    $("#addVariable").modal("hide");
+    $("#variablesTb").append(variableInfo);
+
+    variableInfo.find(".glyphicon-remove").on("click", function () {
+        var variName = $(this).parent().parent().find(".variName").text();
+        variables.splice(jQuery.inArray(variName, variables), 1);
+        $(this).parent().parent().remove();
+    });
     variables.push(variableName);
 });
 
-$(".glyphicon.glyphicon-remove").on("click",function () {
-    console.log("hello");
-    $(this).parent().parent().remove();
-});
 
 $("#closeModalBtn").click(function () {
     $("#addVariable").modal("hide");
@@ -244,15 +249,26 @@ function printLocals(locals) {
 }
 
 function printVariables(variables) {
+    if(variables.length == 0)return;
     $("#variableTb").empty();
+    var variableInfo;
     $.ajax({
         type: "POST",
         url: "/play/editor/printVariables",
-        data: {debugId: debugId, variables: variables},
+        data: {debugId: debugId, 'variables[]': variables},
         success: function (msg) {
             for (var key in msg) {
-                $("#variablesTb").append("<tr><td>" + key + "</td><td>" + msg[key] + "</td></tr>");
+                variableInfo = $("<tr><td class='variName'>" + key + "</td>" +
+                "<td>" + msg[key] + "</td>" +
+                "<td><span class='glyphicon glyphicon-remove'></span></td></tr>");
+                $("#variablesTb").append(variableInfo);
+
+                variableInfo.find(".glyphicon-remove").on("click", function () {
+                    $(this).parent().parent().remove();
+                });
             }
+
+
         },
         error: function () {
             outputEditor.setValue("Error:can not connect to the server!", -1);
@@ -263,7 +279,6 @@ function printVariables(variables) {
 }
 
 function step(url, debugId) {
-    breakpoints = editor.getSession().$breakpoints;
     $.ajax({
         type: "POST",
         url: url,
@@ -307,6 +322,7 @@ function exitDebug(debugId) {
         }
     });
     disableBtn();
+    variables = [];
 }
 
 function highlightLine(lineNum) {
