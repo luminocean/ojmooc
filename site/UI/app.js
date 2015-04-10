@@ -11,6 +11,7 @@ var users = require('./routes/users');
 var editorCompile = require('./routes/editorCompile');
 var ajaxRequest=require('./routes/ajaxRequest');
 var whiteboardImage = require('./routes/whiteboardImage');
+var videoDataHandle=require('./routes/videoDataHandle');
 //test用
 var User=require('./models/User');
 
@@ -67,6 +68,7 @@ app.use('/', index);
 app.use('/users', users);
 app.use('/play/editor',editorCompile);
 app.use('/play/whiteboard',whiteboardImage);
+app.use('/timeline',videoDataHandle);
 //app.get('/hello',routes);
 //app.get('/hello',users);
 

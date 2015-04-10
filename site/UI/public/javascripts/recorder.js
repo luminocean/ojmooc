@@ -8,8 +8,8 @@
 var STATE_TIME_INTERVAL = 5;    //场景之间的时间间隔
 var timer;
 var playInterval;
-var timelineInterval
-
+var timelineInterval;
+var audioContent;
 
 var timeline = function(){
     this.startTime = 0;
@@ -166,6 +166,40 @@ timeline.prototype.setCurrentTime = function(time){
 timeline.prototype.getTotalTime = function(){
     return this.totalTime;
 };
+
+timeline.prototype.saveVedio = function(){
+    console.log(audioContent);
+    var rID = 1;
+    var that = this;
+    var recordCount = that.recorders.length;
+    var vedioInfos = [];
+    for(var i=0;i<recordCount;i++){
+        var instanceType = that.recorders[i].instance.name;
+        var stepRecords = that.recorders[i].step_records;
+        var sceneRecords = that.recorders[i].scene_records;
+        vedioInfos.push({instanceType:instanceType, stepRecords:stepRecords, sceneRecords:sceneRecords});
+    }
+
+    $.ajax({
+        type: "POST",
+        url: "/timeline/recordOver",
+        //data: {rID:rID,vedioInfos:JSON.stringify(vedioInfos),audiocontent:JSON.stringify(audioContent)},
+        //data: {audiocontent:audioContent},
+        data: {rID:rID,vedioInfos:JSON.stringify(vedioInfos)},
+        dataType: "json",
+        success: function (msg) {
+            alert(msg.info);
+        },
+        error: function () {
+            console.log("can not save the vedio");
+        }
+    });
+}
+
+timeline.prototype.LoadVedio = function(vedioSrc){
+    var that = this;
+    //加载对应的视频数据
+}
 
 //获取日期对应的秒数
 function getTimeSeconds(date){

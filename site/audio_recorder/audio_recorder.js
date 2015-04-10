@@ -55,6 +55,7 @@ function stopRecordAudio() {
     if (recorder)
         recorder.stopRecording(function(url) {
             audio.src = url;
+            console.log(audio.src);
             audio.muted = false;
         });
 };

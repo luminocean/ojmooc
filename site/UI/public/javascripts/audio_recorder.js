@@ -9,7 +9,6 @@ var startRecordAudio = $("#record");
 var stopRecordingAudio = $("#stop");
 var audio = getByID('audio');
 var playAudio = $("#play");
-
 var audioConstraints = {
     audio: true,
     video: false
@@ -60,6 +59,18 @@ function stopRecordAudio() {
         recorder.stopRecording(function(url) {
             audio.src = url;
             audio.muted = false;
+            recorder.getDataURL(function(audioData){
+                fileName = Math.round(Math.random() * 99999999) + 99999999;
+                audioContent = {
+                    audio:{
+                        name : fileName + '.wav',
+                        type: 'audio/wav',
+                        contents: audioData
+                    }
+                };
+                console.log(audioContent);
+                saveVedio();
+            });
         });
 };
 

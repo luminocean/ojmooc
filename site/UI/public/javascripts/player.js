@@ -193,13 +193,17 @@ WindowController.prototype.stopRecord = function(){
     $("#windowConBtnGro").off("click.frame");
 };
 
-
-var recorder0 = new recorder(editorRecord);
+/*
+    recorder0:editorRecord
+    recorder1:whiteboard
+    recorder2:windowController
+ */
+//var recorder0 = new recorder(editorRecord);
 var recorder1 = new recorder(whiteboard);
 var windowController=new WindowController();
 var recorder2 = new recorder(windowController);
 var timeline = new timeline();
-timeline.addRecorder(recorder0);
+//timeline.addRecorder(recorder0);
 timeline.addRecorder(recorder1);
 timeline.addRecorder(recorder2);
 
@@ -228,6 +232,9 @@ function stop_record(){
     windowController.stopRecord();
 }
 
+function saveVedio(){
+    timeline.saveVedio();
+}
 var isFirstClick = true;
 var playedTime = 0;
 function playback(){

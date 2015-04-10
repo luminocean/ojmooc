@@ -68,6 +68,7 @@ function start_record(){
 
 function stop_record(){
     console.log("stop record");
+    console.log($("#audio").src);
     timeline.stop();
 }
 
