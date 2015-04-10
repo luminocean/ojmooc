@@ -8,7 +8,7 @@ var config = {
     //监控的主机地址，这里可以填写一系列的ip地址从而监控多个docker宿主机
     "inspectIps":[
         "127.0.0.1"
-        //,"120.27.55.54"
+        //,"121.42.155.75"
     ],
     "runtime":{
         "dir":"/tmp/hawatcher/runtime",
