@@ -1,12 +1,17 @@
 //回放操作
 WhiteBoard.prototype.setAction = function(action){
+    console.log(action);
     replayAction(action);
 }
 
 //设置白板图形状态
 WhiteBoard.prototype.setScene = function(scene){
+    console.log(scene);
     clear();
-    whiteboard.objs = scene.objs;
+    whiteboard.objs = new Array();
+    for(var i = 0; i < scene.objs.length; i++){
+        whiteboard.objs[i] = scene.objs[i];
+    }
     whiteboard.penColor = scene.pencolor;
     whiteboard.penSize = scene.pensize;
     whiteboard.textColor = scene.textcolor;
@@ -154,8 +159,8 @@ function replay_shapeInvisible(action){
     shapeInvisible(action.id,action.val[0]);
 }
 
-var replay_operationList = ["setPenColor","setPenSize","quickAddLine","addLine","addLinePoint","setTextFont","setTextSize","setTextColor","addText","editText","drag","addOperation","addDoWhile","addWhile","addIf","editGraph","addArray","addQueue","editDataStructure","addCircle","addSquare","addRectangle","addTriangle","addImage","resizeCircle","resizeArray","resizeIf","resizeRectangle","shapeInvisible"];
-var replay_funcs = [replay_setPenColor,replay_setPenSize,replay_quickAddLine,replay_addLine,replay_addLinePoint,replay_setTextFont,replay_setTextSize,replay_setTextColor,replay_addText,replay_editText,replay_drag,replay_addOperation,replay_addDoWhile,replay_addWhile,replay_addIf,replay_editGraph,replay_addArray,replay_addQueue,replay_editDataStructure,replay_addCircle,replay_addSquare,replay_addRectangle,replay_addTriangle,replay_addImage,replay_resizeCircleAndTriangle,replay_resizeDataStructure,replay_resizeGraph,replay_resizeRecAndImg,replay_shapeInvisible];
+var replay_operationList = ["setPenColor","setPenSize","quickAddLine","addLine","addLinePoint","setTextFont","setTextSize","setTextColor","addText","editText","drag","addOperation","addDoWhile","addWhile","addIf","editGraph","addArray","addStack","addQueue","editDataStructure","addCircle","addSquare","addRectangle","addTriangle","addImage","resizeCircle","resizeArray","resizeIf","resizeRectangle","shapeInvisible"];
+var replay_funcs = [replay_setPenColor,replay_setPenSize,replay_quickAddLine,replay_addLine,replay_addLinePoint,replay_setTextFont,replay_setTextSize,replay_setTextColor,replay_addText,replay_editText,replay_drag,replay_addOperation,replay_addDoWhile,replay_addWhile,replay_addIf,replay_editGraph,replay_addArray,replay_addStack,replay_addQueue,replay_editDataStructure,replay_addCircle,replay_addSquare,replay_addRectangle,replay_addTriangle,replay_addImage,replay_resizeCircleAndTriangle,replay_resizeDataStructure,replay_resizeGraph,replay_resizeRecAndImg,replay_shapeInvisible];
 
 //回放一个操作
 function replayAction(action){
