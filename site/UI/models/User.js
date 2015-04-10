@@ -342,11 +342,49 @@ User.prototype.getRecordListJson =function getRecordListJson(callback){
  查询找到我的视频库信息
  return 视频库JSON
  */
+User.prototype.getRecordListJsonForSave =function getRecordListJsonForSave(callback){
+    //查询找到我的视频库信息
+    //和登录时查找到的对象一样，也可以那时就存储
+    //根据自身ID查找数据库
+    var templist=[];
+    var len=tempUser.uRecordInfo.length;
+    for(var i=0;i<len;i++){
+        if(tempUser.uRecordInfo[i].type=='default'){
+            templist.push(tempUser.uRecordInfo[i]);
+        }
+    }
+    return JSON.stringify(templist);
+};
+
+/*
+ 老师使用
+ 查询找到我的视频库信息
+ return 视频库JSON
+ */
 User.prototype.getPracticeListJson =function getPracticeListJson(callback){
     //查询找到我的视频库信息
     //和登录时查找到的对象一样，也可以那时就存储
     //根据自身ID查找数据库
     return JSON.stringify(tempUser.uPracticeInfo);
+};
+
+/*
+ 老师使用
+ 查询找到我的视频库信息
+ return 视频库JSON
+ */
+User.prototype.getPracticeListJsonForSave =function getPracticeListJsonForSave(callback){
+    //查询找到我的视频库信息
+    //和登录时查找到的对象一样，也可以那时就存储
+    //根据自身ID查找数据库
+    var templist=[];
+    var len=tempUser.uPracticeInfo.length;
+    for(var i=0;i<len;i++){
+        if(tempUser.uPracticeInfo[i].type=='default'){
+            templist.push(tempUser.uPracticeInfo[i]);
+        }
+    }
+    return JSON.stringify(templist);
 };
 
 

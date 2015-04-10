@@ -9,9 +9,22 @@ router.get('/getRecordList', function(req, res, next) {
     res.send(res.locals.user.getRecordListJson());
 });
 
+/* GET ajax listing. */
+//录制视频存储新的视频，选择文件夹路径
+router.get('/getRecordListForsave', function(req, res, next) {
+    res.send(res.locals.user.getRecordListJsonForSave());
+});
+
+
 //获取习题哭列表
 router.get('/getPracticeList', function(req, res, next) {
     res.send(res.locals.user.getPracticeListJson());
+});
+
+/* GET ajax listing. */
+//上传习题存储新的题目，选择文件夹路径
+router.get('/getPracticeListForsave', function(req, res, next) {
+    res.send(res.locals.user.getPracticeListJsonForSave());
 });
 
 //处理视频库的操作

@@ -4,6 +4,8 @@ var conn=require('../database/dbHelper');
 
 var User=require('../models/User');
 var Subject=require('../models/Subject');
+var PracticeModel=require('../models/PracticeModel');
+var RecordModel=require('../models/RecordModel');
 
 var router = express.Router();
 
@@ -53,6 +55,29 @@ router.get('/record', function(req, res, next) {
 
 router.get('/uploadPractice', function(req, res, next) {
   res.render('uploadPractice',{title:'上传习题',active:''});
+});
+
+router.post('/uploadPractice', function(req, res, next) {
+  console.log(req.body);
+  var parentID=req.body.hiddenParentID;
+  var newPractice=new PracticeModel({
+    pID:null,
+    pName:req.body.pname,
+    pUIDofTea:res.locals.user.uID,
+    pDescrip:req.body.pdescrip,
+    pFormatLength:parseInt(req.body.hiddenFormatLength),
+    pInputFormat:[],
+    pOutputFormat:[]
+  });
+  var len=newPractice.pFormatLength;
+  for(var i=1;i<=len;i++){
+    newPractice.pInputFormat.push(req.body['pinputformat'+i]);
+    newPractice.pOutputFormat.push(req.body['poutputformat'+i]);
+  }
+  console.log(newPractice);
+  newPractice.save(function(){
+    res.render('showPracticeForSelf',{title:'查看习题',active:''});
+  });
 });
 
 router.get('/classes', function(req, res, next) {
