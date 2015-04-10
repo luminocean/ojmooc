@@ -1,6 +1,6 @@
-var http = require("http");
-var fs = require("fs");
-var path = require("path");
+var http = require('http');
+var fs = require('fs');
+var path = require('path');
 var Busboy = require('busboy');
 
 var id;
@@ -8,6 +8,7 @@ var id;
 var uploadServer = http.createServer(function(req,res){
     if(req.url == "/upload"){
         if (req.method === 'POST') {
+            console.log(req.headers);
             var busboy = new Busboy({ headers: req.headers });
             busboy.on('file', function(fieldname, file, filename, encoding, mimetype) {
                 id = generateID(filename);

@@ -34,7 +34,9 @@ $("#graphBoard")[0].addEventListener("drop",function(event){
                 var id = generateID();
                 addImage(id,image,xLoc,yLoc);
 
-                uploadFile(thefile,id,xLoc,yLoc);
+                if(onRecord == true) {
+                    uploadFile(thefile, id, xLoc, yLoc);
+                }
             };
         })(file);
         reader.readAsDataURL(file);
@@ -46,7 +48,8 @@ function uploadFile(file,id,x,y){
     fd.append("fileToUpload", file);
 
     var xhr = new XMLHttpRequest();
-    var url = "http://127.0.0.1:1337/upload";
+    var url = "/play/whiteboard/upload";
+    //var url = "http://127.0.0.1:1337/upload";
     xhr.onreadystatechange = function(){
         if(xhr.readyState == 4 && xhr.status == 200){
             var imgid = xhr.responseText;

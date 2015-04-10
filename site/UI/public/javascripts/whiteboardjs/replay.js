@@ -120,7 +120,8 @@ function replay_addImage(action){
     var img = new Image();
 
     var xhr = new XMLHttpRequest();
-    var url = "http://127.0.0.1:1337/download";
+    var url = "/play/whiteboard/download";
+    //var url = "http://127.0.0.1:1337/download";
     xhr.open("POST",url,true);
     xhr.onreadystatechange = function(){
         if(xhr.readyState == 4 && xhr.status == 200){
