@@ -25,48 +25,26 @@
     height: 150px;
 }
 
-#penButton{
-    background-image: url("../img/pen.jpg");
-}
+
 #penMenu{
     margin-top: 5px;
     height: 30px;
-    background-image: url("../img/menudown.jpg");
+
 }
 
 #textMenu{
     margin-top: 5px;
     height: 30px;
-    background-image: url("../img/menudown.jpg");
+
 }
 
 #imageMenu{
     margin-top: 5px;
     height: 30px;
-    background-image: url("../img/menudown.jpg");
-}
-
-#eraserButton{
-    background-image: url("../img/eraser.jpg");
-}
-
-#textButton{
-    background-image: url("../img/txt.jpg");
-}
-
-#imageButton{
-    background-image: url("../img/img.jpg");
 }
 
 
-#uploadFileButton{
-    margin-top: 5px;
-    width: 30px;
-    height: 30px;
-    left: 115px;
-    opacity: 0;
-    position: absolute;
-}
+
 
 .file input{
     width: 30px;
@@ -74,17 +52,16 @@
 
 #undoButton{
     float: right;
-    background-image: url("../img/undo.jpg");
+
 }
 
 #redoButton{
     float: right;
-    background-image: url("../img/redo.jpg");
+
 }
 
 #clearButton{
     float: right;
-    background-image: url("../img/clear.jpg");
 }
 
 
