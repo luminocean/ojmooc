@@ -85,11 +85,13 @@
 }
 
 #aboutButton{
+    height: 25px;
     float: right;
     width: 13%;
 }
 
 #addButton{
+    height: 25px;
     float: right;
     width: 13%;
 }
