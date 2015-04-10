@@ -8,9 +8,10 @@ var editorRecord = function () {
     this.name = "editorRecord";
 };
 
-var Scene = function (debugStatus, srcCode, srcType, inputEditor, outputEditor, variables, breakpoints, locals) {
+var Scene = function (debugStatus, srcCode, fontSize, srcType, inputEditor, outputEditor, variables, breakpoints, locals) {
     this.debugStatus = status;
     this.srcCode = srcCode;
+    this.fontSize = fontSize;
     this.srcType = srcType;
     this.inputEditor = inputEditor;
     this.outputEditor = outputEditor;

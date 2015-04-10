@@ -28,8 +28,8 @@ router.post('/run', function (req, res) {
     runner.run(code, language, params, function (err, result) {
         if (err) return console.error(err);
         var runInfo = {
-            "result":result,
-            "message":message
+            "result": result,
+            "message": message
         };
         res.send(runInfo);
         res.end();
@@ -64,12 +64,10 @@ router.post('/debugBegin', function (req, res) {
 
 router.post('/printVariables', function (req, res) {
     var debugId = req.body.debugId;
-    var variables = req.body.variables;
-
+    var variables = req.body["variables[]"];
     dbr.printVal(debugId, variables, function (err, values) {
         res.send(values);
     });
-
 });
 
 router.post('/setBreakpointToServer', function (req, res) {
