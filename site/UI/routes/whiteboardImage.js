@@ -10,7 +10,7 @@ router.post('/upload',function(req,res){
         var busboy = new Busboy({ headers: req.headers });
         busboy.on('file', function(fieldname, file, filename, encoding, mimetype) {
             id = generateID(filename);
-            var saveTo = path.join(__dirname,"../upload/images"+id);
+            var saveTo = path.join(__dirname,"../upload/images/"+id);
             file.pipe(fs.createWriteStream(saveTo));
         });
         busboy.on('finish', function() {
