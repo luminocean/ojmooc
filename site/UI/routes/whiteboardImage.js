@@ -10,7 +10,7 @@ router.post('/upload',function(req,res){
         var busboy = new Busboy({ headers: req.headers });
         busboy.on('file', function(fieldname, file, filename, encoding, mimetype) {
             id = generateID(filename);
-            var saveTo = path.join(__dirname,"../uploadImages/"+id);
+            var saveTo = path.join(__dirname,"../upload/images/"+id);
             file.pipe(fs.createWriteStream(saveTo));
         });
         busboy.on('finish', function() {
@@ -31,7 +31,7 @@ router.post('/download',function(req,res){
         });
         req.on("end",function(){
             var filename = buffer.split("undefined")[1];
-            var filepath = path.join(__dirname,"../uploadImages/"+filename);
+            var filepath = path.join(__dirname,"../upload/images"+filename);
             fs.readFile(filepath,"base64",function(err,data){
                 if(err){
                     console.log("err");

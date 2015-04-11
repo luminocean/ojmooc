@@ -12,7 +12,8 @@ var WhiteBoardScene = function(objs,pencolor,pensize,textfont,textcolor,textsize
 
 //获取某一时间白板的状态
 WhiteBoard.prototype.getScene = function(){
-    var scene = new WhiteBoardScene(whiteboard.objs,whiteboard.penColor,whiteboard.pensize,whiteboard.textFont,whiteboard.textColor,whiteboard.textSize);
+    var scene = new WhiteBoardScene(whiteboard.objs,whiteboard.penColor,whiteboard.penSize,whiteboard.textFont,whiteboard.textColor,whiteboard.textSize);
+    console.log(scene);
     return scene;
 }
 

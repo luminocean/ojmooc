@@ -1,11 +1,14 @@
 /**
  * Created by blueking on 2015/3/7.
  */
-var mysql = require('../node_modules/mysql');
+var mysql = require('mysql');
 getConnect = function(){
     var connect = mysql.createConnection({
+        host: '121.42.155.75',
         user: 'root',
-        password: '123456'
+        password: 'vagrant',
+        database:'ojmooc',
+        port: 3306
     });
     return connect;
 }
@@ -23,10 +26,7 @@ exports.query_course_info = function(condition,value,callback) {
             }
 
             if (results) {
-                //callback(null,results);
-                for (var i = 0; i < results.length; i++) {
-                    console.log("%d\t%s\t%s", results[i].cid, results[i].cname, results[i].csection);
-                }
+                callback(null,results);
             }
             connect.end();
         });
@@ -40,7 +40,7 @@ exports.insert_course_info = function(values){
     connect.query("use " + database_name);
     connect.query('insert into ' + table_name + ' set ?',values,function(err,result){
         if(err){
-            throw err;
+            console.log(err);
         }
         else {
             console.log("insert success");
@@ -57,7 +57,7 @@ exports.delete_course_info = function(condition,value){
     connect.query("use " + database_name);
     connect.query('delete from ' + table_name + ' where ' + condition + ' = ?',value,function(err,result){
         if(err){
-            throw err;
+            console.log(err);
         }
         else {
             console.log("delete success");

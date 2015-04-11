@@ -6,7 +6,7 @@ var debugId;
 var stdout = "";
 var breakpoints = [];
 var variables = [];
-var exitMessage = "程序调试结束！";
+var exitMessage = "程序调试结束！\r\n";
 
 var editor = ace.edit("editor");
 var inputEditor = ace.edit("inputEditor");
@@ -16,25 +16,20 @@ var outputEditor = ace.edit("outputEditor");
 //var range = new Range(0, 0, 0, 0);
 var marker;
 
+
 $(document).ready(function () {
-
-    //$("#leftPanel").hide();
-    //$("#debugOptionPanel").hide();
-
     //消除console的警告
     editor.$blockScrolling = Infinity;
     inputEditor.$blockScrolling = Infinity;
     outputEditor.$blockScrolling = Infinity;
 
     ace.require("ace/ext/language_tools");
-
     inputEditor.setTheme("ace/theme/twilight");
     outputEditor.setTheme("ace/theme/twilight");
     editor.setTheme("ace/theme/twilight");
     outputEditor.setReadOnly(true);
     editor.getSession().setMode("ace/mode/c_cpp");
 
-    //设置代码自动补全
     editor.setOptions({
         enableBasicAutocompletion: true,
         enableSnippets: true,
@@ -42,12 +37,6 @@ $(document).ready(function () {
     });
     disableBtn();
 });
-
-//    var Range = ace.require("ace/range").Range;
-//    var range = new Range(3,0,3,144);
-//    console.log(range);
-//    var marker = editor.session.addMarker(range, "warning", "fullLine");
-//    content = editor.session.getTextRange(selectionRange);
 
 editor.getSession().selection.on("changeSelection", function () {
     var range = editor.getSelectionRange();
@@ -60,13 +49,11 @@ $("#fontsize").change(function () {
     var action = new fontChange(size);
     sendActionOverEditor(action);
     $("#editor").css("font-size", size);
-
 });
 
 $("#language").change(function () {
     var session = editor.getSession();
     var lan = $("#language").val();
-
     var action = new languageChange(lan);
     sendActionOverEditor(action);
 
@@ -77,9 +64,9 @@ $("#language").change(function () {
         case "pas":
             session.setMode("ace/mode/pascal");
             break;
-        case "bas":
-            session.setMode("ace/mode/qbasic");
-            break;
+        //case "bas":
+        //    session.setMode("ace/mode/qbasic");
+        //    break;
         case "default":
             break;
     }
@@ -105,6 +92,11 @@ $("#run").click(function () {
         data: {code: code, language: lan, params: params},
         dataType: "json",
         success: function (msg) {
+            if (msg.err) {
+                stdout += msg.err;
+                outputEditor.setValue(stdout, -1);
+                return;
+            }
             stdout += msg.result;
             stdout += msg.message;
             outputEditor.setValue(stdout, -1);
@@ -117,34 +109,6 @@ $("#run").click(function () {
 
 
 //debug模块
-$("#debugInto").click(function () {
-    var action = new debugIntoChange();
-    sendActionOverEditor(action);
-    runToDebug();
-});
-
-$("#debugOut").click(function () {
-    var action = new debugOutChange();
-    sendActionOverEditor(action);
-    debugToRun();
-});
-
-function runToDebug() {
-    $("#midPanel").removeClass("col-sm-12").addClass("col-sm-8");
-    $("#leftPanel").show();
-    $("#debugOptionPanel").show();
-    $("#debugInto").hide();
-    $("#run").hide();
-}
-
-function debugToRun() {
-    $("#midPanel").removeClass("col-sm-8").addClass("col-sm-12");
-    $("#leftPanel").hide();
-    $("#debugOptionPanel").hide();
-    $("#debugInto").show();
-    $("#run").show();
-}
-
 
 $("#debugBegin").click(function () {
 
@@ -168,8 +132,8 @@ $("#debugBegin").click(function () {
     for (var bp in breakpoints) {
         bplines.push(bp);
     }
-    console.log(JSON.stringify(bplines));
-    console.log(JSON.stringify(variables));
+    console.log("breakpoints" + bplines);
+    console.log("variables" + variables);
 
     $.ajax({
         type: "POST",
@@ -177,21 +141,27 @@ $("#debugBegin").click(function () {
         data: {code: code, language: lan, params: params, 'bps[]': bplines},
         dataType: "json",
         success: function (msg) {
+            if (msg.err) {
+                removeHighLightLine(marker);
+                stdout += msg.err;
+                console.log(msg.err);
+                outputEditor.setValue(stdout, -1);
+                return;
+            }
             debugId = msg.debugId;
-
             stdout += message;
             stdout += msg.stdout;
             editor.setDebugId(debugId);
 
             outputEditor.setValue(stdout, -1);
             printLocals(msg.locals);
-            printVariables(variables);
 
             if (msg.finish) {
-                stdout += exitMessage;
                 exitDebug(debugId);
                 outputEditor.setValue(stdout, -1);
             } else {
+                removeHighLightLine(marker);
+                printVariables(variables);
                 highlightLine(msg.breakPoint.lineNum);
             }
         },
@@ -199,8 +169,7 @@ $("#debugBegin").click(function () {
             outputEditor.setValue("Error:can not connect to the server!", -1);
         }
     });
-})
-;
+});
 
 $("#stepInto").click(function () {
     step("/play/editor/stepInto", debugId);
@@ -216,67 +185,7 @@ $("#continue").click(function () {
 
 $("#exit").click(function () {
     exitDebug(debugId);
-    stdout += exitMessage;
-    outputEditor.setValue(stdout, -1);
 });
-
-
-$("#addVariableBtn").click(function () {
-    var variableName = $("#variable-name").val();
-    var variableInfo = $("<tr><td class='variName'>" + variableName + "</td>" +
-    "<td>" + "undefined" + "</td>" +
-    "<td><span class='glyphicon glyphicon-remove'></span></td></tr>");
-    $("#addVariable").modal("hide");
-    $("#variablesTb").append(variableInfo);
-
-    variableInfo.find(".glyphicon-remove").on("click", function () {
-        var variName = $(this).parent().parent().find(".variName").text();
-        variables.splice(jQuery.inArray(variName, variables), 1);
-        $(this).parent().parent().remove();
-    });
-    variables.push(variableName);
-});
-
-
-$("#closeModalBtn").click(function () {
-    $("#addVariable").modal("hide");
-});
-
-function printLocals(locals) {
-    for (var key in locals) {
-        $("#localsTb").append("<tr><td>" + key + "</td><td>" + locals[key] + "</td></tr>");
-    }
-}
-
-function printVariables(variables) {
-    if(variables.length == 0)return;
-    $("#variableTb").empty();
-    var variableInfo;
-    $.ajax({
-        type: "POST",
-        url: "/play/editor/printVariables",
-        data: {debugId: debugId, 'variables[]': variables},
-        success: function (msg) {
-            for (var key in msg) {
-                variableInfo = $("<tr><td class='variName'>" + key + "</td>" +
-                "<td>" + msg[key] + "</td>" +
-                "<td><span class='glyphicon glyphicon-remove'></span></td></tr>");
-                $("#variablesTb").append(variableInfo);
-
-                variableInfo.find(".glyphicon-remove").on("click", function () {
-                    $(this).parent().parent().remove();
-                });
-            }
-
-
-        },
-        error: function () {
-            outputEditor.setValue("Error:can not connect to the server!", -1);
-        }
-    });
-
-
-}
 
 function step(url, debugId) {
     $.ajax({
@@ -287,14 +196,19 @@ function step(url, debugId) {
         success: function (msg) {
             stdout += msg.stdout;
             outputEditor.setValue(stdout, -1);
-            printVariables(variables);
-            printLocals(msg.locals);
-            removeHighLightLine(marker);
+
+            if (msg.err) {
+                removeHighLightLine(marker);
+                stdout += msg.err;
+                outputEditor.setValue(stdout, -1);
+                return;
+            }
             if (msg.finish) {
-                stdout += exitMessage;
                 exitDebug(debugId);
                 outputEditor.setValue(stdout, -1);
             } else {
+                removeHighLightLine(marker);
+                printVariables(variables);
                 highlightLine(msg.breakPoint.lineNum);
             }
         },
@@ -312,20 +226,98 @@ function exitDebug(debugId) {
         data: {debugId: debugId},
         dataType: "json",
         success: function (msg) {
-            stdout += msg.stdout;
+            if (msg.err) {
+                stdout += msg.err;
+                console.log(msg.err);
+                outputEditor.setValue(stdout, -1);
+                return;
+            }
             stdout += exitMessage;
             outputEditor.setValue(stdout, -1);
-
         },
         error: function () {
             outputEditor.setValue("Error:can not connect to the server!", -1);
         }
     });
     disableBtn();
-    variables = [];
+    $("#variablesTb").empty();
+    for (var i = 0; i < variables.length; i++) {
+        var variableInfo = $("<tr><td class='variName'>" + variables[i] + "</td>" +
+        "<td>" + "undefined" + "</td>" +
+        "<td><span class='glyphicon glyphicon-remove'></span></td></tr>");
+        $("#variablesTb").append(variableInfo);
+
+        variableInfo.find(".glyphicon-remove").on("click", function () {
+            var variName = $(this).parent().parent().find(".variName").text();
+            variables.splice(jQuery.inArray(variName, variables), 1);
+            $(this).parent().parent().remove();
+        });
+    }
+}
+
+$("#addVariableBtn").click(function () {
+    var variableName = $("#variable-name").val();
+    var variableInfo = $("<tr><td class='variName'>" + variableName + "</td>" +
+    "<td>" + "undefined" + "</td>" +
+    "<td><span class='glyphicon glyphicon-remove'></span></td></tr>");
+    $("#addVariable").modal("hide");
+    $("#variablesTb").append(variableInfo);
+
+    variableInfo.find(".glyphicon-remove").on("click", function () {
+        var variName = $(this).parent().parent().find(".variName").text();
+        variables.splice(jQuery.inArray(variName, variables), 1);
+        $(this).parent().parent().remove();
+    });
+    variables.push(variableName);
+});
+
+$("#closeModalBtn").click(function () {
+    $("#addVariable").modal("hide");
+});
+
+function printLocals(locals) {
+    for (var key in locals) {
+        $("#localsTb").append("<tr><td>" + key + "</td><td>" + locals[key] + "</td></tr>");
+    }
+}
+
+function printVariables(variables) {
+    if (variables.length == 0)return;
+    $("#variablesTb").empty();
+    var variableInfo;
+    $.ajax({
+        type: "POST",
+        url: "/play/editor/printVariables",
+        data: {debugId: debugId, 'variables[]': variables},
+        success: function (msg) {
+            if (msg.err) {
+                stdout += msg.err;
+                console.log(msg.err);
+                outputEditor.setValue(stdout, -1);
+                return;
+            }
+            console.log(msg);
+            for (var key in msg) {
+                variableInfo = $("<tr><td class='variName'>" + key + "</td>" +
+                "<td>" + msg[key] + "</td>" +
+                "<td><span class='glyphicon glyphicon-remove'></span></td></tr>");
+                $("#variablesTb").append(variableInfo);
+
+                variableInfo.find(".glyphicon-remove").on("click", function () {
+                    var variName = $(this).parent().parent().find(".variName").text();
+                    variables.splice(jQuery.inArray(variName, variables), 1);
+                    $(this).parent().parent().remove();
+                });
+            }
+        },
+        error: function () {
+            outputEditor.setValue("Error:can not connect to the server!", -1);
+        }
+    });
 }
 
 function highlightLine(lineNum) {
+    console.log("breakpointNum" + lineNum);
     var actualLine = lineNum - 1;
     var action = new highlightLineChange(lineNum);
     sendActionOverEditor(action);
@@ -353,4 +345,34 @@ function activeBtn() {
     $('#stepOver').removeAttr("disabled");
     $('#continue').removeAttr("disabled");
     $('#exit').removeAttr("disabled");
+}
+
+$("#debugInto").click(function () {
+    var action = new debugIntoChange();
+    sendActionOverEditor(action);
+    runToDebug();
+    //$("#editor").resize();
+});
+
+$("#debugOut").click(function () {
+    var action = new debugOutChange();
+    sendActionOverEditor(action);
+    debugToRun();
+    //$("#editor").resize()
+});
+
+function runToDebug() {
+    $("#midPanel").removeClass("col-sm-12").addClass("col-sm-8");
+    $("#leftPanel").show();
+    $("#debugOptionPanel").show();
+    $("#debugInto").hide();
+    $("#run").hide();
+}
+
+function debugToRun() {
+    $("#midPanel").removeClass("col-sm-8").addClass("col-sm-12");
+    $("#leftPanel").hide();
+    $("#debugOptionPanel").hide();
+    $("#debugInto").show();
+    $("#run").show();
 }

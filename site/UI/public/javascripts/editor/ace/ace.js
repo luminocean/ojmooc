@@ -2906,7 +2906,7 @@ define("ace/mouse/mouse_event", ["require", "exports", "module", "ace/lib/event"
 
                 var target = this.domEvent.target;
                 if (typeof pos != "undefined") {
-                    if (this.x < 20 + target.getBoundingClientRect().left) {
+                    if (this.x < 15 + target.getBoundingClientRect().left) {
                         if (this.editor.session.$breakpoints[pos.row] == "ace_breakpoint") {
                             this.editor.session.clearBreakpoint(pos.row);
                             actionClear.value = pos.row;
