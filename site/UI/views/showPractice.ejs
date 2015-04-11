@@ -1,0 +1,245 @@
+<% include globalView/header.ejs %>
+<!--..放单独需要的CSS -->
+
+<% include globalView/mainNavbar.ejs%>
+
+<div id="container" class="container">
+
+    <form id="showp" class="form-horizontal">
+        <fieldset>
+            <div>
+                <legend>查看习题</legend>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 col-md-3 control-label" for="" >题目名称 </label>
+                <div class="col-sm-10 col-md-7 well" >
+                    <div tabindex="1" id="showpname">
+                        <p><%= showPractice.pName%></p>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group" >
+                <label class="col-sm-2 col-md-3 control-label" for="" >题目描述 </label>
+                <div class="col-sm-10 col-md-7 well" >
+                    <div>
+                        <p><%= showPractice.pDescrip%></p>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group" >
+                <label class="col-sm-2 col-md-3 control-label" for="showpinputformat" >输入格式 </label>
+                <div class="col-sm-10 col-md-7 well" >
+                    <div>
+                        <p><%= showPractice.pInputFormat%></p>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group" >
+                <label class="col-sm-2 col-md-3 control-label" for="showpoutputformat" >输出格式 </label>
+                <div class="col-sm-10 col-md-7 well" >
+                    <div>
+                        <p><%= showPractice.pOutputFormat%></p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-10 col-md-offset-1">
+                <div class="divider-horizontal"></div>
+            </div>
+            <div id="showpracticeFormatList">
+                <% for(var i=1;i<=showPractice.pFormatListLength;i++){%>
+                <div class="practiceFormat">
+                    <div class="form-group" >
+                        <label class="col-sm-2 col-md-3 control-label" for="" id="showpformat<%= i%>">样例<%= i%></label>
+                    </div>
+                    <div class="form-group" >
+                        <label class="col-sm-2 col-md-3 control-label" for="showppinputformat<%= i%>" >输入样例<%= i%></label>
+                        <div class="col-sm-10 col-md-7 well" >
+                            <div>
+                                <p><%= showPractice.pInputFormatList[i-1]%></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group" >
+                        <label class="col-sm-2 col-md-3 control-label" for="showpoutputformat<%= i%>" >输出样例<%= i%></label>
+                        <div class="col-sm-10 col-md-7 well" >
+                            <div>
+                                <p><%= showPractice.pOutputFormatList[i-1]%></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <% }%>
+            </div>
+            <div class="form-group" >
+                <label class="col-sm-2 col-md-3 control-label" for="" ></label>
+                <div class="col-md-7">
+                    <div class="pull-right">
+                        <button id="updatepracticeBtn" class="btn btn-primary">修改习题</button>
+                        <div class="divider displayInline"></div>
+                        <button id="deletepracticeBtn" type="button" class="btn btn-default" data-toggle="modal" data-target="#sureModel">删除习题</button>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+
+    <form id="updatep" class="form-horizontal hidden">
+        <fieldset>
+        <div>
+            <legend>修改习题</legend>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 col-md-3 control-label" for="pname" >题目名称 </label>
+            <div class="col-sm-10 col-md-7" >
+                <input type="text" class="form-control" id="pname" name="pname" placeholder="Practice Name" value="<%= showPractice.pName%>">
+            </div>
+        </div>
+        <div class="form-group" >
+            <label class="col-sm-2 col-md-3 control-label" for="pdescrip" >题目描述 </label>
+            <div class="col-sm-10 col-md-7" >
+                <textarea class="form-control" rows="5" id="pdescrip" name="pdescrip" placeholder="Practice Description" ><%= showPractice.pDescrip%></textarea>
+            </div>
+        </div>
+        <div class="form-group" >
+            <label class="col-sm-2 col-md-3 control-label" for="pinputformat" >输入格式 </label>
+            <div class="col-sm-10 col-md-7" >
+                <textarea class="form-control" rows="5" id="pinputformat" name="pinputformat" placeholder="Practice InputFormat" ><%= showPractice.pInputFormat%></textarea>
+            </div>
+        </div>
+        <div class="form-group" >
+            <label class="col-sm-2 col-md-3 control-label" for="poutputformat" >输出格式 </label>
+            <div class="col-sm-10 col-md-7" >
+                <textarea class="form-control" rows="5" id="poutputformat" name="poutputformat" placeholder="Practice OutputFormat" ><%= showPractice.pOutputFormat%></textarea>
+            </div>
+        </div>
+            <div class="col-md-10 col-md-offset-1">
+                <div class="divider-horizontal"></div>
+            </div>
+        <div id="practiceFormatList">
+            <% var len=showPractice.pFormatListLength;
+            for(var i=1;i<=len;i++){ %>
+            <div class="practiceFormat">
+                <div class="form-group" >
+                    <label class="col-sm-2 col-md-3 control-label" for="" id="pformat<%= i%>">样例<%= i%></label>
+                </div>
+                <div class="form-group" >
+                    <label class="col-sm-2 col-md-3 control-label" for="pinputformat<%= i%>" >输入样例<%= i%></label>
+                    <div class="col-sm-10 col-md-7" >
+                        <textarea class="form-control" rows="5" id="pinputformat<%= i%>" name="pinputformat<%= i%>" placeholder="Practice InputFormat" ><%= showPractice.pInputFormatList[i-1]%></textarea>
+                    </div>
+                </div>
+
+                <div class="form-group" >
+                    <label class="col-sm-2 col-md-3 control-label" for="poutputformat<%= i%>" >输出样例<%= i%></label>
+                    <div class="col-sm-10 col-md-7" >
+                        <textarea class="form-control" rows="5" id="poutputformat<%= i%>" name="poutputformat<%= i%>" placeholder="Practice OutputFormat" ><%= showPractice.pOutputFormatList[i-1]%></textarea>
+                    </div>
+                </div>
+            </div>
+            <% }%>
+            <% i=-1;%>
+        </div>
+        <div class="form-group" >
+            <label class="col-sm-2 col-md-3 control-label" for="" ></label>
+            <div class="col-md-3">
+                <button class="btn btn-primary" id="addFormat" >添加样例</button>
+            </div>
+        </div>
+        <div class="form-group" >
+            <label class="col-sm-2 col-md-3 control-label" for="" ></label>
+            <div class="col-md-7">
+                <div class="pull-right">
+                    <button id="saveChangeBtn" class="btn btn-primary" formmethod="post">保存修改</button>
+                    <div class="divider displayInline"></div>
+                    <a id="cancelupdateBtn" class="btn btn-default" >取消修改</a>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <input id="hiddenFormatLength" name="hiddenFormatLength" type="text" class="form-control" value="<%= showPractice.pFormatListLength%>">
+            <input id="hiddenpID" name="hiddenpID" type="text" class="form-control" value="<%= showPractice.pID%>">
+        </div>
+        </fieldset>
+    </form>
+
+    <!-- Modal -->
+    <div class="modal fade" id="sureModel" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">确定</h4>
+                </div>
+                <div class="modal-body">
+                    <p>你确定删除这道习题吗？</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary" id="sureDelete">确定</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<% include globalView/footer.ejs %>
+<!-- ..放单独需要的JS -->
+
+<script type="text/javascript">
+
+    $('#addFormat').on('click',function(e) {
+        e.preventDefault();
+
+        var len=parseInt($('#hiddenFormatLength').val())+1;
+        var wholediv=$('<div>',{'class':'practiceFormat'});
+        var firstgroup=$('<div>',{'class':'form-group'}).append($('<label>').addClass('col-sm-2 col-md-3 control-label').attr('id','pformat'+len).text('样例'+len));
+        var secondgroup=$('<div>',{'class':'form-group'}).append($('<label>').addClass('col-sm-2 col-md-3 control-label').attr('for','pinputformat'+len).text('输入样例'+len))
+                .append($('<div>').addClass('col-sm-10 col-md-7').append($('<textarea>').addClass('form-control').attr('rows',5).attr('id','pinputformat'+len).attr('name','pinputformat'+len).attr('placeholder','Practice InputFormat')));
+        var thirdgroup=$('<div>',{'class':'form-group'}).append($('<label>').addClass('col-sm-2 col-md-3 control-label').attr('for','poutputformat'+len).text('输出样例'+len))
+                .append($('<div>').addClass('col-sm-10 col-md-7').append($('<textarea>').addClass('form-control').attr('rows',5).attr('id','poutputformat'+len).attr('name','poutputformat'+len).attr('placeholder','Practice OutputFormat')));
+
+        wholediv.append(firstgroup);
+        wholediv.append(secondgroup);
+        wholediv.append(thirdgroup);
+        $('#practiceFormatList').append(wholediv);
+        $('#hiddenFormatLength').val(len);
+    });
+
+    $('#updatepracticeBtn').on('click',function(e){
+        e.preventDefault();
+        $('#showp').addClass('hidden');
+        $('#updatep').removeClass('hidden');
+//        $('#showp').fadeOut().addClass('hidden');
+//        $('#updatep').removeClass('hidden').fadeIn();
+        $('#pname').focus();
+    })
+
+    $('#deletepracticeBtn').on('click',function(e){
+        e.preventDefault();
+    });
+
+    $('#suredelete').on('click',function(e){
+        e.preventDefault();
+
+    });
+
+    $('#cancelupdateBtn').on('click',function(e){
+        e.preventDefault();
+        $('#showp').removeClass('hidden');
+        $('#updatep').addClass('hidden');
+        $('#showpname').focus();
+    });
+
+    $('#saveChangeBtn').on('click',function(e){
+
+    });
+
+
+</script>
+
+
+</body>
+</html>

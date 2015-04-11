@@ -57,6 +57,61 @@ router.get('/uploadPractice', function(req, res, next) {
   res.render('uploadPractice',{title:'上传习题',active:''});
 });
 
+//一般为？pID=..
+router.get('/showPractice', function(req, res, next) {
+  var showObject=null;
+  var pid=-1;
+  if(req.query.pID){
+    pid=req.query.pID;
+  }
+  //临时直接返回,应在if判断里
+  PracticeModel.get(pid,function(err,practice){
+     showObject={
+      title:'查看习题',
+      active:'',
+      showPractice:practice
+    };
+    console.log("there");
+    console.log(showObject.showPractice);
+    res.render('showPractice',showObject);
+  });
+
+});
+
+/*
+ post之后需要
+按照pid更新题目信息
+这里不处理更改文件路径
+ */
+router.post('/showPractice', function(req, res, next) {
+  console.log(req.body);
+
+  var updatePractice=new PracticeModel({
+    pID:req.body.hiddenpID,
+    pName:req.body.pname,
+    pUIDofTea:res.locals.user.uID,
+    pDescrip:req.body.pdescrip,
+    pFormatListLength:parseInt(req.body.hiddenFormatLength),
+    pInputFormat:req.body.pinputformat,
+    pOutputFormat:req.body.poutputformat,
+    pInputFormatList:[],
+    pOutputFormatList:[]
+  });
+  var len=updatePractice.pFormatListLength;
+  for(var i=1;i<=len;i++){
+    updatePractice.pInputFormatList.push(req.body['pinputformat'+i]);
+    updatePractice.pOutputFormatList.push(req.body['poutputformat'+i]);
+  }
+  updatePractice.update(function(){
+    res.redirect('/showPractice?pID=12345');//保存新题目之后哈是在这个题目界面，题目信息重新拿
+  });
+});
+
+/*
+post之后需要
+1.存储习题本身
+2.存储到老师习题库
+ */
 router.post('/uploadPractice', function(req, res, next) {
   console.log(req.body);
   var parentID=req.body.hiddenParentID;
@@ -65,18 +120,20 @@ router.post('/uploadPractice', function(req, res, next) {
     pName:req.body.pname,
     pUIDofTea:res.locals.user.uID,
     pDescrip:req.body.pdescrip,
-    pFormatLength:parseInt(req.body.hiddenFormatLength),
-    pInputFormat:[],
-    pOutputFormat:[]
+    pFormatListLength:parseInt(req.body.hiddenFormatLength),
+    pInputFormat:req.body.pinputformat,
+    pOutputFormat:req.body.poutputformat,
+    pInputFormatList:[],
+    pOutputFormatList:[]
   });
-  var len=newPractice.pFormatLength;
+  var len=newPractice.pFormatListLength;
   for(var i=1;i<=len;i++){
-    newPractice.pInputFormat.push(req.body['pinputformat'+i]);
-    newPractice.pOutputFormat.push(req.body['poutputformat'+i]);
+    newPractice.pInputFormatList.push(req.body['pinputformat'+i]);
+    newPractice.pOutputFormatList.push(req.body['poutputformat'+i]);
   }
-  console.log(newPractice);
-  newPractice.save(function(){
-    res.render('showPracticeForSelf',{title:'查看习题',active:''});
+  newPractice.save(parentID,function(){
+    //res.render('showPractice',{title:'查看习题',active:''});
+    res.redirect('/myclass?redir=upPra');//正常跳转到习题库，之前的调用callback，处理数据库存储
   });
 });
 
@@ -97,9 +154,13 @@ router.get('/myClass', function(req, res, next) {
     var myClassObjectOfT={
       title: '我的课程',
       active:'myClass',
+      redir:null,
       subOfMineList:Subject.getSubsOfTeacher(res.locals.user.uID),//老师课程展示
       allInfoOfTeacher:res.locals.user.getallInfoOfTeacher()//个人信息，视频，习题库展示
     };
+    if(req.query.redir){
+      myClassObjectOfT.redir=req.query.redir;
+    }
     res.render('myClassOfTeacher',myClassObjectOfT);
   }else{
     var myClassObjectOfS={

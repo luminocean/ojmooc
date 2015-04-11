@@ -12,7 +12,7 @@ RecordModel.prototype.save=function save(callback){
 
 };
 
-RecordModel.get=function get(rname,callback){
+RecordModel.get=function get(rID,callback){
 
 };
 

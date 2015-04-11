@@ -6,6 +6,7 @@
 
 <div id="container" class="container" xmlns="http://www.w3.org/1999/html">
     <form class="form-horizontal">
+        <fieldset>
         <legend>上传习题</legend>
         <div class="form-group">
             <label class="col-sm-2 col-md-3 control-label" for="pname" >题目名称 </label>
@@ -31,6 +32,9 @@
                 <textarea class="form-control" rows="5" id="poutputformat" name="poutputformat" placeholder="Practice OutputFormat" ></textarea>
             </div>
         </div>
+            <div class="col-md-10 col-md-offset-1">
+                <div class="divider-horizontal"></div>
+            </div>
         <div id="practiceFormatList">
             <div class="practiceFormat">
                 <div class="form-group" >
@@ -94,7 +98,6 @@
 
 </div>
 </div>
-</body>
 
 <% include globalView/footer.ejs %>
 <!-- ..放单独需要的JS -->

@@ -11,15 +11,15 @@
 
             <!-- Nav tabs -->
             <ul class="nav nav-tabs " role="tablist">
-                <li role="presentation" class="col-md-2 active"><a href="#subjectCon" aria-controls="subjectCon" role="tab" data-toggle="tab">所有课程</a></li>
-                <li role="presentation" class="col-md-2"><a href="#recordCon" aria-controls="recordCon" role="tab" data-toggle="tab">视频库</a></li>
-                <li role="presentation" class="col-md-2"><a href="#practiceCon" aria-controls="practiceCon" role="tab" data-toggle="tab">习题库</a></li>
+                <li role="presentation" class="col-md-2 <% if(redir==null){%>  active <% }%>"><a href="#subjectCon" aria-controls="subjectCon" role="tab" data-toggle="tab">所有课程</a></li>
+                <li role="presentation" class="col-md-2 <% if(redir=='upRec'){%>  active <% }%> "><a href="#recordCon" aria-controls="recordCon" role="tab" data-toggle="tab">视频库</a></li>
+                <li role="presentation" class="col-md-2 <% if(redir=='upPra'){%>  active <% }%>"><a href="#practiceCon" aria-controls="practiceCon" role="tab" data-toggle="tab">习题库</a></li>
                 <li role="presentation" class="col-md-2"><a href="#faqCon" aria-controls="faqCon" role="tab" data-toggle="tab">FAQ</a></li>
             </ul>
 
             <!-- Tab panes -->
             <div class="tab-content">
-                <div role="tabpanel" class="tab-pane fade in active " id="subjectCon">
+                <div role="tabpanel" class="tab-pane fade <% if(redir==null){%> in active <% }%>" id="subjectCon">
                     <div class="allMyClassesShow">
                         <div class="row">
                             <% var len=subOfMineList.length;
@@ -43,7 +43,7 @@
                         </div>
                     </div>
                 </div>
-                <div role="tabpanel" class="tab-pane fade" id="recordCon">
+                <div role="tabpanel" class="tab-pane fade <% if(redir=='upRec'){%> in active <% }%>" id="recordCon">
                     <div class="contralBtnList clearfix">
                         <div class="col-md-8 col-sm-8 col-xs-8 pull-left">
                             <button type="button" class="button button-3d button-small button-inverse" onclick=""><span class="glyphicon glyphicon-facetime-video"></span> 录制视频</button>
@@ -61,7 +61,7 @@
 
                     </div>
                 </div>
-                <div role="tabpanel" class="tab-pane fade" id="practiceCon">
+                <div role="tabpanel" class="tab-pane fade<% if(redir=='upPra'){%> in active <% }%>" id="practiceCon">
                     <div class="contralBtnList clearfix">
                         <div class="col-md-8 col-sm-8 col-xs-8 pull-left">
                             <button type="button" class="button button-3d button-small button-inverse" onclick=""><span class="glyphicon glyphicon-file"></span> 上传习题</button>
